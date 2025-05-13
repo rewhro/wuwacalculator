@@ -1,8 +1,8 @@
 // src/components/SkillsModal.jsx
 import React from 'react';
 import { formatDescription } from '../utils/formatDescription';
+import skillTabs from '../constants/skillTabs';
 
-const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill'];
 
 export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activeCharacter, activeSkillTab, setActiveSkillTab, sliderValues, currentSliderColor }) {
     if (!skillsModalOpen) return null;
