@@ -10,29 +10,13 @@
     margin-bottom: 16px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.skills-settings {
     transition: box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
 }
 
+/* Subtle hover effect for light mode */
 .skills-settings:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     background-color: #f0f0f0;
-}
-
-@media (prefers-color-scheme: dark) {
-    .character-settings,
-    .skills-settings {
-        background-color: #2a2a2a;
-        border-color: #333;
-    }
-
-    .skills-settings:hover {
-        background-color: #2a2a2a;
-        box-shadow: none;
-        transform: none;
-    }
 }
 
 /* Settings sliders label + input */
@@ -40,4 +24,23 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+/* ===================== */
+/*   DARK MODE OVERRIDE  */
+/* ===================== */
+@media (prefers-color-scheme: dark) {
+    .character-settings,
+    .skills-settings {
+        background: linear-gradient(145deg, #1b1b1b, #232323);
+        border-color: rgba(255,255,255,0.1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+
+    /* No hover pop for dark mode (subtle design) */
+    .skills-settings:hover {
+        background: linear-gradient(145deg, #1b1b1b, #232323);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        transform: none;
+    }
 }

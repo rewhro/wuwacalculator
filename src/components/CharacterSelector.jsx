@@ -1,5 +1,5 @@
 // src/components/CharacterSelector.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatDescription } from '../utils/formatDescription';
 
 const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill'];
@@ -19,6 +19,18 @@ export default function CharacterSelector({
                                               setSkillsModalOpen,
                                               setMenuOpen
                                           }) {
+    // ✅ Auto update fill on any value change
+    useEffect(() => {
+        const sliders = document.querySelectorAll('input[type="range"]');
+        sliders.forEach(input => {
+            const min = Number(input.min ?? 0);
+            const max = Number(input.max ?? 100);
+            const val = Number(input.value ?? 0);
+            const percent = ((val - min) * 100) / (max - min);
+            input.style.setProperty('--slider-fill', `${percent}%`);
+        });
+    }, [sliderValues, characterLevel]);
+
     return (
         <div id="left-pane" className="partition partition-relative">
             {/* Character Header */}
@@ -99,7 +111,9 @@ export default function CharacterSelector({
                             .map((node, index) => (
                                 <div key={index} className="inherent-skill">
                                     <h4>{node.Skill.Name}</h4>
-                                    <p dangerouslySetInnerHTML={{ __html: formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor) }} />
+                                    <p dangerouslySetInnerHTML={{
+                                        __html: formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor)
+                                    }} />
                                 </div>
                             ))}
                     </div>

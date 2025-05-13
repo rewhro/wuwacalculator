@@ -8,6 +8,7 @@
     margin-bottom: 16px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
 }
 
 .inherent-skills-box h3 {
@@ -24,4 +25,29 @@
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 6px;
+}
+
+.inherent-skills .inherent-skill p {
+    color: #444;
+    line-height: 1.4;
+}
+
+/* ========================== */
+/*   DARK MODE OVERRIDE       */
+/* ========================== */
+@media (prefers-color-scheme: dark) {
+    .inherent-skills-box {
+        background: linear-gradient(145deg, #1b1b1b, #232323);
+        border-color: rgba(255,255,255,0.1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+
+    .inherent-skills-box h3,
+    .inherent-skills .inherent-skill h4 {
+        color: #ffffff;
+    }
+
+    .inherent-skills .inherent-skill p {
+        color: #bbbbbb;
+    }
 }

@@ -120,44 +120,50 @@ export default function App() {
 
             {/* Main UI stays inside layout */}
             <div className="layout">
-                <div className="split">
-                    <div id="left-pane" className="partition">
-                        <CharacterSelector
-                            characters={characters}
-                            activeCharacter={activeCharacter}
-                            handleCharacterSelect={handleCharacterSelect}
-                            menuOpen={menuOpen}
-                            setMenuOpen={setMenuOpen}
-                            menuRef={menuRef}
-                            attributeIconPath={attributeIconPath}
-                            currentSliderColor={currentSliderColor}
-                            sliderValues={sliderValues}
-                            setSliderValues={setSliderValues}
-                            characterLevel={characterLevel}
-                            setCharacterLevel={setCharacterLevel}
-                            setSkillsModalOpen={setSkillsModalOpen}
-                        />
-                    </div>
+                <div className="main-content">     {/* ✅ NEW wrapper */}
+                    <div className="split">
+                        <div id="left-pane" className="partition">
+                            <div className="pane-content">
+                                <CharacterSelector
+                                    characters={characters}
+                                    activeCharacter={activeCharacter}
+                                    handleCharacterSelect={handleCharacterSelect}
+                                    menuOpen={menuOpen}
+                                    setMenuOpen={setMenuOpen}
+                                    menuRef={menuRef}
+                                    attributeIconPath={attributeIconPath}
+                                    currentSliderColor={currentSliderColor}
+                                    sliderValues={sliderValues}
+                                    setSliderValues={setSliderValues}
+                                    characterLevel={characterLevel}
+                                    setCharacterLevel={setCharacterLevel}
+                                    setSkillsModalOpen={setSkillsModalOpen}
+                                />
+                            </div>
+                        </div>
 
-                    <div id="right-pane" className="partition">
-                        <CharacterStats
-                            activeCharacter={activeCharacter}
-                            currentCharacterState={currentCharacterState}
-                            characterLevel={characterLevel}
-                            currentSliderColor={currentSliderColor}
-                        />
+                        <div id="right-pane" className="partition">
+                            <div className="pane-content">
+                                <CharacterStats
+                                    activeCharacter={activeCharacter}
+                                    currentCharacterState={currentCharacterState}
+                                    characterLevel={characterLevel}
+                                    currentSliderColor={currentSliderColor}
+                                />
 
-                        <DamageSection
-                            activeCharacter={activeCharacter}
-                            currentCharacterState={currentCharacterState}
-                            characterLevel={characterLevel}
-                            sliderValues={sliderValues}
-                            characterRuntimeStates={characterRuntimeStates}
-                        />
+                                <DamageSection
+                                    activeCharacter={activeCharacter}
+                                    currentCharacterState={currentCharacterState}
+                                    characterLevel={characterLevel}
+                                    sliderValues={sliderValues}
+                                    characterRuntimeStates={characterRuntimeStates}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Toolbar (optional) */}
+                {/* Toolbar stays below */}
                 <div className="toolbar">
                     <h2>Toolbar</h2>
                     <p>Toolbar content goes here.</p>
