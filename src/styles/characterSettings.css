@@ -1,0 +1,43 @@
+/* ===================== */
+/*   CHARACTER SETTINGS  */
+/* ===================== */
+
+.character-settings,
+.skills-settings {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.skills-settings {
+    transition: box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+.skills-settings:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    background-color: #f0f0f0;
+}
+
+@media (prefers-color-scheme: dark) {
+    .character-settings,
+    .skills-settings {
+        background-color: #2a2a2a;
+        border-color: #333;
+    }
+
+    .skills-settings:hover {
+        background-color: #2a2a2a;
+        box-shadow: none;
+        transform: none;
+    }
+}
+
+/* Settings sliders label + input */
+.slider-label-with-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -1,0 +1,25 @@
+/* ===================== */
+/*   GENERAL LAYOUT      */
+/* ===================== */
+
+#root {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.split {
+    display: flex;
+    max-height: calc(100% - 60px);
+}
+
+#left-pane, #right-pane {
+    overflow-y: auto;
+}

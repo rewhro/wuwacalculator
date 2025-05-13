@@ -1,0 +1,149 @@
+/* ========================= */
+/*      DAMAGE SECTION       */
+/* ========================= */
+.multipliers-section {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.multiplier-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.multiplier-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.multiplier-value {
+    font-family: monospace;
+    color: #222;
+}
+
+@media (prefers-color-scheme: dark) {
+    .multipliers-section {
+        border-top-color: #444;
+    }
+    .multiplier-row {
+        border-bottom-color: #444;
+    }
+    .multiplier-label {
+        color: #ccc;
+    }
+    .multiplier-value {
+        color: #fff;
+    }
+}
+
+.stats-grid {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 8px 12px;
+}
+
+.stat-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.stat-row:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+    .stats-grid {
+        border-color: #444;
+    }
+
+    .stat-row:nth-child(even) {
+        background-color: #1e1e1e;
+    }
+
+    .stat-row:nth-child(odd) {
+        background-color: #2a2a2a;
+    }
+
+    .stat-label, .stat-value {
+        color: #eee;
+    }
+
+    #right-pane h2 {
+        color: #fff;
+    }
+}
+
+/* Right-align section titles in the right pane */
+#right-pane h2 {
+    text-align: left;
+}
+
+/* Optional: keep dark mode override for title color */
+@media (prefers-color-scheme: dark) {
+    #right-pane h2 {
+        color: #fff;
+        text-align: right;
+    }
+}
+
+/* Damage Section */
+.damage-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.damage-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 15px;
+    background-color: #fafafa;
+}
+
+.damage-grid {
+    display: grid;
+    grid-template-columns: 1fr 80px 80px 80px;
+    font-size: 14px;
+    row-gap: 6px;
+    margin-bottom: 6px;
+}
+
+.damage-grid div {
+    text-align: left;
+}
+
+.damage-grid div:first-child,
+.damage-grid div:nth-child(4n + 1) {
+    text-align: left;   /* ✅ First column (attack name) left aligned */
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+    .damage-box {
+        border-color: #444;
+        background-color: #2a2a2a;
+    }
+
+    .damage-grid div {
+        color: #ddd;
+    }
+}
+
+/* Add this to App.css */
+.box-wrapper {
+    margin-bottom: 20px;   /* 👈 controls space between boxes */
+}
+
+.stats-grid {
+    margin-bottom: 50px;   /* 👈 adjust this for more or less space */
+}

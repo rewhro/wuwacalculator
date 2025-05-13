@@ -1,0 +1,22 @@
+/* ===================== */
+/*   TOOLBAR             */
+/* ===================== */
+
+.toolbar {
+    height: 60px;                  /* or whatever height you want */
+    background-color: #e0e0e0;
+    border-top: 1px solid #ddd;
+    flex-shrink: 0;
+
+    display: flex;                 /* ✅ new: use flex to center content */
+    align-items: center;           /* ✅ vertically center */
+    justify-content: space-between;/* optional: space between elements if you want buttons later */
+    padding: 0 0;               /* ✅ only horizontal padding */
+}
+
+@media (prefers-color-scheme: dark) {
+    .toolbar {
+        background-color: #2a2a2a;
+        border-top-color: #333;
+    }
+}
