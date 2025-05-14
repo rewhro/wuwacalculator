@@ -7,10 +7,10 @@
     justify-content: center;
     align-items: center !important;
     gap: 16px;
-    height: 60px !important;
+    height: 80px !important;
     background-color: #f9f9f9;
-    border-top: 1px solid #ddd;
-    border-radius: 0 0 8px 8px;
+    border-bottom: 1px solid #ddd;
+    /*border-radius: 0 0 8px 8px;*/
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     /*flex-wrap: wrap;*/
 }
@@ -45,8 +45,8 @@
 }
 
 .toolbar-icon-button img {
-    width: 60% !important;
-    height: 60% !important;
+    width: 50% !important;
+    height: 50% !important;
     object-fit: contain;
 }
 

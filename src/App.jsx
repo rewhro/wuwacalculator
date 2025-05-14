@@ -292,6 +292,12 @@ export default function App() {
                          currentSliderColor={currentSliderColor} />
 
             <div className="layout">
+                <div className="toolbar">
+                    <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} />
+                    <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} />
+                    <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} />
+                    <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} />
+                </div>
                 <div className="main-content">
                     <div className="split">
                         <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
@@ -343,12 +349,6 @@ export default function App() {
                                            characterRuntimeStates={characterRuntimeStates} />
                         </div>
                     </div>
-                </div>
-                <div className="toolbar">
-                    <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} />
-                    <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} />
-                    <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} />
-                    <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} />
                 </div>
             </div>
         </>
