@@ -334,7 +334,8 @@ export default function App() {
                             <CharacterStats activeCharacter={activeCharacter}
                                             baseCharacterState={baseCharacterState}
                                             characterLevel={characterLevel}
-                                            temporaryBuffs={temporaryBuffs} />
+                                            temporaryBuffs={temporaryBuffs}
+                                            finalStats={finalStats} />
 
                             <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}
                                            characterLevel={characterLevel}
