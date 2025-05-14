@@ -44,8 +44,7 @@ export default function CharacterStats({
 
     return (
         <>
-            <h2 style={{ marginTop: '20px', textAlign: 'left' }}>Stats</h2>
-
+            <h2 className="panel-title">Stats</h2>
             <div className="stats-grid">
                 {statsConfig.map(({ key, label, isPct }) => {
                     const isBaseStat = ['atk', 'hp', 'def'].includes(key);

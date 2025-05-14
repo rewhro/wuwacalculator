@@ -10,11 +10,17 @@ import SkillsModal from './components/SkillsModal';
 import CharacterSelector from './components/CharacterSelector';
 import CharacterStats from './components/CharacterStats';
 import DamageSection from './components/DamageSection';
+import WeaponPane from './components/WeaponPane';
+import EnemyPane from './components/EnemyPane';
+import CustomBuffsPane from './components/CustomBuffsPane';
+import ToolbarIconButton from './components/ToolbarIconButton';
 
 import { getStatsForLevel } from './utils/getStatsForLevel';
 import { attributeColors, attributeIcons, elementToAttribute } from './utils/attributeHelpers';
 
 export default function App() {
+    const [leftPaneView, setLeftPaneView] = useState('characters');
+
     const defaultTemporaryBuffs = {
         atkPercent: 0,
         hpPercent: 0,
@@ -63,6 +69,30 @@ export default function App() {
             havoc: 0
         },
         activeNodes: {}
+    });
+
+    const [customBuffs, setCustomBuffs] = useState({
+        atkFlat: 0,
+        hpFlat: 0,
+        defFlat: 0,
+        atkPercent: 0,
+        hpPercent: 0,
+        defPercent: 0,
+        critRate: 0,
+        critDmg: 0,
+        energyRegen: 0,
+        healingBonus: 0,
+        basicAtk: 0,
+        heavyAtk: 0,
+        resonanceSkill: 0,
+        resonanceLiberation: 0,
+        basic: 0,
+        aero: 0,
+        glacio: 0,
+        spectro: 0,
+        fusion: 0,
+        electro: 0,
+        havoc: 0
     });
 
     const [baseCharacterState, setBaseCharacterState] = useState(null);
@@ -261,16 +291,35 @@ export default function App() {
         <div className="layout">
             <div className="main-content">
                 <div className="split">
-                    <div id="left-pane" className="partition">
-                        <CharacterSelector characters={characters} activeCharacter={activeCharacter}
-                                           handleCharacterSelect={handleCharacterSelect}
-                                           menuOpen={menuOpen} setMenuOpen={setMenuOpen}
-                                           menuRef={menuRef} attributeIconPath={attributeIconPath}
-                                           currentSliderColor={currentSliderColor} sliderValues={sliderValues}
-                                           setSliderValues={setSliderValues} characterLevel={characterLevel}
-                                           setCharacterLevel={setCharacterLevel}
-                                           setSkillsModalOpen={setSkillsModalOpen}
-                                           temporaryBuffs={temporaryBuffs} setTemporaryBuffs={setTemporaryBuffs} />
+                    <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
+                        {leftPaneView === 'characters' && (
+                            <CharacterSelector
+                                characters={characters}
+                                activeCharacter={activeCharacter}
+                                handleCharacterSelect={handleCharacterSelect}
+                                menuOpen={menuOpen}
+                                setMenuOpen={setMenuOpen}
+                                menuRef={menuRef}
+                                attributeIconPath={attributeIconPath}
+                                currentSliderColor={currentSliderColor}
+                                sliderValues={sliderValues}
+                                setSliderValues={setSliderValues}
+                                characterLevel={characterLevel}
+                                setCharacterLevel={setCharacterLevel}
+                                setSkillsModalOpen={setSkillsModalOpen}
+                                temporaryBuffs={temporaryBuffs}
+                                setTemporaryBuffs={setTemporaryBuffs}
+                            />
+                        )}
+                        {leftPaneView === 'weapon' && (
+                            <WeaponPane activeCharacter={activeCharacter} />
+                        )}
+                        {leftPaneView === 'enemy' && (
+                            <EnemyPane activeCharacter={activeCharacter} />
+                        )}
+                        {leftPaneView === 'buffs' && (
+                            <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
+                        )}
                     </div>
 
                     <div id="right-pane" className="partition">
@@ -286,7 +335,13 @@ export default function App() {
                     </div>
                 </div>
             </div>
-            <div className="toolbar"><h2>Toolbar</h2></div>
-        </div>
-    </>);
+            <div className="toolbar">
+                <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} />
+                <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} />
+                <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} />
+                <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} />
+            </div>
+            </div>
+        </>
+    );
 }

@@ -4,7 +4,7 @@ import { calculateDamage } from '../utils/damageCalculator';
 
 export default function DamageSection({
                                           activeCharacter,
-                                          finalStats,                       // ✅ use finalStats from App.jsx
+                                          finalStats,
                                           characterLevel,
                                           sliderValues,
                                           characterRuntimeStates
@@ -13,8 +13,7 @@ export default function DamageSection({
 
     return (
         <>
-            <h2 style={{ marginTop: '20px', textAlign: 'left' }}>Damage</h2>
-
+            <h2 className="panel-title">Damage</h2>
             <div className="damage-section">
                 {skillTabs.map((tab) => {
                     const skill = getSkillData(activeCharacter, tab);
@@ -25,7 +24,9 @@ export default function DamageSection({
                     return (
                         <div key={tab} className="box-wrapper">
                             <div className="damage-box">
-                                <h3>{tab.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</h3>
+                                <h3 className="damage-box-title">
+                                    {tab.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                </h3>
                                 {levels.length > 0 ? (
                                     <div className="damage-grid">
                                         <div></div>
@@ -36,7 +37,6 @@ export default function DamageSection({
                                             const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
                                             const scaling = characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? { atk: 1, hp: 0, def: 0, energyRegen: 0 };
 
-                                            // ✅ this now uses App.jsx calculated finalStats
                                             const atk = finalStats.atk ?? 0;
                                             const hp = finalStats.hp ?? 0;
                                             const def = finalStats.def ?? 0;

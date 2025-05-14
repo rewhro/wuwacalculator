@@ -11,3 +11,4 @@ import './animations.css';
 import './damageSection.css';
 import './inherentSkills.css';
 import './reset.css';
+import './customBuffs.css';

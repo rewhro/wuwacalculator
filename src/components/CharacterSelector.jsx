@@ -32,7 +32,7 @@ export default function CharacterSelector({
     const isDark = useDarkMode();
 
     return (
-        <div id="left-pane" className="partition partition-relative">
+        <>
             <CharacterHeader activeCharacter={activeCharacter} setMenuOpen={setMenuOpen} attributeIconPath={attributeIconPath} menuOpen={menuOpen} />
             <div className="character-settings">
                 <div className="slider-group">
@@ -104,6 +104,6 @@ export default function CharacterSelector({
                 </div>
             )}
             <SequenceSkillsBox activeCharacter={activeCharacter} currentSliderColor={currentSliderColor} sliderValues={sliderValues} />
-        </div>
+        </>
     );
 }

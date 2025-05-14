@@ -43,7 +43,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .stat-row {
@@ -83,18 +83,6 @@
     }
 }
 
-/* Right-align section titles in the right pane */
-#right-pane h2 {
-    text-align: left;
-}
-
-/* Optional: keep dark mode override for title color */
-@media (prefers-color-scheme: dark) {
-    #right-pane h2 {
-        color: #fff;
-        text-align: right;
-    }
-}
 
 /* Damage Section */
 .damage-section {
@@ -113,7 +101,7 @@
 .damage-grid {
     display: grid;
     grid-template-columns: 1fr 80px 80px 80px;
-    font-size: 14px;
+    font-size: 16px;
     row-gap: 6px;
     margin-bottom: 6px;
 }
@@ -124,7 +112,7 @@
 
 .damage-grid div:first-child,
 .damage-grid div:nth-child(4n + 1) {
-    text-align: left;   /* ✅ First column (attack name) left aligned */
+    text-align: left;
 }
 
 /* Dark mode overrides */
@@ -146,4 +134,34 @@
 
 .stats-grid {
     margin-bottom: 50px;   /* 👈 adjust this for more or less space */
+}
+
+
+
+.damage-box-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+    .damage-box-title {
+        color: #ddd;
+    }
+}
+
+.panel-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 20px;
+    color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+    .panel-title {
+        color: #ddd;
+    }
 }

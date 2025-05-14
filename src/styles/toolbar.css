@@ -1,22 +1,63 @@
 /* ===================== */
-/*   TOOLBAR             */
+/*   FINAL TOOLBAR      */
 /* ===================== */
 
 .toolbar {
-    height: 60px;                  /* or whatever height you want */
-    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center !important;
+    gap: 16px;
+    height: 60px !important;
+    background-color: #f9f9f9;
     border-top: 1px solid #ddd;
-    flex-shrink: 0;
-
-    display: flex;                 /* ✅ new: use flex to center content */
-    align-items: center;           /* ✅ vertically center */
-    justify-content: space-between;/* optional: space between elements if you want buttons later */
-    padding: 0 0;               /* ✅ only horizontal padding */
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /*flex-wrap: wrap;*/
 }
 
+.toolbar-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Dark mode consistency */
 @media (prefers-color-scheme: dark) {
     .toolbar {
         background-color: #2a2a2a;
-        border-top-color: #333;
+        border-top-color: #444;
+        box-shadow: none;
+    }
+}
+
+.toolbar-icon-button {
+    width: 80px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toolbar-icon-button img {
+    width: 60% !important;
+    height: 60% !important;
+    object-fit: contain;
+}
+
+.toolbar-icon-button:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    .toolbar-icon-button {
+        background: none;
+        box-shadow: none;
     }
 }
