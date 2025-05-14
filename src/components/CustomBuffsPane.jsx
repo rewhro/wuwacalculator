@@ -122,7 +122,7 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
                     enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0
                 });
             }}>
-                Clear All Buffs
+                Clear All
             </button>
         </>
     );

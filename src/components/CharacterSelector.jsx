@@ -66,39 +66,57 @@ export default function CharacterSelector({
                             </div>
                         ))}
                         <div className="buff-icons">
-                            {Object.entries(activeCharacter.raw?.SkillTrees ?? {}).filter(([, node]) => node.NodeType === 4 && node.Skill?.Name && buffIconMap[node.Skill.Name]).map(([nodeId, node]) => {
-                                const iconFile = buffIconMap[node.Skill.Name];
-                                const iconPath = isDark ? `/assets/skill-icons/dark/${iconFile}.webp` : `/assets/skill-icons/light/${iconFile}.webp`;
-                                const isActive = temporaryBuffs?.activeNodes?.[nodeId] ?? false;
-                                return (
-                                    <img
-                                        key={nodeId}
-                                        src={iconPath}
-                                        alt={iconFile}
-                                        className={`buff-icon ${isActive ? 'active' : ''}`}
-                                        onClick={() => {
-                                            const nodeIdNum = Number(nodeId);
-                                            const skillName = node.Skill?.Name;
-                                            const buffKey = skillToBuffMap[skillName];
-                                            const percent = parseFloat((node.Skill?.Param?.[0] ?? "0").replace('%', ''));
-                                            setTemporaryBuffs(prev => {
-                                                const wasActive = prev.activeNodes?.[nodeIdNum] ?? false;
-                                                const newActive = !wasActive;
-                                                return {
-                                                    ...prev,
-                                                    activeNodes: {
-                                                        ...prev.activeNodes,
-                                                        [nodeIdNum]: newActive
-                                                    },
-                                                    ...(buffKey ? {
-                                                        [buffKey]: newActive ? (prev[buffKey] ?? 0) + percent : (prev[buffKey] ?? 0) - percent
-                                                    } : {})
-                                                };
-                                            });
-                                        }}
-                                    />
-                                );
-                            })}
+                            {Object.entries(activeCharacter.raw?.SkillTrees ?? {})
+                                .filter(([, node]) =>
+                                    node.NodeType === 4 &&
+                                    node.Skill?.Name &&
+                                    buffIconMap[node.Skill.Name]
+                                )
+                                .map(([nodeId, node]) => {
+                                    const iconFile = buffIconMap[node.Skill.Name];
+                                    const iconPath = isDark
+                                        ? `/assets/skill-icons/dark/${iconFile}.webp`
+                                        : `/assets/skill-icons/light/${iconFile}.webp`;
+                                    const isActive = temporaryBuffs?.activeNodes?.[nodeId] ?? false;
+                                    const tooltipText = formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor);
+
+                                    return (
+                                        <div
+                                            key={nodeId}
+                                            className="buff-icon-wrapper"
+                                            data-tooltip={tooltipText}
+                                        >
+                                            <img
+                                                src={iconPath}
+                                                alt={iconFile}
+                                                className={`buff-icon ${isActive ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    const nodeIdNum = Number(nodeId);
+                                                    const skillName = node.Skill?.Name;
+                                                    const buffKey = skillToBuffMap[skillName];
+                                                    const percent = parseFloat((node.Skill?.Param?.[0] ?? "0").replace('%', ''));
+
+                                                    setTemporaryBuffs(prev => {
+                                                        const wasActive = prev.activeNodes?.[nodeIdNum] ?? false;
+                                                        const newActive = !wasActive;
+                                                        return {
+                                                            ...prev,
+                                                            activeNodes: {
+                                                                ...prev.activeNodes,
+                                                                [nodeIdNum]: newActive
+                                                            },
+                                                            ...(buffKey ? {
+                                                                [buffKey]: newActive
+                                                                    ? (prev[buffKey] ?? 0) + percent
+                                                                    : (prev[buffKey] ?? 0) - percent
+                                                            } : {})
+                                                        };
+                                                    });
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                })}
                         </div>
                     </div>
                 </div>

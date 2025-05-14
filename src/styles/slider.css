@@ -70,3 +70,10 @@ input[type="range"]::-moz-range-thumb:hover {
         box-shadow: inset 0 1px 3px rgba(255,255,255,0.05);
     }
 }
+
+/* Consistent slider labels across all panels */
+.slider-group label,
+.slider-label-with-input label {
+    font-weight: bold;
+    font-size: 14px;
+}
