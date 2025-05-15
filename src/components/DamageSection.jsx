@@ -12,8 +12,9 @@ export default function DamageSection({
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill'];
 
     return (
-        <>
+        <div className="damage-box">          {/* ✅ outer big box */}
             <h2 className="panel-title">Damage</h2>
+
             <div className="damage-section">
                 {skillTabs.map((tab) => {
                     const skill = getSkillData(activeCharacter, tab);
@@ -21,12 +22,14 @@ export default function DamageSection({
                         level => Array.isArray(level.Param?.[0]) &&
                             level.Param[0].some(val => typeof val === 'string' && val.includes('%'))
                     ) : [];
+
                     return (
                         <div key={tab} className="box-wrapper">
-                            <div className="damage-box">
+                            <div className="damage-inner-box">   {/* ✅ small inner box */}
                                 <h3 className="damage-box-title">
                                     {tab.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                                 </h3>
+
                                 {levels.length > 0 ? (
                                     <div className="damage-grid">
                                         <div></div>
@@ -60,13 +63,15 @@ export default function DamageSection({
                                             );
                                         })}
                                     </div>
-                                ) : <p>No multipliers.</p>}
+                                ) : (
+                                    <p>No multipliers.</p>
+                                )}
                             </div>
                         </div>
                     );
                 })}
             </div>
-        </>
+        </div>
     );
 }
 

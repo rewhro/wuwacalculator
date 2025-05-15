@@ -20,6 +20,7 @@ import { attributeColors, attributeIcons, elementToAttribute } from './utils/att
 
 export default function App() {
     const [leftPaneView, setLeftPaneView] = useState('characters');
+    const [isCollapsedMode, setIsCollapsedMode] = useState(false);
 
     const defaultTemporaryBuffs = {
         atkPercent: 0,
@@ -148,7 +149,36 @@ export default function App() {
     }, [menuOpen]);
 
     useEffect(() => {
-        Split(['#left-pane', '#right-pane'], { sizes: [25, 75], minSize: [250, 400], gutterSize: 1 });
+        Split(['#left-pane', '#right-pane'], { sizes: [50, 50], gutterSize: 1 });
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const desktopThreshold = 1050;  // 👉 choose safe desktop threshold
+
+            if (window.innerWidth >= desktopThreshold) {
+                // Force disable collapsed mode if we grow big again
+                setIsCollapsedMode(false);
+                return;
+            }
+
+            // Otherwise only check pane sizes for collapse
+            const leftPane = document.querySelector('#left-pane');
+            const rightPane = document.querySelector('#right-pane');
+
+            if (leftPane && rightPane) {
+                const leftWidth = leftPane.offsetWidth;
+                const rightWidth = rightPane.offsetWidth;
+
+                const totalPaneWidth = leftWidth + rightWidth;
+                setIsCollapsedMode(window.innerWidth < totalPaneWidth);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     useEffect(() => {
@@ -299,54 +329,57 @@ export default function App() {
                     <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} />
                 </div>
                 <div className="main-content">
-                    <div className="split">
-                        <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
-                            {leftPaneView === 'characters' && (
-                                <CharacterSelector
-                                    characters={characters}
-                                    activeCharacter={activeCharacter}
-                                    handleCharacterSelect={handleCharacterSelect}
-                                    menuOpen={menuOpen}
-                                    setMenuOpen={setMenuOpen}
-                                    menuRef={menuRef}
-                                    attributeIconPath={attributeIconPath}
-                                    currentSliderColor={currentSliderColor}
-                                    sliderValues={sliderValues}
-                                    setSliderValues={setSliderValues}
-                                    characterLevel={characterLevel}
-                                    setCharacterLevel={setCharacterLevel}
-                                    setSkillsModalOpen={setSkillsModalOpen}
-                                    temporaryBuffs={temporaryBuffs}
-                                    setTemporaryBuffs={setTemporaryBuffs}
-                                />
-                            )}
-                            {leftPaneView === 'weapon' && (
-                                <WeaponPane activeCharacter={activeCharacter} />
-                            )}
-                            {leftPaneView === 'enemy' && (
-                                <EnemyPane
-                                    enemyLevel={enemyLevel}
-                                    setEnemyLevel={setEnemyLevel}
-                                    enemyRes={enemyRes}
-                                    setEnemyRes={setEnemyRes}
-                                />
-                            )}
-                            {leftPaneView === 'buffs' && (
-                                <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
-                            )}
-                        </div>
+                    <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`}>
+                        <div className="split">
+                            <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
 
-                        <div id="right-pane" className="partition">
-                            <CharacterStats activeCharacter={activeCharacter}
-                                            baseCharacterState={baseCharacterState}
-                                            characterLevel={characterLevel}
-                                            temporaryBuffs={temporaryBuffs}
-                                            finalStats={finalStats} />
+                                {leftPaneView === 'characters' && (
+                                    <CharacterSelector
+                                        characters={characters}
+                                        activeCharacter={activeCharacter}
+                                        handleCharacterSelect={handleCharacterSelect}
+                                        menuOpen={menuOpen}
+                                        setMenuOpen={setMenuOpen}
+                                        menuRef={menuRef}
+                                        attributeIconPath={attributeIconPath}
+                                        currentSliderColor={currentSliderColor}
+                                        sliderValues={sliderValues}
+                                        setSliderValues={setSliderValues}
+                                        characterLevel={characterLevel}
+                                        setCharacterLevel={setCharacterLevel}
+                                        setSkillsModalOpen={setSkillsModalOpen}
+                                        temporaryBuffs={temporaryBuffs}
+                                        setTemporaryBuffs={setTemporaryBuffs}
+                                    />
+                                )}
+                                {leftPaneView === 'weapon' && (
+                                    <WeaponPane activeCharacter={activeCharacter} />
+                                )}
+                                {leftPaneView === 'enemy' && (
+                                    <EnemyPane
+                                        enemyLevel={enemyLevel}
+                                        setEnemyLevel={setEnemyLevel}
+                                        enemyRes={enemyRes}
+                                        setEnemyRes={setEnemyRes}
+                                    />
+                                )}
+                                {leftPaneView === 'buffs' && (
+                                    <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
+                                )}
+                            </div>
 
-                            <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}
-                                           characterLevel={characterLevel}
-                                           sliderValues={sliderValues}
-                                           characterRuntimeStates={characterRuntimeStates} />
+                            <div id="right-pane" className="partition">
+                                <CharacterStats activeCharacter={activeCharacter}
+                                                baseCharacterState={baseCharacterState}
+                                                characterLevel={characterLevel}
+                                                temporaryBuffs={temporaryBuffs}
+                                                finalStats={finalStats} />
+
+                                <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}
+                                               characterLevel={characterLevel}
+                                               sliderValues={sliderValues}
+                                               characterRuntimeStates={characterRuntimeStates} />
+                            </div>
                         </div>
                     </div>
                 </div>

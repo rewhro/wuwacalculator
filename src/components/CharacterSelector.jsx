@@ -7,6 +7,8 @@ import CharacterMenu from './CharacterMenu';
 import SkillSettings from './SkillSettings';
 import { formatDescription } from '../utils/formatDescription';
 
+const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
+
 const buffIconMap = {
     'ATK+': 'atk', 'HP+': 'hp', 'DEF+': 'def',
     'Healing Bonus+': 'healing-bonus', 'Crit. Rate+': 'crit-rate', 'Crit. DMG+': 'crit-dmg',
@@ -78,7 +80,8 @@ export default function CharacterSelector({
                                         ? `/assets/skill-icons/dark/${iconFile}.webp`
                                         : `/assets/skill-icons/light/${iconFile}.webp`;
                                     const isActive = temporaryBuffs?.activeNodes?.[nodeId] ?? false;
-                                    const tooltipText = formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor);
+                                    const rawTooltip = formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor);
+                                    const tooltipText = cleanTooltipText(rawTooltip);
 
                                     return (
                                         <div
@@ -90,6 +93,8 @@ export default function CharacterSelector({
                                                 src={iconPath}
                                                 alt={iconFile}
                                                 className={`buff-icon ${isActive ? 'active' : ''}`}
+                                                title={tooltipText}
+
                                                 onClick={() => {
                                                     const nodeIdNum = Number(nodeId);
                                                     const skillName = node.Skill?.Name;

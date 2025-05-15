@@ -7,6 +7,8 @@
 
 .buff-row {
     display: flex;
+    min-width: 50px;
+    max-width: 80px;
     align-items: center;
     justify-content: space-between;
     background: #f9f9f9;
@@ -16,7 +18,7 @@
 
 .buff-row label {
     font-weight: bold;
-    flex: 1;
+    flex: 0 1 120px;
     min-width: 130px;
     text-align: left;
 }
@@ -70,7 +72,7 @@
 
 .dual-input input {
     flex: 1 1 0;
-    min-width: 0;             /* 👈 this is KEY to prevent overflow */
+    min-width: 0;
 }
 
 .buff-row {
