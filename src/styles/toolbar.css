@@ -42,6 +42,10 @@
     background: none;
     cursor: pointer;
     padding: 0;
+
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: none;
 }
 
 .toolbar-icon-button img {
