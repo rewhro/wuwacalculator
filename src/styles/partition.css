@@ -1,0 +1,58 @@
+/* ===================== */
+/*   PANES / PARTITIONS  */
+/* ===================== */
+
+/* Default: desktop → allow Split.js scrolls */
+#left-pane, #right-pane {
+    box-sizing: border-box;
+    overflow-x: auto;
+    height: 100%;
+}
+
+/* Small screen: override to unified scroll */
+.layout.collapsed-mode #left-pane,
+.layout.collapsed-mode #right-pane {
+    overflow: unset !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    flex: none !important;
+    min-width: 100% !important;
+    width: 100% !important;
+}
+
+.layout.collapsed-mode #left-pane {
+    padding: 16px !important;
+    margin-bottom: 50px;
+}
+
+.layout.collapsed-mode #right-pane {
+    padding: 16px !important;
+}
+
+.layout.collapsed-mode .split {
+    flex-direction: column;
+}
+
+#left-pane {
+    width: 30%;
+    padding: 16px;
+    max-height: 100%;
+}
+
+#right-pane {
+    padding: 10px;
+    min-width: 600px;
+}
+
+.partition {
+    background-color: #f5f5f5;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .partition {
+        background-color: #1a1a1a;
+        border-right-color: #333;
+    }
+}

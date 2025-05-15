@@ -1,0 +1,103 @@
+/* ========================== */
+/*   INHERENT SKILLS          */
+/* ========================== */
+.inherent-skills-box {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.inherent-skills-box h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.inherent-skills .inherent-skill {
+    margin-bottom: 15px;
+}
+
+.inherent-skills .inherent-skill h4 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.inherent-skills .inherent-skill p {
+    color: #444;
+    line-height: 1.4;
+}
+
+/* ========================== */
+/*   DARK MODE OVERRIDE       */
+/* ========================== */
+@media (prefers-color-scheme: dark) {
+    .inherent-skills-box {
+        background: linear-gradient(145deg, #1b1b1b, #232323);
+        border-color: rgba(255,255,255,0.1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+
+    .inherent-skills-box h3,
+    .inherent-skills .inherent-skill h4 {
+        color: #ffffff;
+    }
+
+    .inherent-skills .inherent-skill p {
+        color: #bbbbbb;
+    }
+}
+
+/* ===================== */
+/*   Buff Icons          */
+/* ===================== */
+
+.buff-icons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    justify-content: center;
+    gap: 10px;
+    place-items: center;
+    margin-top: 12px;
+}
+
+.buff-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background-color: #fff;
+    padding: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.53);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.buff-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.buff-icon.active {
+    transform: scale(0.9);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+    .buff-icon {
+        background-color: #2a2a2a;
+        box-shadow: 0 1px 4px rgba(255, 255, 255, 0.25);
+    }
+
+    .buff-icon:hover {
+        box-shadow: 0 2px 6px rgba(255, 255, 255, 0.25);
+    }
+
+    .buff-icon.active {
+        transform: scale(0.9);
+        box-shadow: 0 1px 4px rgba(255, 255, 255, 0.12);
+    }
+}
