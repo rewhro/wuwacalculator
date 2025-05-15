@@ -17,6 +17,8 @@ import ToolbarIconButton from './components/ToolbarIconButton';
 
 import { getStatsForLevel } from './utils/getStatsForLevel';
 import { attributeColors, attributeIcons, elementToAttribute } from './utils/attributeHelpers';
+import { getFinalStats } from './utils/getStatsForLevel';
+import { getUnifiedStatPool } from './utils/getUnifiedStatPool';
 
 export default function App() {
     const [leftPaneView, setLeftPaneView] = useState('characters');
@@ -39,6 +41,29 @@ export default function App() {
         },
         activeNodes: {}
     };
+
+    const [combatState, setCombatState] = useState({
+        characterLevel: 1,
+        enemyLevel: 1,
+        enemyRes: 0,
+        enemyResShred: 0,
+        enemyDefShred: 0,
+        enemyDefIgnore: 0,
+        elementBonus: 0,
+        elementDmgAmplify: 0,
+        flatDmg: 0,
+        damageTypeAmplify: {
+            basic: 0,
+            heavy: 0,
+            skill: 0,
+            ultimate: 0
+        },
+        dmgReduction: 0,
+        elementDmgReduction: 0,
+        critRate: 0,
+        critDmg: 0
+    });
+
     const [sliderValues, setSliderValues] = useState({
         normalAttack: 1,
         resonanceSkill: 1,
@@ -57,7 +82,7 @@ export default function App() {
     const [enemyLevel, setEnemyLevel] = useState(1);
     const [enemyRes, setEnemyRes] = useState(0);
 
-    const [temporaryBuffs, setTemporaryBuffs] = useState({
+    const [traceNodeBuffs, setTraceNodeBuffs] = useState({
         atkPercent: 0,
         hpPercent: 0,
         defPercent: 0,
@@ -120,7 +145,7 @@ export default function App() {
                 if (foundChar) {
                     setActiveCharacter(foundChar);
                     setCharacterRuntimeStates(saved.characterRuntimeStates ?? {});
-                    setTemporaryBuffs(saved.temporaryBuffs ?? defaultTemporaryBuffs);
+                    setTraceNodeBuffs(saved.temporaryBuffs ?? defaultTemporaryBuffs);
                     setCharacterLevel(saved.characterLevel ?? 1);
 
                     const state = characterStates.find(c => String(c.Id) === String(foundChar.link));
@@ -185,15 +210,15 @@ export default function App() {
         const saveState = {
             characterRuntimeStates,
             activeCharacterId: activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link,
-            temporaryBuffs,
+            temporaryBuffs: traceNodeBuffs,
             characterLevel
         };
         localStorage.setItem('wutheringAppState', JSON.stringify(saveState));
-    }, [characterRuntimeStates, activeCharacter, temporaryBuffs, characterLevel]);
+    }, [characterRuntimeStates, activeCharacter, traceNodeBuffs, characterLevel]);
 
     useEffect(() => {
         if (!activeCharacter) return;
-        const activeNodeIds = Object.entries(temporaryBuffs.activeNodes ?? {})
+        const activeNodeIds = Object.entries(traceNodeBuffs.activeNodes ?? {})
             .filter(([_, active]) => active)
             .map(([nodeId]) => Number(nodeId));
 
@@ -204,6 +229,11 @@ export default function App() {
             healingBonus: 0,
             critRate: 0,
             critDmg: 0,
+            energyRegen: 0,
+            basicAtk: 0,
+            heavyAtk: 0,
+            resonanceSkill: 0,
+            resonanceLiberation: 0,
             elementalBonuses: {
                 aero: 0,
                 glacio: 0,
@@ -212,7 +242,7 @@ export default function App() {
                 electro: 0,
                 havoc: 0
             },
-            activeNodes: temporaryBuffs.activeNodes
+            activeNodes: traceNodeBuffs.activeNodes
         };
 
         const skillMap = {
@@ -246,8 +276,25 @@ export default function App() {
             }
         });
 
-        setTemporaryBuffs(buffTotals);
-    }, [temporaryBuffs.activeNodes, activeCharacter]);
+        // ✅ Studio patch → merge customBuffs
+        buffTotals.atkPercent += customBuffs?.atkPercent ?? 0;
+        buffTotals.hpPercent += customBuffs?.hpPercent ?? 0;
+        buffTotals.defPercent += customBuffs?.defPercent ?? 0;
+        buffTotals.critRate += customBuffs?.critRate ?? 0;
+        buffTotals.critDmg += customBuffs?.critDmg ?? 0;
+        buffTotals.healingBonus += customBuffs?.healingBonus ?? 0;
+
+        buffTotals.basicAtk += customBuffs?.basicAtk ?? 0;
+        buffTotals.heavyAtk += customBuffs?.heavyAtk ?? 0;
+        buffTotals.resonanceSkill += customBuffs?.resonanceSkill ?? 0;
+        buffTotals.resonanceLiberation += customBuffs?.resonanceLiberation ?? 0;
+
+        ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
+            buffTotals.elementalBonuses[element] += customBuffs?.[element] ?? 0;
+        });
+
+        setTraceNodeBuffs(buffTotals);
+    }, [traceNodeBuffs.activeNodes, activeCharacter, customBuffs]);
 
     const handleCharacterSelect = (char) => {
         if (activeCharacter) {
@@ -264,7 +311,12 @@ export default function App() {
                     SkillLevels: sliderValues,
                     CurrentWeapon: null,
                     CharacterLevel: characterLevel,
-                    TemporaryBuffs: temporaryBuffs
+                    TemporaryBuffs: traceNodeBuffs,
+                    CombatState: combatState,
+                    weapon: {
+                        name: "",
+                        baseAtk: 0
+                    }
                 }
             }));
         }
@@ -281,7 +333,7 @@ export default function App() {
             resonanceLiberation: 1, introSkill: 1, sequence: 0
         });
 
-        setTemporaryBuffs(cached?.TemporaryBuffs ?? {
+        setTraceNodeBuffs(cached?.TemporaryBuffs ?? {
             atkPercent: 0,
             hpPercent: 0,
             defPercent: 0,
@@ -298,22 +350,39 @@ export default function App() {
             },
             activeNodes: {}
         });
+
+        setCombatState(cached?.CombatState ?? {
+            characterLevel: 1,
+            enemyLevel: 1,
+            enemyRes: 0,
+            enemyResShred: 0,
+            enemyDefShred: 0,
+            enemyDefIgnore: 0,
+            elementBonus: 0,
+            elementDmgAmplify: 0,
+            flatDmg: 0,
+            damageTypeAmplify: {
+                basic: 0,
+                heavy: 0,
+                skill: 0,
+                ultimate: 0
+            },
+            dmgReduction: 0,
+            elementDmgReduction: 0,
+            critRate: 0,
+            critDmg: 0
+        });
+
         setMenuOpen(false);
     };
 
-    const levelStats = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel) ?? {};
-    const finalStats = { ...levelStats };
-
-    finalStats.atk = (levelStats["Atk"] ?? 0) * (1 + (temporaryBuffs.atkPercent ?? 0) / 100);
-    finalStats.hp = (levelStats["Life"] ?? 0) * (1 + (temporaryBuffs.hpPercent ?? 0) / 100);
-    finalStats.def = (levelStats["Def"] ?? 0) * (1 + (temporaryBuffs.defPercent ?? 0) / 100);
-    finalStats.critRate = (baseCharacterState?.Stats?.critRate ?? 0) + (temporaryBuffs.critRate ?? 0);
-    finalStats.critDmg = (baseCharacterState?.Stats?.critDmg ?? 0) + (temporaryBuffs.critDmg ?? 0);
-    finalStats.healingBonus = (baseCharacterState?.Stats?.healingBonus ?? 0) + (temporaryBuffs.healingBonus ?? 0);
-    ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
-        const key = `${element}DmgBonus`;
-        finalStats[key] = (baseCharacterState?.Stats?.[key] ?? 0) + (temporaryBuffs.elementalBonuses[element] ?? 0);
-    });
+    const mergedBuffs = getUnifiedStatPool([traceNodeBuffs, customBuffs]);
+    const finalStats = getFinalStats(
+        activeCharacter,
+        baseCharacterState,
+        characterLevel,
+        mergedBuffs
+    );
 
     return (<>
             <SkillsModal skillsModalOpen={skillsModalOpen} setSkillsModalOpen={setSkillsModalOpen}
@@ -348,12 +417,15 @@ export default function App() {
                                         characterLevel={characterLevel}
                                         setCharacterLevel={setCharacterLevel}
                                         setSkillsModalOpen={setSkillsModalOpen}
-                                        temporaryBuffs={temporaryBuffs}
-                                        setTemporaryBuffs={setTemporaryBuffs}
+                                        temporaryBuffs={traceNodeBuffs}
+                                        setTemporaryBuffs={setTraceNodeBuffs}
                                     />
                                 )}
                                 {leftPaneView === 'weapon' && (
-                                    <WeaponPane activeCharacter={activeCharacter} />
+                                    <WeaponPane activeCharacter={activeCharacter}
+                                                combatState={combatState}
+                                                setCombatState={setCombatState}
+                                    />
                                 )}
                                 {leftPaneView === 'enemy' && (
                                     <EnemyPane
@@ -361,6 +433,8 @@ export default function App() {
                                         setEnemyLevel={setEnemyLevel}
                                         enemyRes={enemyRes}
                                         setEnemyRes={setEnemyRes}
+                                        combatState={combatState}
+                                        setCombatState={setCombatState}
                                     />
                                 )}
                                 {leftPaneView === 'buffs' && (
@@ -372,7 +446,7 @@ export default function App() {
                                 <CharacterStats activeCharacter={activeCharacter}
                                                 baseCharacterState={baseCharacterState}
                                                 characterLevel={characterLevel}
-                                                temporaryBuffs={temporaryBuffs}
+                                                temporaryBuffs={traceNodeBuffs}
                                                 finalStats={finalStats} />
 
                                 <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}

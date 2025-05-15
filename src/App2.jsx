@@ -17,9 +17,11 @@ import ToolbarIconButton from './components/ToolbarIconButton';
 
 import { getStatsForLevel } from './utils/getStatsForLevel';
 import { attributeColors, attributeIcons, elementToAttribute } from './utils/attributeHelpers';
+import { getFinalStats } from './utils/getStatsForLevel';
 
 export default function App() {
     const [leftPaneView, setLeftPaneView] = useState('characters');
+    const [isCollapsedMode, setIsCollapsedMode] = useState(false);
 
     const defaultTemporaryBuffs = {
         atkPercent: 0,
@@ -38,6 +40,29 @@ export default function App() {
         },
         activeNodes: {}
     };
+
+    const [combatState, setCombatState] = useState({
+        characterLevel: 1,
+        enemyLevel: 1,
+        enemyRes: 0,
+        enemyResShred: 0,
+        enemyDefShred: 0,
+        enemyDefIgnore: 0,
+        elementBonus: 0,
+        elementDmgAmplify: 0,
+        flatDmg: 0,
+        damageTypeAmplify: {
+            basic: 0,
+            heavy: 0,
+            skill: 0,
+            ultimate: 0
+        },
+        dmgReduction: 0,
+        elementDmgReduction: 0,
+        critRate: 0,
+        critDmg: 0
+    });
+
     const [sliderValues, setSliderValues] = useState({
         normalAttack: 1,
         resonanceSkill: 1,
@@ -148,7 +173,36 @@ export default function App() {
     }, [menuOpen]);
 
     useEffect(() => {
-        Split(['#left-pane', '#right-pane'], { sizes: [25, 75], minSize: [250, 400], gutterSize: 1 });
+        Split(['#left-pane', '#right-pane'], { sizes: [50, 50], gutterSize: 1 });
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const desktopThreshold = 1050;  // 👉 choose safe desktop threshold
+
+            if (window.innerWidth >= desktopThreshold) {
+                // Force disable collapsed mode if we grow big again
+                setIsCollapsedMode(false);
+                return;
+            }
+
+            // Otherwise only check pane sizes for collapse
+            const leftPane = document.querySelector('#left-pane');
+            const rightPane = document.querySelector('#right-pane');
+
+            if (leftPane && rightPane) {
+                const leftWidth = leftPane.offsetWidth;
+                const rightWidth = rightPane.offsetWidth;
+
+                const totalPaneWidth = leftWidth + rightWidth;
+                setIsCollapsedMode(window.innerWidth < totalPaneWidth);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     useEffect(() => {
@@ -174,6 +228,11 @@ export default function App() {
             healingBonus: 0,
             critRate: 0,
             critDmg: 0,
+            energyRegen: 0,                    // ✅ added energyRegen
+            basicAtk: 0,                       // ✅ added skill buffs
+            heavyAtk: 0,
+            resonanceSkill: 0,
+            resonanceLiberation: 0,
             elementalBonuses: {
                 aero: 0,
                 glacio: 0,
@@ -216,8 +275,26 @@ export default function App() {
             }
         });
 
+        // ✅ Studio patch → merge customBuffs
+        buffTotals.atkPercent += customBuffs?.atkPercent ?? 0;
+        buffTotals.hpPercent += customBuffs?.hpPercent ?? 0;
+        buffTotals.defPercent += customBuffs?.defPercent ?? 0;
+        buffTotals.critRate += customBuffs?.critRate ?? 0;
+        buffTotals.critDmg += customBuffs?.critDmg ?? 0;
+        buffTotals.healingBonus += customBuffs?.healingBonus ?? 0;
+        buffTotals.energyRegen += customBuffs?.energyRegen ?? 0;   // ✅ added energyRegen
+
+        buffTotals.basicAtk += customBuffs?.basicAtk ?? 0;         // ✅ added skill buffs
+        buffTotals.heavyAtk += customBuffs?.heavyAtk ?? 0;
+        buffTotals.resonanceSkill += customBuffs?.resonanceSkill ?? 0;
+        buffTotals.resonanceLiberation += customBuffs?.resonanceLiberation ?? 0;
+
+        ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
+            buffTotals.elementalBonuses[element] += customBuffs?.[element] ?? 0;
+        });
+
         setTemporaryBuffs(buffTotals);
-    }, [temporaryBuffs.activeNodes, activeCharacter]);
+    }, [temporaryBuffs.activeNodes, activeCharacter, customBuffs]);
 
     const handleCharacterSelect = (char) => {
         if (activeCharacter) {
@@ -234,7 +311,12 @@ export default function App() {
                     SkillLevels: sliderValues,
                     CurrentWeapon: null,
                     CharacterLevel: characterLevel,
-                    TemporaryBuffs: temporaryBuffs
+                    TemporaryBuffs: temporaryBuffs,
+                    CombatState: combatState,
+                    weapon: {
+                        name: "",
+                        baseAtk: 0
+                    }
                 }
             }));
         }
@@ -268,22 +350,39 @@ export default function App() {
             },
             activeNodes: {}
         });
+
+        setCombatState(cached?.CombatState ?? {
+            characterLevel: 1,
+            enemyLevel: 1,
+            enemyRes: 0,
+            enemyResShred: 0,
+            enemyDefShred: 0,
+            enemyDefIgnore: 0,
+            elementBonus: 0,
+            elementDmgAmplify: 0,
+            flatDmg: 0,
+            damageTypeAmplify: {
+                basic: 0,
+                heavy: 0,
+                skill: 0,
+                ultimate: 0
+            },
+            dmgReduction: 0,
+            elementDmgReduction: 0,
+            critRate: 0,
+            critDmg: 0
+        });
+
         setMenuOpen(false);
     };
 
-    const levelStats = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel) ?? {};
-    const finalStats = { ...levelStats };
-
-    finalStats.atk = (levelStats["Atk"] ?? 0) * (1 + (temporaryBuffs.atkPercent ?? 0) / 100);
-    finalStats.hp = (levelStats["Life"] ?? 0) * (1 + (temporaryBuffs.hpPercent ?? 0) / 100);
-    finalStats.def = (levelStats["Def"] ?? 0) * (1 + (temporaryBuffs.defPercent ?? 0) / 100);
-    finalStats.critRate = (baseCharacterState?.Stats?.critRate ?? 0) + (temporaryBuffs.critRate ?? 0);
-    finalStats.critDmg = (baseCharacterState?.Stats?.critDmg ?? 0) + (temporaryBuffs.critDmg ?? 0);
-    finalStats.healingBonus = (baseCharacterState?.Stats?.healingBonus ?? 0) + (temporaryBuffs.healingBonus ?? 0);
-    ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
-        const key = `${element}DmgBonus`;
-        finalStats[key] = (baseCharacterState?.Stats?.[key] ?? 0) + (temporaryBuffs.elementalBonuses[element] ?? 0);
-    });
+    const finalStats = getFinalStats(
+        activeCharacter,
+        baseCharacterState,
+        characterLevel,
+        temporaryBuffs,
+        customBuffs
+    );
 
     return (<>
             <SkillsModal skillsModalOpen={skillsModalOpen} setSkillsModalOpen={setSkillsModalOpen}
@@ -292,62 +391,71 @@ export default function App() {
                          currentSliderColor={currentSliderColor} />
 
             <div className="layout">
-                <div className="main-content">
-                    <div className="split">
-                        <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
-                            {leftPaneView === 'characters' && (
-                                <CharacterSelector
-                                    characters={characters}
-                                    activeCharacter={activeCharacter}
-                                    handleCharacterSelect={handleCharacterSelect}
-                                    menuOpen={menuOpen}
-                                    setMenuOpen={setMenuOpen}
-                                    menuRef={menuRef}
-                                    attributeIconPath={attributeIconPath}
-                                    currentSliderColor={currentSliderColor}
-                                    sliderValues={sliderValues}
-                                    setSliderValues={setSliderValues}
-                                    characterLevel={characterLevel}
-                                    setCharacterLevel={setCharacterLevel}
-                                    setSkillsModalOpen={setSkillsModalOpen}
-                                    temporaryBuffs={temporaryBuffs}
-                                    setTemporaryBuffs={setTemporaryBuffs}
-                                />
-                            )}
-                            {leftPaneView === 'weapon' && (
-                                <WeaponPane activeCharacter={activeCharacter} />
-                            )}
-                            {leftPaneView === 'enemy' && (
-                                <EnemyPane
-                                    enemyLevel={enemyLevel}
-                                    setEnemyLevel={setEnemyLevel}
-                                    enemyRes={enemyRes}
-                                    setEnemyRes={setEnemyRes}
-                                />
-                            )}
-                            {leftPaneView === 'buffs' && (
-                                <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
-                            )}
-                        </div>
-
-                        <div id="right-pane" className="partition">
-                            <CharacterStats activeCharacter={activeCharacter}
-                                            baseCharacterState={baseCharacterState}
-                                            characterLevel={characterLevel}
-                                            temporaryBuffs={temporaryBuffs} />
-
-                            <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}
-                                           characterLevel={characterLevel}
-                                           sliderValues={sliderValues}
-                                           characterRuntimeStates={characterRuntimeStates} />
-                        </div>
-                    </div>
-                </div>
                 <div className="toolbar">
                     <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} />
                     <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} />
                     <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} />
                     <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} />
+                </div>
+                <div className="main-content">
+                    <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`}>
+                        <div className="split">
+                            <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
+
+                                {leftPaneView === 'characters' && (
+                                    <CharacterSelector
+                                        characters={characters}
+                                        activeCharacter={activeCharacter}
+                                        handleCharacterSelect={handleCharacterSelect}
+                                        menuOpen={menuOpen}
+                                        setMenuOpen={setMenuOpen}
+                                        menuRef={menuRef}
+                                        attributeIconPath={attributeIconPath}
+                                        currentSliderColor={currentSliderColor}
+                                        sliderValues={sliderValues}
+                                        setSliderValues={setSliderValues}
+                                        characterLevel={characterLevel}
+                                        setCharacterLevel={setCharacterLevel}
+                                        setSkillsModalOpen={setSkillsModalOpen}
+                                        temporaryBuffs={temporaryBuffs}
+                                        setTemporaryBuffs={setTemporaryBuffs}
+                                    />
+                                )}
+                                {leftPaneView === 'weapon' && (
+                                    <WeaponPane activeCharacter={activeCharacter}
+                                                combatState={combatState}
+                                                setCombatState={setCombatState}
+                                    />
+                                )}
+                                {leftPaneView === 'enemy' && (
+                                    <EnemyPane
+                                        enemyLevel={enemyLevel}
+                                        setEnemyLevel={setEnemyLevel}
+                                        enemyRes={enemyRes}
+                                        setEnemyRes={setEnemyRes}
+                                        combatState={combatState}
+                                        setCombatState={setCombatState}
+                                    />
+                                )}
+                                {leftPaneView === 'buffs' && (
+                                    <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
+                                )}
+                            </div>
+
+                            <div id="right-pane" className="partition">
+                                <CharacterStats activeCharacter={activeCharacter}
+                                                baseCharacterState={baseCharacterState}
+                                                characterLevel={characterLevel}
+                                                temporaryBuffs={temporaryBuffs}
+                                                finalStats={finalStats} />
+
+                                <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}
+                                               characterLevel={characterLevel}
+                                               sliderValues={sliderValues}
+                                               characterRuntimeStates={characterRuntimeStates} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -57,7 +57,7 @@
 
 .buff-icons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);   /* 👈 2 columns */
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, auto);
     justify-content: center;
     gap: 10px;
@@ -86,9 +86,7 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Dark mode support */
 @media (prefers-color-scheme: dark) {
-    /* dark mode */
     .buff-icon {
         background-color: #2a2a2a;
         box-shadow: 0 1px 4px rgba(255, 255, 255, 0.25);

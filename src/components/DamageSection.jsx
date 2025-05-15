@@ -12,7 +12,7 @@ export default function DamageSection({
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill'];
 
     return (
-        <div className="damage-box">          {/* ✅ outer big box */}
+        <div className="damage-box">
             <h2 className="panel-title">Damage</h2>
 
             <div className="damage-section">

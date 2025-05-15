@@ -19,20 +19,12 @@ double calculate_def_multiplier(double characterLevel, double enemyLevel, double
     return (800.0 + 8.0 * characterLevel) / (800.0 + 8.0 * characterLevel + effectiveDef);
 }
 
-double calculate_dmg_reduction(double baseReduction, double additionalReduction) {
-    return 1.0 - (baseReduction + additionalReduction);
-}
-
-double calculate_element_reduction(double baseReduction, double additionalReduction) {
-    return 1.0 - (baseReduction + additionalReduction);
-}
-
 double calculate_dmg_bonus(double elementBonus, double bonusAdditional) {
     return 1.0 + elementBonus + bonusAdditional;
 }
 
-double calculate_dmg_amplify(double elementAmplify, double amplifyElement) {
-    return 1.0 + elementAmplify + amplifyElement;
+double calculate_dmg_amplify(double elementAmplify, double dmgTypAmplify) {
+    return 1.0 + elementAmplify + dmgTypAmplify;
 }
 
 double calculate_special_dmg(double specialBase, double specialAdditional) {
@@ -41,23 +33,20 @@ double calculate_special_dmg(double specialBase, double specialAdditional) {
 
 double calculate_damage(
     double stat, double multiplier,
-    double flatDmg, double flatBonus,
+    double flatDmg,
     double enemyRes, double resShred,
-    double characterLevel, double enemyLevel, double defIgnore, double defShred,
-    double dmgReductionBase, double dmgReductionAdditional,
-    double elementReductionBase, double elementReductionAdditional,
+    double characterLevel, double enemyLevel
+    double defIgnore, double defShred,
+    double dmgReduction, double elementReduction,
     double elementDmgBonus, double dmgBonusAdditional,
-    double elementAmplify, double amplifyElement,
+    double elementAmplify, double dmgTypAmplify,
     double specialBase, double specialAdditional
 ) {
     double baseAbilityDmg = stat * multiplier;
-    double baseDmg = baseAbilityDmg + flatDmg + flatBonus;
+    double baseDmg = baseAbilityDmg + flatDmg;
 
     double resMultiplier = calculate_res_multiplier(enemyRes, resShred);
     double defMultiplier = calculate_def_multiplier(characterLevel, enemyLevel, defIgnore, defShred);
-    double dmgReduction = calculate_dmg_reduction(dmgReductionBase, dmgReductionAdditional);
-    double elementReduction = calculate_element_reduction(elementReductionBase, elementReductionAdditional);
-
     double dmgBonus = calculate_dmg_bonus(elementDmgBonus, dmgBonusAdditional);
     double dmgAmplify = calculate_dmg_amplify(elementAmplify, amplifyElement);
     double specialDmg = calculate_special_dmg(specialBase, specialAdditional);

@@ -93,7 +93,6 @@ export default function CharacterSelector({
                                                 src={iconPath}
                                                 alt={iconFile}
                                                 className={`buff-icon ${isActive ? 'active' : ''}`}
-                                                title={tooltipText}
 
                                                 onClick={() => {
                                                     const nodeIdNum = Number(nodeId);

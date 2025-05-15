@@ -1,33 +1,50 @@
 import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
+import { getStatsForLevel } from '../utils/getStatsForLevel';
 
-export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, temporaryBuffs, finalStats }) {
+export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, temporaryBuffs, customBuffs, finalStats }) {
     if (!activeCharacter) return null;
 
-    const characterBaseAtk = finalStats.atk ?? 0;
+    // MAIN STATS
+    const characterBaseAtk = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0;
     const weaponBaseAtk = activeCharacter?.weapon?.baseAtk ?? 0;
     const baseAtk = characterBaseAtk + weaponBaseAtk;
-    const scaledAtk = baseAtk * (1 + (temporaryBuffs.atkPercent ?? 0) / 100);
-    const bonusAtk = scaledAtk - baseAtk;
+    const atkBonus = (finalStats.atk ?? 0) - baseAtk;
 
-    const stats = [
-        { label: 'ATK', base: baseAtk, bonus: bonusAtk, total: scaledAtk },
-        { label: 'HP', base: finalStats.hp ?? 0, bonus: 0, total: finalStats.hp ?? 0 },
-        { label: 'DEF', base: finalStats.def ?? 0, bonus: 0, total: finalStats.def ?? 0 },
-        { label: 'Crit Rate', base: baseCharacterState?.Stats?.critRate ?? 0, bonus: temporaryBuffs.critRate ?? 0, total: (baseCharacterState?.Stats?.critRate ?? 0) + (temporaryBuffs.critRate ?? 0) },
-        { label: 'Crit DMG', base: baseCharacterState?.Stats?.critDmg ?? 0, bonus: temporaryBuffs.critDmg ?? 0, total: (baseCharacterState?.Stats?.critDmg ?? 0) + (temporaryBuffs.critDmg ?? 0) },
-        { label: 'Healing Bonus', base: baseCharacterState?.Stats?.healingBonus ?? 0, bonus: temporaryBuffs.healingBonus ?? 0, total: (baseCharacterState?.Stats?.healingBonus ?? 0) + (temporaryBuffs.healingBonus ?? 0) },
-        { label: 'Energy Recharge', base: baseCharacterState?.Stats?.energyRegen ?? 0, bonus: temporaryBuffs.energyRegen ?? 0, total: (baseCharacterState?.Stats?.energyRegen ?? 0) + (temporaryBuffs.energyRegen ?? 0) }
+    const baseHp = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Life"] ?? 0;
+    const hpBonus = (finalStats.hp ?? 0) - baseHp;
+
+    const baseDef = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Def"] ?? 0;
+    const defBonus = (finalStats.def ?? 0) - baseDef;
+
+    const mainStats = [
+        { label: 'ATK', base: baseAtk, bonus: atkBonus, total: finalStats.atk ?? 0 },
+        { label: 'HP', base: baseHp, bonus: hpBonus, total: finalStats.hp ?? 0 },
+        { label: 'DEF', base: baseDef, bonus: defBonus, total: finalStats.def ?? 0 }
     ];
 
+    // SECONDARY STATS
+    const energyRegenBase = baseCharacterState?.Stats?.energyRegen ?? 0;
+    const energyRegenTotal = finalStats.energyRegen ?? 0;
+    const secondaryStats = [
+        { label: 'Energy Regen', base: energyRegenBase, bonus: energyRegenTotal - energyRegenBase, total: energyRegenTotal },
+        { label: 'Crit Rate', base: baseCharacterState?.Stats?.critRate ?? 0, bonus: (temporaryBuffs?.critRate ?? 0) + (customBuffs?.critRate ?? 0), total: (baseCharacterState?.Stats?.critRate ?? 0) + (temporaryBuffs?.critRate ?? 0) + (customBuffs?.critRate ?? 0) },
+        { label: 'Crit DMG', base: baseCharacterState?.Stats?.critDmg ?? 0, bonus: (temporaryBuffs?.critDmg ?? 0) + (customBuffs?.critDmg ?? 0), total: (baseCharacterState?.Stats?.critDmg ?? 0) + (temporaryBuffs?.critDmg ?? 0) + (customBuffs?.critDmg ?? 0) },
+        { label: 'Healing Bonus', base: baseCharacterState?.Stats?.healingBonus ?? 0, bonus: (temporaryBuffs?.healingBonus ?? 0) + (customBuffs?.healingBonus ?? 0), total: (baseCharacterState?.Stats?.healingBonus ?? 0) + (temporaryBuffs?.healingBonus ?? 0) + (customBuffs?.healingBonus ?? 0) }
+    ];
+
+    // ELEMENTAL & DAMAGE MODIFIERS
+    const stats = [...mainStats, ...secondaryStats];
     ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
-        const base = baseCharacterState?.Stats?.[`${element}DmgBonus`] ?? 0;
-        const bonus = temporaryBuffs.elementalBonuses?.[element] ?? 0;
-        const total = base + bonus;
+        const key = `${element}DmgBonus`;
+        const base = baseCharacterState?.Stats?.[key] ?? 0;
+        const iconBuff = temporaryBuffs?.elementalBonuses?.[element] ?? 0;
+        const customBuff = customBuffs?.[element] ?? 0;
+        const total = base + iconBuff + customBuff;
         stats.push({
             label: `${element.charAt(0).toUpperCase() + element.slice(1)} DMG Bonus`,
             base,
-            bonus,
+            bonus: iconBuff + customBuff,
             total,
             color: attributeColors[element] ?? '#fff'
         });
@@ -35,14 +52,13 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
 
     ['basicAtk','heavyAtk','resonanceSkill','resonanceLiberation'].forEach(skill => {
         const label = skill.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()) + ' DMG Bonus';
-        const value = temporaryBuffs[skill] ?? 0;
-        stats.push({ label, base: 0, bonus: value, total: value });
+        const iconBuff = temporaryBuffs?.[skill] ?? 0;
+        const customBuff = customBuffs?.[skill] ?? 0;
+        const total = iconBuff + customBuff;
+        stats.push({ label, base: 0, bonus: total, total });
     });
 
-    const mainStats = stats.filter(stat => ['ATK', 'HP', 'DEF'].includes(stat.label));
-    const secondaryStats = stats.filter(stat => ['Energy Recharge', 'Crit Rate', 'Crit DMG', 'Healing Bonus'].includes(stat.label));
-    const dmgModifiers = stats.filter(stat => !mainStats.includes(stat) && !secondaryStats.includes(stat));
-
+    // ✅ FINAL STUDIO POLISHED DISPLAY
     const renderStatsGrid = group => (
         <div className="stats-grid">
             {group.map((stat, index) => {
@@ -54,7 +70,9 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
                             {stat.label}
                         </div>
                         <div className="stat-value">{displayValue(stat.base)}</div>
-                        <div className="stat-bonus">+{displayValue(stat.bonus)}</div>
+                        <div className="stat-bonus">
+                            {(stat.bonus === 0 || stat.bonus === 0.0) ? '' : `+${displayValue(stat.bonus)}`}
+                        </div>
                         <div className="stat-total">{displayValue(stat.total)}</div>
                     </div>
                 );
@@ -73,7 +91,7 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
             {renderStatsGrid(secondaryStats)}
 
             <h3 className="stat-group-title">Damage Modifier Stats</h3>
-            {renderStatsGrid(dmgModifiers)}
+            {renderStatsGrid(stats.slice(mainStats.length + secondaryStats.length))}
         </div>
     );
 }
