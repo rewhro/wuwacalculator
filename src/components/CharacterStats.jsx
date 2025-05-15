@@ -1,13 +1,5 @@
 import React from 'react';
-
-const elementColors = {
-    aero: '#3cc1c3',
-    glacio: '#64aaff',
-    spectro: '#9b79e5',
-    fusion: '#ff9a3c',
-    electro: '#e86aff',
-    havoc: '#ff5252'
-};
+import { attributeColors } from '../utils/attributeHelpers';
 
 export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, temporaryBuffs, finalStats }) {
     if (!activeCharacter) return null;
@@ -37,7 +29,7 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
             base,
             bonus,
             total,
-            color: elementColors[element] ?? '#fff'
+            color: attributeColors[element] ?? '#fff'
         });
     });
 

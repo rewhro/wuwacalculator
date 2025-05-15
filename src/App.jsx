@@ -320,7 +320,7 @@ export default function App() {
                          activeCharacter={activeCharacter} activeSkillTab={activeSkillTab}
                          setActiveSkillTab={setActiveSkillTab} sliderValues={sliderValues}
                          currentSliderColor={currentSliderColor} />
-            
+
             <div className="layout">
                 <div className="toolbar">
                     <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} />
