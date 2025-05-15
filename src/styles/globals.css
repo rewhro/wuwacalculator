@@ -48,16 +48,8 @@ html, body, #root {
     min-width: 450px;
 }
 
-#app-zoom {
-    transform: scale(1);
-    transform-origin: top left;
-    display: inline-block;
-    width: fit-content;
-}
-
 @media (max-width: 500px) {
-    #app-zoom {
-        transform: scale(0.75);
-        transform-origin: top left;
+    html {
+        zoom: 0.75;
     }
 }
