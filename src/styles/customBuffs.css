@@ -95,7 +95,7 @@
     font-size: 14px;
 }
 
-.clear-buffs-button {
+.clear-button {
     display: block;
     margin: 12px auto 0 auto;
     padding: 8px 18px;
@@ -109,35 +109,35 @@
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.clear-buffs-button:hover {
+.clear-button:hover {
     background-color: #e6e6e6;
     border-color: #bbb;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
-.clear-buffs-button:focus {
+.clear-button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(0,0,0,0.2);
 }
 
 @media (prefers-color-scheme: dark) {
-    .clear-buffs-button {
+    .clear-button {
         background-color: #2a2a2a;
         border-color: #444;
         box-shadow: none;
     }
 
-    .clear-buffs-button:hover {
+    .clear-button:hover {
         border-color: #555;
         background-color: #333;
     }
 
-    .clear-buffs-button:focus {
+    .clear-button:focus {
         box-shadow: 0 0 0 2px #555;
     }
 }
 
-.clear-buffs-button:active {
+.clear-button:active {
     transform: scale(0.97);
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }

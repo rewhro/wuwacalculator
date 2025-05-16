@@ -14,7 +14,7 @@ export default function SkillSettings({ sliderValues, setSliderValues, currentSl
                                 type="range"
                                 min="1"
                                 max="10"
-                                value={sliderValues[tab]}
+                                value={sliderValues[tab] ?? 1}
                                 onChange={(e) =>
                                     setSliderValues(prev => ({ ...prev, [tab]: Number(e.target.value) }))
                                 }

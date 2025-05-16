@@ -110,7 +110,7 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
                 </div>
             </div>
 
-            <button className="clear-buffs-button" onClick={() => {
+            <button className="clear-button" onClick={() => {
                 setCustomBuffs({
                     atkFlat: 0, atkPercent: 0, hpFlat: 0, hpPercent: 0, defFlat: 0, defPercent: 0,
                     critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0,

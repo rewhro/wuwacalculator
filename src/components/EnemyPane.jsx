@@ -1,60 +1,61 @@
 import React from 'react';
 
-export default function EnemyPane({ combatState, setCombatState }) {
+export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnemyRes }) {
+    if (enemyLevel == null || enemyRes == null) return null;
+
     return (
         <div className="character-settings">
             <h3>Enemy Settings</h3>
 
-            {/* Enemy Level Slider */}
+            {/* Enemy Level slider + number */}
             <div className="slider-group">
                 <div className="slider-label-with-input">
-                    <label>Enemy Level</label>
-                    <input type="number"
-                           className="character-level-input"
-                           value={combatState.enemyLevel}
-                           min="1"
-                           max="120"
-                           onChange={(e) => setCombatState(prev => ({
-                               ...prev,
-                               enemyLevel: Math.min(Math.max(+e.target.value, 1), 120)
-                           }))} />
+                    <label htmlFor="enemy-level">Enemy Level </label>
+                    <input
+                        id="enemy-level"
+                        type="number"
+                        min="1"
+                        max="120"
+                        value={enemyLevel}
+                        onChange={(e) => {
+                            const val = Math.min(120, Math.max(1, Number(e.target.value)));
+                            setEnemyLevel(val);
+                        }}
+                    />
                 </div>
-                <div className="slider-controls">
-                    <input type="range" min="1" max="120"
-                           value={combatState.enemyLevel}
-                           onChange={(e) => setCombatState(prev => ({
-                               ...prev,
-                               enemyLevel: Number(e.target.value)
-                           }))}
-                           style={{ '--slider-color': '#888' }} />
-                    <span>{combatState.enemyLevel}</span>
-                </div>
+                <input
+                    type="range"
+                    min="1"
+                    max="120"
+                    value={enemyLevel}
+                    onChange={(e) => setEnemyLevel(Number(e.target.value))}
+                />
             </div>
 
-            {/* Enemy Resistance Slider */}
+            {/* Enemy Resistance slider + number */}
             <div className="slider-group">
                 <div className="slider-label-with-input">
-                    <label>Enemy Resistance (%)</label>
-                    <input type="number"
-                           className="character-level-input"
-                           value={combatState.enemyRes}
-                           min="0"
-                           max="100"
-                           onChange={(e) => setCombatState(prev => ({
-                               ...prev,
-                               enemyRes: Math.min(Math.max(+e.target.value, 0), 100)
-                           }))} />
+                    <label htmlFor="enemy-res">Enemy Resistance </label>
+                    <input
+                        id="enemy-res"
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={enemyRes}
+                        onChange={(e) => {
+                            const val = Math.min(100, Math.max(0, Number(e.target.value)));
+                            setEnemyRes(val);
+                        }}
+                    />
+                    <span>%</span>
                 </div>
-                <div className="slider-controls">
-                    <input type="range" min="0" max="100"
-                           value={combatState.enemyRes}
-                           onChange={(e) => setCombatState(prev => ({
-                               ...prev,
-                               enemyRes: Number(e.target.value)
-                           }))}
-                           style={{ '--slider-color': '#888' }} />
-                    <span>{combatState.enemyRes}%</span>
-                </div>
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={enemyRes}
+                    onChange={(e) => setEnemyRes(Number(e.target.value))}
+                />
             </div>
         </div>
     );

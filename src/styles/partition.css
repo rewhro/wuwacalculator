@@ -7,6 +7,7 @@
     box-sizing: border-box;
     overflow-x: auto;
     height: 100%;
+    max-width: 100%;
 }
 
 /* Small screen: override to unified scroll */
@@ -36,8 +37,22 @@
 
 #left-pane {
     width: 30%;
+    min-width: 350px;
+    max-width: 800px;
+    flex: 1 350px;
     padding: 16px;
     max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#left-pane {
+    flex: 1 1 auto;
+    max-width: calc(100vw - var(--sidebar-width));
+    overflow: auto;
+    min-width: 350px; /* optional base size */
 }
 
 #right-pane {

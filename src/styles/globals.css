@@ -1,3 +1,8 @@
+.layout {
+    --sidebar-width: 200px;
+    --sidebar-collapsed-width: 60px;
+}
+
 /* ===================== */
 /*   GENERAL LAYOUT      */
 /* ===================== */
@@ -7,7 +12,7 @@ html, body, #root {
     margin: 0;
     padding: 0;
     width: 100%;
-    /*overflow: auto;*/
+    overflow: hidden;
 }
 
 .layout {
@@ -52,4 +57,21 @@ html, body, #root {
     html {
         zoom: 0.75;
     }
+}
+
+
+/* ===================== */
+/*   TRANSITION TARGETS  */
+/* ===================== */
+
+.sidebar-button,
+.label-slot,
+.label-text,
+.icon-slot,
+.toolbar,
+.sidebar {
+    transition:
+            background-color 0.3s ease,
+            color 0.3s ease,
+            transform 0.3s ease;
 }

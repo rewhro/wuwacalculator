@@ -15,10 +15,14 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                         value={combatState.weaponBaseAtk ?? 0}
                         min="0"
                         max="999"
-                        onChange={(e) => setCombatState(prev => ({
-                            ...prev,
-                            weaponBaseAtk: Number(e.target.value)
-                        }))}
+                        onChange={(e) => {
+                            const raw = Number(e.target.value);
+                            const clamped = Math.min(Math.max(raw, 0), 999);
+                            setCombatState(prev => ({
+                                ...prev,
+                                weaponBaseAtk: clamped
+                            }));
+                        }}
                     />
                 </div>
             </div>
