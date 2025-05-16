@@ -27,10 +27,30 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
     const energyRegenBase = baseCharacterState?.Stats?.energyRegen ?? 0;
     const energyRegenTotal = finalStats.energyRegen ?? 0;
     const secondaryStats = [
-        { label: 'Energy Regen', base: energyRegenBase, bonus: energyRegenTotal - energyRegenBase, total: energyRegenTotal },
-        { label: 'Crit Rate', base: baseCharacterState?.Stats?.critRate ?? 0, bonus: (temporaryBuffs?.critRate ?? 0) + (customBuffs?.critRate ?? 0), total: (baseCharacterState?.Stats?.critRate ?? 0) + (temporaryBuffs?.critRate ?? 0) + (customBuffs?.critRate ?? 0) },
-        { label: 'Crit DMG', base: baseCharacterState?.Stats?.critDmg ?? 0, bonus: (temporaryBuffs?.critDmg ?? 0) + (customBuffs?.critDmg ?? 0), total: (baseCharacterState?.Stats?.critDmg ?? 0) + (temporaryBuffs?.critDmg ?? 0) + (customBuffs?.critDmg ?? 0) },
-        { label: 'Healing Bonus', base: baseCharacterState?.Stats?.healingBonus ?? 0, bonus: (temporaryBuffs?.healingBonus ?? 0) + (customBuffs?.healingBonus ?? 0), total: (baseCharacterState?.Stats?.healingBonus ?? 0) + (temporaryBuffs?.healingBonus ?? 0) + (customBuffs?.healingBonus ?? 0) }
+        {
+            label: 'Energy Regen',
+            base: baseCharacterState?.Stats?.energyRegen ?? 0,
+            bonus: (finalStats.energyRegen ?? 0) - (baseCharacterState?.Stats?.energyRegen ?? 0),
+            total: finalStats.energyRegen ?? 0
+        },
+        {
+            label: 'Crit Rate',
+            base: baseCharacterState?.Stats?.critRate ?? 0,
+            bonus: (finalStats.critRate ?? 0) - (baseCharacterState?.Stats?.critRate ?? 0),
+            total: finalStats.critRate ?? 0
+        },
+        {
+            label: 'Crit DMG',
+            base: baseCharacterState?.Stats?.critDmg ?? 0,
+            bonus: (finalStats.critDmg ?? 0) - (baseCharacterState?.Stats?.critDmg ?? 0),
+            total: finalStats.critDmg ?? 0
+        },
+        {
+            label: 'Healing Bonus',
+            base: baseCharacterState?.Stats?.healingBonus ?? 0,
+            bonus: (finalStats.healingBonus ?? 0) - (baseCharacterState?.Stats?.healingBonus ?? 0),
+            total: finalStats.healingBonus ?? 0
+        }
     ];
 
     // ELEMENTAL & DAMAGE MODIFIERS
@@ -50,12 +70,12 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
         });
     });
 
-    ['basicAtk','heavyAtk','resonanceSkill','resonanceLiberation'].forEach(skill => {
+    ['basicAtk','heavyAtk','skillAtk','ultimateAtk'].forEach(skill => {
         const label = skill.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()) + ' DMG Bonus';
-        const iconBuff = temporaryBuffs?.[skill] ?? 0;
-        const customBuff = customBuffs?.[skill] ?? 0;
-        const total = iconBuff + customBuff;
-        stats.push({ label, base: 0, bonus: total, total });
+        const base = 0;
+        const total = finalStats?.[skill] ?? 0;
+        const bonus = total - base;
+        stats.push({ label, base, bonus, total });
     });
 
     // ✅ FINAL STUDIO POLISHED DISPLAY
