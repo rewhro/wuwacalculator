@@ -417,9 +417,6 @@ export default function App() {
         combatState
     );
 
-    console.log("🟢 Merged Buffs:", mergedBuffs);
-    console.log("🟡 Final Stats:", finalStats);
-
     return (<>
             <SkillsModal skillsModalOpen={skillsModalOpen} setSkillsModalOpen={setSkillsModalOpen}
                          activeCharacter={activeCharacter} activeSkillTab={activeSkillTab}
