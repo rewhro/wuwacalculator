@@ -10,12 +10,13 @@ export const getStatsForLevel = (statsObj, level) => {
     return {};
 };
 
-export function getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs) {
+export function getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState) {
     const baseStats = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel) ?? {};
 
-    const characterBaseAtk = baseStats["Atk"] ?? 0;
-    const weaponBaseAtk = activeCharacter?.weapon?.baseAtk ?? 0;
-    const baseAtk = characterBaseAtk + weaponBaseAtk;
+    const weaponBaseAtk = combatState?.weaponBaseAtk ?? 0;
+    const characterBaseAtk = (baseStats["Atk"] ?? 0) + weaponBaseAtk;
+
+    const baseAtk = characterBaseAtk;
     const totalAtkPercent = mergedBuffs?.atkPercent ?? 0;
     const totalAtkFlat = mergedBuffs?.atkFlat ?? 0;
 
@@ -39,10 +40,11 @@ export function getFinalStats(activeCharacter, baseCharacterState, characterLeve
 
     ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
         const key = `${element}DmgBonus`;
-        finalStats[key] = (baseCharacterState?.Stats?.[key] ?? 0) + (mergedBuffs?.[element] ?? 0);
+        const bonus = mergedBuffs?.elementalBonuses?.[element] ?? 0;
+        finalStats[key] = (finalStats[key] ?? 0) + bonus;
     });
 
-    ['basicAtk','heavyAtk','resonanceSkill','resonanceLiberation'].forEach(skill => {
+    ['basicAtk','heavyAtk','skillAtk','ultimateAtk'].forEach(skill => {
         finalStats[skill] = mergedBuffs?.[skill] ?? 0;
     });
 

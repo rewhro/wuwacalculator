@@ -9,7 +9,7 @@ import { formatDescription } from '../utils/formatDescription';
 
 const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
 
-const buffIconMap = {
+const traceNodeIconMap = {
     'ATK+': 'atk', 'HP+': 'hp', 'DEF+': 'def',
     'Healing Bonus+': 'healing-bonus', 'Crit. Rate+': 'crit-rate', 'Crit. DMG+': 'crit-dmg',
     'Aero DMG Bonus+': 'aero-bonus', 'Glacio DMG Bonus+': 'glacio-bonus',
@@ -72,10 +72,10 @@ export default function CharacterSelector({
                                 .filter(([, node]) =>
                                     node.NodeType === 4 &&
                                     node.Skill?.Name &&
-                                    buffIconMap[node.Skill.Name]
+                                    traceNodeIconMap[node.Skill.Name]
                                 )
                                 .map(([nodeId, node]) => {
-                                    const iconFile = buffIconMap[node.Skill.Name];
+                                    const iconFile = traceNodeIconMap[node.Skill.Name];
                                     const iconPath = isDark
                                         ? `/assets/skill-icons/dark/${iconFile}.webp`
                                         : `/assets/skill-icons/light/${iconFile}.webp`;

@@ -1,15 +1,21 @@
 // src/components/DamageSection.jsx
 import React from 'react';
 import { calculateDamage } from '../utils/damageCalculator';
+import { elementToAttribute } from '../utils/attributeHelpers';
 
 export default function DamageSection({
                                           activeCharacter,
                                           finalStats,
                                           characterLevel,
                                           sliderValues,
-                                          characterRuntimeStates
+                                          characterRuntimeStates,
+                                          combatState,
+                                          mergedBuffs
                                       }) {
+    if (!activeCharacter) return null;
+
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill'];
+    const element = elementToAttribute[activeCharacter?.attribute] ?? '';
 
     return (
         <div className="damage-box">
@@ -25,7 +31,7 @@ export default function DamageSection({
 
                     return (
                         <div key={tab} className="box-wrapper">
-                            <div className="damage-inner-box">   {/* ✅ small inner box */}
+                            <div className="damage-inner-box">
                                 <h3 className="damage-box-title">
                                     {tab.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                                 </h3>
@@ -38,20 +44,34 @@ export default function DamageSection({
                                         <div>AVG</div>
                                         {levels.map((level, index) => {
                                             const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-                                            const scaling = characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? { atk: 1, hp: 0, def: 0, energyRegen: 0 };
-
-                                            const atk = finalStats.atk ?? 0;
-                                            const hp = finalStats.hp ?? 0;
-                                            const def = finalStats.def ?? 0;
-                                            const energyRegen = finalStats.energyRegen ?? 0;
+                                            const scaling = characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
+                                                atk: 1, hp: 0, def: 0, energyRegen: 0
+                                            };
 
                                             const multiplierString = level.Param?.[0]?.[sliderValues[tab] - 1] ?? "0%";
-                                            const multiplier = parseFloat(multiplierString.replace('%', '')) / 100;
-                                            const { normal, crit, avg } = calculateDamage(
-                                                { atk, hp, def, energyRegen },
+                                            const multiplier = parseCompoundMultiplier(multiplierString);
+
+                                            const element = elementToAttribute[activeCharacter?.attribute] ?? '';
+
+                                            // ✅ Detect skillType based on label content
+                                            const label = level.Name?.toLowerCase() ?? '';
+                                            let skillType = '';
+                                            if (label.includes('heavy attack')) skillType = 'heavy';
+                                            else if (tab === 'resonanceSkill') skillType = 'skill';
+                                            else if (tab === 'resonanceLiberation') skillType = 'ultimate';
+                                            else if (tab === 'normalAttack') skillType = 'basic';
+                                            // forteCircuit intentionally left with empty skillType
+
+                                            const { normal, crit, avg } = calculateDamage({
+                                                finalStats,
+                                                combatState,
                                                 multiplier,
-                                                scaling
-                                            );
+                                                scaling,
+                                                element,
+                                                skillType,
+                                                characterLevel,
+                                                mergedBuffs
+                                            });
 
                                             return (
                                                 <React.Fragment key={index}>
@@ -78,7 +98,22 @@ export default function DamageSection({
 function getSkillData(char, tab) {
     if (!char?.raw?.SkillTrees) return null;
     const tree = Object.values(char.raw.SkillTrees).find(tree =>
-        tree.Skill?.Type?.toLowerCase().replace(/\s/g, '') === tab.toLowerCase()
+        tree.Skill?.Type?.toLowerCase?.().replace(/\s/g, '') === tab.toLowerCase()
     );
     return tree?.Skill ?? null;
+}
+
+function parseCompoundMultiplier(formula) {
+    if (!formula) return 0;
+
+    // Match things like "21.58%*4" or "67.56%" etc.
+    const parts = formula.match(/\d+(\.\d+)?%(\*\d+)?/g);
+    if (!parts) return 0;
+
+    return parts.reduce((sum, part) => {
+        const [percent, timesStr] = part.split('*');
+        const value = parseFloat(percent.replace('%', '')) / 100;
+        const times = timesStr ? parseInt(timesStr, 10) : 1;
+        return sum + value * times;
+    }, 0);
 }

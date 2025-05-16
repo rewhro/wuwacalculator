@@ -2,13 +2,13 @@ import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
 import { getStatsForLevel } from '../utils/getStatsForLevel';
 
-export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, temporaryBuffs, customBuffs, finalStats }) {
+export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, temporaryBuffs, customBuffs, finalStats, combatState }) {
     if (!activeCharacter) return null;
 
     // MAIN STATS
     const characterBaseAtk = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0;
-    const weaponBaseAtk = activeCharacter?.weapon?.baseAtk ?? 0;
-    const baseAtk = characterBaseAtk + weaponBaseAtk;
+    const weaponBaseAtk = combatState?.weaponBaseAtk ?? 0;
+    const baseAtk = ((getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0) + weaponBaseAtk);
     const atkBonus = (finalStats.atk ?? 0) - baseAtk;
 
     const baseHp = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Life"] ?? 0;

@@ -50,7 +50,14 @@ export default function App() {
         enemyDefShred: 0,
         enemyDefIgnore: 0,
         elementBonus: 0,
-        elementDmgAmplify: 0,
+        elementDmgAmplify: {
+            aero: 0,
+            glacio: 0,
+            spectro: 0,
+            fusion: 0,
+            electro: 0,
+            havoc: 0
+        },
         flatDmg: 0,
         damageTypeAmplify: {
             basic: 0,
@@ -115,7 +122,6 @@ export default function App() {
         heavyAtk: 0,
         resonanceSkill: 0,
         resonanceLiberation: 0,
-        basic: 0,
         aero: 0,
         glacio: 0,
         spectro: 0,
@@ -276,6 +282,7 @@ export default function App() {
             }
         });
 
+        /*
         // ✅ Studio patch → merge customBuffs
         buffTotals.atkPercent += customBuffs?.atkPercent ?? 0;
         buffTotals.hpPercent += customBuffs?.hpPercent ?? 0;
@@ -284,14 +291,33 @@ export default function App() {
         buffTotals.critDmg += customBuffs?.critDmg ?? 0;
         buffTotals.healingBonus += customBuffs?.healingBonus ?? 0;
 
-        buffTotals.basicAtk += customBuffs?.basicAtk ?? 0;
-        buffTotals.heavyAtk += customBuffs?.heavyAtk ?? 0;
-        buffTotals.resonanceSkill += customBuffs?.resonanceSkill ?? 0;
-        buffTotals.resonanceLiberation += customBuffs?.resonanceLiberation ?? 0;
+         */
 
         ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
             buffTotals.elementalBonuses[element] += customBuffs?.[element] ?? 0;
         });
+        setCombatState(prev => ({
+            ...prev,
+            elementDmgAmplify: {
+                ...prev.elementDmgAmplify,
+                aero: customBuffs?.aeroAmplify ?? 0,
+                glacio: customBuffs?.glacioAmplify ?? 0,
+                spectro: customBuffs?.spectroAmplify ?? 0,
+                fusion: customBuffs?.fusionAmplify ?? 0,
+                electro: customBuffs?.electroAmplify ?? 0,
+                havoc: customBuffs?.havocAmplify ?? 0
+            }
+        }));
+
+        setCombatState(prev => ({
+            ...prev,
+            damageTypeAmplify: {
+                basic: customBuffs?.basicAtkAmplify ?? 0,
+                heavy: customBuffs?.heavyAtkAmplify ?? 0,
+                skill: customBuffs?.resonanceSkillAmplify ?? 0,
+                ultimate: customBuffs?.resonanceLiberationAmplify ?? 0
+            }
+        }));
 
         setTraceNodeBuffs(buffTotals);
     }, [traceNodeBuffs.activeNodes, activeCharacter, customBuffs]);
@@ -376,12 +402,19 @@ export default function App() {
         setMenuOpen(false);
     };
 
-    const mergedBuffs = getUnifiedStatPool([traceNodeBuffs, customBuffs]);
+
+    const mergedBuffs = getUnifiedStatPool([traceNodeBuffs, customBuffs, combatState]);
+
+    mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
+    mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
+    mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
+
     const finalStats = getFinalStats(
         activeCharacter,
         baseCharacterState,
         characterLevel,
-        mergedBuffs
+        mergedBuffs,
+        combatState
     );
 
     return (<>
@@ -447,12 +480,18 @@ export default function App() {
                                                 baseCharacterState={baseCharacterState}
                                                 characterLevel={characterLevel}
                                                 temporaryBuffs={traceNodeBuffs}
-                                                finalStats={finalStats} />
+                                                finalStats={finalStats}
+                                                combatState={combatState} />
 
-                                <DamageSection activeCharacter={activeCharacter} finalStats={finalStats}
-                                               characterLevel={characterLevel}
-                                               sliderValues={sliderValues}
-                                               characterRuntimeStates={characterRuntimeStates} />
+                                <DamageSection
+                                    activeCharacter={activeCharacter}
+                                    finalStats={finalStats}
+                                    characterLevel={characterLevel}
+                                    sliderValues={sliderValues}
+                                    characterRuntimeStates={characterRuntimeStates}
+                                    combatState={combatState}
+                                    mergedBuffs={mergedBuffs}
+                                />
                             </div>
                         </div>
                     </div>

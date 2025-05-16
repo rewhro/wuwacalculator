@@ -1,3 +1,4 @@
+// src/components/CustomBuffsPane.jsx
 import React from 'react';
 
 export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
