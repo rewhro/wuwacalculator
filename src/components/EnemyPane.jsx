@@ -1,7 +1,19 @@
 import React from 'react';
 
-export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnemyRes }) {
+export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnemyRes, combatState, setCombatState }) {
     if (enemyLevel == null || enemyRes == null) return null;
+
+    const handleLevelChange = (val) => {
+        const clamped = Math.min(120, Math.max(1, Number(val)));
+        setEnemyLevel(clamped);
+        setCombatState(prev => ({ ...prev, enemyLevel: clamped }));
+    };
+
+    const handleResChange = (val) => {
+        const clamped = Math.min(100, Math.max(0, Number(val)));
+        setEnemyRes(clamped);
+        setCombatState(prev => ({ ...prev, enemyRes: clamped }));
+    };
 
     return (
         <div className="character-settings">
@@ -17,10 +29,7 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
                         min="1"
                         max="120"
                         value={enemyLevel}
-                        onChange={(e) => {
-                            const val = Math.min(120, Math.max(1, Number(e.target.value)));
-                            setEnemyLevel(val);
-                        }}
+                        onChange={(e) => handleLevelChange(e.target.value)}
                     />
                 </div>
                 <input
@@ -28,7 +37,7 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
                     min="1"
                     max="120"
                     value={enemyLevel}
-                    onChange={(e) => setEnemyLevel(Number(e.target.value))}
+                    onChange={(e) => handleLevelChange(e.target.value)}
                 />
             </div>
 
@@ -42,10 +51,7 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
                         min="0"
                         max="100"
                         value={enemyRes}
-                        onChange={(e) => {
-                            const val = Math.min(100, Math.max(0, Number(e.target.value)));
-                            setEnemyRes(val);
-                        }}
+                        onChange={(e) => handleResChange(e.target.value)}
                     />
                     <span>%</span>
                 </div>
@@ -54,7 +60,7 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
                     min="0"
                     max="100"
                     value={enemyRes}
-                    onChange={(e) => setEnemyRes(Number(e.target.value))}
+                    onChange={(e) => handleResChange(e.target.value)}
                 />
             </div>
         </div>

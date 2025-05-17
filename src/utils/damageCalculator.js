@@ -51,10 +51,9 @@ export function calculateDamage({
     const skillTypeBonus = skillType ? (finalStats?.[`${skillType}Atk`] ?? 0) : 0;
     const elementBonus = (finalStats[`${element}DmgBonus`] ?? 0) + skillTypeBonus;
     const amplify =
-        (combatState.elementDmgAmplify?.[element] ?? 0) +
-        (skillType ? (combatState.damageTypeAmplify?.[skillType] ?? 0) : 0);
+        (mergedBuffs.elementDmgAmplify?.[element] ?? 0) +
+        (skillType ? (mergedBuffs.damageTypeAmplify?.[skillType] ?? 0) : 0);
     const special = 1 + 0; // reserved for future
-
 
     const dmgBonus = 1 + elementBonus / 100;
     const dmgAmplify = 1 + amplify / 100;
@@ -71,8 +70,7 @@ export function calculateDamage({
     const avg = critRate >= 1
         ? crit
         : (crit * critRate) + (normal * (1 - critRate));
-
-    /*
+/*
     console.table({
         element,
         atk,
@@ -100,10 +98,7 @@ export function calculateDamage({
         crit,
         avg
     });
-
-     */
-
-
+*/
     return {
         normal: Math.floor(normal),
         crit: Math.floor(crit),

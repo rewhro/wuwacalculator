@@ -2,8 +2,9 @@ import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
 import { getStatsForLevel } from '../utils/getStatsForLevel';
 
-export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, temporaryBuffs, customBuffs, finalStats, combatState }) {
+export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, mergedBuffs, customBuffs, finalStats, combatState }) {
     if (!activeCharacter) return null;
+
 
     // MAIN STATS
     const characterBaseAtk = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0;
@@ -58,13 +59,13 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
     ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
         const key = `${element}DmgBonus`;
         const base = baseCharacterState?.Stats?.[key] ?? 0;
-        const iconBuff = temporaryBuffs?.elementalBonuses?.[element] ?? 0;
-        const customBuff = customBuffs?.[element] ?? 0;
-        const total = base + iconBuff + customBuff;
+        const bonus = mergedBuffs?.[element] ?? 0;  // mergedBuffs carries the bonus part only
+        const total = base + bonus;
+
         stats.push({
             label: `${element.charAt(0).toUpperCase() + element.slice(1)} DMG Bonus`,
             base,
-            bonus: iconBuff + customBuff,
+            bonus,
             total,
             color: attributeColors[element] ?? '#fff'
         });

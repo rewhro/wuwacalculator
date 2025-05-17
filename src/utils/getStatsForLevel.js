@@ -14,9 +14,9 @@ export function getFinalStats(activeCharacter, baseCharacterState, characterLeve
     const baseStats = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel) ?? {};
 
     const weaponBaseAtk = combatState?.weaponBaseAtk ?? 0;
-    const characterBaseAtk = (baseStats["Atk"] ?? 0) + weaponBaseAtk;
+    const characterBaseAtk = (baseStats["Atk"] ?? 0);
 
-    const baseAtk = characterBaseAtk;
+    const baseAtk = characterBaseAtk + weaponBaseAtk;
     const totalAtkPercent = mergedBuffs?.atkPercent ?? 0;
     const totalAtkFlat = mergedBuffs?.atkFlat ?? 0;
 

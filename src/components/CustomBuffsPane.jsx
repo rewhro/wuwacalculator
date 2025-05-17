@@ -26,24 +26,62 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             clamped = Math.min(Math.max(num, 0), 9999);
         }
 
+        // Map to nested damageTypeAmplify
+        const damageTypeMap = {
+            basicAtkAmplify: 'basic',
+            heavyAtkAmplify: 'heavy',
+            resonanceSkillAmplify: 'skill',
+            resonanceLiberationAmplify: 'ultimate'
+        };
+
+        if (damageTypeMap[key]) {
+            setCustomBuffs(prev => ({
+                ...prev,
+                damageTypeAmplify: {
+                    ...prev.damageTypeAmplify,
+                    [damageTypeMap[key]]: clamped
+                }
+            }));
+            return;
+        }
+
         setCustomBuffs(prev => ({
             ...prev,
             [key]: clamped
         }));
     };
 
-    const renderInput = (key) => (
-        percentageFields.has(key) ? (
+    const renderInput = (key) => {
+        const damageTypeMap = {
+            basicAtkAmplify: 'basic',
+            heavyAtkAmplify: 'heavy',
+            resonanceSkillAmplify: 'skill',
+            resonanceLiberationAmplify: 'ultimate'
+        };
+
+        let value = customBuffs[key] ?? 0;
+
+        if (damageTypeMap[key]) {
+            value = customBuffs.damageTypeAmplify?.[damageTypeMap[key]] ?? 0;
+        }
+
+        return percentageFields.has(key) ? (
             <div className="input-with-suffix">
-                <input type="number" value={customBuffs[key] ?? 0}
-                       onChange={e => handleChange(key, e.target.value)} />
+                <input
+                    type="number"
+                    value={value}
+                    onChange={e => handleChange(key, e.target.value)}
+                />
                 <span>%</span>
             </div>
         ) : (
-            <input type="number" value={customBuffs[key] ?? 0}
-                   onChange={e => handleChange(key, e.target.value)} />
-        )
-    );
+            <input
+                type="number"
+                value={value}
+                onChange={e => handleChange(key, e.target.value)}
+            />
+        );
+    };
 
     return (
         <>

@@ -34,10 +34,13 @@
     flex-direction: column;
 }
 
+.layout.collapsed-mode {
+    overflow-y: auto;
+}
+
 #left-pane {
     width: 30%;
     min-width: 350px;
-    max-width: 800px;
     flex: 1 350px;
     padding: 16px;
     max-height: 100%;
@@ -49,13 +52,14 @@
 
 #left-pane {
     flex: 1 1 auto;
-    max-width: calc(100vw - var(--sidebar-width));
     min-width: 350px;
 }
 
 #right-pane {
+    width: 70%;
     padding: 10px;
     min-width: 600px;
+    overflow-y: auto;
 }
 
 .partition {

@@ -18,11 +18,18 @@ const buffIconMap = {
 };
 
 const skillToBuffMap = {
-    'ATK+': 'atkPercent', 'HP+': 'hpPercent', 'DEF+': 'defPercent',
-    'Healing Bonus+': 'healingBonus', 'Crit. Rate+': 'critRate', 'Crit. DMG+': 'critDmg',
-    'Aero DMG Bonus+': 'aeroDmgBonus', 'Glacio DMG Bonus+': 'glacioDmgBonus',
-    'Spectro DMG Bonus+': 'spectroDmgBonus', 'Fusion DMG Bonus+': 'fusionDmgBonus',
-    'Electro DMG Bonus+': 'electroDmgBonus', 'Havoc DMG Bonus+': 'havocDmgBonus'
+    'ATK+': 'atkPercent',
+    'HP+': 'hpPercent',
+    'DEF+': 'defPercent',
+    'Healing Bonus+': 'healingBonus',
+    'Crit. Rate+': 'critRate',
+    'Crit. DMG+': 'critDmg',
+    'Aero DMG Bonus+': 'aero',
+    'Glacio DMG Bonus+': 'glacio',
+    'Spectro DMG Bonus+': 'spectro',
+    'Fusion DMG Bonus+': 'fusion',
+    'Electro DMG Bonus+': 'electro',
+    'Havoc DMG Bonus+': 'havoc'
 };
 
 export default function CharacterSelector({

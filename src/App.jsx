@@ -306,6 +306,7 @@ export default function App() {
                                         temporaryBuffs={traceNodeBuffs}
                                         finalStats={finalStats}
                                         combatState={combatState}
+                                        mergedBuffs={mergedBuffs}
                                     />
                                     <DamageSection
                                         activeCharacter={activeCharacter}
