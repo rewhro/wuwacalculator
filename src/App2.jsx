@@ -18,11 +18,12 @@ import { attributeColors, attributeIcons, elementToAttribute } from './utils/att
 import { getFinalStats } from './utils/getStatsForLevel';
 import { getUnifiedStatPool } from './utils/getUnifiedStatPool';
 import { usePersistentState } from './hooks/usePersistentState';
-import { Settings, HelpCircle, Sun, Moon } from 'lucide-react';
+import { Settings, HelpCircle } from 'lucide-react';
 import useDarkMode from './hooks/useDarkMode';
 
 export default function App() {
-    const [isDark, toggleTheme] = useDarkMode();
+    const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
+    const { isDark } = useDarkMode();
     const [leftPaneView, setLeftPaneView] = useState('characters');
     const [isCollapsedMode, setIsCollapsedMode] = useState(false);
 
@@ -35,7 +36,6 @@ export default function App() {
     const [traceNodeBuffs, setTraceNodeBuffs] = useState({});
     const [combatState, setCombatState] = useState({});
     const [sliderValues, setSliderValues] = useState({});
-    const [characterLevel, setCharacterLevel] = useState(1);
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [skillsModalOpen, setSkillsModalOpen] = useState(false);
@@ -60,9 +60,7 @@ export default function App() {
         fetchCharacters().then(data => {
             setCharacters(data);
             if (activeCharacterId) {
-                const foundChar = data.find(c =>
-                    String(c.Id ?? c.id ?? c.link) === String(activeCharacterId)
-                );
+                const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(activeCharacterId));
                 if (foundChar) {
                     setActiveCharacter(foundChar);
                     const state = characterStates.find(c => String(c.Id) === String(foundChar.link));
@@ -78,13 +76,10 @@ export default function App() {
                 }
             } else {
                 const defaultCharacterId = 1506;
-                const foundChar = data.find(c =>
-                    String(c.Id ?? c.id ?? c.link) === String(defaultCharacterId)
-                );
+                const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(defaultCharacterId));
                 if (foundChar) {
                     setActiveCharacter(foundChar);
                     setActiveCharacterId(defaultCharacterId);
-
                     const state = characterStates.find(c => String(c.Id) === String(defaultCharacterId));
                     setBaseCharacterState(state ?? null);
 
@@ -175,86 +170,155 @@ export default function App() {
 
     const finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
 
-    return (<>
-        <SkillsModal skillsModalOpen={skillsModalOpen} setSkillsModalOpen={setSkillsModalOpen} activeCharacter={activeCharacter} activeSkillTab={activeSkillTab} setActiveSkillTab={setActiveSkillTab} sliderValues={sliderValues} currentSliderColor={currentSliderColor} />
-        <div className="layout">
-            <div className="toolbar">
-                <div className="toolbar-group">
-                    <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} />
-                    <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} />
-                    <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} />
-                    <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} />
-                </div>
-                <button
-                    className={`hamburger-button ${hamburgerOpen ? 'open' : ''}`}
-                    onClick={() => setHamburgerOpen(prev => !prev)}
-                >
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-            <div className="horizontal-layout">
-                <div className={`sidebar ${hamburgerOpen ? 'expanded' : 'collapsed'}`}>
-                    <div className="sidebar-content">
-                        <button className="sidebar-button">
-                            <div className="icon-slot">
-                                <Settings size={24} className="settings-icon" stroke="currentColor" />
-                            </div>
-                            <div className="label-slot"><span className="label-text">Settings</span></div>
-                        </button>
+    useEffect(() => {
+        if (!activeCharacter) return;
 
-                        <button className="sidebar-button">
-                            <div className="icon-slot">
-                                <HelpCircle size={24} className="help-icon" stroke="currentColor" />
-                            </div>
-                            <div className="label-slot"><span className="label-text">Help</span></div>
-                        </button>
-                        <ResetButton />
+        const charId = activeCharacter.Id ?? activeCharacter.id ?? activeCharacter.link;
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                Name: activeCharacter.displayName,
+                Id: charId,
+                Attribute: activeCharacter.attribute,
+                WeaponType: activeCharacter.weaponType ?? 0,
+                Stats: baseCharacterState?.Stats ?? {},
+                CharacterLevel: characterLevel,
+                SkillLevels: sliderValues,
+                TemporaryBuffs: traceNodeBuffs,
+                CustomBuffs: customBuffs,
+                CombatState: combatState
+            }
+        }));
+    }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
+
+    return (
+        <>
+            <SkillsModal
+                skillsModalOpen={skillsModalOpen}
+                setSkillsModalOpen={setSkillsModalOpen}
+                activeCharacter={activeCharacter}
+                activeSkillTab={activeSkillTab}
+                setActiveSkillTab={setActiveSkillTab}
+                sliderValues={sliderValues}
+                currentSliderColor={currentSliderColor}
+            />
+
+            {/* Root layout */}
+            <div className="layout">
+
+                {/* Toolbar at top */}
+                <div className="toolbar">
+                    <div className="toolbar-group">
+                        <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} isDark={isDark} />
+                        <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} isDark={isDark} />
+                        <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} isDark={isDark} />
+                        <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} isDark={isDark} />
                     </div>
-                    <div className="sidebar-footer">
-                        <button
-                            className="sidebar-button hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors duration-200"
-                            onClick={toggleTheme}
-                        >
-                            <div className="icon-slot">
-                                {isDark ? (
-                                    <Sun className="theme-icon text-yellow-500" size={24} />
-                                ) : (
-                                    <Moon className="theme-icon text-blue-500" size={24} />
-                                )}
-                            </div>
-                            <div className="label-slot">
-                                <span className="label-text">{isDark ? 'Light Mode' : 'Dark Mode'}</span>
-                            </div>
-                        </button>
-                    </div>
+                    <button
+                        className={`hamburger-button ${hamburgerOpen ? 'open' : ''}`}
+                        onClick={() => setHamburgerOpen(prev => !prev)}
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
-                <div className="main-content">
-                    <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`}>
-                        <div className="split">
-                            <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
-                                {leftPaneView === 'characters' && (
-                                    <CharacterSelector characters={characters} activeCharacter={activeCharacter} handleCharacterSelect={handleCharacterSelect} menuOpen={menuOpen} setMenuOpen={setMenuOpen} menuRef={menuRef} attributeIconPath={attributeIconPath} currentSliderColor={currentSliderColor} sliderValues={sliderValues} setSliderValues={setSliderValues} characterLevel={characterLevel} setCharacterLevel={setCharacterLevel} setSkillsModalOpen={setSkillsModalOpen} temporaryBuffs={traceNodeBuffs} setTemporaryBuffs={setTraceNodeBuffs} />
-                                )}
-                                {leftPaneView === 'weapon' && (
-                                    <WeaponPane activeCharacter={activeCharacter} combatState={combatState} setCombatState={setCombatState} />
-                                )}
-                                {leftPaneView === 'enemy' && (
-                                    <EnemyPane enemyLevel={enemyLevel} setEnemyLevel={setEnemyLevel} enemyRes={enemyRes} setEnemyRes={setEnemyRes} combatState={combatState} setCombatState={setCombatState} />
-                                )}
-                                {leftPaneView === 'buffs' && (
-                                    <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
-                                )}
-                            </div>
-                            <div id="right-pane" className="partition">
-                                <CharacterStats activeCharacter={activeCharacter} baseCharacterState={baseCharacterState} characterLevel={characterLevel} temporaryBuffs={traceNodeBuffs} finalStats={finalStats} combatState={combatState} />
-                                <DamageSection activeCharacter={activeCharacter} finalStats={finalStats} characterLevel={characterLevel} sliderValues={sliderValues} characterRuntimeStates={characterRuntimeStates} combatState={combatState} mergedBuffs={mergedBuffs} />
+
+                {/* Horizontal layout: sidebar + main content */}
+                <div className="horizontal-layout">
+
+                    {/* Sidebar */}
+                    <div className={`sidebar ${hamburgerOpen ? 'expanded' : 'collapsed'}`}>
+                        <div className="sidebar-content">
+                            <button className="sidebar-button">
+                                <div className="icon-slot">
+                                    <Settings size={24} className="settings-icon" stroke="currentColor" />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">Settings</span>
+                                </div>
+                            </button>
+
+                            <button className="sidebar-button">
+                                <div className="icon-slot">
+                                    <HelpCircle size={24} className="help-icon" stroke="currentColor" />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">Help</span>
+                                </div>
+                            </button>
+
+                            <ResetButton />
+                        </div>
+
+                        {/* Footer */}
+                        <div className="sidebar-footer"></div>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="main-content">
+                        <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`}>
+                            <div className="split">
+                                {/* Left Pane */}
+                                <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
+                                    {leftPaneView === 'characters' && (
+                                        <CharacterSelector
+                                            characters={characters}
+                                            activeCharacter={activeCharacter}
+                                            handleCharacterSelect={handleCharacterSelect}
+                                            menuOpen={menuOpen}
+                                            setMenuOpen={setMenuOpen}
+                                            menuRef={menuRef}
+                                            attributeIconPath={attributeIconPath}
+                                            currentSliderColor={currentSliderColor}
+                                            sliderValues={sliderValues}
+                                            setSliderValues={setSliderValues}
+                                            characterLevel={characterLevel}
+                                            setCharacterLevel={setCharacterLevel}
+                                            setSkillsModalOpen={setSkillsModalOpen}
+                                            temporaryBuffs={traceNodeBuffs}
+                                            setTemporaryBuffs={setTraceNodeBuffs}
+                                            isDark={isDark}
+                                        />
+                                    )}
+                                    {leftPaneView === 'weapon' && (
+                                        <WeaponPane activeCharacter={activeCharacter} combatState={combatState} setCombatState={setCombatState} />
+                                    )}
+                                    {leftPaneView === 'enemy' && (
+                                        <EnemyPane enemyLevel={enemyLevel} setEnemyLevel={setEnemyLevel} enemyRes={enemyRes} setEnemyRes={setEnemyRes} combatState={combatState} setCombatState={setCombatState} />
+                                    )}
+                                    {leftPaneView === 'buffs' && (
+                                        <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
+                                    )}
+                                </div>
+
+                                {/* Right Pane */}
+                                <div id="right-pane" className="partition">
+                                    <CharacterStats
+                                        activeCharacter={activeCharacter}
+                                        baseCharacterState={baseCharacterState}
+                                        characterLevel={characterLevel}
+                                        temporaryBuffs={traceNodeBuffs}
+                                        finalStats={finalStats}
+                                        combatState={combatState}
+                                    />
+                                    <DamageSection
+                                        activeCharacter={activeCharacter}
+                                        finalStats={finalStats}
+                                        characterLevel={characterLevel}
+                                        sliderValues={sliderValues}
+                                        characterRuntimeStates={characterRuntimeStates}
+                                        combatState={combatState}
+                                        mergedBuffs={mergedBuffs}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-        </div>
-    </>);
+        </>
+    );
 }

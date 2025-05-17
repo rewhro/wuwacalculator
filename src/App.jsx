@@ -22,6 +22,7 @@ import { Settings, HelpCircle } from 'lucide-react';
 import useDarkMode from './hooks/useDarkMode';
 
 export default function App() {
+    const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark } = useDarkMode();
     const [leftPaneView, setLeftPaneView] = useState('characters');
     const [isCollapsedMode, setIsCollapsedMode] = useState(false);
@@ -35,7 +36,6 @@ export default function App() {
     const [traceNodeBuffs, setTraceNodeBuffs] = useState({});
     const [combatState, setCombatState] = useState({});
     const [sliderValues, setSliderValues] = useState({});
-    const [characterLevel, setCharacterLevel] = useState(1);
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [skillsModalOpen, setSkillsModalOpen] = useState(false);
@@ -263,6 +263,7 @@ export default function App() {
                                 {/* Left Pane */}
                                 <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
                                     {leftPaneView === 'characters' && (
+                                        characters?.length > 0 ? (
                                         <CharacterSelector
                                             characters={characters}
                                             activeCharacter={activeCharacter}
@@ -279,7 +280,11 @@ export default function App() {
                                             setSkillsModalOpen={setSkillsModalOpen}
                                             temporaryBuffs={traceNodeBuffs}
                                             setTemporaryBuffs={setTraceNodeBuffs}
+                                            isDark={isDark}
                                         />
+                                        ) : (
+                                            <div className="loading">Loading characters...</div>
+                                        )
                                     )}
                                     {leftPaneView === 'weapon' && (
                                         <WeaponPane activeCharacter={activeCharacter} combatState={combatState} setCombatState={setCombatState} />

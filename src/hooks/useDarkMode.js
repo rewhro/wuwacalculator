@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 export default function useDarkMode() {
     const [isDark, setIsDark] = useState(
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        window.matchMedia('(prefers-color-scheme: dark)').matches
     );
 
     useEffect(() => {
@@ -14,5 +14,5 @@ export default function useDarkMode() {
         return () => mediaQuery.removeEventListener('change', handleChange);
     }, []);
 
-    return isDark;
+    return { isDark }; // ✅ wrapped in object
 }
