@@ -164,7 +164,7 @@
 /* SIDEBAR GRID CONTENT  */
 /* ===================== */
 
-.sidebar-content {
+.sidebar-content, .sidebar-footer {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -309,7 +309,6 @@
 
 .sidebar-footer {
     margin-top: auto;
-    padding: 16px;
 }
 
 /* ===================== */

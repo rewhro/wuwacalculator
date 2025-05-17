@@ -14,7 +14,7 @@ export default function ResetButton() {
             introSkill: 1,
             sequence: 0
         }));
-        localStorage.setItem('activeCharacterId', JSON.stringify(1506)); // optional default
+        localStorage.setItem('activeCharacterId', JSON.stringify(1506));
         window.location.href = window.location.href;
     };
 

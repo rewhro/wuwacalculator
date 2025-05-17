@@ -248,12 +248,11 @@ export default function App() {
                                     <span className="label-text">Help</span>
                                 </div>
                             </button>
-
-                            <ResetButton />
                         </div>
-
                         {/* Footer */}
-                        <div className="sidebar-footer"></div>
+                        <div className="sidebar-footer">
+                            <ResetButton/>
+                        </div>
                     </div>
 
                     {/* Main Content */}
