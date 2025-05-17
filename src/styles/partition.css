@@ -5,7 +5,6 @@
 /* Default: desktop → allow Split.js scrolls */
 #left-pane, #right-pane {
     box-sizing: border-box;
-    overflow-x: auto;
     height: 100%;
     max-width: 100%;
 }
@@ -51,8 +50,7 @@
 #left-pane {
     flex: 1 1 auto;
     max-width: calc(100vw - var(--sidebar-width));
-    overflow: auto;
-    min-width: 350px; /* optional base size */
+    min-width: 350px;
 }
 
 #right-pane {
