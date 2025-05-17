@@ -125,3 +125,26 @@
         color: #222;
     }
 }
+
+.multipliers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.multipliers-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+}
+
+@media (prefers-color-scheme: dark) {
+    .multipliers-table td {
+        border-bottom: 1px solid #444;
+    }
+}
+
+.multipliers-table .multiplier-value {
+    text-align: right;
+}

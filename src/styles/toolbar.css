@@ -269,7 +269,6 @@
     transform: scale(1.15) rotate(10deg);
 }
 
-/* Shake-only animation */
 @keyframes rotate-shake {
     0%   { transform: rotate(0deg); }
     25%  { transform: rotate(-10deg); }
@@ -278,12 +277,10 @@
     100% { transform: rotate(0deg); }
 }
 
-/* Base state */
 .reset-icon {
     transition: transform 0.2s ease;
 }
 
-/* Hover = shake once */
 .sidebar-button:hover .reset-icon {
     animation: rotate-shake 0.6s ease-in-out;
 }

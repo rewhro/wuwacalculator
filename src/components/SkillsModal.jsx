@@ -36,14 +36,16 @@ export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activ
                                 <h3>{skill.Name ?? activeSkillTab}</h3>
                                 <p dangerouslySetInnerHTML={{ __html: formatDescription(skill.Desc, skill.Param, currentSliderColor) }} />
                                 {skill.Level && (
-                                    <div className="multipliers-section">
+                                    <table className="multipliers-table">
+                                        <tbody>
                                         {Object.entries(skill.Level).map(([key, levelData]) => (
-                                            <div key={key} className="multiplier-row">
-                                                <span className="multiplier-label">{levelData.Name}</span>
-                                                <span className="multiplier-value">{levelData.Param?.[0]?.[sliderValue - 1] ?? 'N/A'}</span>
-                                            </div>
+                                            <tr key={key} className="multiplier-row">
+                                                <td className="multiplier-label">{levelData.Name}</td>
+                                                <td className="multiplier-value">{levelData.Param?.[0]?.[sliderValue - 1] ?? 'N/A'}</td>
+                                            </tr>
                                         ))}
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 )}
                             </>
                         );
