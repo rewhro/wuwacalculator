@@ -12,3 +12,6 @@ import './damageSection.css';
 import './inherentSkills.css';
 import './reset.css';
 import './customBuffs.css';
+import './checkbox.css';
+import './resetMenu.css'
+import './changeLogModal.css';

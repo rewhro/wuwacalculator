@@ -1,5 +1,5 @@
-export function getUnifiedStatPool(buffSources) {
-    const merged = {
+export function getUnifiedStatPool(buffSources, overrideLogic = null) {
+    let merged = {
         atkFlat: 0,
         hpFlat: 0,
         defFlat: 0,
@@ -21,6 +21,8 @@ export function getUnifiedStatPool(buffSources) {
         electro: 0,
         havoc: 0,
         coordinated: 0,
+        outroAtk: 0,
+        outroAmplify: 0,
         elementBonus: 0,
         enemyResShred: 0,
         enemyDefShred: 0,
@@ -47,12 +49,30 @@ export function getUnifiedStatPool(buffSources) {
                     merged.elementDmgAmplify[elKey] = (merged.elementDmgAmplify[elKey] ?? 0) + Number(elVal ?? 0);
                 }
             } else if (ELEMENT_KEYS.includes(key)) {
+                // ➤ Add to total elemental damage bonus
                 merged[key] += val;
-                merged.elementDmgAmplify[key] = (merged.elementDmgAmplify[key] ?? 0) + val;
+
+                // ✅ DO NOT treat it as amplify — so remove the line below:
+                // merged.elementDmgAmplify[key] = (merged.elementDmgAmplify[key] ?? 0) + val;
             } else if (merged[key] !== undefined) {
-                // 🟢 This keeps basicAtk/heavyAtk/etc. as flat bonuses, not misclassified
                 merged[key] += val;
             }
+        }
+    }
+
+    // ✅ Apply character-specific override logic (if provided)
+    if (overrideLogic?.modifyUnifiedStats) {
+        const result = overrideLogic.modifyUnifiedStats({
+            mergedBuffs: merged,
+            combatState: overrideLogic.combatState ?? {},
+            skillMeta: overrideLogic.skillMeta ?? {},
+            characterState: overrideLogic.characterState ?? {},
+            isActiveSequence: overrideLogic.isActiveSequence ?? (() => false),
+            isToggleActive: overrideLogic.isToggleActive ?? (() => false)
+        });
+
+        if (result?.mergedBuffs) {
+            merged = result.mergedBuffs;
         }
     }
 

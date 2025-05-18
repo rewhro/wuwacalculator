@@ -125,7 +125,7 @@
 
 @media (prefers-color-scheme: dark) {
     .stats-box, .damage-box {
-        background: linear-gradient(145deg, #1b1b1b, #232323);
+        background: linear-gradient(145deg, #1f2937, #232323);
         border-color: rgba(255,255,255,0.1);
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
@@ -140,11 +140,15 @@
     }
 
     .stat-row:nth-child(even) {
-        background-color: #1e1e1e;
+        background-color: rgba(2, 3, 4, 0.31);
     }
 
     .stat-row:nth-child(odd) {
-        background-color: #2a2a2a;
+        background-color: rgba(26, 26, 28, 0.16);
+    }
+
+    .damage-inner-box {
+        background-color: rgba(2, 3, 4, 0.31);
     }
 
     .stat-label, .stat-value, .stat-bonus, .stat-total,

@@ -2,6 +2,7 @@
 import React from 'react';
 import { calculateDamage } from '../utils/damageCalculator';
 import { elementToAttribute } from '../utils/attributeHelpers';
+import { getCharacterOverride, getHardcodedMultipliers } from '../data/character-behaviour';
 
 export default function DamageSection({
                                           activeCharacter,
@@ -14,8 +15,9 @@ export default function DamageSection({
                                       }) {
     if (!activeCharacter) return null;
 
-    const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill'];
+    const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
     const element = elementToAttribute[activeCharacter?.attribute] ?? '';
+    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
 
     return (
         <div className="damage-box">
@@ -24,10 +26,27 @@ export default function DamageSection({
             <div className="damage-section">
                 {skillTabs.map((tab) => {
                     const skill = getSkillData(activeCharacter, tab);
-                    const levels = skill?.Level ? Object.values(skill.Level).filter(
-                        level => Array.isArray(level.Param?.[0]) &&
-                            level.Param[0].some(val => typeof val === 'string' && val.includes('%'))
-                    ) : [];
+                    let levels = [];
+
+                    if (skill?.Level) {
+                        levels = Object.values(skill.Level).filter(
+                            level => Array.isArray(level.Param?.[0]) &&
+                                level.Param[0].some(val => typeof val === 'string' && val.includes('%'))
+                        );
+                    }
+
+                    if (tab === 'outroSkill' && levels.length === 0) {
+                        const hardcoded = getHardcodedMultipliers(charId)?.outroSkill ?? [];
+                        levels = hardcoded.map(entry => ({
+                            Name: entry.name,
+                            Param: [[entry.multiplier]],
+                            scaling: entry.scaling
+                        }));
+                    }
+                    if (tab === 'outroSkill') {
+                        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+                        const multipliers = getHardcodedMultipliers(charId)?.[tab] ?? [];
+                    }
 
                     return (
                         <div key={tab} className="box-wrapper">
@@ -44,11 +63,17 @@ export default function DamageSection({
                                         <div>AVG</div>
                                         {levels.map((level, index) => {
                                             const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-                                            const scaling = characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
-                                                atk: 1, hp: 0, def: 0, energyRegen: 0
-                                            };
+                                            const scaling = level.scaling ?? (
+                                                characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
+                                                    atk: 1, hp: 0, def: 0, energyRegen: 0
+                                                }
+                                            );
 
-                                            const multiplierString = level.Param?.[0]?.[sliderValues[tab] - 1] ?? "0%";
+                                            const multiplierString =
+                                                typeof level.Param?.[0] === 'string'
+                                                    ? level.Param[0]
+                                                    : level.Param?.[0]?.[sliderValues[tab] - 1] ?? level.Param?.[0]?.[0] ?? "0%";
+
                                             const multiplier = parseCompoundMultiplier(multiplierString);
 
                                             const element = elementToAttribute[activeCharacter?.attribute] ?? '';
@@ -60,15 +85,57 @@ export default function DamageSection({
                                             else if (tab === 'resonanceSkill') skillType = 'skill';
                                             else if (tab === 'resonanceLiberation') skillType = 'ultimate';
                                             else if (tab === 'normalAttack') skillType = 'basic';
+                                            else if (tab === 'outroSkill') skillType = 'outro';
                                             // forteCircuit intentionally left with empty skillType
 
+
+                                            let skillMeta = {
+                                                name: level.Name,
+                                                skillType,
+                                                multiplier,
+                                                amplify: 0
+                                            };
+
+                                            const characterState = {
+                                                activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
+                                                toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
+                                            };
+
+                                            const isActiveSequence = (seqNum) => sliderValues?.sequence >= seqNum;
+                                            const isToggleActive = (toggleId) => characterState?.toggles?.[toggleId] === true;
+
+                                            const override = getCharacterOverride(charId);
+                                            if (override) {
+                                                const result = override({
+                                                    mergedBuffs,
+                                                    combatState,
+                                                    skillMeta,
+                                                    characterState,
+                                                    isActiveSequence,
+                                                    isToggleActive
+                                                });
+                                                skillMeta = result.skillMeta;
+                                            }
+/*
+                                            // Log debug info for specific skills
+                                            const lowerName = skillMeta.name?.toLowerCase() ?? '';
+
+                                            if (
+                                                lowerName.includes('starflash') ||
+                                                skillType === 'ultimate' || // usually 'resonanceLiberation'
+                                                skillType === 'outro'
+                                            ) {
+                                                console.log(`[🧪 DEBUG] ${skillMeta.name} — Multiplier: ${skillMeta.multiplier}, Amplify: ${skillMeta.amplify}`);
+                                            }
+*/
                                             const { normal, crit, avg } = calculateDamage({
                                                 finalStats,
                                                 combatState,
-                                                multiplier,
+                                                multiplier: skillMeta.multiplier,
+                                                amplify: skillMeta.amplify,
                                                 scaling,
                                                 element,
-                                                skillType,
+                                                skillType: skillMeta.skillType,
                                                 characterLevel,
                                                 mergedBuffs
                                             });

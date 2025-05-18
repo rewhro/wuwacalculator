@@ -38,10 +38,11 @@ export function getFinalStats(activeCharacter, baseCharacterState, characterLeve
     finalStats.healingBonus = (baseCharacterState?.Stats?.healingBonus ?? 0) + (mergedBuffs?.healingBonus ?? 0);
     finalStats.energyRegen = (baseCharacterState?.Stats?.energyRegen ?? 0) + (mergedBuffs?.energyRegen ?? 0);
 
-    ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
-        const key = `${element}DmgBonus`;
-        const bonus = mergedBuffs?.elementalBonuses?.[element] ?? 0;
-        finalStats[key] = (finalStats[key] ?? 0) + bonus;
+    ['aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc'].forEach(element => {
+        const dmgBonusKey = `${element}DmgBonus`;
+        const bonusFromBuffs = mergedBuffs?.[dmgBonusKey] ?? 0;
+        const bonusFromPassive = mergedBuffs?.[element] ?? 0;
+        finalStats[dmgBonusKey] = (finalStats[dmgBonusKey] ?? 0) + bonusFromBuffs + bonusFromPassive;
     });
 
     ['basicAtk','heavyAtk','skillAtk','ultimateAtk'].forEach(skill => {

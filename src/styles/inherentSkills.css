@@ -37,7 +37,7 @@
 /* ========================== */
 @media (prefers-color-scheme: dark) {
     .inherent-skills-box {
-        background: linear-gradient(145deg, #1b1b1b, #232323);
+        background: linear-gradient(145deg, #1f2937, #232323);
         border-color: rgba(255,255,255,0.1);
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }

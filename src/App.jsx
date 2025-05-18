@@ -18,10 +18,15 @@ import { attributeColors, attributeIcons, elementToAttribute } from './utils/att
 import { getFinalStats } from './utils/getStatsForLevel';
 import { getUnifiedStatPool } from './utils/getUnifiedStatPool';
 import { usePersistentState } from './hooks/usePersistentState';
-import { Settings, HelpCircle } from 'lucide-react';
+import {Settings, HelpCircle, History} from 'lucide-react';
 import useDarkMode from './hooks/useDarkMode';
+import { getCharacterOverride } from './data/character-behaviour';
+import ChangelogModal from './components/ChangelogModal';
+
 
 export default function App() {
+    const LATEST_CHANGELOG_VERSION = '2025-05-18';
+    const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark } = useDarkMode();
     const [leftPaneView, setLeftPaneView] = useState('characters');
@@ -54,7 +59,9 @@ export default function App() {
     const defaultSliderValues = { normalAttack: 1, resonanceSkill: 1, forteCircuit: 1, resonanceLiberation: 1, introSkill: 1, sequence: 0 };
     const defaultTraceBuffs = { atkPercent: 0, hpPercent: 0, defPercent: 0, healingBonus: 0, critRate: 0, critDmg: 0, elementalBonuses: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, activeNodes: {} };
     const defaultCustomBuffs = { atkFlat: 0, hpFlat: 0, defFlat: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0, basicAtk: 0, heavyAtk: 0, resonanceSkill: 0, resonanceLiberation: 0, aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 };
-    const defaultCombatState = { characterLevel: 1, enemyLevel: 1, enemyRes: 0, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0, elementBonus: 0, elementDmgAmplify: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, flatDmg: 0, damageTypeAmplify: { basic: 0, heavy: 0, skill: 0, ultimate: 0 }, dmgReduction: 0, elementDmgReduction: 0, critRate: 0, critDmg: 0, weaponBaseAtk: 0 };
+    const defaultCombatState = { characterLevel: 1, enemyLevel: 1, enemyRes: 0, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0, elementBonus: 0, elementDmgAmplify: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, flatDmg: 0, damageTypeAmplify: { basic: 0, heavy: 0, skill: 0, ultimate: 0 }, dmgReduction: 0, elementDmgReduction: 0, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0 };
+    const [characterState, setCharacterState] = useState({ activeStates: {} });
+
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -93,6 +100,14 @@ export default function App() {
                 }
             }
         });
+    }, []);
+
+    useEffect(() => {
+        const seenVersion = localStorage.getItem('seenChangelogVersion');
+        if (seenVersion !== LATEST_CHANGELOG_VERSION) {
+            setShowChangelog(true); // show modal
+            localStorage.setItem('seenChangelogVersion', LATEST_CHANGELOG_VERSION); // mark as seen
+        }
     }, []);
 
     useEffect(() => {
@@ -136,16 +151,18 @@ export default function App() {
             setCharacterRuntimeStates(prev => ({
                 ...prev,
                 [charId]: {
-                    Name: activeCharacter.displayName,
+                    ...(prev[charId] ?? {}),
+                    Name: char.displayName,
                     Id: charId,
-                    Attribute: activeCharacter.attribute,
-                    WeaponType: activeCharacter.weaponType ?? 0,
+                    Attribute: char.attribute,
+                    WeaponType: char.weaponType ?? 0,
                     Stats: baseCharacterState?.Stats ?? {},
                     CharacterLevel: characterLevel,
                     SkillLevels: sliderValues,
                     TemporaryBuffs: traceNodeBuffs,
                     CustomBuffs: customBuffs,
-                    CombatState: combatState
+                    CombatState: combatState,
+                    CharacterState: characterState
                 }
             }));
         }
@@ -160,14 +177,52 @@ export default function App() {
         setTraceNodeBuffs(cached?.TemporaryBuffs ?? defaultTraceBuffs);
         setCustomBuffs(cached?.CustomBuffs ?? defaultCustomBuffs);
         setCombatState(cached?.CombatState ?? defaultCombatState);
+        setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
 
-    const mergedBuffs = getUnifiedStatPool([traceNodeBuffs, customBuffs, combatState]);
+    const overrideLogic = getCharacterOverride(
+        activeCharacter?.id ?? activeCharacter?.Id ?? activeCharacter?.link
+    );
+
+    let mergedBuffs = getUnifiedStatPool(
+        [traceNodeBuffs, customBuffs, combatState],
+        overrideLogic
+    );
+
+// ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
+    if (overrideLogic && typeof overrideLogic === 'function') {
+        const charId =
+            activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+
+        const characterState = {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
+            toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
+        };
+
+        const sequenceLevel = sliderValues?.sequence ?? 0;
+
+        const isActiveSequence = (seqNum) => sequenceLevel >= seqNum;
+        const isToggleActive = (toggleId) =>
+            characterState?.toggles?.[toggleId] === true;
+
+        const globalResult = overrideLogic({
+            mergedBuffs,
+            combatState,
+            characterState, // ✅ now contains live toggle data
+            isActiveSequence,
+            isToggleActive,
+            skillMeta: {}, // global passive buffs only
+        });
+
+        mergedBuffs = globalResult.mergedBuffs;
+        // combatState = globalResult.combatState; // Uncomment if needed
+    }
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
 
+    //console.log(mergedBuffs);
     const finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
 
     useEffect(() => {
@@ -187,10 +242,12 @@ export default function App() {
                 SkillLevels: sliderValues,
                 TemporaryBuffs: traceNodeBuffs,
                 CustomBuffs: customBuffs,
-                CombatState: combatState
+                CombatState: combatState,
+                CharacterState: characterState
             }
         }));
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
+
 
     return (
         <>
@@ -231,6 +288,7 @@ export default function App() {
                     {/* Sidebar */}
                     <div className={`sidebar ${hamburgerOpen ? 'expanded' : 'collapsed'}`}>
                         <div className="sidebar-content">
+                            {/*
                             <button className="sidebar-button">
                                 <div className="icon-slot">
                                     <Settings size={24} className="settings-icon" stroke="currentColor" />
@@ -246,6 +304,15 @@ export default function App() {
                                 </div>
                                 <div className="label-slot">
                                     <span className="label-text">Help</span>
+                                </div>
+                            </button>
+                            */}
+                            <button className="sidebar-button" onClick={() => setShowChangelog(true)}>
+                                <div className="icon-slot">
+                                    <History size={24} stroke="currentColor" />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">Changelog</span>
                                 </div>
                             </button>
                         </div>
@@ -279,7 +346,8 @@ export default function App() {
                                             setSkillsModalOpen={setSkillsModalOpen}
                                             temporaryBuffs={traceNodeBuffs}
                                             setTemporaryBuffs={setTraceNodeBuffs}
-                                            isDark={isDark}
+                                            characterRuntimeStates={characterRuntimeStates}
+                                            setCharacterRuntimeStates={setCharacterRuntimeStates}
                                         />
                                         ) : (
                                             <div className="loading">Loading characters...</div>
@@ -323,6 +391,7 @@ export default function App() {
 
                 </div>
             </div>
+            <ChangelogModal open={showChangelog} onClose={() => setShowChangelog(false)} />
         </>
     );
 }

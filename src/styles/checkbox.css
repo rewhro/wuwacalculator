@@ -1,0 +1,70 @@
+/* === Modern Checkbox Base === */
+.modern-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+    color: #333;
+}
+
+.modern-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #888;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    background-color: #fff;
+    position: relative;
+}
+
+.modern-checkbox input[type="checkbox"]:checked {
+    background-color: #4f46e5; /* Indigo */
+    border-color: #4f46e5;
+}
+
+.modern-checkbox input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.modern-checkbox input[type="checkbox"]:checked::after {
+    display: block;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    animation: checkmarkFade 0.2s ease;
+}
+
+@keyframes checkmarkFade {
+    from {
+        opacity: 0;
+        transform: scale(0.5) rotate(45deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(45deg);
+    }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .modern-checkbox {
+        color: #eee;
+    }
+    .modern-checkbox input[type="checkbox"] {
+        background-color: #1f1f1f;
+        border-color: #777;
+    }
+    .modern-checkbox input[type="checkbox"]:checked {
+        background-color: #6366f1;
+        border-color: #6366f1;
+    }
+}

@@ -1,0 +1,31 @@
+.reset-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-danger {
+    background-color: #dc2626 !important;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-danger:hover {
+    background-color: #b91c1c; /* Tailwind red-700 */
+}
+
+.btn-danger:active {
+    background-color: #991b1b; /* Tailwind red-800 */
+}
+
+@media (prefers-color-scheme: dark) {
+    .skills-modal-content {
+        background: linear-gradient(145deg, #1f2937, #232323);
+        color: #f9fafb;
+    }
+}

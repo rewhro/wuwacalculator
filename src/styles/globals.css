@@ -55,6 +55,15 @@ html, body, #root {
     min-width: 450px;
 }
 
+@media (prefers-color-scheme: dark) {
+    #left-pane, #right-pane {
+        background: #131922 !important;
+    }
+    .layout {
+        background: #131922 !important;
+    }
+}
+
 @media (max-width: 500px) {
     html {
         zoom: 0.55;

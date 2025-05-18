@@ -71,8 +71,15 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
         });
     });
 
+    const labelMap = {
+        basicAtk: 'Basic Attack DMG Bonus',
+        heavyAtk: 'Heavy Attack DMG Bonus',
+        skillAtk: 'Resonance Skill DMG Bonus',
+        ultimateAtk: 'Resonance Liberation DMG Bonus'
+    };
+
     ['basicAtk','heavyAtk','skillAtk','ultimateAtk'].forEach(skill => {
-        const label = skill.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()) + ' DMG Bonus';
+        const label = labelMap[skill] ?? skill;
         const base = 0;
         const total = finalStats?.[skill] ?? 0;
         const bonus = total - base;

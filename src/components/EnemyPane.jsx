@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnemyRes, combatState, setCombatState }) {
+export default function EnemyPane({
+                                      enemyLevel, setEnemyLevel,
+                                      enemyRes, setEnemyRes,
+                                      combatState, setCombatState
+                                  }) {
     if (enemyLevel == null || enemyRes == null) return null;
 
     const handleLevelChange = (val) => {
@@ -15,14 +19,19 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
         setCombatState(prev => ({ ...prev, enemyRes: clamped }));
     };
 
+    const handleDebuffChange = (key, val) => {
+        const clamped = Math.min(60, Math.max(0, Number(val)));
+        setCombatState(prev => ({ ...prev, [key]: clamped }));
+    };
+
     return (
         <div className="character-settings">
             <h3>Enemy Settings</h3>
 
-            {/* Enemy Level slider + number */}
+            {/* Enemy Level */}
             <div className="slider-group">
                 <div className="slider-label-with-input">
-                    <label htmlFor="enemy-level">Enemy Level </label>
+                    <label htmlFor="enemy-level">Enemy Level</label>
                     <input
                         id="enemy-level"
                         type="number"
@@ -41,10 +50,10 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
                 />
             </div>
 
-            {/* Enemy Resistance slider + number */}
+            {/* Enemy Resistance */}
             <div className="slider-group">
                 <div className="slider-label-with-input">
-                    <label htmlFor="enemy-res">Enemy Resistance </label>
+                    <label htmlFor="enemy-res">Enemy Resistance</label>
                     <input
                         id="enemy-res"
                         type="number"
@@ -62,6 +71,55 @@ export default function EnemyPane({ enemyLevel, setEnemyLevel, enemyRes, setEnem
                     value={enemyRes}
                     onChange={(e) => handleResChange(e.target.value)}
                 />
+            </div>
+
+            {/* 🟣 Debuff Section */}
+            <div style={{ marginTop: '50px' }}>
+                <h4></h4>
+
+                {/* Spectro Frazzle */}
+                <div className="slider-group">
+                    <div className="slider-label-with-input">
+                        <label htmlFor="spectro-frazzle">Spectro Frazzle</label>
+                        <input
+                            id="spectro-frazzle"
+                            type="number"
+                            min="0"
+                            max="60"
+                            value={combatState.spectroFrazzle ?? 0}
+                            onChange={(e) => handleDebuffChange('spectroFrazzle', e.target.value)}
+                        />
+                    </div>
+                    <input
+                        type="range"
+                        min="0"
+                        max="60"
+                        value={combatState.spectroFrazzle ?? 0}
+                        onChange={(e) => handleDebuffChange('spectroFrazzle', e.target.value)}
+                    />
+                </div>
+
+                {/* Aero Erosion */}
+                <div className="slider-group">
+                    <div className="slider-label-with-input">
+                        <label htmlFor="aero-erosion">Aero Erosion</label>
+                        <input
+                            id="aero-erosion"
+                            type="number"
+                            min="0"
+                            max="60"
+                            value={combatState.aeroErosion ?? 0}
+                            onChange={(e) => handleDebuffChange('aeroErosion', e.target.value)}
+                        />
+                    </div>
+                    <input
+                        type="range"
+                        min="0"
+                        max="60"
+                        value={combatState.aeroErosion ?? 0}
+                        onChange={(e) => handleDebuffChange('aeroErosion', e.target.value)}
+                    />
+                </div>
             </div>
         </div>
     );

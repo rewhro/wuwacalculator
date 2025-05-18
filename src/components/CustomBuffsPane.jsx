@@ -45,6 +45,26 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             return;
         }
 
+        const elementAmplifyMap = {
+            aeroAmplify: 'aero',
+            glacioAmplify: 'glacio',
+            spectroAmplify: 'spectro',
+            fusionAmplify: 'fusion',
+            electroAmplify: 'electro',
+            havocAmplify: 'havoc'
+        };
+
+        if (elementAmplifyMap[key]) {
+            setCustomBuffs(prev => ({
+                ...prev,
+                elementDmgAmplify: {
+                    ...prev.elementDmgAmplify,
+                    [elementAmplifyMap[key]]: clamped
+                }
+            }));
+            return;
+        }
+
         setCustomBuffs(prev => ({
             ...prev,
             [key]: clamped
@@ -59,10 +79,23 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             resonanceLiberationAmplify: 'ultimate'
         };
 
+        const elementAmplifyMap = {
+            aeroAmplify: 'aero',
+            glacioAmplify: 'glacio',
+            spectroAmplify: 'spectro',
+            fusionAmplify: 'fusion',
+            electroAmplify: 'electro',
+            havocAmplify: 'havoc'
+        };
+
         let value = customBuffs[key] ?? 0;
 
         if (damageTypeMap[key]) {
             value = customBuffs.damageTypeAmplify?.[damageTypeMap[key]] ?? 0;
+        }
+
+        if (elementAmplifyMap[key]) {
+            value = customBuffs.elementDmgAmplify?.[elementAmplifyMap[key]] ?? 0;
         }
 
         return percentageFields.has(key) ? (
