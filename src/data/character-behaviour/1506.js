@@ -23,6 +23,10 @@ export function applyPheobeLogic({
                 ? 'Confession'
                 : null;
 
+    if (state !== 'Confession') {
+        mergedBuffs.__pheobeConfessionResShred = false;
+    }
+
     // === Damage Type Reassignments ===
     const basicSkills = [
         "Chamuel's Star: Stage 1 DMG",
@@ -42,7 +46,6 @@ export function applyPheobeLogic({
         skillMeta.skillType = 'skill';
     }
 
-    console.log(`[PheobeLogic] Assigned skill type: ${skillMeta.name} → ${skillMeta.skillType}`);
 
     // === Flat Multiplier Boosts ===
     if (state === 'Absolution') {
@@ -62,14 +65,18 @@ export function applyPheobeLogic({
             skillMeta.multiplier *= (1 + 2.55);
         }
 
-
-
         if (isActiveSequence(3) && skillMeta.name?.includes('Starflash')) {
             skillMeta.multiplier *= (1 + 0.91);
         }
+
     } else if (state === 'Confession') {
         if (skillMeta.skillType === 'ultimate') {
             skillMeta.multiplier *= (1 + 0.90);
+        }
+
+        if (!mergedBuffs.__pheobeConfessionResShred) {
+            mergedBuffs.enemyResShred += 10;
+            mergedBuffs.__pheobeConfessionResShred = true;
         }
 
         if (isActiveSequence(3) && skillMeta.name?.includes('Starflash')) {
