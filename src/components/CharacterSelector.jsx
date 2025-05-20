@@ -22,9 +22,12 @@ const traceNodeIconMap = {
 const skillToBuffMap = {
     'ATK+': 'atkPercent', 'HP+': 'hpPercent', 'DEF+': 'defPercent',
     'Healing Bonus+': 'healingBonus', 'Crit. Rate+': 'critRate', 'Crit. DMG+': 'critDmg',
-    'Aero DMG Bonus+': 'aeroDmgBonus', 'Glacio DMG Bonus+': 'glacioDmgBonus',
-    'Spectro DMG Bonus+': 'spectroDmgBonus', 'Fusion DMG Bonus+': 'fusionDmgBonus',
-    'Electro DMG Bonus+': 'electroDmgBonus', 'Havoc DMG Bonus+': 'havocDmgBonus'
+    'Aero DMG Bonus+': 'aero',
+    'Glacio DMG Bonus+': 'glacio',
+    'Spectro DMG Bonus+': 'spectro',
+    'Fusion DMG Bonus+': 'fusion',
+    'Electro DMG Bonus+': 'electro',
+    'Havoc DMG Bonus+': 'havoc'
 };
 
 export default function CharacterSelector({
@@ -147,7 +150,12 @@ export default function CharacterSelector({
                 <div className="inherent-skills-box">
                     {!CustomInherents && <h3>Inherent Skills</h3>}
                     {CustomInherents ? (
-                        <CustomInherents character={activeCharacter} currentSliderColor={currentSliderColor} />
+                        <CustomInherents
+                            character={activeCharacter}
+                            currentSliderColor={currentSliderColor}
+                            characterRuntimeStates={characterRuntimeStates}
+                            setCharacterRuntimeStates={setCharacterRuntimeStates}
+                        />
                     ) : (
                         <div className="inherent-skills">
                             {Object.values(activeCharacter.raw?.SkillTrees ?? {})
@@ -198,19 +206,37 @@ export default function CharacterSelector({
                                                 const percent = parseFloat((node.Skill?.Param?.[0] ?? "0").replace('%', ''));
 
                                                 setTemporaryBuffs(prev => {
+                                                    // Toggle the node
                                                     const wasActive = prev.activeNodes?.[nodeIdNum] ?? false;
-                                                    const newActive = !wasActive;
+                                                    const newActiveNodes = {
+                                                        ...prev.activeNodes,
+                                                        [nodeIdNum]: !wasActive
+                                                    };
+
+                                                    // If no buffKey, just return updated activeNodes
+                                                    if (!buffKey) {
+                                                        return {
+                                                            ...prev,
+                                                            activeNodes: newActiveNodes
+                                                        };
+                                                    }
+
+                                                    // Recalculate total buff for this buffKey
+                                                    const total = Object.entries(newActiveNodes)
+                                                        .filter(([, isActive]) => isActive)
+                                                        .map(([id]) => {
+                                                            const otherNode = activeCharacter.raw?.SkillTrees?.[id];
+                                                            const otherSkillName = otherNode?.Skill?.Name;
+                                                            const otherBuffKey = skillToBuffMap[otherSkillName];
+                                                            const value = parseFloat((otherNode?.Skill?.Param?.[0] ?? "0").replace('%', ''));
+                                                            return otherBuffKey === buffKey ? value : 0;
+                                                        })
+                                                        .reduce((sum, val) => sum + val, 0);
+
                                                     return {
                                                         ...prev,
-                                                        activeNodes: {
-                                                            ...prev.activeNodes,
-                                                            [nodeIdNum]: newActive
-                                                        },
-                                                        ...(buffKey ? {
-                                                            [buffKey]: newActive
-                                                                ? (prev[buffKey] ?? 0) + percent
-                                                                : (prev[buffKey] ?? 0) - percent
-                                                        } : {})
+                                                        activeNodes: newActiveNodes,
+                                                        [buffKey]: total
                                                     };
                                                 });
                                             }}

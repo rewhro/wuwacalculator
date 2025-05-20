@@ -25,7 +25,7 @@ import ChangelogModal from './components/ChangelogModal';
 
 
 export default function App() {
-    const LATEST_CHANGELOG_VERSION = '2025-05-18';
+    const LATEST_CHANGELOG_VERSION = '2025-05-20';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark } = useDarkMode();
@@ -248,7 +248,8 @@ export default function App() {
         }));
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
 
-
+    //console.log(mergedBuffs);
+    //console.log(finalStats);
     return (
         <>
             <SkillsModal

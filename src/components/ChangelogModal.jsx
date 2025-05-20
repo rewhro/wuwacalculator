@@ -10,14 +10,26 @@ export default function ChangelogModal({ open, onClose }) {
             entries: [
                 {
                     type: 'paragraph',
-                    content: `<strong>Pheobe</strong> has been fully integrated into the calculator.`
+                    content: `<strong>Pheobe</strong> is now fully functional.`
                 },
+                /*
                 {
                     type: 'bullet',
                     content: `Mostly just UI support and "un-generalization" (i'm not sure yet what that means) for THE Pheobe. More characters will be updated later.`
-                }
+                },
+                */
             ]
         },
+        {
+            date: '20/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Sanhua</strong> is now fully functional.`
+                }
+            ]
+
+        }
         // Add more changelogs as needed
     ];
 

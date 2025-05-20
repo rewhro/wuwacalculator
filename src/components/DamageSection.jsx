@@ -93,7 +93,8 @@ export default function DamageSection({
                                                 name: level.Name,
                                                 skillType,
                                                 multiplier,
-                                                amplify: 0
+                                                amplify: 0,
+                                                tab
                                             };
 
                                             const characterState = {
@@ -102,7 +103,9 @@ export default function DamageSection({
                                             };
 
                                             const isActiveSequence = (seqNum) => sliderValues?.sequence >= seqNum;
-                                            const isToggleActive = (toggleId) => characterState?.toggles?.[toggleId] === true;
+                                            const isToggleActive = (toggleId) =>
+                                                characterState?.toggles?.[toggleId] === true ||
+                                                characterState?.activeStates?.[toggleId] === true;
 
                                             const override = getCharacterOverride(charId);
                                             if (override) {
@@ -115,6 +118,7 @@ export default function DamageSection({
                                                     isToggleActive
                                                 });
                                                 skillMeta = result.skillMeta;
+                                                mergedBuffs = result.mergedBuffs;
                                             }
 /*
                                             // Log debug info for specific skills
@@ -137,7 +141,9 @@ export default function DamageSection({
                                                 element,
                                                 skillType: skillMeta.skillType,
                                                 characterLevel,
-                                                mergedBuffs
+                                                mergedBuffs,
+                                                skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
+                                                critDmgBonus: skillMeta.critDmgBonus ?? 0
                                             });
 
                                             return (

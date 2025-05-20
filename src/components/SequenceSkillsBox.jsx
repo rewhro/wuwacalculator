@@ -59,6 +59,8 @@ export default function SequenceSkillsBox({
                                 sequenceToggles={sequenceToggles}
                                 toggleSequence={toggleSequence}
                                 currentSequenceLevel={sliderValues.sequence}
+                                setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                charId={charId}
                             />
                         )}
                     </div>

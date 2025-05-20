@@ -81,7 +81,7 @@ export function PheobeSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
                 onChange={() => toggleSequence(nodeKey)}
                 disabled={isDisabled}
             />
-            {`Sequence ${nodeKey}`}
+            Enable
         </label>
     );
 }

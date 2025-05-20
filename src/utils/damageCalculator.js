@@ -9,7 +9,9 @@ export function calculateDamage({
                                     skillType,
                                     characterLevel,
                                     mergedBuffs,
-                                    amplify = 0
+                                    amplify = 0,
+                                    skillDmgBonus = 0,
+                                    critDmgBonus = 0
                                 }) {
     // 1️⃣ Base stats
     const atk = finalStats.atk ?? 0;
@@ -54,7 +56,11 @@ export function calculateDamage({
     const elementReductionTotal = 1 - ((combatState.elementDmgReduction ?? 0) + 0);
 
     // 7️⃣ Bonuses
-    const skillTypeBonus = skillType ? (finalStats?.[`${skillType}Atk`] ?? 0) : 0;
+    const skillTypeBonus = skillType ? (
+        (finalStats?.[`${skillType}Atk`] ?? 0) +
+        (mergedBuffs?.[`${skillType}Atk`] ?? 0) +
+        skillDmgBonus
+    ) : 0;
     let elementBonus = (finalStats[`${element}DmgBonus`] ?? 0) + skillTypeBonus;
     if (skillType === 'outro') {
         elementBonus += mergedBuffs?.outroAtk ?? 0;
@@ -76,14 +82,16 @@ export function calculateDamage({
 
     // 9️⃣ Crit damage
     const critRate = Math.min((finalStats.critRate ?? 0) / 100, 1);
-    const critDmg = (finalStats.critDmg ?? 0) / 100;
+    const critDmg = ((finalStats.critDmg ?? 0) / 100) + (critDmgBonus / 100);
     const crit = normal * critDmg;
+
+    //console.log(critDmgBonus);
 
     // 10️⃣ Average damage
     const avg = critRate >= 1
         ? crit
         : (crit * critRate) + (normal * (1 - critRate));
-    /*
+/*
         console.table({
             element,
             atk,
@@ -102,7 +110,6 @@ export function calculateDamage({
             elementReductionTotal,
             elementBonus,
             skillTypeBonus,
-            amplify,
             dmgBonus,
             dmgAmplify,
             normal,
@@ -112,19 +119,7 @@ export function calculateDamage({
             crit,
             avg
         });
-
-
-    if (
-        skillType === 'outro' ||
-        skillType === 'ultimate' ||
-        String(element)?.toLowerCase()?.includes('spectro') ||
-        amplify > 0
-    ) {
-        console.log(mergedBuffs);
-        console.log(finalStats);
-    }
-
-     */
+*/
     return {
         normal: Math.floor(normal),
         crit: Math.floor(crit),
