@@ -25,7 +25,7 @@ import ChangelogModal from './components/ChangelogModal';
 
 
 export default function App() {
-    const LATEST_CHANGELOG_VERSION = '2025-05-20';
+    const LATEST_CHANGELOG_VERSION = '2025-05-21';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark } = useDarkMode();

@@ -29,6 +29,16 @@ export default function ChangelogModal({ open, onClose }) {
                 }
             ]
 
+        },
+        {
+            date: '21/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Baizhi</strong> is now fully functional.`
+                }
+            ]
+
         }
         // Add more changelogs as needed
     ];

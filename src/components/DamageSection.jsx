@@ -1,6 +1,7 @@
-// src/components/DamageSection.jsx
+""// src/components/DamageSection.jsx
 import React from 'react';
 import { calculateDamage } from '../utils/damageCalculator';
+import { calculateSupportEffect } from '../utils/supportCalculator';
 import { elementToAttribute } from '../utils/attributeHelpers';
 import { getCharacterOverride, getHardcodedMultipliers } from '../data/character-behaviour';
 
@@ -35,17 +36,19 @@ export default function DamageSection({
                         );
                     }
 
-                    if (tab === 'outroSkill' && levels.length === 0) {
-                        const hardcoded = getHardcodedMultipliers(charId)?.outroSkill ?? [];
-                        levels = hardcoded.map(entry => ({
+                    const extra = getHardcodedMultipliers(charId)?.[tab] ?? [];
+
+                    if (levels.length === 0) {
+                        levels = extra.map(entry => ({
+                            ...entry,
                             Name: entry.name,
-                            Param: [[entry.multiplier]],
-                            scaling: entry.scaling
+                            Param: [[entry.multiplier ?? '0%']]
                         }));
-                    }
-                    if (tab === 'outroSkill') {
-                        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-                        const multipliers = getHardcodedMultipliers(charId)?.[tab] ?? [];
+                    } else {
+                        levels = levels.map(level => {
+                            const match = extra.find(entry => entry.name === level.Name);
+                            return match ? { ...level, ...match } : level;
+                        });
                     }
 
                     return (
@@ -53,6 +56,7 @@ export default function DamageSection({
                             <div className="damage-inner-box">
                                 <h3 className="damage-box-title">
                                     {tab.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    {skill?.Name ? `: ${skill.Name}` : ''}
                                 </h3>
 
                                 {levels.length > 0 ? (
@@ -62,7 +66,7 @@ export default function DamageSection({
                                         <div>CRIT</div>
                                         <div>AVG</div>
                                         {levels.map((level, index) => {
-                                            const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+
                                             const scaling = level.scaling ?? (
                                                 characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
                                                     atk: 1, hp: 0, def: 0, energyRegen: 0
@@ -76,9 +80,6 @@ export default function DamageSection({
 
                                             const multiplier = parseCompoundMultiplier(multiplierString);
 
-                                            const element = elementToAttribute[activeCharacter?.attribute] ?? '';
-
-                                            // ✅ Detect skillType based on label content
                                             const label = level.Name?.toLowerCase() ?? '';
                                             let skillType = '';
                                             if (label.includes('heavy attack')) skillType = 'heavy';
@@ -86,20 +87,22 @@ export default function DamageSection({
                                             else if (tab === 'resonanceLiberation') skillType = 'ultimate';
                                             else if (tab === 'normalAttack') skillType = 'basic';
                                             else if (tab === 'outroSkill') skillType = 'outro';
-                                            // forteCircuit intentionally left with empty skillType
-
 
                                             let skillMeta = {
                                                 name: level.Name,
                                                 skillType,
                                                 multiplier,
                                                 amplify: 0,
-                                                tab
+                                                tab,
+                                                tags: [
+                                                    ...(level.healing ? ['healing'] : []),
+                                                    ...(level.shielding ? ['shielding'] : [])
+                                                ]
                                             };
 
                                             const characterState = {
                                                 activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
-                                                toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
+                                                toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {}
                                             };
 
                                             const isActiveSequence = (seqNum) => sliderValues?.sequence >= seqNum;
@@ -120,38 +123,66 @@ export default function DamageSection({
                                                 skillMeta = result.skillMeta;
                                                 mergedBuffs = result.mergedBuffs;
                                             }
-/*
-                                            // Log debug info for specific skills
-                                            const lowerName = skillMeta.name?.toLowerCase() ?? '';
 
-                                            if (
-                                                lowerName.includes('starflash') ||
-                                                skillType === 'ultimate' || // usually 'resonanceLiberation'
-                                                skillType === 'outro'
-                                            ) {
-                                                console.log(`[🧪 DEBUG] ${skillMeta.name} — Multiplier: ${skillMeta.multiplier}, Amplify: ${skillMeta.amplify}`);
+                                            const tag = skillMeta.tags?.[0];
+                                            const isSupportSkill = tag === 'healing' || tag === 'shielding';
+                                            const supportColor = tag === 'healing' ? 'limegreen' : '#4fc3f7';
+
+                                            let normal = null, crit = null, avg = null;
+
+                                            const multipliers = getHardcodedMultipliers(charId)?.[tab] ?? [];
+
+                                            if (isSupportSkill) {
+                                                const flat = parseFlatComponent(multiplierString);
+                                                avg = calculateSupportEffect({
+                                                    finalStats,
+                                                    scaling,
+                                                    multiplier: skillMeta.multiplier,
+                                                    type: tag,
+                                                    flat
+                                                });
+                                            } else {
+                                                //console.log(mergedBuffs);
+                                                const result = calculateDamage({
+                                                    finalStats,
+                                                    combatState,
+                                                    multiplier: skillMeta.multiplier,
+                                                    amplify: skillMeta.amplify,
+                                                    scaling,
+                                                    element,
+                                                    skillType: skillMeta.skillType,
+                                                    characterLevel,
+                                                    mergedBuffs,
+                                                    skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
+                                                    critDmgBonus: skillMeta.critDmgBonus ?? 0
+                                                });
+
+                                                normal = result.normal;
+                                                crit = result.crit;
+                                                avg = result.avg;
                                             }
-*/
-                                            const { normal, crit, avg } = calculateDamage({
-                                                finalStats,
-                                                combatState,
-                                                multiplier: skillMeta.multiplier,
-                                                amplify: skillMeta.amplify,
-                                                scaling,
-                                                element,
-                                                skillType: skillMeta.skillType,
-                                                characterLevel,
-                                                mergedBuffs,
-                                                skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
-                                                critDmgBonus: skillMeta.critDmgBonus ?? 0
-                                            });
 
                                             return (
                                                 <React.Fragment key={index}>
-                                                    <div>{level.Name}</div>
-                                                    <div>{normal.toLocaleString()}</div>
-                                                    <div>{crit.toLocaleString()}</div>
-                                                    <div>{avg.toLocaleString()}</div>
+                                                    <div style={isSupportSkill ? { color: supportColor, fontWeight: 'bold' } : {}}>
+                                                        {level.Name}
+                                                    </div>
+
+                                                    {isSupportSkill ? (
+                                                        <>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div style={{ color: supportColor, fontWeight: 'bold' }}>
+                                                                {avg.toLocaleString()}
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div>{normal.toLocaleString()}</div>
+                                                            <div>{crit.toLocaleString()}</div>
+                                                            <div>{avg.toLocaleString()}</div>
+                                                        </>
+                                                    )}
                                                 </React.Fragment>
                                             );
                                         })}
@@ -179,7 +210,6 @@ function getSkillData(char, tab) {
 function parseCompoundMultiplier(formula) {
     if (!formula) return 0;
 
-    // Match things like "21.58%*4" or "67.56%" etc.
     const parts = formula.match(/\d+(\.\d+)?%(\*\d+)?/g);
     if (!parts) return 0;
 
@@ -189,4 +219,18 @@ function parseCompoundMultiplier(formula) {
         const times = timesStr ? parseInt(timesStr, 10) : 1;
         return sum + value * times;
     }, 0);
+}
+
+export function parseFlatComponent(formula) {
+    if (!formula) return 0;
+
+    // Extract all numeric values (both percent and flat)
+    const allNumbers = formula.match(/\d+(\.\d+)?/g)?.map(Number) ?? [];
+
+    // Get percent contribution using existing function
+    const percentMultiplier = parseCompoundMultiplier(formula) * 100;
+
+    // Total minus percentage portion = flat component
+    const total = allNumbers.reduce((sum, n) => sum + n, 0);
+    return total - percentMultiplier;
 }
