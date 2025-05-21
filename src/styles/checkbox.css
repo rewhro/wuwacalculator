@@ -55,16 +55,14 @@
 }
 
 /* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    .modern-checkbox {
+.dark .modern-checkbox {
         color: #eee;
     }
-    .modern-checkbox input[type="checkbox"] {
+    .dark .modern-checkbox input[type="checkbox"] {
         background-color: #1f1f1f;
         border-color: #777;
     }
-    .modern-checkbox input[type="checkbox"]:checked {
+    .dark .modern-checkbox input[type="checkbox"]:checked {
         background-color: #6366f1;
         border-color: #6366f1;
     }
-}

@@ -22,13 +22,18 @@ import {Settings, HelpCircle, History} from 'lucide-react';
 import useDarkMode from './hooks/useDarkMode';
 import { getCharacterOverride } from './data/character-behaviour';
 import ChangelogModal from './components/ChangelogModal';
-
+import { Moon, Sun } from 'lucide-react';
 
 export default function App() {
     const LATEST_CHANGELOG_VERSION = '2025-05-21';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
-    const { isDark } = useDarkMode();
+    const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
+    const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    };
+
     const [leftPaneView, setLeftPaneView] = useState('characters');
     const [isCollapsedMode, setIsCollapsedMode] = useState(false);
 
@@ -145,6 +150,7 @@ export default function App() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+
     const handleCharacterSelect = (char) => {
         if (activeCharacter) {
             const charId = activeCharacter.Id ?? activeCharacter.id ?? activeCharacter.link;
@@ -248,6 +254,20 @@ export default function App() {
         }));
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => {
+            document.documentElement.classList.toggle('dark', mediaQuery.matches);
+        };
+
+        handleChange(); // Initial set
+        mediaQuery.addEventListener('change', handleChange);
+
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, []);
+
+
+
     //console.log(mergedBuffs);
     //console.log(finalStats);
     return (
@@ -268,10 +288,30 @@ export default function App() {
                 {/* Toolbar at top */}
                 <div className="toolbar">
                     <div className="toolbar-group">
-                        <ToolbarIconButton iconName="character" altText="Characters" onClick={() => setLeftPaneView('characters')} isDark={isDark} />
-                        <ToolbarIconButton iconName="weapon" altText="Weapon" onClick={() => setLeftPaneView('weapon')} isDark={isDark} />
-                        <ToolbarIconButton iconName="enemy" altText="Enemy" onClick={() => setLeftPaneView('enemy')} isDark={isDark} />
-                        <ToolbarIconButton iconName="buffs" altText="Buffs" onClick={() => setLeftPaneView('buffs')} isDark={isDark} />
+                        <ToolbarIconButton
+                            iconName="character"
+                            altText="Characters"
+                            onClick={() => setLeftPaneView('characters')}
+                            effectiveTheme={effectiveTheme}
+                        />
+                        <ToolbarIconButton
+                            iconName="weapon"
+                            altText="Weapon"
+                            onClick={() => setLeftPaneView('weapon')}
+                            effectiveTheme={effectiveTheme}
+                        />
+                        <ToolbarIconButton
+                            iconName="enemy"
+                            altText="Enemy"
+                            onClick={() => setLeftPaneView('enemy')}
+                            effectiveTheme={effectiveTheme}
+                        />
+                        <ToolbarIconButton
+                            iconName="buffs"
+                            altText="Buffs"
+                            onClick={() => setLeftPaneView('buffs')}
+                            effectiveTheme={effectiveTheme}
+                        />
                     </div>
                     <button
                         className={`hamburger-button ${hamburgerOpen ? 'open' : ''}`}
@@ -316,6 +356,19 @@ export default function App() {
                                     <span className="label-text">Changelog</span>
                                 </div>
                             </button>
+                            <button className="sidebar-button" onClick={toggleTheme}>
+                                <div className="icon-slot">
+                                    <div className="icon-slot theme-toggle-icon">
+                                        <Sun className="icon-sun" size={24} />
+                                        <Moon className="icon-moon" size={24} />
+                                    </div>
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">
+                                        {effectiveTheme === 'light' ? 'Dawn' : 'Dusk'}
+                                    </span>
+                                </div>
+                            </button>
                         </div>
                         {/* Footer */}
                         <div className="sidebar-footer">
@@ -349,6 +402,7 @@ export default function App() {
                                             setTemporaryBuffs={setTraceNodeBuffs}
                                             characterRuntimeStates={characterRuntimeStates}
                                             setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                            effectiveTheme={effectiveTheme}
                                         />
                                         ) : (
                                             <div className="loading">Loading characters...</div>

@@ -11,11 +11,10 @@
     background-color: #d3d3d3;
 }
 
-@media (prefers-color-scheme: dark) {
-    .gutter {
-        background-color: #333;
-    }
-    .gutter:hover {
-        background-color: #6ba7e5;
-    }
+.dark .gutter {
+    background-color: #333;
+}
+
+.dark .gutter:hover {
+    background-color: #6ba7e5;
 }

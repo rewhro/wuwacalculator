@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .layout {
     --sidebar-width: 200px;
     --sidebar-collapsed-width: 60px;
@@ -13,6 +17,7 @@ html, body, #root {
     padding: 0;
     width: 100%;
     overflow: hidden;
+    @apply transition-colors duration-300;
 }
 
 .layout {
@@ -21,7 +26,12 @@ html, body, #root {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    /*overflow: auto;*/
+    background: #f9f9f9;
+    @apply transition-colors duration-300;
+}
+
+.dark .layout {
+    background: #131922;
 }
 
 .main-content {
@@ -40,14 +50,8 @@ html, body, #root {
     min-width: 0;
 }
 
-#left-pane.characters-mode {
-    min-width: 350px;
-}
-
-#left-pane.weapon-mode {
-    min-width: 350px;
-}
-
+#left-pane.characters-mode,
+#left-pane.weapon-mode,
 #left-pane.enemy-mode {
     min-width: 350px;
 }
@@ -56,38 +60,40 @@ html, body, #root {
     min-width: 450px;
 }
 
-@media (prefers-color-scheme: dark) {
-    #left-pane, #right-pane {
-        background: #131922 !important;
-    }
-    .layout {
-        background: #131922 !important;
-    }
+.dark #left-pane,
+.dark #right-pane {
+    background: #131922;
 }
 
 @media (max-width: 500px) {
     html {
         zoom: 0.55;
     }
+
     .layout {
         overflow-y: auto;
         height: 100%;
     }
 }
 
+/* Text color elements */
+.inherent-skills-box,
+.stat-label,
+.damage-grid,
+.stat-value,
+.stat-total,
+.slider-group,
+.header-with-icon
+{
+    color: #222;
+    /*@apply transition-colors duration-300;*/
+}
 
-/* ===================== */
-/*   TRANSITION TARGETS  */
-/* ===================== */
-
-.sidebar-button,
-.label-slot,
-.label-text,
-.icon-slot,
-.toolbar,
-.sidebar {
-    transition:
-            background-color 0.3s ease,
-            color 0.3s ease,
-            transform 0.3s ease;
+.dark .slider-group,
+.dark .buff-grid,
+.dark .character-settings,
+.dark .header-with-icon
+{
+    color: #ddd;
+    /*@apply transition-colors duration-300;*/
 }

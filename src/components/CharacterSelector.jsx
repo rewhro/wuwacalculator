@@ -7,7 +7,6 @@ import SkillSettings from './SkillSettings';
 import { formatDescription } from '../utils/formatDescription';
 import { getCharacterUIComponent } from '../data/character-ui';
 import { getCustomInherentSkillsComponent } from '../data/character-ui';
-import useDarkMode from '../hooks/useDarkMode';
 
 const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
 
@@ -35,9 +34,8 @@ export default function CharacterSelector({
                                               attributeIconPath, currentSliderColor, sliderValues, setSliderValues,
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
                                               temporaryBuffs, setTemporaryBuffs,
-                                              characterRuntimeStates, setCharacterRuntimeStates
+                                              characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme
                                           }) {
-    const isDark = useDarkMode();
     const safeLevel = Math.min(Math.max(Number(characterLevel ?? 1), 1), 90);
 
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
@@ -181,7 +179,7 @@ export default function CharacterSelector({
                             )
                             .map(([nodeId, node]) => {
                                 const iconFile = traceNodeIconMap[node.Skill.Name];
-                                const themeSuffix = isDark ? 'dark' : 'light';
+                                const themeSuffix = effectiveTheme === 'dark' ? 'dark' : 'light';
                                 const iconPath = `/assets/skill-icons/${themeSuffix}/${iconFile}.webp?v=${themeSuffix}`;
                                 const isActive = temporaryBuffs?.activeNodes?.[nodeId] ?? false;
                                 const tooltipText = cleanTooltipText(

@@ -1,10 +1,15 @@
-// src/components/ToolbarIconButton.jsx
 import React from 'react';
-import useDarkMode from '../hooks/useDarkMode';
 
-export default function ToolbarIconButton({ iconName, onClick, altText }) {
-    const isDark = useDarkMode();
-    const iconPath = `/assets/icons/${isDark ? 'dark' : 'light'}/${iconName}.png`;
+export default function ToolbarIconButton({ iconName, onClick, altText, effectiveTheme }) {
+    let iconPath;
+
+    if (effectiveTheme === 'dark') {
+        iconPath = `/assets/icons/dark/${iconName}.png`;
+    } else {
+        iconPath = `/assets/icons/light/${iconName}.png`;
+    }
+
+    console.log(`[🧪 Icon Theme] Using theme: ${effectiveTheme}, icon path: ${iconPath}`);
 
     return (
         <button onClick={onClick} className="toolbar-icon-button">

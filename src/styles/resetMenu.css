@@ -23,9 +23,7 @@
     background-color: #991b1b; /* Tailwind red-800 */
 }
 
-@media (prefers-color-scheme: dark) {
-    .skills-modal-content {
-        background: linear-gradient(145deg, #1f2937, #232323);
+.dark .skills-modal-content {
+        background: linear-gradient(145deg, rgba(31, 41, 55, 0.76), #232323);
         color: #f9fafb;
     }
-}

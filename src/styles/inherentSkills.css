@@ -8,7 +8,6 @@
     margin-top: 16px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
 }
 
 .inherent-skills-box h3 {
@@ -19,38 +18,37 @@
 
 .inherent-skills .inherent-skill {
     margin-bottom: 15px;
+    color: #222;
+    line-height: 1.4;
+
 }
 
 .inherent-skills .inherent-skill h4 {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 6px;
+    color: #222
 }
 
-.inherent-skills .inherent-skill p {
-    color: #444;
-    line-height: 1.4;
-}
 
 /* ========================== */
 /*   DARK MODE OVERRIDE       */
 /* ========================== */
-@media (prefers-color-scheme: dark) {
-    .inherent-skills-box {
+.dark .inherent-skills-box {
         background: linear-gradient(145deg, #1f2937, rgba(33, 48, 58, 0.16));
         border-color: rgba(255,255,255,0.1);
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        color: #ddd
     }
 
-    .inherent-skills-box h3,
-    .inherent-skills .inherent-skill h4 {
+    .dark .inherent-skills-box h3,
+    .dark .inherent-skills .inherent-skill h4 {
         color: #ffffff;
     }
 
-    .inherent-skills .inherent-skill p {
+    .dark .inherent-skills .inherent-skill p {
         color: #bbbbbb;
     }
-}
 
 /* ===================== */
 /*   Buff Icons          */
@@ -87,18 +85,16 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-@media (prefers-color-scheme: dark) {
-    .buff-icon {
+.dark .buff-icon {
         background-color: #2a2a2a;
         box-shadow: 0 1px 4px rgba(255, 255, 255, 0.25);
     }
 
-    .buff-icon:hover {
+    .dark .buff-icon:hover {
         box-shadow: 0 2px 6px rgba(255, 255, 255, 0.25);
     }
 
-    .buff-icon.active {
+    .dark .buff-icon.active {
         transform: scale(0.9);
         box-shadow: 0 1px 4px rgba(255, 255, 255, 0.12);
     }
-}

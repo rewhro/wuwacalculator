@@ -34,13 +34,11 @@
     text-align: center;
 }
 
-@media (prefers-color-scheme: dark) {
-    .custom-select.small {
+.dark .custom-select.small {
         background: rgba(0, 0, 0, 0.34);
         color: #ddd;
         border-color: #444;
     }
-}
 
 .dropdown-arrow {
     position: absolute;
@@ -53,8 +51,6 @@
     color: #555;
 }
 
-@media (prefers-color-scheme: dark) {
-    .dropdown-arrow {
+.dark .dropdown-arrow {
         color: #ccc;
     }
-}

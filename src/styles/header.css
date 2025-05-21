@@ -24,11 +24,9 @@
     transition: transform 0.2s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-    .header-icon {
+.dark .header-icon {
         border-color: #404040;
     }
-}
 
 /* Character info + attribute icon */
 .character-info-header {

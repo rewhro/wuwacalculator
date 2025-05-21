@@ -10,7 +10,7 @@
     margin-top: 16px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+    color: #222
 }
 
 /* Subtle hover effect for light mode */
@@ -24,21 +24,25 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #222
 }
 
 /* ===================== */
 /*   DARK MODE OVERRIDE  */
 /* ===================== */
-@media (prefers-color-scheme: dark) {
-    .character-settings,
-    .skills-settings {
+
+.dark .slider-label-with-input {
+    color: #ddd;
+}
+
+.dark .character-settings,
+    .dark .skills-settings {
         background: linear-gradient(145deg, #1f2937, rgba(33, 48, 58, 0.16));
         border-color: rgba(255,255,255,0.1);
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
 
-    .skills-settings:hover {
+    .dark .skills-settings:hover {
         background: linear-gradient(145deg, #1f2937, rgba(33, 48, 58, 0.16));
         box-shadow: 0 4px 10px rgba(255, 255, 255, 0.08);
     }
-}

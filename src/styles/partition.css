@@ -67,9 +67,7 @@
 }
 
 /* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    .partition {
+.dark .partition {
         background-color: #1a1a1a;
         border-right-color: #333;
     }
-}

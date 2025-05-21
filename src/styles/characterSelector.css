@@ -13,13 +13,11 @@
     color: #222;
 }
 
-@media (prefers-color-scheme: dark) {
-    .character-level-input {
+.dark .character-level-input {
         background-color: #000000;
         color: #ddd;
         border: 1px solid #333;
     }
-}
 
 .character-level-input:focus {
     outline: none;
@@ -56,12 +54,11 @@
     transform: translateY(0);
 }
 
-@media (prefers-color-scheme: dark) {
-    .icon-menu-vertical {
+.dark .icon-menu-vertical {
         background-color: #2a2a2a;
         border-color: #444;
     }
-}
+
 
 .icon-menu-img {
     width: 32px;
@@ -75,11 +72,10 @@
     font-weight: 600;
 }
 
-@media (prefers-color-scheme: dark) {
-    .dropdown-label {
+.dark .dropdown-label {
         color: #ffffff;
     }
-}
+
 
 .dropdown-item {
     display: flex;
@@ -99,11 +95,10 @@
     background-color: #eee;
 }
 
-@media (prefers-color-scheme: dark) {
-    .dropdown-item:hover {
+.dark .dropdown-item:hover {
         background-color: #333;
     }
-}
+
 
 .buff-icon-wrapper {
     position: relative;
@@ -180,13 +175,11 @@
 }
 
 /* Dark mode */
-@media (prefers-color-scheme: dark) {
-    .character-settings input[type="number"] {
+.dark .character-settings input[type="number"] {
         border-color: #555;
         background: rgba(0, 0, 0, 0.34);
         color: #ddd;
     }
-}
 
 /* Remove number spinners for consistency */
 .character-settings input::-webkit-outer-spin-button,

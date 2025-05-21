@@ -7,25 +7,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
     height: 60px;
     background-color: #f9f9f9;
     border-bottom: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     padding: 0 16px;
+    color: #222
 }
 
 .toolbar-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 40px;
     flex-wrap: wrap;
 }
 
 .toolbar-icon-button {
-    width: 80px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,17 +54,6 @@
     transition: transform 0.2s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-    .toolbar {
-        background: #1f2937;
-        border-bottom-color: #444;
-        box-shadow: none;
-    }
-    .toolbar-icon-button {
-        background: none;
-        box-shadow: none;
-    }
-}
 
 /* ===================== */
 /*     HAMBURGER BTN    */
@@ -120,12 +109,6 @@
     transform: translateY(-8px) rotate(-45deg);
 }
 
-@media (prefers-color-scheme: dark) {
-    .hamburger-button span {
-        background-color: white;
-    }
-}
-
 
 /* ===================== */
 /*        SIDEBAR       */
@@ -144,6 +127,7 @@
     flex-direction: column;
     outline: none;
     box-shadow: none;
+    color: #222
 }
 
 
@@ -152,13 +136,6 @@
     min-width: 60px;
 }
 
-@media (prefers-color-scheme: dark) {
-    .sidebar {
-        background: #1f2937;
-        border-right-color: #444;
-        box-shadow: none;
-    }
-}
 
 /* ===================== */
 /* SIDEBAR GRID CONTENT  */
@@ -322,4 +299,93 @@
 .horizontal-layout {
     display: flex;
     height: calc(100vh - 60px);
+}
+
+.dark .toolbar {
+    background: #1f2937;
+    border-bottom-color: #444;
+    box-shadow: none;
+}
+
+.dark .toolbar-icon-button {
+    background: none;
+    box-shadow: none;
+}
+
+.dark .hamburger-button span {
+    background-color: white;
+}
+
+.dark .sidebar {
+    background: #1f2937;
+    border-right-color: #444;
+    box-shadow: none;
+    color: #ddd
+}
+
+/* Icon container handles positioning */
+.theme-toggle-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+}
+
+/* Shared transition for both icons */
+.theme-toggle-icon svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    fill: currentColor;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* Default states */
+.theme-toggle-icon .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.theme-toggle-icon .icon-moon {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+/* When dark mode is active */
+.dark .theme-toggle-icon .icon-sun {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+.dark .theme-toggle-icon .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+/* Base icon styles */
+.theme-toggle-icon .icon-sun,
+.theme-toggle-icon .icon-moon {
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* 🌞 Sun: yellow pulse */
+.sidebar-button:hover .theme-toggle-icon .icon-sun {
+    color: #facc15; /* Tailwind yellow-400 */
+    animation: iconPulse 0.6s ease-in-out;
+}
+
+/* 🌙 Moon: midnight pulse */
+.sidebar-button:hover .theme-toggle-icon .icon-moon {
+    color: #7970da; /* Tailwind slate-900 (midnight blue tone) */
+    animation: iconPulse 0.6s ease-in-out;
+}
+
+/* Pulse keyframes */
+@keyframes iconPulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.toolbar-icon-button img {
+    transition: filter 0.3s ease, transform 0.3s ease;
 }
