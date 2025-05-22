@@ -18,6 +18,7 @@ export async function fetchCharacters() {
             raw: char                      // full object for skill modal
         }));
 
+        //console.log('successfully loaded characters-mapped.json:');
         return characters;
     } catch (error) {
         console.error('❌ Error loading characters-mapped.json:', error);

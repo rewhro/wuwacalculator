@@ -31,7 +31,8 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         dmgReduction: 0,
         elementDmgReduction: 0,
         damageTypeAmplify: {},
-        elementDmgAmplify: {}
+        elementDmgAmplify: {},
+        introAtk: 0
     };
 
     const ELEMENT_KEYS = ['aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc'];

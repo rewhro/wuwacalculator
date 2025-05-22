@@ -9,8 +9,6 @@ export default function ToolbarIconButton({ iconName, onClick, altText, effectiv
         iconPath = `/assets/icons/light/${iconName}.png`;
     }
 
-    console.log(`[🧪 Icon Theme] Using theme: ${effectiveTheme}, icon path: ${iconPath}`);
-
     return (
         <button onClick={onClick} className="toolbar-icon-button">
             <img src={iconPath} alt={altText} style={{ width: 28, height: 28 }} />

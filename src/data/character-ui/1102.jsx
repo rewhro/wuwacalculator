@@ -71,7 +71,7 @@ export function CustomInherentSkills({
                                     checked={activeStates.inherent1 ?? false}
                                     onChange={() => toggleState('inherent1')}
                                 />
-                                Enable +20% Resonance Skill DMG
+                                Enable
                             </label>
                         )}
 
@@ -82,7 +82,7 @@ export function CustomInherentSkills({
                                     checked={activeStates.inherent2 ?? false}
                                     onChange={() => toggleState('inherent2')}
                                 />
-                                Enable +20% Burst (Glacier/Ice/Thorn) DMG
+                                Enable
                             </label>
                         )}
                     </div>

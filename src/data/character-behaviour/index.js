@@ -1,6 +1,7 @@
 import { applyPheobeLogic, pheobeMultipliers } from './1506.js';
 import { applySanhuaLogic } from './1102.js';
 import { applyBaizhiLogic, baizhiMultipliers } from './1103.js';
+import {applyLingyangLogic, lingYangMultipliers} from "./1104.js";
 
 
 const overrides = {
@@ -14,6 +15,10 @@ const overrides = {
     '1103': {
         logic: applyBaizhiLogic,
         multipliers: baizhiMultipliers
+    },
+    "1104": {
+        logic: applyLingyangLogic,
+        multipliers: lingYangMultipliers
     }
 };
 

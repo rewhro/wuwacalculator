@@ -86,7 +86,7 @@ export default function DamageSection({
                                             else if (tab === 'resonanceSkill') skillType = 'skill';
                                             else if (tab === 'resonanceLiberation') skillType = 'ultimate';
                                             else if (tab === 'normalAttack') skillType = 'basic';
-                                            else if (tab === 'outroSkill') skillType = 'outro';
+                                            else if (tab === 'introSkill') skillType = 'intro';
 
                                             let skillMeta = {
                                                 name: level.Name,

@@ -39,6 +39,16 @@ export default function ChangelogModal({ open, onClose }) {
                 }
             ]
 
+        },
+        {
+            date: '22/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Lingyang</strong> is now fully functional.`
+                }
+            ]
+
         }
         // Add more changelogs as needed
     ];
