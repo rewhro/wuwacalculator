@@ -130,7 +130,7 @@ export default function DamageSection({
 
                                             let normal = null, crit = null, avg = null;
 
-                                            const multipliers = getHardcodedMultipliers(charId)?.[tab] ?? [];
+                                           // const multipliers = getHardcodedMultipliers(charId)?.[tab] ?? [];
 
                                             if (isSupportSkill) {
                                                 const flat = parseFlatComponent(multiplierString);
@@ -142,7 +142,6 @@ export default function DamageSection({
                                                     flat
                                                 });
                                             } else {
-                                                //console.log(mergedBuffs);
                                                 const result = calculateDamage({
                                                     finalStats,
                                                     combatState,
@@ -154,7 +153,8 @@ export default function DamageSection({
                                                     characterLevel,
                                                     mergedBuffs,
                                                     skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
-                                                    critDmgBonus: skillMeta.critDmgBonus ?? 0
+                                                    critDmgBonus: skillMeta.critDmgBonus ?? 0,
+                                                    skillDefIgnore: skillMeta.skillDefIgnore ?? 0
                                                 });
 
                                                 normal = result.normal;

@@ -2,6 +2,7 @@ import { applyPheobeLogic, pheobeMultipliers } from './1506.js';
 import { applySanhuaLogic } from './1102.js';
 import { applyBaizhiLogic, baizhiMultipliers } from './1103.js';
 import {applyLingyangLogic, lingYangMultipliers} from "./1104.js";
+import {applyLupaLogic} from "./1207.js";
 
 
 const overrides = {
@@ -19,6 +20,9 @@ const overrides = {
     "1104": {
         logic: applyLingyangLogic,
         multipliers: lingYangMultipliers
+    },
+    "1207": {
+        logic: applyLupaLogic
     }
 };
 

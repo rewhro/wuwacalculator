@@ -25,7 +25,7 @@ import ChangelogModal from './components/ChangelogModal';
 import { Moon, Sun } from 'lucide-react';
 
 export default function App() {
-    const LATEST_CHANGELOG_VERSION = '2025-05-22';
+    const LATEST_CHANGELOG_VERSION = '2025-05-22 17:34';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -196,7 +196,7 @@ export default function App() {
         overrideLogic
     );
 
-// ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
+    // ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
     if (overrideLogic && typeof overrideLogic === 'function') {
         const charId =
             activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
@@ -229,7 +229,6 @@ export default function App() {
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
 
     //console.log(mergedBuffs);
-    const finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
 
     useEffect(() => {
         if (!activeCharacter) return;
@@ -270,6 +269,8 @@ export default function App() {
 
     //console.log(mergedBuffs);
     //console.log(finalStats);
+    let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
+
     return (
         <>
             <SkillsModal

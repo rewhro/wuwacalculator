@@ -11,7 +11,8 @@ export function calculateDamage({
                                     mergedBuffs,
                                     amplify = 0,
                                     skillDmgBonus = 0,
-                                    critDmgBonus = 0
+                                    critDmgBonus = 0,
+                                    skillDefIgnore
                                 }) {
     // 1️⃣ Base stats
     const atk = finalStats.atk ?? 0;
@@ -45,7 +46,7 @@ export function calculateDamage({
     // 5️⃣ Enemy defense multiplier
     const enemyLevel = combatState.enemyLevel ?? 1;
     const charLevel = characterLevel ?? 1;
-    const enemyDefIgnore = mergedBuffs?.enemyDefIgnore ?? 0;
+    const enemyDefIgnore = skillDefIgnore + mergedBuffs?.enemyDefIgnore ?? 0;
     const enemyDefShred = mergedBuffs?.enemyDefShred ?? 0;
     const enemyDef = ((8 * enemyLevel) + 792) * (1 - (enemyDefIgnore + enemyDefShred)/100);
     const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
@@ -120,6 +121,7 @@ export function calculateDamage({
             avg
         });
 */
+
     return {
         normal: Math.floor(normal),
         crit: Math.floor(crit),

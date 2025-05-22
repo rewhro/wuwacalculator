@@ -153,6 +153,7 @@ export default function CharacterSelector({
                             currentSliderColor={currentSliderColor}
                             characterRuntimeStates={characterRuntimeStates}
                             setCharacterRuntimeStates={setCharacterRuntimeStates}
+                            toggleState={toggleState}
                         />
                     ) : (
                         <div className="inherent-skills">
@@ -248,6 +249,9 @@ export default function CharacterSelector({
                             <CustomCharacterUI
                                 activeStates={activeStates}
                                 toggleState={toggleState}
+                                characterRuntimeStates={characterRuntimeStates}
+                                setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                charId={charId}
                             />
                         </div>
                     )}

@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const inputPath = path.join(__dirname, '../src/data/characters-mapped.json');
-const outputPath = path.join(__dirname, '../src/data/characterStates.json');
+const inputPath = path.join(__dirname, '../data/characters-mapped.json');
+const outputPath = path.join(__dirname, '../data/characterStates.json');
 
 const DEFAULT_CRIT_RATE = 5;
 const DEFAULT_CRIT_DMG = 150;
