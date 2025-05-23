@@ -18,7 +18,10 @@ export default function SkillSettings({ sliderValues, setSliderValues, currentSl
                                 onChange={(e) =>
                                     setSliderValues(prev => ({ ...prev, [tab]: Number(e.target.value) }))
                                 }
-                                style={{ '--slider-color': currentSliderColor }}
+                                style={{
+                                    '--slider-color': currentSliderColor,
+                                    '--slider-fill': `${((sliderValues[tab] - 1) / 9) * 100}%`
+                                }}
                             />
                             <span>{sliderValues[tab]}</span>
                         </div>

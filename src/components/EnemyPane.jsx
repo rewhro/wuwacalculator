@@ -47,6 +47,10 @@ export default function EnemyPane({
                     max="120"
                     value={enemyLevel}
                     onChange={(e) => handleLevelChange(e.target.value)}
+                    style={{
+                        '--slider-color': '#777777',
+                        '--slider-fill': `${((enemyLevel - 1) / 119) * 100}%`
+                    }}
                 />
             </div>
 
@@ -70,6 +74,10 @@ export default function EnemyPane({
                     max="100"
                     value={enemyRes}
                     onChange={(e) => handleResChange(e.target.value)}
+                    style={{
+                        '--slider-color': '#777777',
+                        '--slider-fill': `${(enemyRes / 100) * 100}%`
+                    }}
                 />
             </div>
 
@@ -96,6 +104,10 @@ export default function EnemyPane({
                         max="60"
                         value={combatState.spectroFrazzle ?? 0}
                         onChange={(e) => handleDebuffChange('spectroFrazzle', e.target.value)}
+                        style={{
+                            '--slider-color': 'rgb(202,179,63)',
+                            '--slider-fill': `${((combatState.spectroFrazzle ?? 0) / 60) * 100}%`
+                        }}
                     />
                 </div>
 
@@ -118,6 +130,10 @@ export default function EnemyPane({
                         max="60"
                         value={combatState.aeroErosion ?? 0}
                         onChange={(e) => handleDebuffChange('aeroErosion', e.target.value)}
+                        style={{
+                            '--slider-color': 'rgb(15,205,160)',
+                            '--slider-fill': `${((combatState.aeroErosion ?? 0) / 60) * 100}%`
+                        }}
                     />
                 </div>
             </div>

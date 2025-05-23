@@ -105,7 +105,10 @@ export default function CharacterSelector({
                             max="90"
                             value={safeLevel}
                             onChange={(e) => setCharacterLevel(Number(e.target.value))}
-                            style={{ '--slider-color': currentSliderColor }}
+                            style={{
+                                '--slider-color': currentSliderColor,
+                                '--slider-fill': `${((safeLevel - 1) / 89) * 100}%`
+                            }}
                         />
                         <span>{safeLevel}</span>
                     </div>
@@ -123,7 +126,10 @@ export default function CharacterSelector({
                             onChange={(e) =>
                                 setSliderValues(prev => ({ ...prev, sequence: Number(e.target.value) }))
                             }
-                            style={{ '--slider-color': currentSliderColor }}
+                            style={{
+                                '--slider-color': currentSliderColor,
+                                '--slider-fill': `${(sliderValues.sequence / 6) * 100}%`
+                            }}
                         />
                         <span>{sliderValues.sequence}</span>
                     </div>
