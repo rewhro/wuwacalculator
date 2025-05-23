@@ -36,21 +36,32 @@ export default function DamageSection({
                         );
                     }
 
-                    const extra = getHardcodedMultipliers(charId)?.[tab] ?? [];
+                    const extra = getHardcodedMultipliers(charId, activeCharacter)?.[tab] ?? [];
+
+                    const customLevels = extra.map(entry => ({
+                        ...entry,
+                        Name: entry.name,
+                        Param: [[entry.multiplier ?? '0%']]
+                    }));
 
                     if (levels.length === 0) {
-                        levels = extra.map(entry => ({
-                            ...entry,
-                            Name: entry.name,
-                            Param: [[entry.multiplier ?? '0%']]
-                        }));
+                        levels = customLevels;
                     } else {
+                        const existingNames = levels.map(l => l.Name);
+                        const newCustom = customLevels.filter(e => !existingNames.includes(e.Name));
                         levels = levels.map(level => {
-                            const match = extra.find(entry => entry.name === level.Name);
-                            return match ? { ...level, ...match } : level;
+                            const match = customLevels.find(e => e.Name === level.Name);
+                            return match ? { ...level, ...match, visible: match.visible ?? true } : level;
+                        }).concat(newCustom);
+                    }
+/*
+                    if (tab === 'forteCircuit' || tab === 'resonanceLiberation') {
+                        console.log(`🧪 [${tab}] Final multipliers:`);
+                        levels.forEach((lvl, i) => {
+                            console.log(`  ${i + 1}. ${lvl.Name} → ${lvl.Param?.[0]?.[0]}`);
                         });
                     }
-
+*/
                     return (
                         <div key={tab} className="box-wrapper">
                             <div className="damage-inner-box">
@@ -66,7 +77,7 @@ export default function DamageSection({
                                         <div>CRIT</div>
                                         <div>AVG</div>
                                         {levels.map((level, index) => {
-
+                                            if (level.visible === false) return null; // ⛔ Don't render if visibility is disabled
                                             const scaling = level.scaling ?? (
                                                 characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
                                                     atk: 1, hp: 0, def: 0, energyRegen: 0
@@ -94,6 +105,7 @@ export default function DamageSection({
                                                 multiplier,
                                                 amplify: 0,
                                                 tab,
+                                                visible: true,
                                                 tags: [
                                                     ...(level.healing ? ['healing'] : []),
                                                     ...(level.shielding ? ['shielding'] : [])
@@ -118,19 +130,22 @@ export default function DamageSection({
                                                     skillMeta,
                                                     characterState,
                                                     isActiveSequence,
-                                                    isToggleActive
+                                                    isToggleActive,
+                                                    baseCharacterState: activeCharacter,   // or pass in correct state
+                                                    sliderValues,
+                                                    getSkillData
                                                 });
                                                 skillMeta = result.skillMeta;
                                                 mergedBuffs = result.mergedBuffs;
                                             }
+
+                                            if (skillMeta.visible === false) return null; // 🔒 Also check here post-override
 
                                             const tag = skillMeta.tags?.[0];
                                             const isSupportSkill = tag === 'healing' || tag === 'shielding';
                                             const supportColor = tag === 'healing' ? 'limegreen' : '#4fc3f7';
 
                                             let normal = null, crit = null, avg = null;
-
-                                           // const multipliers = getHardcodedMultipliers(charId)?.[tab] ?? [];
 
                                             if (isSupportSkill) {
                                                 const flat = parseFlatComponent(multiplierString);

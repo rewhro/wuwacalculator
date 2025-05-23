@@ -110,6 +110,5 @@ export function applyLupaLogic({
         skillMeta.__seq6Applied = false;
     }
 
-
     return { mergedBuffs, combatState, skillMeta };
 }

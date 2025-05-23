@@ -53,6 +53,16 @@ export default function ChangelogModal({ open, onClose }) {
                 }
             ]
 
+        },
+        {
+            date: '23/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Zhezhi</strong> is now fully functional.`
+                }
+            ]
+
         }
         // Add more changelogs as needed
     ];
