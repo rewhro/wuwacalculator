@@ -68,6 +68,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Carlotta</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Cartethyia</strong> is now fully functional.`
                 }
             ]
 

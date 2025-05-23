@@ -1,6 +1,3 @@
-import { calculateSupportEffect} from "../../utils/supportCalculator.js";
-import { extractFlatAndPercent} from "../../components/DamageSection.jsx";
-
 export function applyCarlottaLogic({
                                    mergedBuffs,
                                    combatState,
@@ -20,7 +17,6 @@ export function applyCarlottaLogic({
         amplify: skillMeta?.amplify ?? 0,
         ...skillMeta
     };
-    const isToggleActiveLocal = (key) => characterState?.activeStates?.[key] === true;
     const name = skillMeta.name?.toLowerCase();
     const tab = skillMeta.tab ?? '';
 

@@ -1,4 +1,3 @@
-import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
 
 export default function CarlottaUI({ activeStates, toggleState }) {

@@ -1,5 +1,4 @@
 import { calculateSupportEffect} from "../../utils/supportCalculator.js";
-import { extractFlatAndPercent} from "../../components/DamageSection.jsx";
 
 export function applyYouhuLogic({
                                    mergedBuffs,
@@ -144,3 +143,13 @@ export const youhuMultipliers = {
         }
     ]
 };
+
+function extractFlatAndPercent(str) {
+    const flatMatch = str.match(/^(\d+(\.\d+)?)/);
+    const percentMatch = str.match(/(\d+(\.\d+)?)%/);
+
+    return {
+        flat: flatMatch ? parseFloat(flatMatch[1]) : 0,
+        percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0
+    };
+}

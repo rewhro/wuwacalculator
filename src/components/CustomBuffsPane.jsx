@@ -11,7 +11,9 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
         'basicAtkAmplify', 'heavyAtkAmplify', 'resonanceSkillAmplify',
         'resonanceLiberationAmplify', 'aeroAmplify', 'glacioAmplify',
         'spectroAmplify', 'fusionAmplify', 'electroAmplify', 'havocAmplify',
-        'enemyResShred', 'enemyDefShred', 'enemyDefIgnore'
+        'enemyResShred', 'enemyDefShred', 'enemyDefIgnore',
+        'spectroFrazzleAmplify', 'aeroErosionAmplify',
+        'spectroFrazzleDmg', 'aeroErosionDmg'
     ]);
 
     const flatFields = new Set(['atkFlat', 'hpFlat', 'defFlat']);
@@ -31,7 +33,9 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             basicAtkAmplify: 'basic',
             heavyAtkAmplify: 'heavy',
             resonanceSkillAmplify: 'skill',
-            resonanceLiberationAmplify: 'ultimate'
+            resonanceLiberationAmplify: 'ultimate',
+            spectroFrazzleAmplify: 'spectroFrazzle',
+            aeroErosionAmplify: 'aeroErosion'
         };
 
         if (damageTypeMap[key]) {
@@ -76,7 +80,9 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             basicAtkAmplify: 'basic',
             heavyAtkAmplify: 'heavy',
             resonanceSkillAmplify: 'skill',
-            resonanceLiberationAmplify: 'ultimate'
+            resonanceLiberationAmplify: 'ultimate',
+            spectroFrazzleAmplify: 'spectroFrazzle',
+            aeroErosionAmplify: 'aeroErosion'
         };
 
         const elementAmplifyMap = {
@@ -171,7 +177,11 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
                         ['Havoc DMG Amplify', 'havocAmplify'],
                         ['Enemy Res Shred', 'enemyResShred'],
                         ['Enemy DEF Shred', 'enemyDefShred'],
-                        ['Enemy DEF Ignore', 'enemyDefIgnore']
+                        ['Enemy DEF Ignore', 'enemyDefIgnore'],
+                        ['Spectro Frazzle DMG', 'spectroFrazzleDmg'],
+                        ['Aero Erosion DMG', 'aeroErosionDmg'],
+                        ['Spectro Frazzle DMG Amplify', 'spectroFrazzleAmplify'],
+                        ['Aero Erosion DMG Amplify', 'aeroErosionAmplify']
                     ].map(([label, key]) => (
                         <div className="buff-row" key={key}>
                             <label>{label}</label>
@@ -191,7 +201,11 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
                     basicAtkAmplify: 0, heavyAtkAmplify: 0, resonanceSkillAmplify: 0,
                     resonanceLiberationAmplify: 0, aeroAmplify: 0, glacioAmplify: 0,
                     spectroAmplify: 0, fusionAmplify: 0, electroAmplify: 0, havocAmplify: 0,
-                    enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0
+                    enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0,
+                    spectroFrazzleDmg: 0,
+                    aeroErosionDmg: 0,
+                    spectroFrazzleAmplify: 0,
+                    aeroErosionAmplify: 0,
                 });
             }}>
                 Clear All

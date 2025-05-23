@@ -68,32 +68,29 @@ export default function DamageSection({
                                         <div>CRIT</div>
                                         <div>AVG</div>
                                         {levels.map((level, index) => {
-                                            if (level.visible === false) return null; // ⛔ Don't render if visibility is disabled
-                                            const scaling = level.scaling ?? (
-                                                characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
-                                                    atk: 1, hp: 0, def: 0, energyRegen: 0
-                                                }
-                                            );
-
-                                            const multiplierString =
-                                                typeof level.Param?.[0] === 'string'
-                                                    ? level.Param[0]
-                                                    : level.Param?.[0]?.[sliderValues[tab] - 1] ?? level.Param?.[0]?.[0] ?? "0%";
-
-                                            const multiplier = parseCompoundMultiplier(multiplierString);
+                                            if (level.visible === false) return null;
 
                                             const label = level.Name?.toLowerCase() ?? '';
-                                            let skillType = '';
-                                            if (label.includes('heavy attack')) skillType = 'heavy';
-                                            else if (tab === 'resonanceSkill') skillType = 'skill';
-                                            else if (tab === 'resonanceLiberation') skillType = 'ultimate';
-                                            else if (tab === 'normalAttack') skillType = 'basic';
-                                            else if (tab === 'introSkill') skillType = 'intro';
+                                            let skillType = [];
 
+                                            // Exclusively assign the core type
+                                            if (label.includes('heavy attack')) {
+                                                skillType = ['heavy'];
+                                            } else if (tab === 'resonanceSkill') {
+                                                skillType = ['skill'];
+                                            } else if (tab === 'resonanceLiberation') {
+                                                skillType = ['ultimate'];
+                                            } else if (tab === 'normalAttack') {
+                                                skillType = ['basic'];
+                                            } else if (tab === 'introSkill') {
+                                                skillType = ['intro'];
+                                            }
+
+                                            // ✅ skillMeta starts with only one type — safe to add others later in override logic
                                             let skillMeta = {
                                                 name: level.Name,
-                                                skillType,
-                                                multiplier,
+                                                skillType: skillType.length === 1 ? skillType[0] : skillType,
+                                                multiplier: 1,
                                                 amplify: 0,
                                                 tab,
                                                 visible: true,
@@ -102,6 +99,14 @@ export default function DamageSection({
                                                     ...(level.shielding ? ['shielding'] : [])
                                                 ]
                                             };
+
+                                            // If level provides a multiplier string, parse it
+                                            const multiplierString =
+                                                typeof level.Param?.[0] === 'string'
+                                                    ? level.Param[0]
+                                                    : level.Param?.[0]?.[sliderValues[tab] - 1] ?? level.Param?.[0]?.[0] ?? "0%";
+
+                                            skillMeta.multiplier = parseCompoundMultiplier(multiplierString);
 
                                             const characterState = {
                                                 activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
@@ -114,22 +119,29 @@ export default function DamageSection({
                                                 characterState?.activeStates?.[toggleId] === true;
 
                                             const override = getCharacterOverride(charId);
+                                            const localMergedBuffs = structuredClone(mergedBuffs); // ✅ clone to isolate buffs
+
                                             if (override) {
                                                 const result = override({
-                                                    mergedBuffs,
+                                                    mergedBuffs: localMergedBuffs,
                                                     combatState,
                                                     skillMeta,
                                                     characterState,
                                                     isActiveSequence,
                                                     isToggleActive,
-                                                    baseCharacterState: activeCharacter,   // or pass in correct state
+                                                    baseCharacterState: activeCharacter,
                                                     sliderValues,
                                                     getSkillData,
                                                     finalStats
                                                 });
                                                 skillMeta = result.skillMeta;
-                                                mergedBuffs = result.mergedBuffs;
                                             }
+
+                                            const scaling = skillMeta.scaling ?? level.scaling ?? (
+                                                characterRuntimeStates[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
+                                                    atk: 1, hp: 0, def: 0, energyRegen: 0
+                                                }
+                                            );
 
                                             if (skillMeta.visible === false) return null; // 🔒 Also check here post-override
 
@@ -162,7 +174,7 @@ export default function DamageSection({
                                                     element,
                                                     skillType: skillMeta.skillType,
                                                     characterLevel,
-                                                    mergedBuffs,
+                                                    mergedBuffs: localMergedBuffs,
                                                     skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
                                                     critDmgBonus: skillMeta.critDmgBonus ?? 0,
                                                     skillDefIgnore: skillMeta.skillDefIgnore ?? 0
@@ -171,6 +183,7 @@ export default function DamageSection({
                                                 normal = result.normal;
                                                 crit = result.crit;
                                                 avg = result.avg;
+
                                             }
 
                                             return (
@@ -244,14 +257,4 @@ export function parseFlatComponent(formula) {
     // Total minus percentage portion = flat component
     const total = allNumbers.reduce((sum, n) => sum + n, 0);
     return total - percentMultiplier;
-}
-
-export function extractFlatAndPercent(str) {
-    const flatMatch = str.match(/^(\d+(\.\d+)?)/);
-    const percentMatch = str.match(/(\d+(\.\d+)?)%/);
-
-    return {
-        flat: flatMatch ? parseFloat(flatMatch[1]) : 0,
-        percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0
-    };
 }

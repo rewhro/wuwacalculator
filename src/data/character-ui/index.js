@@ -6,7 +6,7 @@ import LupaUI, { CustomInherentSkills as LupaInherents, LupaSequenceToggles } fr
 import ZhezhiUI, {CustomInherentSkills as ZhezhiInherents, ZhezhiSequenceToggles} from './1105.jsx';
 import YouhuUI, {CustomInherentSkills as YouhuInherents, youhuSequenceToggles} from "./1106.jsx";
 import CarlottaUI, {CarolottaSequenceToggles} from "./1107.jsx";
-
+import CartethyiaUI, { cartethyiaSequenceToggles} from "./1409.jsx";
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
         case '1506': return PheobeUI;
@@ -15,6 +15,7 @@ export function getCharacterUIComponent(characterId) {
         case '1105': return ZhezhiUI;
         case '1106': return YouhuUI;
         case '1107': return CarlottaUI;
+        case '1409': return CartethyiaUI;
         default: return null;
     }
 }
@@ -42,6 +43,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1105': return ZhezhiSequenceToggles;
         case '1106': return youhuSequenceToggles;
         case '1107': return CarolottaSequenceToggles;
+        case '1409': return cartethyiaSequenceToggles;
         default: return null;
     }
 }

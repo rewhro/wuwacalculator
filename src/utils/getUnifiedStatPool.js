@@ -32,6 +32,8 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         elementDmgReduction: 0,
         damageTypeAmplify: {},
         elementDmgAmplify: {},
+        spectroFrazzleDmg: 0,
+        aeroErosionDmg: 0,
         introAtk: 0
     };
 
@@ -49,6 +51,8 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
                 for (const [elKey, elVal] of Object.entries(rawVal ?? {})) {
                     merged.elementDmgAmplify[elKey] = (merged.elementDmgAmplify[elKey] ?? 0) + Number(elVal ?? 0);
                 }
+            } else if (key === 'spectroFrazzleDmg' || key === 'aeroErosionDmg') {
+                merged[key] += val;
             } else if (ELEMENT_KEYS.includes(key)) {
                 // ➤ Add to total elemental damage bonus
                 merged[key] += val;
