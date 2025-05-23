@@ -59,20 +59,20 @@ export function applyCartethyiaLogic({
     }
 
     // inherent 1
-    if (!mergedBuffs.__inherent1) {
+    if (!mergedBuffs.__cartethyiaInherent1) {
         mergedBuffs.elementDmgAmplify.aero = (mergedBuffs.elementDmgAmplify.aero ?? 0) + Math.min(combatState.aeroErosion * 10, 60);
-        mergedBuffs.__inherent1 = true;
+        mergedBuffs.__cartethyiaInherent1 = true;
     }
 
     // Sequence 2
     const seq1Value = (characterState?.toggles?.['1_value'] ?? 0) / 30;
     if (isActiveSequence(1) && seq1Value > 0) {
-        if (!mergedBuffs.__seq1) {
+        if (!mergedBuffs.__cartethyiaSeq1) {
             mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + (seq1Value * 20);
-            mergedBuffs.__seq1 = true;
+            mergedBuffs.__cartethyiaSeq1 = true;
         }
     } else {
-        mergedBuffs.__seq1 = false;
+        mergedBuffs.__cartethyiaSeq1 = false;
     }
 
     if (isActiveSequence(2)) {
@@ -90,22 +90,22 @@ export function applyCartethyiaLogic({
     }
 
     if (isToggleActive(4) && isActiveSequence(4)) {
-        if (!mergedBuffs.__seq4) {
+        if (!mergedBuffs.__cartethyiaSeq4) {
             mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 20;
-            mergedBuffs.__seq4 = true;
+            mergedBuffs.__cartethyiaSeq4 = true;
         }
     } else {
-        mergedBuffs.__seq4 = false;
+        mergedBuffs.__cartethyiaSeq4 = false;
     }
 
     if (isActiveSequence(6)) {
-        if (!mergedBuffs.__seq6) {
+        if (!mergedBuffs.__cartethyiaSeq6) {
             console.log(mergedBuffs);
             mergedBuffs.elementDmgReduction = (mergedBuffs.elementDmgReduction ?? 0) + 40;
-            mergedBuffs.__seq6 = true;
+            mergedBuffs.__cartethyiaSeq6 = true;
         }
     } else {
-        mergedBuffs.__seq6 = false;
+        mergedBuffs.__cartethyiaSeq6 = false;
     }
 
     return { mergedBuffs, combatState, skillMeta };

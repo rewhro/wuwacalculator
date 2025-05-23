@@ -10,6 +10,7 @@ export function calculateDamage({
                                     amplify = 0,
                                     skillDmgBonus = 0,
                                     critDmgBonus = 0,
+                                    critRateBonus = 0,
                                     skillDefIgnore = 0
                                 }) {
     // Normalize skillType into array
@@ -88,7 +89,7 @@ export function calculateDamage({
     const normal = baseDmg * resMult * defMult * dmgReductionTotal * elementReductionTotal * dmgBonus * dmgAmplify * special;
 
     // 9️⃣ Crit damage
-    const critRate = Math.min((finalStats.critRate ?? 0) / 100, 1);
+    const critRate = Math.min(((finalStats.critRate ?? 0) / 100) + (critRateBonus / 100), 1);
     const critDmg = ((finalStats.critDmg ?? 0) / 100) + (critDmgBonus / 100);
     const crit = normal * critDmg;
 

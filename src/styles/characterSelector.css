@@ -14,7 +14,7 @@
 }
 
 .dark .character-level-input {
-        background-color: #000000;
+    background: rgba(0, 0, 0, 0.34);
         color: #ddd;
         border: 1px solid #333;
     }
@@ -189,5 +189,15 @@
 }
 
 .character-settings input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.character-level-input::-webkit-outer-spin-button,
+.character-level-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.character-level-input[type="number"] {
     -moz-appearance: textfield;
 }

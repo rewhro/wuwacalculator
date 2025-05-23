@@ -105,12 +105,12 @@ export function applyYouhuLogic({
 
     const seq6Value = characterState?.toggles?.['6_value'] ?? 0;
     if (isActiveSequence(6) && seq6Value > 0) {
-        if (!mergedBuffs.__seq6) {
+        if (!mergedBuffs.__youhuSeq6) {
             mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + (seq6Value * 15);
-            mergedBuffs.__seq6 = true;
+            mergedBuffs.__youhuSeq6 = true;
         }
     } else {
-        mergedBuffs.__seq6 = false;
+        mergedBuffs.__youhuSeq6 = false;
     }
 
     return { mergedBuffs, combatState, skillMeta };

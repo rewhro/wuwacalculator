@@ -7,6 +7,10 @@ import {applyZhezhiLogic, zhezhiMultipliers} from "./1105.js";
 import {applyYouhuLogic, youhuMultipliers} from "./1106.js";
 import {applyCarlottaLogic, carlottaMultipliers} from "./1107.js";
 import {applyCartethyiaLogic, cartethyiaMultipliers} from "./1409.js";
+import {applyChixiaLogic, chixiaMultipliers} from "./1202.js";
+
+
+
 
 const overrides = {
     '1506': {
@@ -42,6 +46,10 @@ const overrides = {
     "1409": {
         logic: applyCartethyiaLogic,
         multipliers: cartethyiaMultipliers
+    },
+    "1202": {
+        logic: applyChixiaLogic,
+        multipliers: chixiaMultipliers
     }
 };
 

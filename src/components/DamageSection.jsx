@@ -177,6 +177,7 @@ export default function DamageSection({
                                                     mergedBuffs: localMergedBuffs,
                                                     skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
                                                     critDmgBonus: skillMeta.critDmgBonus ?? 0,
+                                                    critRateBonus: skillMeta.critRateBonus ?? 0,
                                                     skillDefIgnore: skillMeta.skillDefIgnore ?? 0
                                                 });
 

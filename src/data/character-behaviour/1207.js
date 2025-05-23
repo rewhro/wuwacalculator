@@ -57,23 +57,23 @@ export function applyLupaLogic({
 
     // Sequence 1: +25% Crit Rate
     if (isToggleActive(1) && isActiveSequence(1)) {
-        if (!mergedBuffs.__seq1) {
+        if (!mergedBuffs.__lupSeq1) {
             mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 25;
-            mergedBuffs.__seq1 = true;
+            mergedBuffs.__lupSeq1 = true;
         }
     } else {
-        mergedBuffs.__seq1 = false;
+        mergedBuffs.__lupSeq1 = false;
     }
 
     // Sequence 2: +40% fusion
     const seq2Value = characterState?.toggles?.['2_value'] ?? 0;
     if (isActiveSequence(2) && seq2Value > 0) {
-        if (!mergedBuffs.__seq2) {
+        if (!mergedBuffs.__lupSeq2) {
             mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + (seq2Value * 20);
-            mergedBuffs.__seq2 = true;
+            mergedBuffs.__lupSeq2 = true;
         }
     } else {
-        mergedBuffs.__seq2 = false;
+        mergedBuffs.__lupSeq2 = false;
     }
 
     // sequence 3
@@ -88,12 +88,12 @@ export function applyLupaLogic({
 
     // sequence 5
     if (isToggleActive(5) && isActiveSequence(5)) {
-        if (!mergedBuffs.__seq5) {
+        if (!mergedBuffs.__lupSeq3) {
             mergedBuffs.resonanceLiberation = (mergedBuffs.resonanceLiberation ?? 0) + 15;
-            mergedBuffs.__seq5 = true;
+            mergedBuffs.__lupSeq3 = true;
         }
     } else {
-        mergedBuffs.__seq5 = false;
+        mergedBuffs.__lupSeq3 = false;
     }
 
     // sequence 6
@@ -102,12 +102,12 @@ export function applyLupaLogic({
             ['nowhere to run dmg', 'dance with the wolf - climax dmg'].some(n => name.includes(n)) ||
             (skillMeta.tab === 'resonanceLiberation' && name.includes('skill damage'));
 
-        if (isTargetSkill && !skillMeta.__seq6Applied) {
+        if (isTargetSkill && !skillMeta.__lupSeq6) {
             skillMeta.skillDefIgnore = (skillMeta.skillDefIgnore ?? 0) + 40;
-            skillMeta.__seq6Applied = true;
+            skillMeta.__lupSeq6 = true;
         }
     } else {
-        skillMeta.__seq6Applied = false;
+        skillMeta.__lupSeq6 = false;
     }
 
     return { mergedBuffs, combatState, skillMeta };
