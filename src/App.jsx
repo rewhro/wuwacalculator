@@ -25,7 +25,7 @@ import ChangelogModal from './components/ChangelogModal';
 import { Moon, Sun } from 'lucide-react';
 
 export default function App() {
-    const LATEST_CHANGELOG_VERSION = '2025-05-23 1:12';
+    const LATEST_CHANGELOG_VERSION = '2025-05-23 3:16';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();

@@ -40,8 +40,7 @@ export default function DamageSection({
 
                     const customLevels = extra.map(entry => ({
                         ...entry,
-                        Name: entry.name,
-                        Param: [[entry.multiplier ?? '0%']]
+                        Name: entry.name
                     }));
 
                     if (levels.length === 0) {
@@ -54,14 +53,6 @@ export default function DamageSection({
                             return match ? { ...level, ...match, visible: match.visible ?? true } : level;
                         }).concat(newCustom);
                     }
-/*
-                    if (tab === 'forteCircuit' || tab === 'resonanceLiberation') {
-                        console.log(`🧪 [${tab}] Final multipliers:`);
-                        levels.forEach((lvl, i) => {
-                            console.log(`  ${i + 1}. ${lvl.Name} → ${lvl.Param?.[0]?.[0]}`);
-                        });
-                    }
-*/
                     return (
                         <div key={tab} className="box-wrapper">
                             <div className="damage-inner-box">
@@ -133,7 +124,8 @@ export default function DamageSection({
                                                     isToggleActive,
                                                     baseCharacterState: activeCharacter,   // or pass in correct state
                                                     sliderValues,
-                                                    getSkillData
+                                                    getSkillData,
+                                                    finalStats
                                                 });
                                                 skillMeta = result.skillMeta;
                                                 mergedBuffs = result.mergedBuffs;
@@ -149,13 +141,17 @@ export default function DamageSection({
 
                                             if (isSupportSkill) {
                                                 const flat = parseFlatComponent(multiplierString);
-                                                avg = calculateSupportEffect({
-                                                    finalStats,
-                                                    scaling,
-                                                    multiplier: skillMeta.multiplier,
-                                                    type: tag,
-                                                    flat
-                                                });
+                                                if ('flatOverride' in skillMeta) {
+                                                    avg = skillMeta.flatOverride;
+                                                } else {
+                                                    avg = calculateSupportEffect({
+                                                        finalStats,
+                                                        scaling,
+                                                        multiplier: skillMeta.multiplier,
+                                                        type: tag,
+                                                        flat
+                                                    });
+                                                }
                                             } else {
                                                 const result = calculateDamage({
                                                     finalStats,
@@ -248,4 +244,14 @@ export function parseFlatComponent(formula) {
     // Total minus percentage portion = flat component
     const total = allNumbers.reduce((sum, n) => sum + n, 0);
     return total - percentMultiplier;
+}
+
+export function extractFlatAndPercent(str) {
+    const flatMatch = str.match(/^(\d+(\.\d+)?)/);
+    const percentMatch = str.match(/(\d+(\.\d+)?)%/);
+
+    return {
+        flat: flatMatch ? parseFloat(flatMatch[1]) : 0,
+        percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0
+    };
 }

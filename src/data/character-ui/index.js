@@ -1,10 +1,11 @@
-import PheobeUI, { CustomInherentSkills as PheobeInherents } from './1506.jsx';
-import { PheobeSequenceToggles } from './1506.jsx';
-import SanhuaUI, { CustomInherentSkills as SanhuaInherents, SanhuaSequenceToggles } from './1102.jsx';
+import PheobeUI, { CustomInherentSkills as PheobeInherents, PheobeSequenceToggles } from './1506.jsx';
+import { CustomInherentSkills as SanhuaInherents, SanhuaSequenceToggles } from './1102.jsx';
 import { CustomInherentSkills as BaizhiInherents, BaizhiSequenceToggles } from './1103.jsx';
 import LingYangUI, { CustomInherentSkills as LingyangInherents, LingyangSequenceToggles } from './1104.jsx';
 import LupaUI, { CustomInherentSkills as LupaInherents, LupaSequenceToggles } from "./1207.jsx";
 import ZhezhiUI, {CustomInherentSkills as ZhezhiInherents, ZhezhiSequenceToggles} from './1105.jsx';
+import YouhuUI, {CustomInherentSkills as YouhuInherents, youhuSequenceToggles} from "./1106.jsx";
+
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -12,6 +13,7 @@ export function getCharacterUIComponent(characterId) {
         case '1104': return LingYangUI;
         case '1207': return LupaUI
         case '1105': return ZhezhiUI;
+        case '1106': return YouhuUI;
         default: return null;
     }
 }
@@ -24,6 +26,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1104': return LingyangInherents;
         case '1207': return LupaInherents;
         case '1105': return ZhezhiInherents;
+        case '1106': return YouhuInherents;
         default: return null;
     }
 }
@@ -36,6 +39,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1104': return LingyangSequenceToggles;
         case '1207': return LupaSequenceToggles;
         case '1105': return ZhezhiSequenceToggles;
+        case '1106': return youhuSequenceToggles;
         default: return null;
     }
 }

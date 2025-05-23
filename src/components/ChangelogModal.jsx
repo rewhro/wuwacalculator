@@ -60,6 +60,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Zhezhi</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Youhu</strong> is now fully functional.`
                 }
             ]
 

@@ -6,9 +6,23 @@ export function applyBaizhiLogic({
                                      isActiveSequence = () => false,
                                      isToggleActive = () => false
                                  }) {
-    const name = skillMeta.name?.toLowerCase?.() ?? '';
 
-    // ✅ Inherent 1: +15% ATK, only once
+    skillMeta = {
+        name: skillMeta?.name ?? '',
+        skillType: skillMeta?.skillType ?? 'basic',
+        multiplier: skillMeta?.multiplier ?? 1,
+        amplify: skillMeta?.amplify ?? 0,
+        ...skillMeta
+    };
+    const name = skillMeta.name?.toLowerCase();
+    const tab = skillMeta.tab ?? '';
+
+    if (tab === 'forteCircuit' && name.includes("stimulus feedback")) {
+        skillMeta.multiplier = 0.25/100;
+    } else if (tab === 'outroSkill' && name.includes("lightning manipulation hot")) {
+        skillMeta.multiplier = 1.54/100;
+    }
+        // ✅ Inherent 1: +15% ATK, only once
     if (characterState?.activeStates?.inherent1 && !mergedBuffs.__baizhiInherentApplied) {
         mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 15;
         mergedBuffs.__baizhiInherentApplied = true;
@@ -100,7 +114,6 @@ export const baizhiMultipliers = {
         },
         {
             name: "Stimulus Feedback",
-            multiplier: "0.25%",
             scaling: { hp: 1 },
             healing: true
         }
@@ -108,7 +121,6 @@ export const baizhiMultipliers = {
     outroSkill: [
         {
             name: "Lightning Manipulation HoT",
-            multiplier: "1.54%",
             scaling: { hp: 1 },
             healing: true
         }
