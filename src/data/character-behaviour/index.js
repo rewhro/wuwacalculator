@@ -4,7 +4,8 @@ import { applyBaizhiLogic, baizhiMultipliers } from './1103.js';
 import {applyLingyangLogic, lingYangMultipliers} from "./1104.js";
 import {applyLupaLogic} from "./1207.js";
 import {applyZhezhiLogic, zhezhiMultipliers} from "./1105.js";
-import {applyYouhuogic, youhuMultipliers} from "./1106.js";
+import {applyYouhuLogic, youhuMultipliers} from "./1106.js";
+import {applyCarlottaLogic, carlottaMultipliers} from "./1107.js";
 
 const overrides = {
     '1506': {
@@ -30,8 +31,12 @@ const overrides = {
         multipliers: zhezhiMultipliers
     },
     "1106": {
-        logic: applyYouhuogic,
+        logic: applyYouhuLogic,
         multipliers: youhuMultipliers
+    },
+    "1107": {
+        logic: applyCarlottaLogic,
+        multipliers: carlottaMultipliers
     }
 };
 

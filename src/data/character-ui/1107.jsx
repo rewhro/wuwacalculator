@@ -1,0 +1,62 @@
+import {formatDescription} from "../../utils/formatDescription.js";
+import React from "react";
+
+export default function CarlottaUI({ activeStates, toggleState }) {
+    return (
+        <div className="status-toggles">
+            <div className="status-toggle-box">
+                <div className="status-toggle-box-inner">
+                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Deconstruction</h4>
+                    <ul style={{ paddingLeft: '20px' }}>
+                        <li>Dealing DMG to targets inflicted with Deconstruction ignores 18% of their DEF.</li>
+                    </ul>
+                    <label className="modern-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={activeStates.deconstruction || false}
+                            onChange={() => toggleState('deconstruction')}
+                        />
+                        Enable
+                    </label>
+                </div>
+
+                <div className="status-toggle-box-inner">
+                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Final Blow</h4>
+                    <ul style={{ paddingLeft: '20px' }}>
+                        <li>Increase the DMG Multiplier of Resonance Liberation Era of New Wave, Resonance Liberation Death Knell, and Resonance Liberation Fatal Finale by 80%.</li>
+                    </ul>
+                    <label className="modern-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={activeStates.finalBlow || false}
+                            onChange={() => toggleState('finalBlow')}
+                        />
+                        Enable
+                    </label>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+// If you have sequence toggles:
+export function CarolottaSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
+    const validKeys = ['1', '4'];
+    if (!validKeys.includes(String(nodeKey))) return null;
+
+    const requiredLevel = Number(nodeKey);
+    const isDisabled = currentSequenceLevel < requiredLevel;
+
+    return (
+        <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
+            <input
+                type="checkbox"
+                checked={sequenceToggles[nodeKey] || false}
+                onChange={() => toggleSequence(nodeKey)}
+                disabled={isDisabled}
+            />
+            Enable
+        </label>
+    );
+}

@@ -58,9 +58,7 @@ export function calculateDamage({
 
     // 7️⃣ Bonuses
     const skillTypeBonus = skillType ? (
-        (finalStats?.[`${skillType}Atk`] ?? 0) +
-        (mergedBuffs?.[`${skillType}Atk`] ?? 0) +
-        skillDmgBonus
+        (finalStats?.[`${skillType}Atk`] ?? 0) + skillDmgBonus
     ) : 0;
     let elementBonus = (finalStats[`${element}DmgBonus`] ?? 0) + skillTypeBonus;
     if (skillType === 'outro') {

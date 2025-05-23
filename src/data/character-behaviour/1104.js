@@ -26,6 +26,8 @@ export function applyLingyangLogic({
         skillMeta.skillType = 'basic';
     } else if (name.includes('mountain roamer damage')) {
         skillMeta.skillType = 'skill';
+    } else if (skillMeta.tab === 'outroSkill' && name.includes("frosty marks")) {
+        skillMeta.multiplier = 587.94/100;
     }
 
     // ✅ Lion's Vigor passive
@@ -77,6 +79,7 @@ export function applyLingyangLogic({
         skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 100;
         console.log(`[Lingyang S6] Applied +100 skillDmgBonus → ${skillMeta.name}`, skillMeta.skillDmgBonus);
     }
+
     return { mergedBuffs, combatState, skillMeta };
 }
 
@@ -87,7 +90,6 @@ export function applyLingyangLogic({
      outroSkill: [
         {
             name: "Frosty Marks",
-            multiplier: "587.94%",
             scaling: { atk: 1 }
 
         }

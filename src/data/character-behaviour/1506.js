@@ -46,6 +46,9 @@ export function applyPheobeLogic({
         skillMeta.skillType = 'skill';
     }
 
+    if (skillMeta.tab === 'outroSkill') {
+        skillMeta.multiplier = 528.41/100;
+    }
 
     // === Flat Multiplier Boosts ===
     if (state === 'Absolution') {
@@ -124,7 +127,6 @@ export const pheobeMultipliers = {
     outroSkill: [
         {
             name: "Attentive Heart",
-            multiplier: "528.41%",
             scaling: { atk: 1 }
         }
     ]

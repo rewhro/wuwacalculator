@@ -1,7 +1,7 @@
 import { calculateSupportEffect} from "../../utils/supportCalculator.js";
 import { extractFlatAndPercent} from "../../components/DamageSection.jsx";
 
-export function applyYouhuogic({
+export function applyYouhuLogic({
                                    mergedBuffs,
                                    combatState,
                                    skillMeta,
@@ -55,8 +55,6 @@ export function applyYouhuogic({
         skillMeta.flatOverride = Math.floor(scrollHeal * 0.3);  // 30% of original
         skillMeta.tags = ['healing'];
         skillMeta.visible = isToggleActiveLocal('inherent1');
-
-        console.log('🧮 ScrollHeal:', scrollHeal, '→ Treasured Piece Heal:', skillMeta.flatOverride);
     }
 
     // inherent 2
