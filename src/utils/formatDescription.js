@@ -25,7 +25,11 @@ export const formatDescription = (desc, param = [], currentSliderColor = '#888')
     // Highlight fixed keywords with fixed colors
     const fixedHighlights = {
         'Spectro Frazzle': 'rgb(202,179,63)',
-        'Aero Erosion': 'rgb(15,205,160)'
+        'Aero Erosion': 'rgb(15,205,160)',
+        'Havoc Bane': 'rgb(172,9,96)',
+        'Fusion Burst': 'rgb(197,52,79)',
+        'Electro Flare': 'rgb(167,13,209)',
+        'Glacio Chafe': 'rgb(62,189,227)'
     };
 
     Object.entries(fixedHighlights).forEach(([word, color]) => {
