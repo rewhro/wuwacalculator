@@ -8,7 +8,7 @@ import YouhuUI, {CustomInherentSkills as YouhuInherents, youhuSequenceToggles} f
 import CarlottaUI, {CarolottaSequenceToggles} from "./1107.jsx";
 import CartethyiaUI, { cartethyiaSequenceToggles} from "./1409.jsx";
 import {CustomInherentSkills as ChixiaInherents, chixiaSequenceToggles} from "./1202.jsx";
-
+import {CustomInherentSkills as EncoreInherents, encoreSequenceToggles} from "./1203.jsx";
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -33,6 +33,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1105': return ZhezhiInherents;
         case '1106': return YouhuInherents;
         case '1202': return ChixiaInherents;
+        case '1203': return EncoreInherents;
         default: return null;
     }
 }
@@ -49,6 +50,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1107': return CarolottaSequenceToggles;
         case '1409': return cartethyiaSequenceToggles;
         case '1202': return chixiaSequenceToggles;
+        case '1203': return encoreSequenceToggles;
         default: return null;
     }
 }

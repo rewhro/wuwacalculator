@@ -76,6 +76,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Chixia</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Encore</strong> is now fully functional.`
                 }
             ]
 
