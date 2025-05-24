@@ -22,13 +22,13 @@ export function applyBaizhiLogic({
     } else if (tab === 'outroSkill' && name.includes("lightning manipulation hot")) {
         skillMeta.multiplier = 1.54/100;
     }
-        // ✅ Inherent 1: +15% ATK, only once
+
+
     if (characterState?.activeStates?.inherent1 && !mergedBuffs.__baizhiInherentApplied) {
         mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 15;
         mergedBuffs.__baizhiInherentApplied = true;
     }
 
-    // === Sequence 2: +15% healing bonus and glacio DMG
     if (isToggleActive(2) && isActiveSequence(2)) {
         if (!mergedBuffs.__baizhiSeq2) {
             mergedBuffs.healingBonus = (mergedBuffs.healingBonus ?? 0) + 15;

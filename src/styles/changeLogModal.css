@@ -31,8 +31,6 @@
     color: #7e7e7e;
 }
 
-
-
     .dark .changelog-entries p,
     .dark .changelog-entries li,
     .dark .changelog-modal h2 {
@@ -41,4 +39,23 @@
 
 .dark .changelog-entries p {
     color: lightseagreen;
+}
+
+/* Make only the changelog content scrollable */
+.changelog-entries {
+    max-height: calc(100vh - 220px); /* adjust based on your modal padding and button size */
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-top: 1rem;
+    scroll-behavior: smooth;
+}
+
+/* Optional: Custom scrollbar styling */
+.changelog-entries::-webkit-scrollbar {
+    width: 8px;
+}
+
+.changelog-entries::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.5);
+    border-radius: 4px;
 }

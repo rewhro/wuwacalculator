@@ -88,6 +88,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Changli</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Brant</strong> is now fully functional.`
                 }
             ]
 

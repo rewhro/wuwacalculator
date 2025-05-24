@@ -11,6 +11,8 @@ import {CustomInherentSkills as ChixiaInherents, chixiaSequenceToggles} from "./
 import {CustomInherentSkills as EncoreInherents, encoreSequenceToggles} from "./1203.jsx";
 import {CustomInherentSkills as MortefiInherents, mortefiSequenceToggles} from "./1204.jsx";
 import {CustomInherentSkills as ChangliInherents, changliSequenceToggles} from "./1205.jsx";
+import BrantUI, {CustomInherentSkills as BrantInherents, brantSequenceToggles} from "./1206.jsx";
+
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -21,6 +23,7 @@ export function getCharacterUIComponent(characterId) {
         case '1106': return YouhuUI;
         case '1107': return CarlottaUI;
         case '1409': return CartethyiaUI;
+        case '1206': return BrantUI;
         default: return null;
     }
 }
@@ -38,6 +41,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1203': return EncoreInherents;
         case '1204': return MortefiInherents;
         case '1205': return ChangliInherents;
+        case '1206': return BrantInherents;
         default: return null;
     }
 }
@@ -57,6 +61,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1203': return encoreSequenceToggles;
         case '1204': return mortefiSequenceToggles;
         case '1205': return changliSequenceToggles;
+        case '1206': return brantSequenceToggles;
         default: return null;
     }
 }

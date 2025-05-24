@@ -3,7 +3,9 @@ export function calculateSupportEffect({
                                            scaling,
                                            multiplier,
                                            type = 'healing',
-                                           flat
+                                           flat,
+                                            skillHealingBonus,
+                                           skillShieldBonus
                                        }) {
     // 1️⃣ Base stats
     const atk = finalStats.atk ?? 0;
@@ -20,7 +22,12 @@ export function calculateSupportEffect({
 
     // 3️⃣ Apply healing or shielding bonus
     const bonusKey = type === 'healing' ? 'healingBonus' : 'shieldingBonus';
-    const bonusPercent = finalStats[bonusKey] ?? 0;
+    let bonusPercent = finalStats[bonusKey] ?? 0;
+    if (type === 'healing') {
+        bonusPercent += skillHealingBonus;
+    } else {
+        bonusPercent += skillShieldBonus;
+    }
 
     return Math.floor(((baseEffect * multiplier) + flat) * (1 + bonusPercent / 100));
 }

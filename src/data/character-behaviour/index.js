@@ -11,6 +11,7 @@ import {applyChixiaLogic, chixiaMultipliers} from "./1202.js";
 import {applyEncoreLogic, encoreMultipliers} from "./1203.js";
 import {applyMortefiLogic, mortefiMultipliers} from "./1204.js";
 import {applyChangliLogic} from "./1205.js";
+import {applyBrantLogic, brantMultipliers} from "./1206.js";
 
 const overrides = {
     '1506': {
@@ -61,6 +62,10 @@ const overrides = {
     },
     "1205": {
         logic: applyChangliLogic
+    },
+    "1206": {
+        logic: applyBrantLogic,
+        multipliers: brantMultipliers
     }
 };
 

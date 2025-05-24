@@ -125,7 +125,6 @@ export const youhuMultipliers = {
         },
         {
             name: "Treasured Piece Healing",
-            multiplier: "0%",
             scaling: { atk: 1 },
             healing: true
         }

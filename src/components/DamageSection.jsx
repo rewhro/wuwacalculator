@@ -100,13 +100,13 @@ export default function DamageSection({
                                                 ]
                                             };
 
-                                            // If level provides a multiplier string, parse it
-                                            const multiplierString =
-                                                typeof level.Param?.[0] === 'string'
-                                                    ? level.Param[0]
-                                                    : level.Param?.[0]?.[sliderValues[tab] - 1] ?? level.Param?.[0]?.[0] ?? "0%";
+                                            const rawMultiplier = typeof level.Param?.[0] === 'string'
+                                                ? level.Param[0]
+                                                : level.Param?.[0]?.[sliderValues[tab] - 1] ?? level.Param?.[0]?.[0] ?? "0%";
 
-                                            skillMeta.multiplier = parseCompoundMultiplier(multiplierString);
+                                            const { flat, percent } = extractFlatAndPercent(rawMultiplier);
+
+                                            skillMeta.multiplier = parseCompoundMultiplier(rawMultiplier);
 
                                             const characterState = {
                                                 activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
@@ -150,12 +150,11 @@ export default function DamageSection({
 
                                             const tag = skillMeta.tags?.[0];
                                             const isSupportSkill = tag === 'healing' || tag === 'shielding';
-                                            const supportColor = tag === 'healing' ? 'limegreen' : '#4fc3f7';
+                                            const supportColor = tag === 'healing' ? 'limegreen' : '#838383';
 
                                             let normal = null, crit = null, avg = null;
 
                                             if (isSupportSkill) {
-                                                const flat = parseFlatComponent(multiplierString);
                                                 if ('flatOverride' in skillMeta) {
                                                     avg = skillMeta.flatOverride;
                                                 } else {
@@ -164,6 +163,8 @@ export default function DamageSection({
                                                         scaling,
                                                         multiplier: skillMeta.multiplier,
                                                         type: tag,
+                                                        skillHealingBonus: skillMeta.skillHealingBonus ?? 0,
+                                                        skillShieldBonus: skillMeta.skillShieldBonus ?? 0,
                                                         flat
                                                     });
                                                 }
@@ -250,6 +251,7 @@ function parseCompoundMultiplier(formula) {
 }
 
 export function parseFlatComponent(formula) {
+    //console.log(formula);
     if (!formula) return 0;
 
     // Extract all numeric values (both percent and flat)
@@ -261,4 +263,14 @@ export function parseFlatComponent(formula) {
     // Total minus percentage portion = flat component
     const total = allNumbers.reduce((sum, n) => sum + n, 0);
     return total - percentMultiplier;
+}
+
+export function extractFlatAndPercent(str) {
+    const flatMatch = str.match(/^(\d+(\.\d+)?)/);
+    const percentMatch = str.match(/(\d+(\.\d+)?)%/);
+
+    return {
+        flat: flatMatch ? parseFloat(flatMatch[1]) : 0,
+        percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0
+    };
 }
