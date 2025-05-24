@@ -83,7 +83,8 @@ html, body, #root {
 .stat-value,
 .stat-total,
 .slider-group,
-.header-with-icon
+.header-with-icon,
+    .damage-text
 {
     color: #222;
     /*@apply transition-colors duration-300;*/
@@ -92,7 +93,8 @@ html, body, #root {
 .dark .slider-group,
 .dark .buff-grid,
 .dark .character-settings,
-.dark .header-with-icon
+.dark .header-with-icon,
+.dark .damage-text
 {
     color: #ddd;
     /*@apply transition-colors duration-300;*/

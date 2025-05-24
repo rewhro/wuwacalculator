@@ -119,7 +119,7 @@ export default function DamageSection({
                                                 characterState?.activeStates?.[toggleId] === true;
 
                                             const override = getCharacterOverride(charId);
-                                            const localMergedBuffs = structuredClone(mergedBuffs); // ✅ clone to isolate buffs
+                                            let localMergedBuffs = structuredClone(mergedBuffs);
 
                                             if (override) {
                                                 const result = override({
@@ -132,9 +132,12 @@ export default function DamageSection({
                                                     baseCharacterState: activeCharacter,
                                                     sliderValues,
                                                     getSkillData,
-                                                    finalStats
+                                                    finalStats,
+                                                    element,
+                                                    characterLevel
                                                 });
                                                 skillMeta = result.skillMeta;
+                                                localMergedBuffs = result.mergedBuffs;
                                             }
 
                                             const scaling = skillMeta.scaling ?? level.scaling ?? (
@@ -213,7 +216,7 @@ export default function DamageSection({
                                         })}
                                     </div>
                                 ) : (
-                                    <p>No multipliers.</p>
+                                    <p className="damage-text">No multipliers.</p>
                                 )}
                             </div>
                         </div>
