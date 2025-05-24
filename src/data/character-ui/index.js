@@ -12,7 +12,7 @@ import {CustomInherentSkills as EncoreInherents, encoreSequenceToggles} from "./
 import {CustomInherentSkills as MortefiInherents, mortefiSequenceToggles} from "./1204.jsx";
 import {CustomInherentSkills as ChangliInherents, changliSequenceToggles} from "./1205.jsx";
 import BrantUI, {CustomInherentSkills as BrantInherents, brantSequenceToggles} from "./1206.jsx";
-
+import {CustomInherentSkills as CalcharoInherents, CalcharoSequenceToggles} from "./1301.jsx";
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -42,6 +42,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1204': return MortefiInherents;
         case '1205': return ChangliInherents;
         case '1206': return BrantInherents;
+        case '1301': return CalcharoInherents;
         default: return null;
     }
 }
@@ -62,6 +63,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1204': return mortefiSequenceToggles;
         case '1205': return changliSequenceToggles;
         case '1206': return brantSequenceToggles;
+        case '1301': return CalcharoSequenceToggles;
         default: return null;
     }
 }

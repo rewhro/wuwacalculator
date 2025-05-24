@@ -12,6 +12,7 @@ import {applyEncoreLogic, encoreMultipliers} from "./1203.js";
 import {applyMortefiLogic, mortefiMultipliers} from "./1204.js";
 import {applyChangliLogic} from "./1205.js";
 import {applyBrantLogic, brantMultipliers} from "./1206.js";
+import {applyCalcharoLogic, calcharoMultipliers} from "./1301.js";
 
 const overrides = {
     '1506': {
@@ -66,6 +67,10 @@ const overrides = {
     "1206": {
         logic: applyBrantLogic,
         multipliers: brantMultipliers
+    },
+    "1301": {
+        logic: applyCalcharoLogic,
+        multipliers: calcharoMultipliers
     }
 };
 
