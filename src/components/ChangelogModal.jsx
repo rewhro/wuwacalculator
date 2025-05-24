@@ -88,13 +88,18 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Changli</strong> is now fully functional.`
-                },
+                }
+            ]
+
+        },
+        {
+            date: '24/05/2025',
+            entries: [
                 {
                     type: 'paragraph',
                     content: `<strong>Brant</strong> is now fully functional.`
                 }
             ]
-
         }
         // Add more changelogs as needed
     ];
