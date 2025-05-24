@@ -1,7 +1,8 @@
-import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import DropdownSelect from "../../components/DropdownSelect.jsx";
+import React from "react";
 
-export default function MortefiUI({ activeStates, toggleState }) {
+export default function ChangliUI({ activeStates, toggleState }) {
     const hasToggles = false; // set to `false` if no actual toggles for this character yet
 
     if (!hasToggles) return null; // prevents empty box rendering
@@ -12,7 +13,6 @@ export default function MortefiUI({ activeStates, toggleState }) {
         </div>
     );
 }
-
 
 export function CustomInherentSkills({
                                          character,
@@ -59,42 +59,39 @@ export function CustomInherentSkills({
                             }}
                         />
 
+                        { name.toLowerCase().includes("secret strategist") && (
+                            <DropdownSelect
+                                label=""
+                                options={[0, 1, 2, 3, 4]}
+                                value={activeStates.inherent1 ?? 0}
+                                onChange={(newValue) => {
+                                    setCharacterRuntimeStates(prev => ({
+                                        ...prev,
+                                        [charId]: {
+                                            ...(prev[charId] ?? {}),
+                                            activeStates: {
+                                                ...(prev[charId]?.activeStates ?? {}),
+                                                inherent1: newValue
+                                            }
+                                        }
+                                    }));
+                                }}
+                                width="80px"
+                            />
+                        )}
+
                         {/* Toggle under skill name directly */}
-                        {name.toLowerCase().includes("harmonic control") && (
+                        {name.toLowerCase().includes("sweeping force") && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
-                                    checked={activeStates.inherent1 ?? false}
-                                    onChange={() => toggleState('inherent1')}
+                                    checked={activeStates.inherent2 ?? false}
+                                    onChange={() => toggleState('inherent2')}
                                 />
                                 Enable
                             </label>
                         )}
 
-                        { name.toLowerCase().includes("rhythmic vibrato") && (
-                            <div className= "slider-label-with-input" style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <input
-                                    type="number"
-                                    className="character-level-input"
-                                    min="0"
-                                    max="50"
-                                    value={activeStates.inherent2 ?? 0}
-                                    onChange={(e) => {
-                                        const val = Math.max(0, Math.min(50, Number(e.target.value) || 0));
-                                        setCharacterRuntimeStates(prev => ({
-                                            ...prev,
-                                            [charId]: {
-                                                ...(prev[charId] ?? {}),
-                                                activeStates: {
-                                                    ...(prev[charId]?.activeStates ?? {}),
-                                                    inherent2: val
-                                                }
-                                            }
-                                        }));
-                                    }}
-                                />
-                            </div>
-                        )}
                     </div>
                 );
             })}
@@ -102,9 +99,8 @@ export function CustomInherentSkills({
     );
 }
 
-
-export function mortefiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
-    if (!['3', '5', '6'].includes(String(nodeKey))) return null;
+export function changliSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
+    if (!['1', '2', '4'].includes(String(nodeKey))) return null;
 
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;

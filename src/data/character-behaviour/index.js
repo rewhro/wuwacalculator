@@ -10,7 +10,7 @@ import {applyCartethyiaLogic, cartethyiaMultipliers} from "./1409.js";
 import {applyChixiaLogic, chixiaMultipliers} from "./1202.js";
 import {applyEncoreLogic, encoreMultipliers} from "./1203.js";
 import {applyMortefiLogic, mortefiMultipliers} from "./1204.js";
-
+import {applyChangliLogic} from "./1205.js";
 
 const overrides = {
     '1506': {
@@ -58,6 +58,9 @@ const overrides = {
     "1204": {
         logic: applyMortefiLogic,
         multipliers: mortefiMultipliers
+    },
+    "1205": {
+        logic: applyChangliLogic
     }
 };
 
