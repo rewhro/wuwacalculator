@@ -34,7 +34,8 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         elementDmgAmplify: {},
         spectroFrazzleDmg: 0,
         aeroErosionDmg: 0,
-        introAtk: 0
+        introAtk: 0,
+        coordAtk: 0
     };
 
     const ELEMENT_KEYS = ['aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc'];
@@ -42,7 +43,6 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
     for (const source of buffSources) {
         for (const [key, rawVal] of Object.entries(source ?? {})) {
             const val = Number(rawVal ?? 0);
-
             if (key === 'damageTypeAmplify') {
                 for (const [typeKey, typeVal] of Object.entries(rawVal ?? {})) {
                     merged.damageTypeAmplify[typeKey] = (merged.damageTypeAmplify[typeKey] ?? 0) + Number(typeVal ?? 0);
@@ -51,14 +51,13 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
                 for (const [elKey, elVal] of Object.entries(rawVal ?? {})) {
                     merged.elementDmgAmplify[elKey] = (merged.elementDmgAmplify[elKey] ?? 0) + Number(elVal ?? 0);
                 }
-            } else if (key === 'spectroFrazzleDmg' || key === 'aeroErosionDmg') {
+            } else if (key === 'coordAmplify') {
+                // ✅ Explicitly support coordAmplify passed as top-level key
+                merged.damageTypeAmplify.coord = (merged.damageTypeAmplify.coord ?? 0) + val;
+            } else if (['spectroFrazzleDmg', 'aeroErosionDmg', 'coordAtk'].includes(key)) {
                 merged[key] += val;
             } else if (ELEMENT_KEYS.includes(key)) {
-                // ➤ Add to total elemental damage bonus
                 merged[key] += val;
-
-                // ✅ DO NOT treat it as amplify — so remove the line below:
-                // merged.elementDmgAmplify[key] = (merged.elementDmgAmplify[key] ?? 0) + val;
             } else if (merged[key] !== undefined) {
                 merged[key] += val;
             }

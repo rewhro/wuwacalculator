@@ -13,6 +13,10 @@ import {applyMortefiLogic, mortefiMultipliers} from "./1204.js";
 import {applyChangliLogic} from "./1205.js";
 import {applyBrantLogic, brantMultipliers} from "./1206.js";
 import {applyCalcharoLogic, calcharoMultipliers} from "./1301.js";
+import {applyYinlinLogic, yinlinMultipliers} from "./1302.js";
+import {applyYuanwuLogic, yuanwuMultipliers} from "./1303.js";
+import {applyJinhsiLogic} from "./1304.js";
+
 
 const overrides = {
     '1506': {
@@ -71,6 +75,17 @@ const overrides = {
     "1301": {
         logic: applyCalcharoLogic,
         multipliers: calcharoMultipliers
+    },
+    "1302": {
+        logic: applyYinlinLogic,
+        multipliers: yinlinMultipliers
+    },
+    "1303": {
+        logic: applyYuanwuLogic,
+        multipliers: yuanwuMultipliers
+    },
+    "1304": {
+        logic: applyJinhsiLogic
     }
 };
 

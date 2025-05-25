@@ -104,6 +104,23 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `<strong>Calcharo</strong> is now fully functional.`
                 }
             ]
+        },
+        {
+            date: '25/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Yinlin</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Yuanwu</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Jinhsi</strong> is now fully functional.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

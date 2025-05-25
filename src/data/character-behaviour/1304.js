@@ -1,0 +1,88 @@
+export function applyJinhsiLogic({
+                               mergedBuffs,
+                               combatState,
+                               skillMeta,
+                               characterState,
+                               isActiveSequence = () => false,
+                               isToggleActive = () => false,
+                           }) {
+    skillMeta = {
+        name: skillMeta?.name ?? '',
+        skillType: skillMeta?.skillType ?? 'basic',
+        multiplier: skillMeta?.multiplier ?? 1,
+        amplify: skillMeta?.amplify ?? 0,
+        ...skillMeta
+    };
+
+    const isToggleActiveLocal = (key) => characterState?.activeStates?.[key] === true;
+    const name = skillMeta.name?.toLowerCase();
+    const tab = skillMeta.tab ?? '';
+
+    if (tab === 'forteCircuit') {
+        if (name.includes('heavy') || name.includes('dodge')) {
+            if (name.includes('heavy')) {
+                skillMeta.skillType = 'heavy';
+            } else {
+                skillMeta.skillType = 'basic';
+            }
+        } else {
+            skillMeta.skillType = 'skill';
+        }
+    }
+
+    if (name === 'additional multiplier per incandescence') {
+        // ✅ Store value in characterState for reliability
+        characterState.activeStates.__incandescenceValue = skillMeta.multiplier;
+        skillMeta.visible = false;
+    }
+
+    if (name === 'illuminous epiphany: stella glamor dmg') {
+        const stacks = characterState?.activeStates?.incandescence ?? 0;
+        const perStack = characterState?.activeStates?.__incandescenceValue ?? 0;
+        const bonusMultiplier = Math.min(stacks * perStack, 58);
+        console.log(bonusMultiplier);
+        skillMeta.multiplier += bonusMultiplier;
+    }
+
+    if (!mergedBuffs.__jinhsiInherent1) {
+        mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 20;
+        mergedBuffs.__jinhsiInherent1 = true;
+    }
+
+    if (tab === 'introSkill') {
+        skillMeta.multiplier *= 1.5;
+    }
+
+    const seq1Value = characterState?.toggles?.['1_value'] ?? 0;
+    if (isActiveSequence(1) && seq1Value > 0 && name.includes('illuminous epiphany')) {
+        skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + seq1Value * 20;
+    }
+
+    const seq3Value = characterState?.toggles?.['3_value'] ?? 0;
+    if (isActiveSequence(3) && seq3Value > 0) {
+        if (!mergedBuffs.__jinhsiS3) {
+            mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + (seq3Value * 25);
+            mergedBuffs.__jinhsiS3 = true;
+        }
+    } else {
+        mergedBuffs.__jinhsiS3 = false;
+    }
+
+    if (isActiveSequence(4) && isToggleActive(4) && !mergedBuffs.__jinhsiS4) {
+        mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 20;
+        mergedBuffs.__jinhsiS4 = true;
+    }
+
+
+    if (isActiveSequence(5) && tab === 'resonanceLiberation') {
+        skillMeta.multiplier *= 2.2;
+    }
+
+    if (isActiveSequence(6) && name.includes('illuminous epiphany')) {
+        skillMeta.multiplier *= 1.45;
+    }
+
+    return {mergedBuffs, combatState, skillMeta};
+}
+
+export const multipliers = {};

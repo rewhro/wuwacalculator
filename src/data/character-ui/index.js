@@ -12,7 +12,11 @@ import {CustomInherentSkills as EncoreInherents, encoreSequenceToggles} from "./
 import {CustomInherentSkills as MortefiInherents, mortefiSequenceToggles} from "./1204.jsx";
 import {CustomInherentSkills as ChangliInherents, changliSequenceToggles} from "./1205.jsx";
 import BrantUI, {CustomInherentSkills as BrantInherents, brantSequenceToggles} from "./1206.jsx";
-import {CustomInherentSkills as CalcharoInherents, CalcharoSequenceToggles} from "./1301.jsx";
+import  {CustomInherentSkills as CalcharoInherents, CalcharoSequenceToggles} from "./1301.jsx";
+import {CustomInherentSkills as YinlinInherents, yinlinSequenceToggles} from "./1302.jsx";
+import {yuanwuSequenceToggles} from "./1303.jsx";
+import JinhsiUI, {jinhsiSequenceToggles} from "./1304.jsx";
+
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -24,6 +28,7 @@ export function getCharacterUIComponent(characterId) {
         case '1107': return CarlottaUI;
         case '1409': return CartethyiaUI;
         case '1206': return BrantUI;
+        case '1304': return JinhsiUI;
         default: return null;
     }
 }
@@ -43,6 +48,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1205': return ChangliInherents;
         case '1206': return BrantInherents;
         case '1301': return CalcharoInherents;
+        case '1302': return YinlinInherents;
         default: return null;
     }
 }
@@ -64,6 +70,9 @@ export function getSequenceToggleComponent(characterId) {
         case '1205': return changliSequenceToggles;
         case '1206': return brantSequenceToggles;
         case '1301': return CalcharoSequenceToggles;
+        case '1302': return yinlinSequenceToggles;
+        case '1303': return yuanwuSequenceToggles;
+        case '1304': return jinhsiSequenceToggles;
         default: return null;
     }
 }

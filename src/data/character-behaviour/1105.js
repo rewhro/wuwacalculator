@@ -10,11 +10,16 @@ export function applyZhezhiLogic({
                                      getSkillData
                                  }) {
     skillMeta = {
+        ...skillMeta,
+
         name: skillMeta?.name ?? '',
-        skillType: skillMeta?.skillType ?? 'basic',
+        skillType: Array.isArray(skillMeta?.skillType)
+            ? [...skillMeta.skillType]
+            : skillMeta?.skillType
+                ? [skillMeta.skillType]
+                : [],
         multiplier: skillMeta?.multiplier ?? 1,
-        amplify: skillMeta?.amplify ?? 0,
-        ...skillMeta
+        amplify: skillMeta?.amplify ?? 0
     };
 
     const name = skillMeta.name?.toLowerCase();
@@ -27,10 +32,12 @@ export function applyZhezhiLogic({
     }
 
     // ✅ Skill type reassignments
-    if (['inklit spirit dmg', 'stroke of genius dmg', 'creation\'s zenith dmg'].some(n => name.includes(n))) {
+    if (['stroke of genius dmg', 'creation\'s zenith dmg'].some(n => name.includes(n))) {
         skillMeta.skillType = 'basic';
     } else if (['ha dmg', 'ha - conjuration dmg'].some(n => name.includes(n))) {
         skillMeta.skillType = 'heavy';
+    } else if (name === 'inklit spirit dmg') {
+        skillMeta.skillType = ['basic', 'coord'];
     }
 
     // 🧠 Inherent 1 stacks: +6% ATK per stack (up to 18%)

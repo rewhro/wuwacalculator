@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-24 13:19';
+    const LATEST_CHANGELOG_VERSION = '2025-05-25 4:55';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -205,7 +205,7 @@ export default function Calculator() {
     );
 
     let mergedBuffs = getUnifiedStatPool(
-        [traceNodeBuffs, customBuffs, combatState],
+        [traceNodeBuffs, combatState, customBuffs],
         overrideLogic
     );
 
@@ -242,6 +242,7 @@ export default function Calculator() {
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
+    //mergedBuffs.coordAtk = mergedBuffs.coordinated ?? 0;
 
     useEffect(() => {
         if (!activeCharacter) return;
@@ -265,19 +266,6 @@ export default function Calculator() {
             }
         }));
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
-/*
-    useEffect(() => {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        const handleChange = () => {
-            document.documentElement.classList.toggle('dark', mediaQuery.matches);
-        };
-
-        handleChange(); // Initial set
-        mediaQuery.addEventListener('change', handleChange);
-
-        return () => mediaQuery.removeEventListener('change', handleChange);
-    }, []);
-*/
 
 
     //console.log(mergedBuffs);

@@ -7,7 +7,7 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
         'critRate', 'critDmg', 'energyRegen', 'healingBonus',
         'basicAtk', 'heavyAtk', 'resonanceSkill', 'resonanceLiberation',
         'aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc',
-        'coordinatedDmg',
+        'coordAtk', 'coordAmplify',
         'basicAtkAmplify', 'heavyAtkAmplify', 'resonanceSkillAmplify',
         'resonanceLiberationAmplify', 'aeroAmplify', 'glacioAmplify',
         'spectroAmplify', 'fusionAmplify', 'electroAmplify', 'havocAmplify',
@@ -35,7 +35,8 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             resonanceSkillAmplify: 'skill',
             resonanceLiberationAmplify: 'ultimate',
             spectroFrazzleAmplify: 'spectroFrazzle',
-            aeroErosionAmplify: 'aeroErosion'
+            aeroErosionAmplify: 'aeroErosion',
+            coordAmplify: 'coord'
         };
 
         if (damageTypeMap[key]) {
@@ -82,7 +83,8 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             resonanceSkillAmplify: 'skill',
             resonanceLiberationAmplify: 'ultimate',
             spectroFrazzleAmplify: 'spectroFrazzle',
-            aeroErosionAmplify: 'aeroErosion'
+            aeroErosionAmplify: 'aeroErosion',
+            coordAmplify: 'coord'
         };
 
         const elementAmplifyMap = {
@@ -164,7 +166,7 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
                         ['Resonance Skill DMG', 'resonanceSkill'], ['Resonance Liberation DMG', 'resonanceLiberation'],
                         ['Aero DMG', 'aero'], ['Glacio DMG', 'glacio'], ['Spectro DMG', 'spectro'],
                         ['Fusion DMG', 'fusion'], ['Electro DMG', 'electro'], ['Havoc DMG', 'havoc'],
-                        ['Coordinated DMG', 'coordinatedDmg'],
+                        ['Coordinated DMG', 'coordAtk'], ['Coordinated DMG Amplify', 'coordAmplify'],
                         ['Basic Attack DMG Amplify', 'basicAtkAmplify'],
                         ['Heavy Attack DMG Amplify', 'heavyAtkAmplify'],
                         ['Resonance Skill DMG Amplify', 'resonanceSkillAmplify'],
@@ -197,14 +199,11 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
                     critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0,
                     basicAtk: 0, heavyAtk: 0, resonanceSkill: 0, resonanceLiberation: 0,
                     aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0,
-                    coordinatedDmg: 0,
-                    basicAtkAmplify: 0, heavyAtkAmplify: 0, resonanceSkillAmplify: 0,
-                    resonanceLiberationAmplify: 0, aeroAmplify: 0, glacioAmplify: 0,
-                    spectroAmplify: 0, fusionAmplify: 0, electroAmplify: 0, havocAmplify: 0,
-                    enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0,
-                    spectroFrazzleDmg: 0,
-                    aeroErosionDmg: 0,
-                    spectroFrazzleAmplify: 0,
+                    coordAtk: 0, coordAmplify: 0, basicAtkAmplify: 0, heavyAtkAmplify: 0,
+                    resonanceSkillAmplify: 0, resonanceLiberationAmplify: 0, aeroAmplify: 0,
+                    glacioAmplify: 0, spectroAmplify: 0, fusionAmplify: 0, electroAmplify: 0,
+                    havocAmplify: 0, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0,
+                    spectroFrazzleDmg: 0, aeroErosionDmg: 0, spectroFrazzleAmplify: 0,
                     aeroErosionAmplify: 0,
                 });
             }}>
