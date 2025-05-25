@@ -1,0 +1,22 @@
+.info-section {
+    margin-bottom: 3rem; /* increase space between sections */
+}
+
+.info-section p {
+    margin: 0.2rem 0; /* reduce space between lines in the same section */
+}
+
+.info-section h3 {
+    margin-bottom: 0.2rem;
+}
+
+.info-section h1 {
+    margin-bottom: 1rem;
+}
+
+.info-section {
+    white-space: normal;
+    max-width: 100ch;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

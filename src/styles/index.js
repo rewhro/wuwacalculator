@@ -16,3 +16,4 @@ import './checkbox.css';
 import './resetMenu.css'
 import './changeLogModal.css';
 import './dropdownSelect.css';
+import './info.css';

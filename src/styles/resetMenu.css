@@ -2,6 +2,7 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
+
 }
 
 .btn-danger {
@@ -24,6 +25,6 @@
 }
 
 .dark .skills-modal-content {
-        background: linear-gradient(145deg, rgba(31, 41, 55, 0.76), #232323);
-        color: #f9fafb;
+    background: linear-gradient(145deg, #1f2937, rgba(33, 48, 58, 0.69));
+    color: #f9fafb;
     }

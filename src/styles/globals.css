@@ -17,7 +17,7 @@ html, body, #root {
     padding: 0;
     width: 100%;
     overflow: hidden;
-    @apply transition-colors duration-300;
+    /*@apply transition-colors duration-300;*/
 }
 
 .layout {
@@ -27,7 +27,7 @@ html, body, #root {
     width: 100%;
     overflow: hidden;
     background: #f9f9f9;
-    @apply transition-colors duration-300;
+    /*@apply transition-colors duration-300;*/
 }
 
 .dark .layout {
@@ -35,11 +35,15 @@ html, body, #root {
 }
 
 .main-content {
-    height: 100%;
-    width: 100%;
-    flex: 1 1 auto;
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
+}
+
+.horizontal-layout {
     display: flex;
-    overflow: hidden;
+    flex-direction: row;
+    height: 100%;
 }
 
 .split {
@@ -84,7 +88,11 @@ html, body, #root {
 .stat-total,
 .slider-group,
 .header-with-icon,
-    .damage-text
+.damage-text,
+.layout,
+.main-content,
+.toolbar,
+.sidebar
 {
     color: #222;
     /*@apply transition-colors duration-300;*/
@@ -94,7 +102,11 @@ html, body, #root {
 .dark .buff-grid,
 .dark .character-settings,
 .dark .header-with-icon,
-.dark .damage-text
+.dark .damage-text,
+.dark .layout,
+.dark .main-content,
+.dark .toolbar,
+.sidebar
 {
     color: #ddd;
     /*@apply transition-colors duration-300;*/

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 
 const STORAGE_KEY = 'user-theme'; // 'dark' | 'light' | null
 
@@ -11,8 +11,8 @@ export default function useDarkMode() {
 
     const [theme, setTheme] = useState(getInitialTheme);
 
-    // Always sync effective theme with stored theme
-    useEffect(() => {
+    // ✅ Apply theme class before browser paints to avoid flash
+    useLayoutEffect(() => {
         document.documentElement.classList.toggle('dark', theme === 'dark');
         localStorage.setItem(STORAGE_KEY, theme);
     }, [theme]);
@@ -22,7 +22,7 @@ export default function useDarkMode() {
 
         const handleSystemChange = () => {
             const systemTheme = mediaQuery.matches ? 'dark' : 'light';
-            setTheme(systemTheme); // 🔁 Actively toggle theme on system change
+            setTheme(systemTheme);
         };
 
         mediaQuery.addEventListener('change', handleSystemChange);

@@ -39,7 +39,6 @@ export function applyCalcharoLogic({
     if (isToggleActiveLocal('inherent1') && !mergedBuffs.__calcharoInherent1) {
         mergedBuffs.resonanceLiberation = (mergedBuffs.resonanceLiberation ?? 0) + 10;
         mergedBuffs.__calcharoInherent1 = true;
-        console.log(mergedBuffs);
     }
 
     if (isToggleActive(2) && isActiveSequence(2) && !mergedBuffs.__calcharoS2) {

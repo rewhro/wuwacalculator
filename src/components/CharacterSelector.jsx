@@ -34,7 +34,7 @@ export default function CharacterSelector({
                                               attributeIconPath, currentSliderColor, sliderValues, setSliderValues,
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
                                               temporaryBuffs, setTemporaryBuffs,
-                                              characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme
+                                              characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef
                                           }) {
     const safeLevel = Math.min(Math.max(Number(characterLevel ?? 1), 1), 90);
 
@@ -77,6 +77,7 @@ export default function CharacterSelector({
                 setMenuOpen={setMenuOpen}
                 attributeIconPath={attributeIconPath}
                 menuOpen={menuOpen}
+                triggerRef={triggerRef}
             />
 
             <div className="character-settings">
