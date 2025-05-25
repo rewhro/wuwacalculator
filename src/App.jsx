@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Calculator from './pages/calculator.jsx';
-import InfoPage from './pages/InfoPage';
+import InfoPage from './pages/infoPage';
 import NotFound from './pages/NotFound'; // add this
 import { Navigate } from 'react-router-dom';
 
