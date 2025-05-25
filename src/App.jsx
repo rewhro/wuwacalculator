@@ -4,6 +4,7 @@ import Calculator from './pages/calculator.jsx';
 import InfoPage from './pages/infoPage';
 import NotFound from './pages/NotFound'; // add this
 import { Navigate } from 'react-router-dom';
+import Settings from "./pages/settings.jsx";
 
 export default function App() {
     return (
@@ -11,6 +12,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/calculator" />} />
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/info" element={<InfoPage />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

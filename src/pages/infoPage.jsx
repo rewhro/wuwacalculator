@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sun, Moon, History, Sparkle } from "lucide-react";
+import { Sun, Moon, Sparkle } from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
-import ResetButton from "../components/ResetButton";
 
 export default function InfoPage() {
     const navigate = useNavigate();
@@ -57,11 +56,10 @@ export default function InfoPage() {
                         </button>
                     </div>
                     <div className="sidebar-footer">
-                        <ResetButton />
                     </div>
                 </div>
 
-                <div className="main-content" style={{ padding: '2rem' }}>
+                <div className="main-content info-page" style={{ padding: '2rem' }}>
                     <div className="info-section">
                         <h1>Hi!</h1>
                         <p>First off, i made this solely because i was bored and wanted to try out programming with javascript.

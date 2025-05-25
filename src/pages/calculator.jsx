@@ -40,8 +40,8 @@ export default function Calculator() {
 
     const [activeCharacterId, setActiveCharacterId] = usePersistentState('activeCharacterId', null);
     const [characterRuntimeStates, setCharacterRuntimeStates] = usePersistentState('characterRuntimeStates', {});
-    const [enemyLevel, setEnemyLevel] = usePersistentState('enemyLevel', 1);
-    const [enemyRes, setEnemyRes] = usePersistentState('enemyRes', 0);
+    const [enemyLevel, setEnemyLevel] = usePersistentState('enemyLevel', 100);
+    const [enemyRes, setEnemyRes] = usePersistentState('enemyRes', 20);
 
     const [customBuffs, setCustomBuffs] = useState({});
     const [traceNodeBuffs, setTraceNodeBuffs] = useState({});
@@ -66,7 +66,7 @@ export default function Calculator() {
     const defaultSliderValues = { normalAttack: 1, resonanceSkill: 1, forteCircuit: 1, resonanceLiberation: 1, introSkill: 1, sequence: 0 };
     const defaultTraceBuffs = { atkPercent: 0, hpPercent: 0, defPercent: 0, healingBonus: 0, critRate: 0, critDmg: 0, elementalBonuses: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, activeNodes: {} };
     const defaultCustomBuffs = { atkFlat: 0, hpFlat: 0, defFlat: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0, basicAtk: 0, heavyAtk: 0, resonanceSkill: 0, resonanceLiberation: 0, aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 };
-    const defaultCombatState = { characterLevel: 1, enemyLevel: 1, enemyRes: 0, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0, elementBonus: 0, elementDmgAmplify: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, flatDmg: 0, damageTypeAmplify: { basic: 0, heavy: 0, skill: 0, ultimate: 0 }, dmgReduction: 0, elementDmgReduction: 0, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0 };
+    const defaultCombatState = { characterLevel: 1, enemyLevel: 90, enemyRes: 10, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0, elementBonus: 0, elementDmgAmplify: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, flatDmg: 0, damageTypeAmplify: { basic: 0, heavy: 0, skill: 0, ultimate: 0 }, dmgReduction: 0, elementDmgReduction: 0, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0 };
     const [characterState, setCharacterState] = useState({ activeStates: {} });
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -85,7 +85,13 @@ export default function Calculator() {
                     setSliderValues(profile.SkillLevels ?? defaultSliderValues);
                     setTraceNodeBuffs(profile.TemporaryBuffs ?? defaultTraceBuffs);
                     setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
-                    setCombatState(profile.CombatState ?? defaultCombatState);
+                    setCombatState(prev => ({
+                        ...defaultCombatState,
+                        ...(profile.CombatState ?? {}),
+                        enemyLevel: prev.enemyLevel, // preserve persisted value
+                        enemyRes: prev.enemyRes      // preserve persisted value
+                    }));
+
                     return;
                 }
             } else {
@@ -108,6 +114,15 @@ export default function Calculator() {
             }
         });
     }, []);
+
+    useEffect(() => {
+        setCombatState(prev => ({
+            ...prev,
+            enemyLevel,
+            enemyRes
+        }));
+    }, [enemyLevel, enemyRes]);
+
 
     useEffect(() => {
         const seenVersion = localStorage.getItem('seenChangelogVersion');
@@ -195,10 +210,22 @@ export default function Calculator() {
         setSliderValues(cached?.SkillLevels ?? defaultSliderValues);
         setTraceNodeBuffs(cached?.TemporaryBuffs ?? defaultTraceBuffs);
         setCustomBuffs(cached?.CustomBuffs ?? defaultCustomBuffs);
-        setCombatState(cached?.CombatState ?? defaultCombatState);
+        setCombatState(prev => ({
+            ...defaultCombatState,
+            ...(cached?.CombatState ?? {}),
+            enemyLevel: prev.enemyLevel,
+            enemyRes: prev.enemyRes
+        }));
         setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
+    useEffect(() => {
+        setCombatState(prev => ({
+            ...prev,
+            enemyLevel,
+            enemyRes
+        }));
+    }, [enemyLevel, enemyRes]);
 
     const overrideLogic = getCharacterOverride(
         activeCharacter?.id ?? activeCharacter?.Id ?? activeCharacter?.link
@@ -344,8 +371,7 @@ export default function Calculator() {
                             </button>
 
                             <div className={`sidebar-dropdown ${showDropdown ? 'open' : ''}`}>
-                                {/*
-                                <button className="sidebar-sub-button">
+                                <button className="sidebar-sub-button" onClick={() => navigate('/settings')}>
                                     <div className="icon-slot">
                                         <Settings size={24} className="settings-icon" stroke="currentColor" />
                                     </div>
@@ -353,6 +379,8 @@ export default function Calculator() {
                                         <span className="label-text">Settings</span>
                                     </div>
                                 </button>
+                                {/*
+
                                 <button className="sidebar-sub-button">
                                     <div className="icon-slot">
                                         <HelpCircle size={24} className="help-icon" stroke="currentColor" />
