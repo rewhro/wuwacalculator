@@ -288,6 +288,7 @@ export default function CharacterSelector({
                 setCharacterRuntimeStates={setCharacterRuntimeStates}
                 sequenceToggles={sequenceToggles}
                 toggleSequence={toggleSequence}
+                activeStates={activeStates}
             />
         </>
     );

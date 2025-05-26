@@ -128,6 +128,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Xiangli Yao</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Zani</strong> is now fully functional.`
                 }
             ]
         }

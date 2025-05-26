@@ -17,6 +17,8 @@ import {CustomInherentSkills as YinlinInherents, yinlinSequenceToggles} from "./
 import {yuanwuSequenceToggles} from "./1303.jsx";
 import JinhsiUI, {jinhsiSequenceToggles} from "./1304.jsx";
 import {CustomInherentSkills as YoaInherents, yoaSequenceToggles} from "./1305.jsx";
+import ZaniUI, {CustomInherentSkills as ZaniInherents, zaniSequenceToggles} from "./1507.jsx";
+
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -29,6 +31,7 @@ export function getCharacterUIComponent(characterId) {
         case '1409': return CartethyiaUI;
         case '1206': return BrantUI;
         case '1304': return JinhsiUI;
+        case '1507': return ZaniUI;
         default: return null;
     }
 }
@@ -49,6 +52,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1301': return CalcharoInherents;
         case '1302': return YinlinInherents;
         case '1305': return YoaInherents;
+        case '1507': return ZaniInherents;
         default: return null;
     }
 }
@@ -74,6 +78,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1303': return yuanwuSequenceToggles;
         case '1304': return jinhsiSequenceToggles;
         case '1305': return yoaSequenceToggles;
+        case '1507': return zaniSequenceToggles;
         default: return null;
     }
 }

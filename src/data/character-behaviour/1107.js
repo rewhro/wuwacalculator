@@ -5,10 +5,6 @@ export function applyCarlottaLogic({
                                    characterState,
                                    isActiveSequence = () => false,
                                    isToggleActive = () => false,
-                                   baseCharacterState,
-                                   sliderValues,
-                                   getSkillData,
-                                   finalStats
                                }) {
     skillMeta = {
         name: skillMeta?.name ?? '',

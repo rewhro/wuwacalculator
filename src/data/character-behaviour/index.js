@@ -17,6 +17,7 @@ import {applyYinlinLogic, yinlinMultipliers} from "./1302.js";
 import {applyYuanwuLogic, yuanwuMultipliers} from "./1303.js";
 import {applyJinhsiLogic} from "./1304.js";
 import {applyYaoLogic, yaoMultipliers} from "./1305.js";
+import {applyZaniLogic, zaniMultipliers} from "./1507.js";
 
 const overrides = {
     '1506': {
@@ -90,6 +91,10 @@ const overrides = {
     "1305": {
         logic: applyYaoLogic,
         multipliers: yaoMultipliers
+    },
+    "1507": {
+        logic: applyZaniLogic,
+        multipliers: zaniMultipliers
     }
 };
 
