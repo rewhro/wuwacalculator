@@ -186,9 +186,9 @@ export default function Settings() {
 
                                     localStorage.setItem("activeCharacterId", JSON.stringify(charId));
                                     setShowImportModal(false);
-                                    setImportSuccess(`Imported: ${importPreview?.Name} successfully.`);
+                                    window.location.href = "/";
+                                    //setImportSuccess(`Imported: ${importPreview?.Name} successfully.`);
                                     // ❌ Remove the reload line below if not desired:
-                                    // window.location.href = "/";
                                 }}
                             >
                                 Confirm Import
