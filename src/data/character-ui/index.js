@@ -1,4 +1,4 @@
-import PheobeUI, { CustomInherentSkills as PheobeInherents, PheobeSequenceToggles } from './1506.jsx';
+import PheobeUI, { PheobeSequenceToggles } from './1506.jsx';
 import { CustomInherentSkills as SanhuaInherents, SanhuaSequenceToggles } from './1102.jsx';
 import { CustomInherentSkills as BaizhiInherents, BaizhiSequenceToggles } from './1103.jsx';
 import LingYangUI, { CustomInherentSkills as LingyangInherents, LingyangSequenceToggles } from './1104.jsx';
@@ -35,7 +35,6 @@ export function getCharacterUIComponent(characterId) {
 
 export function getCustomInherentSkillsComponent(characterId) {
     switch (String(characterId)) {
-        case '1506': return PheobeInherents;
         case '1102': return SanhuaInherents;
         case '1103': return BaizhiInherents;
         case '1104': return LingyangInherents;

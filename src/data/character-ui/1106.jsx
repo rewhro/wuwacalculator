@@ -47,7 +47,9 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+                                         charLevel = 1, // ✅ Accept level
+                                         unlockLevels = [50, 70] // ✅ Default unlock thresholds
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -75,6 +77,20 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const lowerName = name.toLowerCase();
+
+                const isInherent1 = lowerName.includes("treasured piece");
+                const isInherent2 = lowerName.includes("rare find");
+
+                const unlockLevel = unlockLevels[index] ?? 1;
+                const locked = charLevel < unlockLevel;
+
+                // ✅ Auto-disable toggle if locked
+                if (locked) {
+                    if (isInherent1 && activeStates.inherent1) toggleState('inherent1');
+                    if (isInherent2 && activeStates.inherent2) toggleState('inherent2');
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -88,26 +104,37 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {/* Toggle under skill name directly */}
-                        {name.toLowerCase().includes("treasured piece") && (
+                        {isInherent1 && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}
-                                    onChange={() => toggleState('inherent1')}
+                                    onChange={() => !locked && toggleState('inherent1')}
+                                    disabled={locked}
                                 />
                                 Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            (Unlocks at Lv. {unlockLevel})
+                        </span>
+                                )}
                             </label>
                         )}
 
-                        {name.toLowerCase().includes("rare find") && (
+                        {isInherent2 && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent2 ?? false}
-                                    onChange={() => toggleState('inherent2')}
+                                    onChange={() => !locked && toggleState('inherent2')}
+                                    disabled={locked}
                                 />
                                 Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            (Unlocks at Lv. {unlockLevel})
+                        </span>
+                                )}
                             </label>
                         )}
                     </div>

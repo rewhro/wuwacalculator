@@ -9,8 +9,8 @@ import Settings from "./pages/settings.jsx";
 export default function App() {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/calculator" />} />
-            <Route path="/calculator" element={<Calculator />} />
+            {/*<Route path="/" element={<Navigate to="/" />} />*/}
+            <Route path="/" element={<Calculator />} />
             <Route path="/info" element={<InfoPage />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />

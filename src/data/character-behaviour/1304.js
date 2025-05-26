@@ -5,6 +5,7 @@ export function applyJinhsiLogic({
                                characterState,
                                isActiveSequence = () => false,
                                isToggleActive = () => false,
+    characterLevel = 1,
                            }) {
     skillMeta = {
         name: skillMeta?.name ?? '',
@@ -17,6 +18,12 @@ export function applyJinhsiLogic({
     const isToggleActiveLocal = (key) => characterState?.activeStates?.[key] === true;
     const name = skillMeta.name?.toLowerCase();
     const tab = skillMeta.tab ?? '';
+
+    if (!mergedBuffs.__jinhsiInherent1 && characterLevel >= 50) {
+        mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 20;
+        mergedBuffs.__jinhsiInherent1 = true;
+    }
+    console.log(mergedBuffs, mergedBuffs.spectro);
 
     if (tab === 'forteCircuit') {
         if (name.includes('heavy') || name.includes('dodge')) {
@@ -40,16 +47,14 @@ export function applyJinhsiLogic({
         const stacks = characterState?.activeStates?.incandescence ?? 0;
         const perStack = characterState?.activeStates?.__incandescenceValue ?? 0;
         const bonusMultiplier = Math.min(stacks * perStack, 58);
-        console.log(bonusMultiplier);
         skillMeta.multiplier += bonusMultiplier;
     }
 
-    if (!mergedBuffs.__jinhsiInherent1) {
-        mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 20;
-        mergedBuffs.__jinhsiInherent1 = true;
-    }
 
-    if (tab === 'introSkill') {
+
+
+
+    if (tab === 'introSkill' && characterLevel >= 70) {
         skillMeta.multiplier *= 1.5;
     }
 

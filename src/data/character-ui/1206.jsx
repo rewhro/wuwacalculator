@@ -36,6 +36,7 @@ export function CustomInherentSkills({
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+    const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
 
     const toggleState = (key) => {
         setCharacterRuntimeStates(prev => ({
@@ -45,6 +46,19 @@ export function CustomInherentSkills({
                 activeStates: {
                     ...(prev[charId]?.activeStates ?? {}),
                     [key]: !(prev[charId]?.activeStates?.[key] ?? false)
+                }
+            }
+        }));
+    };
+
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
                 }
             }
         }));
@@ -60,6 +74,16 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const lowerName = name.toLowerCase();
+
+                const isTrial = lowerName.includes("trial by fire and tide");
+                const unlockLevel = isTrial ? 70 : 50;
+                const locked = charLevel < unlockLevel;
+
+                if (locked) {
+                    if (isTrial && activeStates.inherent2) updateState('inherent2', false);
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -73,16 +97,26 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {/* Toggle under skill name directly */}
-                        {name.toLowerCase().includes("trial by fire and tide") && (
+                        {isTrial && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent2 ?? false}
-                                    onChange={() => toggleState('inherent2')}
+                                    onChange={() => !locked && toggleState('inherent2')}
+                                    disabled={locked}
                                 />
                                 Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                        (Unlocks at Lv. {unlockLevel})
+                                    </span>
+                                )}
                             </label>
+                        )}
+                        {!isTrial && locked && (
+                            <span style={{ fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
+                            </span>
                         )}
                     </div>
                 );

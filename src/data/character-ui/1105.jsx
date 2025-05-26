@@ -32,19 +32,21 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+                                         unlockLevels = [],
+                                         charLevel = 1 // <== passed in from CharacterSelector
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
 
-    const toggleState = (key) => {
+    const toggleState = (key, value = null) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
             [charId]: {
                 ...(prev[charId] ?? {}),
                 activeStates: {
                     ...(prev[charId]?.activeStates ?? {}),
-                    [key]: !(prev[charId]?.activeStates?.[key] ?? false)
+                    [key]: value ?? !(prev[charId]?.activeStates?.[key] ?? false)
                 }
             }
         }));
@@ -60,6 +62,17 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const lowerName = name.toLowerCase();
+                const isCalligrapher = lowerName.includes("calligrapher's touch");
+
+                const unlockLevel = unlockLevels[index] ?? 1;
+                const locked = charLevel < unlockLevel;
+
+                // Reset dropdown value if locked and currently active
+                if (locked && isCalligrapher && activeStates.inherent1 !== 0) {
+                    toggleState('inherent1', 0);
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -73,25 +86,21 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        { name.toLowerCase().includes("calligrapher's touch") && (
+                        {isCalligrapher && (
                             <DropdownSelect
                                 label=""
                                 options={[0, 1, 2, 3]}
                                 value={activeStates.inherent1 ?? 0}
-                                onChange={(newValue) => {
-                                    setCharacterRuntimeStates(prev => ({
-                                        ...prev,
-                                        [charId]: {
-                                            ...(prev[charId] ?? {}),
-                                            activeStates: {
-                                                ...(prev[charId]?.activeStates ?? {}),
-                                                inherent1: newValue
-                                            }
-                                        }
-                                    }));
-                                }}
+                                onChange={(newValue) => toggleState('inherent1', newValue)}
                                 width="80px"
+                                disabled={locked}
                             />
+                        )}
+
+                        {locked && (
+                            <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
+                            </span>
                         )}
                     </div>
                 );

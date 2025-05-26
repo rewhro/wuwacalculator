@@ -238,8 +238,7 @@ export default function Calculator() {
 
     // ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
     if (overrideLogic && typeof overrideLogic === 'function') {
-        const charId =
-            activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
 
         const characterState = {
             activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
@@ -252,19 +251,21 @@ export default function Calculator() {
         const isToggleActive = (toggleId) =>
             characterState?.toggles?.[toggleId] === true;
 
-        const globalResult = overrideLogic({
+        const result = overrideLogic({
             mergedBuffs,
             combatState,
-            characterState, // ✅ now contains live toggle data
+            characterState,
             isActiveSequence,
             isToggleActive,
-            skillMeta: {}, // global passive buffs only
-            baseCharacterState,      // ✅ ADD THIS
-            sliderValues
+            skillMeta: {}, // empty object to indicate global-level buff
+            baseCharacterState,
+            sliderValues,
+            characterLevel   // ✅ this fixes your issue
         });
 
-        mergedBuffs = globalResult.mergedBuffs;
-        // combatState = globalResult.combatState; // Uncomment if needed
+        if (result?.mergedBuffs) {
+            mergedBuffs = result.mergedBuffs;
+        }
     }
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;

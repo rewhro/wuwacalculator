@@ -72,7 +72,8 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
             skillMeta: overrideLogic.skillMeta ?? {},
             characterState: overrideLogic.characterState ?? {},
             isActiveSequence: overrideLogic.isActiveSequence ?? (() => false),
-            isToggleActive: overrideLogic.isToggleActive ?? (() => false)
+            isToggleActive: overrideLogic.isToggleActive ?? (() => false),
+            characterLevel: overrideLogic.characterLevel ?? 1
         });
 
         if (result?.mergedBuffs) {

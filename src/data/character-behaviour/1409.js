@@ -4,7 +4,8 @@ export function applyCartethyiaLogic({
                                      skillMeta,
                                      characterState,
                                      isActiveSequence = () => false,
-                                     isToggleActive = () => false
+                                     isToggleActive = () => false,
+    characterLevel = 1,
                                  }) {
 
     skillMeta = {
@@ -59,7 +60,7 @@ export function applyCartethyiaLogic({
     }
 
     // inherent 1
-    if (!mergedBuffs.__cartethyiaInherent1) {
+    if (!mergedBuffs.__cartethyiaInherent1 && characterLevel >= 70) {
         mergedBuffs.elementDmgAmplify.aero = (mergedBuffs.elementDmgAmplify.aero ?? 0) + Math.min(combatState.aeroErosion * 10, 60);
         mergedBuffs.__cartethyiaInherent1 = true;
     }

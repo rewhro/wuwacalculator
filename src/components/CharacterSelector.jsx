@@ -43,6 +43,7 @@ export default function CharacterSelector({
     const CustomCharacterUI = getCharacterUIComponent(charId);
     const CustomInherents = getCustomInherentSkillsComponent(charId);
     const sequenceToggles = characterRuntimeStates?.[charId]?.sequenceToggles ?? {};
+    const inherentSkillUnlockLevels = [50, 70];
 
     const toggleState = (stateKey) => {
         setCharacterRuntimeStates(prev => ({
@@ -161,19 +162,33 @@ export default function CharacterSelector({
                             characterRuntimeStates={characterRuntimeStates}
                             setCharacterRuntimeStates={setCharacterRuntimeStates}
                             toggleState={toggleState}
+                            unlockLevels={inherentSkillUnlockLevels}
+                            charLevel={safeLevel}
                         />
                     ) : (
                         <div className="inherent-skills">
                             {Object.values(activeCharacter.raw?.SkillTrees ?? {})
                                 .filter(node => node.Skill?.Type === "Inherent Skill")
-                                .map((node, index) => (
-                                    <div key={index} className="inherent-skill">
-                                        <h4>{node.Skill.Name}</h4>
-                                        <p dangerouslySetInnerHTML={{
-                                            __html: formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor)
-                                        }} />
-                                    </div>
-                                ))}
+                                .map((node, index) => {
+                                    const unlockLevel = inherentSkillUnlockLevels[index] ?? 1;
+                                    const isLocked = safeLevel < unlockLevel;
+
+                                    return (
+                                        <div key={index} className="inherent-skill">
+                                            <h4>{node.Skill?.Name}</h4>
+                                            <p
+                                                dangerouslySetInnerHTML={{
+                                                    __html: formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor)
+                                                }}
+                                            />
+                                            {isLocked && (
+                                                <span style={{ fontSize: '12px', color: 'gray' }}>
+                                Unlocks at Lv. {unlockLevel}
+                            </span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                         </div>
                     )}
 

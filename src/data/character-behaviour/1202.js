@@ -5,6 +5,7 @@ export function applyChixiaLogic({
                                    characterState,
                                    isActiveSequence = () => false,
                                    isToggleActive = () => false,
+                                    characterLevel = 1
                                }) {
     skillMeta = {
         name: skillMeta?.name ?? '',
@@ -24,10 +25,11 @@ export function applyChixiaLogic({
         skillMeta.skillType = 'skill';
     }
 
-    if (name === 'boom boom damage' && !mergedBuffs.__chixiaInherent1) {
+    if (name === 'boom boom damage' && !mergedBuffs.__chixiaInherent1 && characterLevel >= 50) {
         skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 50;
         mergedBuffs.__chixiaInherent1 = true;
     }
+
 
     const inherent2Stacks = characterState?.activeStates?.inherent2 ?? 0;
     const inherent2 = Math.min(inherent2Stacks * 1, 30);

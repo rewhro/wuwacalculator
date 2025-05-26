@@ -6,7 +6,8 @@ export function applyPheobeLogic({
                                              skillMeta,
                                              characterState,
                                              isActiveSequence = () => false,
-                                             isToggleActive = () => false
+                                             isToggleActive = () => false,
+    characterLevel = 1,
                                          }) {
     skillMeta = {
         name: skillMeta?.name ?? '',
@@ -88,7 +89,7 @@ export function applyPheobeLogic({
     }
 
     // === Passive Buffs ===
-    if ((state === 'Absolution' || state === 'Confession') && !mergedBuffs.__pheobeSpectro1) {
+    if ((state === 'Absolution' || state === 'Confession') && !mergedBuffs.__pheobeSpectro1 && characterLevel >= 70) {
         mergedBuffs.spectro += 12;
         mergedBuffs.__pheobeSpectro1 = true;
     }

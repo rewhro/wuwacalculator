@@ -22,6 +22,7 @@ export function CustomInherentSkills({
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+    const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
 
     const toggleState = (key) => {
         setCharacterRuntimeStates(prev => ({
@@ -46,6 +47,40 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const lower = name.toLowerCase();
+                const isHarmonic = lower.includes("harmonic control");
+                const isRhythmic = lower.includes("rhythmic vibrato");
+
+                const lockLevel = isHarmonic ? 50 : isRhythmic ? 70 : 1;
+                const locked = charLevel < lockLevel;
+
+                if (isHarmonic && locked && activeStates.inherent1) {
+                    setCharacterRuntimeStates(prev => ({
+                        ...prev,
+                        [charId]: {
+                            ...(prev[charId] ?? {}),
+                            activeStates: {
+                                ...(prev[charId]?.activeStates ?? {}),
+                                inherent1: false
+                            }
+                        }
+                    }));
+                }
+
+                // If locked, reset numeric value
+                if (isRhythmic && locked && activeStates.inherent2 > 0) {
+                    setCharacterRuntimeStates(prev => ({
+                        ...prev,
+                        [charId]: {
+                            ...(prev[charId] ?? {}),
+                            activeStates: {
+                                ...(prev[charId]?.activeStates ?? {}),
+                                inherent2: 0
+                            }
+                        }
+                    }));
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -59,25 +94,41 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {/* Toggle under skill name directly */}
-                        {name.toLowerCase().includes("harmonic control") && (
+                        {isHarmonic && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}
-                                    onChange={() => toggleState('inherent1')}
+                                    onChange={() => !locked && toggleState('inherent1')}
+                                    disabled={locked}
                                 />
                                 Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                        (Unlocks at Lv. {lockLevel})
+                                    </span>
+                                )}
                             </label>
                         )}
 
-                        { name.toLowerCase().includes("rhythmic vibrato") && (
-                            <div className= "slider-label-with-input" style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {isRhythmic && (
+                            <div
+                                className="slider-label-with-input"
+                                style={{
+                                    marginTop: '8px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    opacity: locked ? 0.5 : 1
+                                }}
+                            >
+                                Rhythmic Vibrato
                                 <input
                                     type="number"
                                     className="character-level-input"
                                     min="0"
                                     max="50"
+                                    disabled={locked}
                                     value={activeStates.inherent2 ?? 0}
                                     onChange={(e) => {
                                         const val = Math.max(0, Math.min(50, Number(e.target.value) || 0));
@@ -93,6 +144,11 @@ export function CustomInherentSkills({
                                         }));
                                     }}
                                 />
+                                {locked && (
+                                    <span style={{ fontSize: '12px', color: 'gray' }}>
+                                        (Unlocks at Lv. {lockLevel})
+                                    </span>
+                                )}
                             </div>
                         )}
                     </div>
@@ -101,7 +157,6 @@ export function CustomInherentSkills({
         </div>
     );
 }
-
 
 export function mortefiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
     if (!['3', '5', '6'].includes(String(nodeKey))) return null;

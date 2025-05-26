@@ -5,6 +5,7 @@ export function applyYuanwuLogic({
                                characterState,
                                isActiveSequence = () => false,
                                isToggleActive = () => false,
+    characterLevel = 1,
                            }) {
     skillMeta = {
         name: skillMeta?.name ?? '',
@@ -34,7 +35,7 @@ export function applyYuanwuLogic({
         }
     }
 
-    if (name === 'thunder uprising damage') {
+    if (name === 'thunder uprising damage' && characterLevel >= 50) {
         skillMeta.multiplier *= 1.4;
     }
 

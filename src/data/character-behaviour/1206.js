@@ -6,6 +6,7 @@ export function applyBrantLogic({
                                characterState,
                                isActiveSequence = () => false,
                                isToggleActive = () => false,
+    characterLevel = 1,
                            }) {
     skillMeta = {
         name: skillMeta?.name ?? '',
@@ -42,7 +43,7 @@ export function applyBrantLogic({
         skillMeta.skillType = 'basic';
     }
 
-    if (!mergedBuffs.__brantInherent1 && name === 'waves of acclaims healing') {
+    if (!mergedBuffs.__brantInherent1 && name === 'waves of acclaims healing' && characterLevel >= 50) {
         skillMeta.skillHealingBonus = (skillMeta.skillHealingBonus ?? 0) + 20;
         mergedBuffs.__brantInherent1 = true;
     }

@@ -6,7 +6,9 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+                                         charLevel = 1,                     // 👈 passed from CharacterSelector
+                                         unlockLevels = [50, 70]           // 👈 optional override array
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -34,6 +36,15 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const unlockLevel = unlockLevels[index] ?? 1;
+                const locked = charLevel < unlockLevel;
+
+                // Force toggle off if locked
+                const toggleKey = index === 0 ? 'inherent1' : index === 1 ? 'inherent2' : null;
+                if (locked && toggleKey && activeStates?.[toggleKey]) {
+                    toggleState(toggleKey);
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -47,15 +58,20 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {/* Add toggle under Inherent Skill 1 */}
-                        {index === 0 && (
+                        {toggleKey && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
-                                    checked={activeStates.inherent1 ?? false}
-                                    onChange={() => toggleState('inherent1')}
+                                    checked={activeStates[toggleKey] ?? false}
+                                    onChange={() => !locked && toggleState(toggleKey)}
+                                    disabled={locked}
                                 />
-                                Euphonia?
+                                Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            (Unlocks at Lv. {unlockLevel})
+                        </span>
+                                )}
                             </label>
                         )}
                     </div>

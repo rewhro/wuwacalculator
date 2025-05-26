@@ -23,6 +23,7 @@ export function CustomInherentSkills({
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+    const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
 
     const skills = Object.values(character?.raw?.SkillTrees ?? {}).filter(
         node => node.Skill?.Type === "Inherent Skill"
@@ -34,6 +35,27 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const lowerName = name.toLowerCase();
+                const isThermobaric = lowerName.includes("numbingly spicy");
+                const isScorching = lowerName.includes("scorching magazine");
+
+                const unlockLevel = isScorching ? 50 : isThermobaric ? 70 : 1;
+                const locked = charLevel < unlockLevel;
+
+                // Reset state if locked
+                if (isThermobaric && locked && activeStates.inherent2 > 0) {
+                    setCharacterRuntimeStates(prev => ({
+                        ...prev,
+                        [charId]: {
+                            ...(prev[charId] ?? {}),
+                            activeStates: {
+                                ...(prev[charId]?.activeStates ?? {}),
+                                inherent2: 0
+                            }
+                        }
+                    }));
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -47,14 +69,15 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        { name.toLowerCase().includes("numbingly spicy!") && (
-                            <div className= "slider-label-with-input" style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {isThermobaric && (
+                            <div className="slider-label-with-input" style={{ marginTop: '8px' }}>
                                 Thermobaric Bullets
                                 <input
                                     type="number"
                                     className="character-level-input"
                                     min="0"
                                     max="60"
+                                    disabled={locked}
                                     value={activeStates.inherent2 ?? 0}
                                     onChange={(e) => {
                                         const val = Math.max(0, Math.min(60, Number(e.target.value) || 0));
@@ -70,6 +93,17 @@ export function CustomInherentSkills({
                                         }));
                                     }}
                                 />
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                        (Unlocks at Lv. {unlockLevel})
+                                    </span>
+                                )}
+                            </div>
+                        )}
+
+                        {isScorching && locked && (
+                            <div style={{ marginTop: '8px', fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
                             </div>
                         )}
                     </div>

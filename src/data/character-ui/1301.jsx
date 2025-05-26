@@ -15,13 +15,14 @@ export default function CalcharoUI({ activeStates, toggleState }) {
 }
 
 export function CustomInherentSkills({
-                                         character,
-                                         currentSliderColor,
-                                         characterRuntimeStates,
-                                         setCharacterRuntimeStates
-                                     }) {
+                                          character,
+                                          currentSliderColor,
+                                          characterRuntimeStates,
+                                          setCharacterRuntimeStates
+                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+    const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
 
     const toggleState = (key) => {
         setCharacterRuntimeStates(prev => ({
@@ -31,6 +32,19 @@ export function CustomInherentSkills({
                 activeStates: {
                     ...(prev[charId]?.activeStates ?? {}),
                     [key]: !(prev[charId]?.activeStates?.[key] ?? false)
+                }
+            }
+        }));
+    };
+
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
                 }
             }
         }));
@@ -46,6 +60,16 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
+                const lowerName = name.toLowerCase();
+
+                const bloodshed = lowerName.includes("bloodshed awaken");
+                const unlockLevel = bloodshed ? 50 : 70;
+                const locked = charLevel < unlockLevel;
+
+                if (locked) {
+                    if (bloodshed && activeStates.inherent1) updateState('inherent1', false);
+                }
+
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
@@ -59,16 +83,26 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {/* Toggle under skill name directly */}
-                        {name.toLowerCase().includes("bloodshed awaken") && (
+                        {bloodshed && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}
-                                    onChange={() => toggleState('inherent1')}
+                                    onChange={() => !locked && toggleState('inherent1')}
+                                    disabled={locked}
                                 />
                                 Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                        (Unlocks at Lv. {unlockLevel})
+                                    </span>
+                                )}
                             </label>
+                        )}
+                        {!bloodshed && locked && (
+                            <span style={{ fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
+                            </span>
                         )}
                     </div>
                 );
