@@ -223,20 +223,7 @@
     -moz-appearance: textfield;
 }
 
-.menu-header {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 16px 20px 12px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    color: #333;
-    background: transparent;
-    flex-shrink: 0;
-}
 
-.dark .menu-header {
-    border-color: rgba(255, 255, 255, 0.1);
-    color: #ddd;
-}
 
 .menu-body {
     display: grid;

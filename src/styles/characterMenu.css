@@ -1,0 +1,121 @@
+.menu-header {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 16px 20px 12px 20px;
+    color: #333;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+.dark .menu-header,
+.menu-header-with-buttons {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ddd;
+}
+
+.menu-header-with-buttons {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.button-group-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.weapon-button-group,
+.attribute-button-group {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.weapon-button,
+.attribute-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.weapon-button img,
+.attribute-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: filter 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.weapon-button img {
+    filter: brightness(0) saturate(100%); /* blackify by default */
+}
+
+/* When .dark class is applied to html/body */
+.dark .weapon-button img,
+.dark .attribute-button img {
+    filter: none; /* show normal colored version */
+}
+
+.weapon-button.selected img,
+.attribute-button.selected img {
+    opacity: 1;
+    border: 1px solid var(--slider-color, #535353);
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dark .weapon-button.selected img,
+.dark .attribute-button.selected img {
+    border: 1px solid var(--slider-color, #a9a9a9);
+    background-color: rgba(255, 255, 255, 0.1) !important;
+
+}
+
+.dropdown-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.dropdown-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-icon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.75;
+}
+
+.mini-weapon-icon {
+    width: 22px;
+    height: 22px;
+    margin-left: auto;
+    filter: grayscale(100%) brightness(0);
+    opacity: 0.7;
+}
+
+/* Optional: in dark mode, restore original */
+.dark .mini-weapon-icon {
+    filter: none;
+    opacity: 1;
+}

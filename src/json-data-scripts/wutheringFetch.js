@@ -14,8 +14,9 @@ export async function fetchCharacters() {
             displayName: char.Name ?? 'Unknown',
             icon: char.Icon ?? 'https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_1_UI.webp',
             link: char.Id?.toString() ?? '',
-            attribute: char.Element ?? 0,  // pass Element number for mapping
-            raw: char                      // full object for skill modal
+            attribute: char.Element ?? 0,
+            weaponType: char.Weapon ?? 0,
+            raw: char
         }));
 
         //console.log('successfully loaded characters-mapped.json:');

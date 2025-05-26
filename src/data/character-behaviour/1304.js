@@ -23,7 +23,6 @@ export function applyJinhsiLogic({
         mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 20;
         mergedBuffs.__jinhsiInherent1 = true;
     }
-    console.log(mergedBuffs, mergedBuffs.spectro);
 
     if (tab === 'forteCircuit') {
         if (name.includes('heavy') || name.includes('dodge')) {
@@ -38,7 +37,6 @@ export function applyJinhsiLogic({
     }
 
     if (name === 'additional multiplier per incandescence') {
-        // ✅ Store value in characterState for reliability
         characterState.activeStates.__incandescenceValue = skillMeta.multiplier;
         skillMeta.visible = false;
     }
@@ -49,10 +47,6 @@ export function applyJinhsiLogic({
         const bonusMultiplier = Math.min(stacks * perStack, 58);
         skillMeta.multiplier += bonusMultiplier;
     }
-
-
-
-
 
     if (tab === 'introSkill' && characterLevel >= 70) {
         skillMeta.multiplier *= 1.5;

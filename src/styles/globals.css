@@ -111,3 +111,22 @@ html, body, #root {
     color: #ddd;
     /*@apply transition-colors duration-300;*/
 }
+
+button,
+button:focus,
+button:active,
+button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+button img {
+    user-select: none !important;
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="file"] {
+    outline: none !important;
+    box-shadow: none !important;
+}

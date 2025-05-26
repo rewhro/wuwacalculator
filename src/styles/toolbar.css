@@ -160,43 +160,6 @@
     box-shadow: none;
 }
 
-.sidebar.collapsed .sidebar-button {
-    grid-template-columns: 60px 0;
-}
-
-/* Main label text */
-.label-text {
-    opacity: 1;
-    transform: translateX(0);
-    transition:
-            opacity 0.9s ease,
-            transform 0.3s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
-}
-
-/* Text fades and slides on collapse */
-.sidebar.collapsed .label-text {
-    opacity: 0;
-    transform: translateX(-10px);
-}
-
-/* Wrapper around text */
-.label-slot {
-    display: flex;
-    align-items: center;
-    padding-left: 8px;
-    font-size: 16px;
-    overflow: hidden;
-    max-width: 120px;
-    transition: max-width 0.3s ease;
-}
-
-/* Compress the wrapper too */
-.sidebar.collapsed .label-slot {
-    max-width: 0;
-}
 
 /* Slot for icon (no change) */
 .icon-slot {
@@ -206,29 +169,6 @@
     height: 60px;
 }
 
-/* Animate grid column when collapsing */
-.sidebar-button {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 60px auto;
-    transition: grid-template-columns 0.3s ease;
-    align-items: center;
-    height: 60px;
-    padding: 0;
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    border-radius: 8px;
-    outline: none;
-    box-shadow: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Collapse 2nd column for label */
-.sidebar.collapsed .sidebar-button {
-    grid-template-columns: 60px 0;
-}
 
 .sidebar-button .icon-slot svg {
     transition: transform 0.3s ease, color 0.3s ease;
@@ -402,6 +342,8 @@
     max-height: 300px; /* adjust if you have more items */
 }
 
+/* Shared for both button types */
+.sidebar-button,
 .sidebar-sub-button {
     width: 100%;
     display: grid;
@@ -420,32 +362,12 @@
     transition: background-color 0.2s ease, grid-template-columns 0.3s ease;
 }
 
-/* On collapse, collapse label column */
+.sidebar.collapsed .sidebar-button,
 .sidebar.collapsed .sidebar-sub-button {
     grid-template-columns: 60px 0;
 }
 
-/* Match hover behavior */
-.sidebar-sub-button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.sidebar-sub-button:focus,
-.sidebar-sub-button:active {
-    background-color: transparent;
-    outline: none;
-    box-shadow: none;
-}
-
-/* Slot for icon */
-.sidebar-sub-button .icon-slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 60px;
-}
-
-/* Label slot and text styling (same as original) */
+.sidebar-button .label-slot,
 .sidebar-sub-button .label-slot {
     display: flex;
     align-items: center;
@@ -456,10 +378,12 @@
     transition: max-width 0.3s ease;
 }
 
+.sidebar.collapsed .sidebar-button .label-slot,
 .sidebar.collapsed .sidebar-sub-button .label-slot {
     max-width: 0;
 }
 
+.sidebar-button .label-text,
 .sidebar-sub-button .label-text {
     opacity: 1;
     transform: translateX(0);
@@ -469,16 +393,8 @@
     display: inline-block;
 }
 
+.sidebar.collapsed .sidebar-button .label-text,
 .sidebar.collapsed .sidebar-sub-button .label-text {
     opacity: 0;
     transform: translateX(-10px);
-}
-
-.sidebar-button.active {
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 0;
-}
-
-.sidebar-button {
-    transition: background-color 0.4s ease;
 }

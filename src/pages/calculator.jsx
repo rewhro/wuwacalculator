@@ -72,11 +72,21 @@ export default function Calculator() {
 
     useEffect(() => {
         fetchCharacters().then(data => {
-            setCharacters(data);
+
+            const sorted = [...data].sort((a, b) =>
+                a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
+            );
+
+            setCharacters(sorted);
+
             if (activeCharacterId) {
                 const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(activeCharacterId));
                 if (foundChar) {
-                    setActiveCharacter(foundChar);
+                    setActiveCharacter({
+                        ...foundChar,
+                        weaponType: foundChar.weaponType ?? foundChar.Weapon ?? foundChar.raw?.Weapon ?? 0,
+                    });
+
                     const state = characterStates.find(c => String(c.Id) === String(foundChar.link));
                     setBaseCharacterState(state ?? null);
 
@@ -88,8 +98,8 @@ export default function Calculator() {
                     setCombatState(prev => ({
                         ...defaultCombatState,
                         ...(profile.CombatState ?? {}),
-                        enemyLevel: prev.enemyLevel, // preserve persisted value
-                        enemyRes: prev.enemyRes      // preserve persisted value
+                        enemyLevel: prev.enemyLevel,
+                        enemyRes: prev.enemyRes
                     }));
 
                     return;
@@ -98,7 +108,11 @@ export default function Calculator() {
                 const defaultCharacterId = 1506;
                 const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(defaultCharacterId));
                 if (foundChar) {
-                    setActiveCharacter(foundChar);
+                    setActiveCharacter({
+                        ...foundChar,
+                        weaponType: foundChar.weaponType ?? foundChar.Weapon ?? foundChar.raw?.Weapon ?? 0,
+                    });
+
                     setActiveCharacterId(defaultCharacterId);
                     const state = characterStates.find(c => String(c.Id) === String(defaultCharacterId));
                     setBaseCharacterState(state ?? null);
@@ -189,7 +203,7 @@ export default function Calculator() {
                     Name: char.displayName,
                     Id: charId,
                     Attribute: char.attribute,
-                    WeaponType: char.weaponType ?? 0,
+                    WeaponType: char.weaponType ?? char.Weapon ?? char.raw?.Weapon ?? 0,
                     Stats: baseCharacterState?.Stats ?? {},
                     CharacterLevel: characterLevel,
                     SkillLevels: sliderValues,
@@ -219,13 +233,6 @@ export default function Calculator() {
         setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
-    useEffect(() => {
-        setCombatState(prev => ({
-            ...prev,
-            enemyLevel,
-            enemyRes
-        }));
-    }, [enemyLevel, enemyRes]);
 
     const overrideLogic = getCharacterOverride(
         activeCharacter?.id ?? activeCharacter?.Id ?? activeCharacter?.link

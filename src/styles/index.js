@@ -18,3 +18,4 @@ import './changeLogModal.css';
 import './dropdownSelect.css';
 import './info.css';
 import './settings.css';
+import './characterMenu.css';
