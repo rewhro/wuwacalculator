@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import {Sun, Moon, Sparkle, Info, History} from "lucide-react";
+import {Sun, Moon, Sparkle, Info, Settings, History} from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
 
-export default function Settings() {
+export default function Setting() {
     const navigate = useNavigate();
     const { theme, setTheme, effectiveTheme } = useDarkMode();
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
@@ -11,7 +11,6 @@ export default function Settings() {
     const [showImportModal, setShowImportModal] = useState(false);
     const [importSuccess, setImportSuccess] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
-
 
     const toggleTheme = () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -99,7 +98,7 @@ export default function Settings() {
                                 <Settings size={24} className="settings-icon" stroke="currentColor" />
                             </div>
                             <div className="label-slot">
-                                <span className="label-text">Home</span>
+                                <span className="label-text">Settings</span>
                             </div>
                         </button>
                         <div className={`sidebar-dropdown ${showDropdown ? 'open' : ''}`}>
@@ -108,10 +107,11 @@ export default function Settings() {
                                     <Sparkle size={24} />
                                 </div>
                                 <div className="label-slot">
-                                    <span className="label-text">Settings</span>
+                                    <span className="label-text">Home</span>
                                 </div>
                             </button>
                             {/*
+
                                 <button className="sidebar-sub-button">
                                     <div className="icon-slot">
                                         <HelpCircle size={24} className="help-icon" stroke="currentColor" />

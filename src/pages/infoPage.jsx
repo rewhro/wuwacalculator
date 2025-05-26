@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sun, Moon, Sparkle } from "lucide-react";
+import { Sun, Moon, Sparkle, Info, Settings } from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
 
 export default function InfoPage() {
     const navigate = useNavigate();
     const { theme, setTheme, effectiveTheme } = useDarkMode();
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const toggleTheme = () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -33,14 +34,45 @@ export default function InfoPage() {
             <div className="horizontal-layout">
                 <div className={`sidebar ${hamburgerOpen ? 'expanded' : 'collapsed'}`}>
                     <div className="sidebar-content">
-                        <button className="sidebar-button" onClick={() => navigate('/')}>
+                        <button
+                            className={`sidebar-button ${showDropdown ? 'active' : ''}`}
+                            onClick={() => setShowDropdown(prev => !prev)}
+                        >
                             <div className="icon-slot">
-                                <Sparkle size={24} />
+                                <Info size={24} />
                             </div>
                             <div className="label-slot">
-                                <span className="label-text">Home</span>
+                                <span className="label-text">Info</span>
                             </div>
                         </button>
+                        <div className={`sidebar-dropdown ${showDropdown ? 'open' : ''}`}>
+                            <button className="sidebar-sub-button" onClick={() => navigate('/')}>
+                                <div className="icon-slot">
+                                    <Sparkle size={24} />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">Home</span>
+                                </div>
+                            </button>
+                            {/*
+                                <button className="sidebar-sub-button">
+                                    <div className="icon-slot">
+                                        <HelpCircle size={24} className="help-icon" stroke="currentColor" />
+                                    </div>
+                                    <div className="label-slot">
+                                        <span className="label-text">Help</span>
+                                    </div>
+                                </button>
+                                */}
+                            <button className="sidebar-sub-button" onClick={() => navigate('/settings')}>
+                                <div className="icon-slot">
+                                    <Settings size={24} className="settings-icon" stroke="currentColor" />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">Settings</span>
+                                </div>
+                            </button>
+                        </div>
                         <button className="sidebar-button" onClick={toggleTheme}>
                             <div className="icon-slot">
                                 <div className="icon-slot theme-toggle-icon">
@@ -49,9 +81,9 @@ export default function InfoPage() {
                                 </div>
                             </div>
                             <div className="label-slot">
-                                <span className="label-text">
-                                    {effectiveTheme === 'light' ? 'Dawn' : 'Dusk'}
-                                </span>
+                                    <span className="label-text">
+                                        {effectiveTheme === 'light' ? 'Dawn' : 'Dusk'}
+                                    </span>
                             </div>
                         </button>
                     </div>
