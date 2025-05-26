@@ -43,30 +43,6 @@ export default function PheobeUI({ activeStates, toggleState }) {
     );
 }
 
-export function CustomInherentSkills({ character, currentSliderColor }) {
-    const skills = Object.values(character?.raw?.SkillTrees ?? {}).filter(
-        node => node.Skill?.Type === "Inherent Skill"
-    );
-
-    return (
-        <div className="inherent-skills">
-            <h4 style={{ fontSize: '20px', marginBottom: '8px' }}>Inherent Skills</h4>
-            {skills.map((node, index) => (
-                <div key={index} className="inherent-skill">
-                    <h4 style={{ fontSize: '16px' }}>{node.Skill.Name}</h4>
-                    <p dangerouslySetInnerHTML={{
-                        __html: formatDescription(
-                            node.Skill.Desc,
-                            node.Skill.Param,
-                            currentSliderColor
-                        )
-                    }} />
-                </div>
-            ))}
-        </div>
-    );
-}
-
 export function PheobeSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
     if (!['4', '5', '6'].includes(String(nodeKey))) return null;
 

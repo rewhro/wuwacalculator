@@ -16,7 +16,7 @@ import  {CustomInherentSkills as CalcharoInherents, CalcharoSequenceToggles} fro
 import {CustomInherentSkills as YinlinInherents, yinlinSequenceToggles} from "./1302.jsx";
 import {yuanwuSequenceToggles} from "./1303.jsx";
 import JinhsiUI, {jinhsiSequenceToggles} from "./1304.jsx";
-
+import {CustomInherentSkills as YoaInherents, yoaSequenceToggles} from "./1305.jsx";
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -48,6 +48,7 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1206': return BrantInherents;
         case '1301': return CalcharoInherents;
         case '1302': return YinlinInherents;
+        case '1305': return YoaInherents;
         default: return null;
     }
 }
@@ -72,6 +73,7 @@ export function getSequenceToggleComponent(characterId) {
         case '1302': return yinlinSequenceToggles;
         case '1303': return yuanwuSequenceToggles;
         case '1304': return jinhsiSequenceToggles;
+        case '1305': return yoaSequenceToggles;
         default: return null;
     }
 }

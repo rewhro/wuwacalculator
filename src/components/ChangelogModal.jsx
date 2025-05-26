@@ -121,6 +121,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `<strong>Jinhsi</strong> is now fully functional.`
                 }
             ]
+        },
+        {
+            date: '26/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Xiangli Yao</strong> is now fully functional.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

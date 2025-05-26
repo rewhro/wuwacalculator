@@ -137,7 +137,6 @@ export function CustomInherentSkills({
                                 className="slider-label-with-input"
                                 style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}
                             >
-                                Secret Strategist
                                 <DropdownSelect
                                     label=""
                                     options={[0, 1, 2, 3]}

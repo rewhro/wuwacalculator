@@ -1,8 +1,8 @@
+import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
-import React from "react";
 
-export default function ChangliUI({ activeStates, toggleState }) {
+export default function YaoUI({ activeStates, toggleState }) {
     const hasToggles = false; // set to `false` if no actual toggles for this character yet
 
     if (!hasToggles) return null; // prevents empty box rendering
@@ -22,7 +22,8 @@ export function CustomInherentSkills({
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
-    const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+
+    let activeStates = { ...(characterRuntimeStates?.[charId]?.activeStates ?? {}) };
 
     const toggleState = (key) => {
         setCharacterRuntimeStates(prev => ({
@@ -56,6 +57,19 @@ export function CustomInherentSkills({
 
     const unlockLevels = [50, 70];
 
+    // Clear locked states before render
+    const lockedStates = { ...activeStates };
+    if (charLevel < 50 && (lockedStates.inherent1 ?? 0) > 0) {
+        lockedStates.inherent1 = 0;
+        updateState('inherent1', 0);
+    }
+    if (charLevel < 70 && lockedStates.inherent2) {
+        lockedStates.inherent2 = false;
+        updateState('inherent2', false);
+    }
+
+    activeStates = lockedStates;
+
     return (
         <div className="inherent-skills">
             <h4 style={{ fontSize: '20px', marginBottom: '8px' }}>Inherent Skills</h4>
@@ -63,17 +77,11 @@ export function CustomInherentSkills({
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
                 const lowerName = name.toLowerCase();
-                const isStrategist = lowerName.includes("secret strategist");
-                const isSweeping = lowerName.includes("sweeping force");
+                const isKnowing = lowerName.includes("knowing");
+                const isFocus = lowerName.includes("focus");
 
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
-
-                // Clear toggle/value if locked
-                if (locked) {
-                    if (isSweeping && activeStates.inherent2) updateState('inherent2', false);
-                    if (isStrategist && (activeStates.inherent1 ?? 0) > 0) updateState('inherent1', 0);
-                }
 
                 return (
                     <div key={index} className="inherent-skill">
@@ -88,7 +96,7 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {isStrategist && (
+                        {isKnowing && (
                             <div
                                 className="slider-label-with-input"
                                 style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}
@@ -109,21 +117,16 @@ export function CustomInherentSkills({
                             </div>
                         )}
 
-                        {isSweeping && (
-                            <label className="modern-checkbox">
-                                <input
-                                    type="checkbox"
-                                    checked={activeStates.inherent2 ?? false}
-                                    onChange={() => !locked && toggleState('inherent2')}
-                                    disabled={locked}
-                                />
-                                Enable
-                                {locked && (
-                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
-                                        (Unlocks at Lv. {unlockLevel})
-                                    </span>
-                                )}
-                            </label>
+                        {isFocus && locked && (
+                            <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel}
+                            </span>
+                        )}
+
+                        {!isKnowing && !isFocus && locked && (
+                            <span style={{ fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
+                            </span>
                         )}
                     </div>
                 );
@@ -132,8 +135,9 @@ export function CustomInherentSkills({
     );
 }
 
-export function changliSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
-    if (!['1', '2', '4'].includes(String(nodeKey))) return null;
+
+export function yoaSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
+    if (!['2', '3', '4'].includes(String(nodeKey))) return null;
 
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;

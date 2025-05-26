@@ -265,7 +265,7 @@ export function parseFlatComponent(formula) {
     return total - percentMultiplier;
 }
 
-export function extractFlatAndPercent(str) {
+function extractFlatAndPercent(str) {
     const flatMatch = str.match(/^(\d+(\.\d+)?)/);
     const percentMatch = str.match(/(\d+(\.\d+)?)%/);
 

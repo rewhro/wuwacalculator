@@ -16,7 +16,7 @@ import {applyCalcharoLogic, calcharoMultipliers} from "./1301.js";
 import {applyYinlinLogic, yinlinMultipliers} from "./1302.js";
 import {applyYuanwuLogic, yuanwuMultipliers} from "./1303.js";
 import {applyJinhsiLogic} from "./1304.js";
-
+import {applyYaoLogic, yaoMultipliers} from "./1305.js";
 
 const overrides = {
     '1506': {
@@ -86,6 +86,10 @@ const overrides = {
     },
     "1304": {
         logic: applyJinhsiLogic
+    },
+    "1305": {
+        logic: applyYaoLogic,
+        multipliers: yaoMultipliers
     }
 };
 
