@@ -22,7 +22,9 @@ import {CustomInherentSkills as YangINherents, yangSequenceToggles} from "./1402
 import JiyanUI, {CustomInherentSkills as JiyanInherents, jiyanSequenceToggles} from "./1404.jsx";
 import {jianxinSequenceToggles} from "./1405.jsx";
 import {CustomInherentSkills as AeroInherents, aeroMSequenceToggles} from "./1406.jsx";
-
+import CiacconaUI, {ciacconaSequenceToggles} from "./1407.jsx";
+import {CustomInherentSkills as SpectroInherents, spectroMSequenceToggles} from "./1501.jsx";
+import VerinaUI, {CustomInherentSkills as VerinaInherents, verinaSequenceToggles} from "./1503.jsx";
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -37,6 +39,8 @@ export function getCharacterUIComponent(characterId) {
         case '1304': return JinhsiUI;
         case '1507': return ZaniUI;
         case '1404': return JiyanUI;
+        case '1407': return CiacconaUI;
+        case '1503': return VerinaUI;
         default: return null;
     }
 }
@@ -62,6 +66,9 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1404': return JiyanInherents;
         case '1406': return AeroInherents;
         case '1408': return AeroInherents;
+        case '1501': return SpectroInherents;
+        case '1502': return SpectroInherents;
+        case '1503': return VerinaInherents;
         default: return null;
     }
 }
@@ -93,6 +100,10 @@ export function getSequenceToggleComponent(characterId) {
         case '1405': return jianxinSequenceToggles;
         case '1406': return aeroMSequenceToggles;
         case '1408': return aeroMSequenceToggles;
+        case '1407': return ciacconaSequenceToggles;
+        case '1501': return spectroMSequenceToggles;
+        case '1502': return spectroMSequenceToggles;
+        case '1503': return verinaSequenceToggles;
         default: return null;
     }
 }

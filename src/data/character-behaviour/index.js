@@ -19,10 +19,14 @@ import {applyJinhsiLogic} from "./1304.js";
 import {applyYaoLogic, yaoMultipliers} from "./1305.js";
 import {applyZaniLogic, zaniMultipliers} from "./1507.js";
 import {applyYangLogic} from "./1402.js";
-import {applyAaltoLogic, aaltoMultipliers} from "./1403.js";
+//import {applyAaltoLogic, aaltoMultipliers} from "./1403.js";
 import {applyJiyanLogic, jiyanMultipliers} from "./1404.js";
 import {applyJianxinLogic, jianxinMultipliers} from "./1405.js";
 import {applyAeroRoverMLogic, aeroRoverMMultipliers} from "./1406.js";
+import {applyCiacconaLogic, ciacconaMultipliers} from "./1407.js";
+import {applySpectroMLogic, spectroMMultipliers} from "./1501.js";
+import {applyVerinaLogic, verinaMultipliers} from "./1503.js";
+
 
 const overrides = {
     '1506': {
@@ -119,6 +123,22 @@ const overrides = {
     "1408": {
         logic: applyAeroRoverMLogic,
         multipliers: aeroRoverMMultipliers
+    },
+    "1407": {
+        logic: applyCiacconaLogic,
+        multipliers: ciacconaMultipliers
+    },
+    "1501": {
+        logic: applySpectroMLogic,
+        multipliers: spectroMMultipliers
+    },
+    "1502": {
+        logic: applySpectroMLogic,
+        multipliers: spectroMMultipliers
+    },
+    "1503": {
+        logic: applyVerinaLogic,
+        multipliers: verinaMultipliers
     }
 };
 

@@ -32,5 +32,5 @@ export function calculateSupportEffect({
 
     const total = ((baseEffect * multiplier) + flat) * (1 + bonusPercent / 100);
 
-    return Math.floor(total);
+    return Math.max(1, Math.floor(total));
 }

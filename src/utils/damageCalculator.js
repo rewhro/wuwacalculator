@@ -100,8 +100,8 @@ export function calculateDamage({
         : (crit * critRate) + (normal * (1 - critRate));
 
     return {
-        normal: Math.floor(normal),
-        crit: Math.floor(crit),
-        avg: Math.floor(avg)
+        normal: Math.max(1, Math.floor(normal)),
+        crit: Math.max(1, Math.floor(crit)),
+        avg: Math.max(1, Math.floor(avg))
     };
 }
