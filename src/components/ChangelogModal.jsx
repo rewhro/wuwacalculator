@@ -173,6 +173,14 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Verina</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Lumi</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Memoke- S-Shorekeeper</strong> is now fully functional.`
                 }
             ]
         }

@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-27 13:13';
+    const LATEST_CHANGELOG_VERSION = '2025-05-27 15:33';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();

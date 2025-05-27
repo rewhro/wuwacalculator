@@ -26,6 +26,8 @@ import {applyAeroRoverMLogic, aeroRoverMMultipliers} from "./1406.js";
 import {applyCiacconaLogic, ciacconaMultipliers} from "./1407.js";
 import {applySpectroMLogic, spectroMMultipliers} from "./1501.js";
 import {applyVerinaLogic, verinaMultipliers} from "./1503.js";
+import {applyLumiLogic} from "./1504.js";
+import {applySkLogic, skMultipliers} from "./1505.js";
 
 
 const overrides = {
@@ -139,6 +141,13 @@ const overrides = {
     "1503": {
         logic: applyVerinaLogic,
         multipliers: verinaMultipliers
+    },
+    "1504": {
+        logic: applyLumiLogic
+    },
+    "1505": {
+        logic: applySkLogic,
+        multipliers: skMultipliers
     }
 };
 
