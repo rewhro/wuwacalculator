@@ -37,6 +37,13 @@
 }
 
 .attribute-icon {
+    width: 47px;
+    height: 47px;
+    object-fit: contain;
+    margin-left: 0.5rem;
+}
+
+.weapon-icon {
     width: 40px;
     height: 40px;
     object-fit: contain;

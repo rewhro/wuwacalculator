@@ -28,7 +28,9 @@ import {applySpectroMLogic, spectroMMultipliers} from "./1501.js";
 import {applyVerinaLogic, verinaMultipliers} from "./1503.js";
 import {applyLumiLogic} from "./1504.js";
 import {applySkLogic, skMultipliers} from "./1505.js";
-
+import {applyTaoqiLogic, taoqiMultipliers} from "./1601.js";
+import {applyDanjinLogic, danjinMultipliers} from "./1602.js";
+import {applyCamellyaLogic, cammellyaMultipliers} from "./1603.js";
 
 const overrides = {
     '1506': {
@@ -148,7 +150,19 @@ const overrides = {
     "1505": {
         logic: applySkLogic,
         multipliers: skMultipliers
-    }
+    },
+    "1601": {
+        logic: applyTaoqiLogic,
+        multipliers: taoqiMultipliers
+    },
+    "1602": {
+        logic: applyDanjinLogic,
+        multipliers: danjinMultipliers
+    },
+    "1603": {
+        logic: applyCamellyaLogic,
+        multipliers: cammellyaMultipliers
+    },
 };
 
 export function getCharacterOverride(charId) {

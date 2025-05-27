@@ -55,31 +55,40 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-.weapon-button img {
+.weapon-button img,
+.weapon-icon {
     filter: brightness(0) saturate(100%); /* blackify by default */
 }
 
 /* When .dark class is applied to html/body */
 .dark .weapon-button img,
-.dark .attribute-button img {
+.dark .attribute-button img,
+.dark .weapon-icon {
     filter: none; /* show normal colored version */
 }
 
+/* Default state */
+.weapon-button img,
+.attribute-button img {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    transform: scale(1);
+}
+
+/* Hover: grow slightly */
+.weapon-button:hover img,
+.attribute-button:hover img {
+    transform: scale(1.15); /* Slight enlargement */
+}
+
+/* Selected: shrink slightly */
 .weapon-button.selected img,
 .attribute-button.selected img {
+    transform: scale(0.8);  /* Slight shrink */
     opacity: 1;
-    border: 1px solid var(--slider-color, #535353);
     border-radius: 6px;
-    background-color: rgba(0, 0, 0, 0.1) !important;
     -webkit-tap-highlight-color: transparent;
 }
 
-.dark .weapon-button.selected img,
-.dark .attribute-button.selected img {
-    border: 1px solid var(--slider-color, #a9a9a9);
-    background-color: rgba(255, 255, 255, 0.1) !important;
-
-}
 
 .dropdown-item-content {
     display: flex;

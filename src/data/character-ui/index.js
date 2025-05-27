@@ -27,6 +27,10 @@ import {CustomInherentSkills as SpectroInherents, spectroMSequenceToggles} from 
 import VerinaUI, {CustomInherentSkills as VerinaInherents, verinaSequenceToggles} from "./1503.jsx";
 import LumiUI, {CustomInherentSkills as LumiInherents, lumiSequenceToggles} from "./1504.jsx";
 import SkUI, {CustomInherentSkills as SkInherents, skSequenceToggles} from "./1505.jsx";
+import {CustomInherentSkills as TaoqiInherents, taoqiSequenceToggles} from "./1601.jsx";
+import DanjinUI, {CustomInherentSkills as DanjinInherents, danjinSequenceToggles} from "./1602.jsx";
+import CamellyaUI, {camellyaSequenceToggles} from "./1603.jsx";
+
 
 export function getCharacterUIComponent(characterId) {
     switch (String(characterId)) {
@@ -44,6 +48,8 @@ export function getCharacterUIComponent(characterId) {
         case '1407': return CiacconaUI;
         case '1503': return VerinaUI;
         case '1505': return SkUI;
+        case '1602': return DanjinUI;
+        case '1603': return CamellyaUI;
         default: return null;
     }
 }
@@ -74,6 +80,8 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1503': return VerinaInherents;
         case '1504': return LumiInherents;
         case '1505': return SkInherents;
+        case '1601': return TaoqiInherents;
+        case '1602': return DanjinInherents;
         default: return null;
     }
 }
@@ -111,6 +119,9 @@ export function getSequenceToggleComponent(characterId) {
         case '1503': return verinaSequenceToggles;
         case '1504': return lumiSequenceToggles;
         case '1505': return skSequenceToggles;
+        case '1601': return taoqiSequenceToggles;
+        case '1602': return danjinSequenceToggles;
+        case '1603': return camellyaSequenceToggles;
         default: return null;
     }
 }

@@ -97,7 +97,7 @@ export default function CharacterMenu({
                             >
                                 <div className="dropdown-item-content">
                                     <div className="dropdown-main">
-                                        <img src={char.icon} alt={char.displayName} className="icon-menu-img" loading="lazy" />
+                                        <img src={char.icon} alt={char.displayName} className="icon-menu-img" />
                                         <span className="dropdown-label">{char.displayName}</span>
                                     </div>
                                     <div className="dropdown-icons">
