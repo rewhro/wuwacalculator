@@ -1,0 +1,215 @@
+import React from "react";
+import {formatDescription} from "../../utils/formatDescription.js";
+import DropdownSelect from "../../components/DropdownSelect.jsx";
+
+export default function JiyanUI({ activeStates, toggleState }) {
+    return (
+        <div className="status-toggles">
+            <div className="status-toggle-box">
+                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Qingloong at War</h4>
+                <p>When casting Resonance Skill Windqueller, if Jiyan has 30 or more "Resolve", he consumes 30 "Resolve" to increase the DMG of this Resonance Skill Windqueller by 20%.
+                    When Jiyan is in Qingloong Mode, DMG of Resonance Skill Windqueller is increased by 20% and no longer consumes "Resolve"</p>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.war || false}
+                        onChange={() => {
+                            toggleState('war');
+                        }}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}
+
+export function CustomInherentSkills({
+                                         character,
+                                         currentSliderColor,
+                                         characterRuntimeStates,
+                                         setCharacterRuntimeStates,
+                                         unlockLevels = [],
+                                         charLevel = 1
+                                     }) {
+    const charId = character?.Id ?? character?.id ?? character?.link;
+    const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+
+    const toggleState = (key) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: !(prev[charId]?.activeStates?.[key] ?? false)
+                }
+            }
+        }));
+    };
+
+    const skills = Object.values(character?.raw?.SkillTrees ?? {}).filter(
+        node => node.Skill?.Type === "Inherent Skill"
+    );
+
+    return (
+        <div className="inherent-skills">
+            <h4 style={{ fontSize: '20px', marginBottom: '8px' }}>Inherent Skills</h4>
+
+            {skills.map((node, index) => {
+                const name = node.Skill?.Name ?? '';
+                const lowerName = name.toLowerCase();
+                const balance = lowerName.includes("heavenly balance");
+                const taming = lowerName.includes("tempest taming");
+
+                const unlockLevel = unlockLevels[index] ?? 1;
+                const locked = charLevel < unlockLevel;
+
+                // ✅ Turn off toggle if locked and still active
+                if (locked) {
+                    if (balance && activeStates.inherent1) {
+                        toggleState('inherent1');
+                    }
+                    if (taming && activeStates.inherent2) {
+                        toggleState('inherent2');
+                    }
+                }
+
+                return (
+                    <div key={index} className="inherent-skill">
+                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <p
+                            dangerouslySetInnerHTML={{
+                                __html: formatDescription(
+                                    node.Skill.Desc,
+                                    node.Skill.Param,
+                                    currentSliderColor
+                                )
+                            }}
+                        />
+
+                        {balance && (
+                            <label className="modern-checkbox">
+                                <input
+                                    type="checkbox"
+                                    checked={activeStates.inherent1 ?? false}
+                                    onChange={() => !locked && toggleState('inherent1')}
+                                    disabled={locked}
+                                />
+                                Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            (Unlocks at Lv. {unlockLevel})
+                        </span>
+                                )}
+                            </label>
+                        )}
+
+                        {taming && (
+                            <label className="modern-checkbox">
+                                <input
+                                    type="checkbox"
+                                    checked={activeStates.inherent2 ?? false}
+                                    onChange={() => !locked && toggleState('inherent2')}
+                                    disabled={locked}
+                                />
+                                Enable
+                                {locked && (
+                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            (Unlocks at Lv. {unlockLevel})
+                        </span>
+                                )}
+                            </label>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+
+export function jiyanSequenceToggles({
+                                        nodeKey,
+                                        sequenceToggles,
+                                        toggleSequence,
+                                        currentSequenceLevel,
+                                        setCharacterRuntimeStates,
+                                        charId
+                                    }) {
+    const validKeys = ['2', '3', '4', '5', '6'];
+    if (!validKeys.includes(String(nodeKey))) return null;
+
+    const requiredLevel = Number(nodeKey);
+    const isDisabled = currentSequenceLevel < requiredLevel;
+
+    if (String(nodeKey) === '5') {
+        const value = sequenceToggles['5_value'] ?? 0;
+
+        return (
+            <div className="slider-label-with-input" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <input
+                    id="blaze-consumed"
+                    type="number"
+                    className="character-level-input"
+                    min="0"
+                    max="15"
+                    value={value}
+                    onChange={(e) => {
+                        const val = Math.max(0, Math.min(15, Number(e.target.value) || 0));
+                        setCharacterRuntimeStates(prev => ({
+                            ...prev,
+                            [charId]: {
+                                ...(prev[charId] ?? {}),
+                                sequenceToggles: {
+                                    ...(prev[charId]?.sequenceToggles ?? {}),
+                                    '5_value': val
+                                }
+                            }
+                        }));
+                    }}
+                />
+            </div>
+        );
+    } else if (String(nodeKey) === '6') {
+        const value = sequenceToggles['6_value'] ?? 0;
+
+        const handleChange = (newValue) => {
+            setCharacterRuntimeStates(prev => ({
+                ...prev,
+                [charId]: {
+                    ...(prev[charId] ?? {}),
+                    sequenceToggles: {
+                        ...(prev[charId]?.sequenceToggles ?? {}),
+                        ['6_value']: newValue
+                    }
+                }
+            }));
+        };
+
+        return (
+            <DropdownSelect
+                label=""
+                options={[0, 1, 2]}
+                value={value}
+                onChange={handleChange}
+                disabled={isDisabled}
+                className="sequence-dropdown"
+                width="80px"
+            />
+        );
+    }
+
+    // === All other sequences: checkbox ===
+    return (
+        <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
+            <input
+                type="checkbox"
+                checked={sequenceToggles[nodeKey] || false}
+                onChange={() => toggleSequence(nodeKey)}
+                disabled={isDisabled}
+            />
+            Enable
+        </label>
+    );
+}

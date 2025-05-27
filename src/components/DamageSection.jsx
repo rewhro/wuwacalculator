@@ -265,12 +265,14 @@ export function parseFlatComponent(formula) {
     return total - percentMultiplier;
 }
 
-function extractFlatAndPercent(str) {
+export function extractFlatAndPercent(str) {
     const flatMatch = str.match(/^(\d+(\.\d+)?)/);
     const percentMatch = str.match(/(\d+(\.\d+)?)%/);
+    const statMatch = str.match(/%[\s]*([a-zA-Z\s]+)/);
 
     return {
         flat: flatMatch ? parseFloat(flatMatch[1]) : 0,
-        percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0
+        percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0,
+        stat: statMatch ? statMatch[1].trim().toLowerCase() : null
     };
 }

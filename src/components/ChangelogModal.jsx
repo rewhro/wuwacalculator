@@ -134,6 +134,31 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `<strong>Zani</strong> is now fully functional.`
                 }
             ]
+        },
+        {
+            date: '27/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>YangYang</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Jiyan</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Jianxin</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Rover: Aero Husbando</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Rover: Aero Waifu</strong> is now fully functional.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

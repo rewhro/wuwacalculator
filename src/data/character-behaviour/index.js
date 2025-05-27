@@ -18,6 +18,11 @@ import {applyYuanwuLogic, yuanwuMultipliers} from "./1303.js";
 import {applyJinhsiLogic} from "./1304.js";
 import {applyYaoLogic, yaoMultipliers} from "./1305.js";
 import {applyZaniLogic, zaniMultipliers} from "./1507.js";
+import {applyYangLogic} from "./1402.js";
+import {applyAaltoLogic, aaltoMultipliers} from "./1403.js";
+import {applyJiyanLogic, jiyanMultipliers} from "./1404.js";
+import {applyJianxinLogic, jianxinMultipliers} from "./1405.js";
+import {applyAeroRoverMLogic, aeroRoverMMultipliers} from "./1406.js";
 
 const overrides = {
     '1506': {
@@ -95,6 +100,25 @@ const overrides = {
     "1507": {
         logic: applyZaniLogic,
         multipliers: zaniMultipliers
+    },
+    "1402": {
+        logic: applyYangLogic
+    },
+    "1404": {
+        logic: applyJiyanLogic,
+        multipliers: jiyanMultipliers
+    },
+    "1405": {
+        logic: applyJianxinLogic,
+        multipliers: jianxinMultipliers
+    },
+    "1406": {
+        logic: applyAeroRoverMLogic,
+        multipliers: aeroRoverMMultipliers
+    },
+    "1408": {
+        logic: applyAeroRoverMLogic,
+        multipliers: aeroRoverMMultipliers
     }
 };
 
