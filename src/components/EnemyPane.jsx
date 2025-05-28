@@ -37,6 +37,7 @@ export default function EnemyPane({
                         type="number"
                         min="1"
                         max="120"
+                        className="character-level-input"
                         value={enemyLevel}
                         onChange={(e) => handleLevelChange(e.target.value)}
                     />
@@ -63,6 +64,7 @@ export default function EnemyPane({
                         type="number"
                         min="0"
                         max="100"
+                        className="character-level-input"
                         value={enemyRes}
                         onChange={(e) => handleResChange(e.target.value)}
                     />
@@ -94,6 +96,7 @@ export default function EnemyPane({
                             type="number"
                             min="0"
                             max="60"
+                            className="character-level-input"
                             value={combatState.spectroFrazzle ?? 0}
                             onChange={(e) => handleDebuffChange('spectroFrazzle', e.target.value)}
                         />
@@ -120,6 +123,7 @@ export default function EnemyPane({
                             type="number"
                             min="0"
                             max="60"
+                            className="character-level-input"
                             value={combatState.aeroErosion ?? 0}
                             onChange={(e) => handleDebuffChange('aeroErosion', e.target.value)}
                         />

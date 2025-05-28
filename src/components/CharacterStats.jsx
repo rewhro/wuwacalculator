@@ -27,32 +27,27 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
     // SECONDARY STATS
     const energyRegenBase = baseCharacterState?.Stats?.energyRegen ?? 0;
     const energyRegenTotal = finalStats.energyRegen ?? 0;
-    const secondaryStats = [
-        {
-            label: 'Energy Regen',
-            base: baseCharacterState?.Stats?.energyRegen ?? 0,
-            bonus: (finalStats.energyRegen ?? 0) - (baseCharacterState?.Stats?.energyRegen ?? 0),
-            total: finalStats.energyRegen ?? 0
-        },
-        {
-            label: 'Crit Rate',
-            base: baseCharacterState?.Stats?.critRate ?? 0,
-            bonus: (finalStats.critRate ?? 0) - (baseCharacterState?.Stats?.critRate ?? 0),
-            total: finalStats.critRate ?? 0
-        },
-        {
-            label: 'Crit DMG',
-            base: baseCharacterState?.Stats?.critDmg ?? 0,
-            bonus: (finalStats.critDmg ?? 0) - (baseCharacterState?.Stats?.critDmg ?? 0),
-            total: finalStats.critDmg ?? 0
-        },
-        {
-            label: 'Healing Bonus',
-            base: baseCharacterState?.Stats?.healingBonus ?? 0,
-            bonus: (finalStats.healingBonus ?? 0) - (baseCharacterState?.Stats?.healingBonus ?? 0),
-            total: finalStats.healingBonus ?? 0
-        }
-    ];
+    const secondaryStats = ['energyRegen', 'critRate', 'critDmg', 'healingBonus'].map(statKey => {
+        const labelMap = {
+            energyRegen: 'Energy Regen',
+            critRate: 'Crit Rate',
+            critDmg: 'Crit DMG',
+            healingBonus: 'Healing Bonus'
+        };
+
+        const baseFromCharacter = baseCharacterState?.Stats?.[statKey] ?? 0;
+        const baseFromWeapon = combatState?.[statKey] ?? 0;
+        const base = baseFromCharacter + baseFromWeapon;
+        const total = finalStats?.[statKey] ?? base;
+        const bonus = total - base;
+
+        return {
+            label: labelMap[statKey],
+            base,
+            bonus,
+            total
+        };
+    });
 
     // ELEMENTAL & DAMAGE MODIFIERS
     const stats = [...mainStats, ...secondaryStats];

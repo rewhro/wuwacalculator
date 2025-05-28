@@ -26,3 +26,33 @@ export async function fetchCharacters() {
         return [];
     }
 }
+
+// src/utils/hakushinFetch.js
+export async function fetchWeapons() {
+    try {
+        // ✅ Import local weapons.json (preloaded)
+        const data = await import('../data/weapons.json');
+
+        // ✅ Validate and return
+        if (!data.default || typeof data.default !== 'object') {
+            throw new Error("Loaded weapons.json is not an object.");
+        }
+
+        // Optional: You can map it into a normalized array if needed
+        const weapons = Object.entries(data.default).map(([id, w]) => ({
+            id,
+            name: w.en ?? 'Unknown',
+            icon: w.icon ?? 'https://via.placeholder.com/48?text=X',
+            type: w.type ?? 0,
+            rank: w.rank ?? 1,
+            desc: w.desc ?? '',
+            baseAtk: w.baseAtk ?? 0,
+            raw: w
+        }));
+
+        return weapons;
+    } catch (error) {
+        console.error('❌ Error loading weapons.json:', error);
+        return [];
+    }
+}

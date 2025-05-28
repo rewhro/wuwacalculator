@@ -23,6 +23,7 @@ import { getCharacterOverride } from '../data/character-behaviour';
 import ChangelogModal from '../components/ChangelogModal';
 import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
 
 export default function Calculator() {
     const navigate = useNavigate();
@@ -129,6 +130,14 @@ export default function Calculator() {
         });
     }, []);
 
+    const [weapons, setWeapons] = useState({});
+
+    useEffect(() => {
+        fetchWeapons().then(data => {
+            setWeapons(data);
+        });
+    }, []);
+
     useEffect(() => {
         setCombatState(prev => ({
             ...prev,
@@ -214,6 +223,7 @@ export default function Calculator() {
                 }
             }));
         }
+
 
         const charId = char.Id ?? char.id ?? char.link;
         const cached = characterRuntimeStates[charId];
@@ -469,7 +479,12 @@ export default function Calculator() {
                                         )
                                     )}
                                     {leftPaneView === 'weapon' && (
-                                        <WeaponPane activeCharacter={activeCharacter} combatState={combatState} setCombatState={setCombatState} />
+                                        <WeaponPane
+                                            activeCharacter={activeCharacter}
+                                            combatState={combatState}
+                                            setCombatState={setCombatState}
+                                            weapons={weapons}
+                                        />
                                     )}
                                     {leftPaneView === 'enemy' && (
                                         <EnemyPane enemyLevel={enemyLevel} setEnemyLevel={setEnemyLevel} enemyRes={enemyRes} setEnemyRes={setEnemyRes} combatState={combatState} setCombatState={setCombatState} />

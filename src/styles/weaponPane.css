@@ -1,0 +1,123 @@
+.weapon-icon-wrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid transparent; /* fallback */
+}
+
+.rarity-1 {
+    border-color: rgba(153, 153, 153, 0.65); /* Common – Gray */
+    background-color: rgba(153, 153, 153, 0.11);
+}
+
+.rarity-2 {
+    border-color: rgba(98, 147, 124, 0.65); /* Rare – Blue */
+    background-color: rgba(98, 147, 124, 0.1);
+}
+
+.rarity-3 {
+    border-color: rgba(96, 147, 185, 0.58); /* Epic – Purple */
+    background-color: rgba(96, 147, 185, 0.11);
+}
+
+.rarity-4 {
+    border-color: rgba(132, 72, 168, 0.75); /* Legendary – Orange */
+    background-color: rgba(121, 46, 166, 0.08);
+}
+
+.rarity-5 {
+    border-color: rgba(255, 183, 0, 0.59); /* Mythic – Gold */
+    background-color: rgba(255, 183, 0, 0.09);
+}
+
+.weapon-icon-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.weapon-header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.weapon-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+/* In styles.css or equivalent */
+
+/* Menu-style rarity borders (lighter, thinner, or glowy perhaps) */
+.weapon-menu-icon.rarity-1 {
+    border: 1px solid rgba(153, 153, 153, 0.65);
+}
+.weapon-menu-icon.rarity-2 {
+    border: 1px solid rgba(98, 147, 124, 0.65);
+}
+.weapon-menu-icon.rarity-3 {
+    border: 1px solid rgba(96, 147, 185, 0.58);
+}
+.weapon-menu-icon.rarity-4 {
+    border: 1px solid rgba(132, 72, 168, 0.75);
+}
+.weapon-menu-icon.rarity-5 {
+    border: 1px solid rgba(255, 183, 0, 0.59);
+}
+
+/* Still circular */
+.weapon-menu-icon {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    margin-right: 8px;
+}
+
+.dropdown-subtext {
+    font-size: 12px;
+    color: #222;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.dark .dropdown-subtext {
+    color: #aaa;
+}
+
+.rarity-stars {
+    display: flex;
+    gap: 5px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    user-select: none;
+}
+
+.star.active {
+    color: #ffc400;
+    text-shadow: 0 0 3px rgba(48, 48, 32, 0.62);
+}
+
+.slider-label-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.character-level-input {
+    width: 60px;
+    margin-left: 6px;
+}
