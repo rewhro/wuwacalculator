@@ -211,6 +211,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `All 5 star weapons are now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `All other weapons are now fully functional.`
                 }
             ]
         }

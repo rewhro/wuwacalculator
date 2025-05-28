@@ -29,7 +29,7 @@ import { getWeaponOverride } from '../data/weapon-behaviour/index.js';
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-28 17:44';
+    const LATEST_CHANGELOG_VERSION = '2025-05-28 20:43';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
