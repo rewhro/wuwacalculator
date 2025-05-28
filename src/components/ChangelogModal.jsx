@@ -195,6 +195,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `<strong>Camellya</strong> is now fully functional.`
                 }
             ]
+        },
+        {
+            date: '27/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `Added weapons (just base atk and main stats)`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

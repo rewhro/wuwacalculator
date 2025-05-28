@@ -27,7 +27,7 @@ import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-27 20:23';
+    const LATEST_CHANGELOG_VERSION = '2025-05-27 2:48';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
