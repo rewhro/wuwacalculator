@@ -24,10 +24,12 @@ import ChangelogModal from '../components/ChangelogModal';
 import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
+import { getWeaponOverride } from '../data/weapon-behaviour/index.js';
+
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-27 2:48';
+    const LATEST_CHANGELOG_VERSION = '2025-05-28 17:44';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -253,6 +255,38 @@ export default function Calculator() {
         overrideLogic
     );
 
+    const weaponOverride = getWeaponOverride(combatState?.weaponId);
+    if (weaponOverride?.applyWeaponLogic) {
+        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+
+        const currentParamValues = combatState.weaponParam?.map(
+            p => p?.[Math.min(Math.max((combatState.weaponRank ?? 1) - 1, 0), 4)]
+        ) ?? [];
+
+        const characterState = {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
+            toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
+        };
+        const isToggleActive = (toggleId) =>
+            characterState?.toggles?.[toggleId] === true;
+
+        const result = weaponOverride.applyWeaponLogic({
+            mergedBuffs,
+            combatState,
+            currentParamValues,
+            characterState,
+            isToggleActive,
+            skillMeta: {},
+            baseCharacterState,
+            activeCharacter
+        });
+
+
+        if (result?.mergedBuffs) {
+            mergedBuffs = result.mergedBuffs;
+        }
+    }
+
     // ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
     if (overrideLogic && typeof overrideLogic === 'function') {
         const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
@@ -274,16 +308,18 @@ export default function Calculator() {
             characterState,
             isActiveSequence,
             isToggleActive,
-            skillMeta: {}, // empty object to indicate global-level buff
+            skillMeta: {},
             baseCharacterState,
             sliderValues,
-            characterLevel   // ✅ this fixes your issue
+            characterLevel
         });
 
         if (result?.mergedBuffs) {
             mergedBuffs = result.mergedBuffs;
         }
     }
+
+
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
@@ -484,6 +520,8 @@ export default function Calculator() {
                                             combatState={combatState}
                                             setCombatState={setCombatState}
                                             weapons={weapons}
+                                            characterRuntimeStates={characterRuntimeStates}
+                                            setCharacterRuntimeStates={setCharacterRuntimeStates}
                                         />
                                     )}
                                     {leftPaneView === 'enemy' && (

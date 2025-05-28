@@ -130,3 +130,8 @@ input[type="file"] {
     outline: none !important;
     box-shadow: none !important;
 }
+
+.modern-checkbox.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}

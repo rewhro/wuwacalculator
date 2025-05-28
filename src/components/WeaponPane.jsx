@@ -1,10 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WeaponMenu from './WeaponMenu';
+import { getWeaponUIComponent } from '../data/weapon-behaviour/index';
 
-export default function WeaponPane({ activeCharacter, combatState, setCombatState, weapons }) {
+export default function WeaponPane({ activeCharacter, combatState, setCombatState, weapons,
+                                       characterRuntimeStates, setCharacterRuntimeStates }) {
     const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
     const weaponMenuRef = useRef(null);
     const weaponTriggerRef = useRef(null);
+    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+    const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+
+    const toggleState = (stateKey) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [stateKey]: !(prev[charId]?.activeStates?.[stateKey] ?? false)
+                }
+            }
+        }));
+    };
 
     const weaponId = combatState.weaponId;
     const weaponLevel = combatState.weaponLevel ?? 1;
@@ -12,6 +29,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         ? `/assets/weapon-icons/${weaponId}.webp`
         : '/assets/default-icon.webp';
 
+    const WeaponUI = getWeaponUIComponent(weaponId);
 
     const [selectedRarities, setSelectedRarities] = useState([1, 2, 3, 4, 5]);
 
@@ -32,7 +50,13 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             weaponStat: stat,
             weaponRarity: weapon.Rarity ?? 1,
 
-            // 🔁 Reset all mapped stat fields to 0 before applying the new one
+            // ✅ Weapon effect fields
+            weaponEffect: weapon.Effect ?? null,
+            weaponEffectName: weapon.EffectName ?? null,
+            weaponParam: weapon.Param ?? [],
+            weaponRank: 1,
+
+            // 🔁 Reset all mapped stat fields before applying the new one
             atkPercent: 0,
             defPercent: 0,
             hpPercent: 0,
@@ -43,7 +67,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         }));
         setWeaponMenuOpen(false);
     };
-
     const handleLevelChange = (level) => {
         const weapon = Object.values(weapons).find(w => w.Id === weaponId);
         if (!weapon) return;
@@ -129,7 +152,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
 
     return (
         <div className="character-settings">
-            <h3>Weapon Settings</h3>
+            <h3>Weapon</h3>
 
             {/* Weapon Icon Trigger */}
             <div className="weapon-header-row">
@@ -149,27 +172,59 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                     />
                 </div>
 
-                <div className="weapon-slider">
-                    <div className="slider-label-inline">
-                        <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Level</label>
+                <div className="weapon-sliders-column">
+                    {/* Level Slider */}
+                    <div className="weapon-slider">
+                        <div className="slider-label-inline">
+                            <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Level</label>
+                            <input
+                                type="number"
+                                className="character-level-input"
+                                value={weaponLevel}
+                                min="1"
+                                max="90"
+                                onChange={(e) => handleLevelChange(Number(e.target.value))}
+                            />
+                        </div>
                         <input
-                            type="number"
-                            className="character-level-input"
-                            value={weaponLevel}
+                            type="range"
                             min="1"
                             max="90"
+                            step="1"
+                            value={weaponLevel}
                             onChange={(e) => handleLevelChange(Number(e.target.value))}
                         />
                     </div>
-                    <input
-                        type="range"
-                        min="1"
-                        max="90"
-                        step="1"
-                        value={weaponLevel}
-                        onChange={(e) => handleLevelChange(Number(e.target.value))}
-                    />
+
+                    {/* Rank Slider */}
+                    <div className="weapon-slider">
+                        <div className="slider-label-inline">
+                            <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Rank</label>
+                            <input
+                                type="number"
+                                className="character-level-input"
+                                value={combatState.weaponRank ?? 1}
+                                min="1"
+                                max="5"
+                                onChange={(e) => {
+                                    const value = Math.max(1, Math.min(5, Number(e.target.value) || 1));
+                                    setCombatState(prev => ({ ...prev, weaponRank: value }));
+                                }}
+                            />
+                        </div>
+                        <input
+                            type="range"
+                            min="1"
+                            max="5"
+                            step="1"
+                            value={combatState.weaponRank ?? 1}
+                            onChange={(e) => {
+                                setCombatState(prev => ({ ...prev, weaponRank: Number(e.target.value) }));
+                            }}
+                        />
+                    </div>
                 </div>
+
             </div>
 
             {/* Weapon Base ATK display */}
@@ -189,6 +244,35 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                 </p>
             )}
 
+            {WeaponUI ? (
+                <div className="inherent-skills-box">
+                    <h4 style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
+                    <WeaponUI
+                        combatState={combatState}
+                        setCombatState={setCombatState}
+                        activeStates={activeStates}
+                        toggleState={toggleState}
+                        characterRuntimeStates={characterRuntimeStates}
+                        setCharacterRuntimeStates={setCharacterRuntimeStates}
+                        currentParamValues={getCurrentParamValues(combatState.weaponParam, combatState.weaponRank)}
+                        charId={charId}
+                    />
+                </div>
+            ) : (
+                combatState.weaponEffect && (
+                    <div className="inherent-skills-box">
+                        <h4 style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
+                        <p>
+                            {formatEffectWithParams(
+                                combatState.weaponEffect,
+                                combatState.weaponParam,
+                                combatState.weaponRank ?? 1
+                            )}
+                        </p>
+                    </div>
+                )
+            )}
+
             {/* Weapon Menu */}
             <WeaponMenu
                 weapons={filteredWeapons}
@@ -201,4 +285,17 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             />
         </div>
     );
+}
+
+function formatEffectWithParams(effect = '', param = [], rank = 1) {
+    const index = Math.max(0, Math.min((rank ?? 1) - 1, 4)); // Clamp rank between 0 and 4
+    return effect.replace(/{(\d+)}/g, (_, group) => {
+        const groupIndex = parseInt(group, 10);
+        return param?.[groupIndex]?.[index] ?? `{${group}}`;
+    });
+}
+
+function getCurrentParamValues(param = [], rank = 1) {
+    const index = Math.max(0, Math.min((rank ?? 1) - 1, 4));
+    return param.map(group => group?.[index] ?? null);
 }

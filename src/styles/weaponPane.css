@@ -121,3 +121,10 @@
     width: 60px;
     margin-left: 6px;
 }
+
+.weapon-sliders-column {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

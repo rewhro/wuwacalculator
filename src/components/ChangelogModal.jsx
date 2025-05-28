@@ -204,6 +204,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `Added weapons (just base atk and main stats)`
                 }
             ]
+        },
+        {
+            date: '28/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `All 5 star weapons are now fully functional.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

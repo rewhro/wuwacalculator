@@ -4,6 +4,8 @@ import { calculateDamage } from '../utils/damageCalculator';
 import { calculateSupportEffect } from '../utils/supportCalculator';
 import { elementToAttribute } from '../utils/attributeHelpers';
 import { getCharacterOverride, getHardcodedMultipliers } from '../data/character-behaviour';
+import { getWeaponOverride } from '../data/weapon-behaviour/index';
+
 
 export default function DamageSection({
                                           activeCharacter,
@@ -138,6 +140,30 @@ export default function DamageSection({
                                                 });
                                                 skillMeta = result.skillMeta;
                                                 localMergedBuffs = result.mergedBuffs;
+                                            }
+
+                                            const weaponId = combatState?.weaponId;
+                                            const weaponOverride = getWeaponOverride(weaponId);
+
+                                            if (weaponOverride && typeof weaponOverride === 'function') {
+                                                const currentParamValues = combatState.weaponParam?.map(
+                                                    p => p?.[Math.min(Math.max((combatState.weaponRank ?? 1) - 1, 0), 4)]
+                                                ) ?? [];
+
+                                                const result = weaponOverride({
+                                                    mergedBuffs: localMergedBuffs,
+                                                    combatState,
+                                                    skillMeta,
+                                                    characterState,
+                                                    isToggleActive,
+                                                    finalStats,
+                                                    element,
+                                                    currentParamValues,
+                                                    baseCharacterState: activeCharacter
+                                                });
+
+                                                localMergedBuffs = result?.mergedBuffs ?? localMergedBuffs;
+                                                skillMeta = result?.skillMeta ?? skillMeta;
                                             }
 
                                             const scaling = skillMeta.scaling ?? level.scaling ?? (
