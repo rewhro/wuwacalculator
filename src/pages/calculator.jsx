@@ -37,20 +37,16 @@ export default function Calculator() {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
     };
-
     const [leftPaneView, setLeftPaneView] = useState('characters');
     const [isCollapsedMode, setIsCollapsedMode] = useState(false);
-
     const [activeCharacterId, setActiveCharacterId] = usePersistentState('activeCharacterId', null);
     const [characterRuntimeStates, setCharacterRuntimeStates] = usePersistentState('characterRuntimeStates', {});
     const [enemyLevel, setEnemyLevel] = usePersistentState('enemyLevel', 100);
     const [enemyRes, setEnemyRes] = usePersistentState('enemyRes', 20);
-
     const [customBuffs, setCustomBuffs] = useState({});
     const [traceNodeBuffs, setTraceNodeBuffs] = useState({});
     const [combatState, setCombatState] = useState({});
     const [sliderValues, setSliderValues] = useState({});
-
     const [menuOpen, setMenuOpen] = useState(false);
     const [skillsModalOpen, setSkillsModalOpen] = useState(false);
     const [activeSkillTab, setActiveSkillTab] = useState('normalAttack');
@@ -61,11 +57,9 @@ export default function Calculator() {
     const characterStates = Object.values(characterStatesRaw);
     const menuRef = useRef(null);
     const triggerRef = useRef(null);
-
     const currentAttribute = elementToAttribute[activeCharacter?.attribute] ?? '';
     const currentSliderColor = attributeColors[currentAttribute] ?? '#888';
     const attributeIconPath = attributeIcons[currentAttribute] ?? '';
-
     const defaultSliderValues = { normalAttack: 1, resonanceSkill: 1, forteCircuit: 1, resonanceLiberation: 1, introSkill: 1, sequence: 0 };
     const defaultTraceBuffs = { atkPercent: 0, hpPercent: 0, defPercent: 0, healingBonus: 0, critRate: 0, critDmg: 0, elementalBonuses: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, activeNodes: {} };
     const defaultCustomBuffs = { atkFlat: 0, hpFlat: 0, defFlat: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0, basicAtk: 0, heavyAtk: 0, resonanceSkill: 0, resonanceLiberation: 0, aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 };

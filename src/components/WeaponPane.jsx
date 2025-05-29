@@ -23,7 +23,17 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         }));
     };
 
+    const statIconMap = {
+        'atk': '/assets/stat-icons/atk.png',
+        'hp': '/assets/stat-icons/hp.png',
+        'def': '/assets/stat-icons/def.png',
+        'crit. rate': '/assets/stat-icons/critrate.png',
+        'crit. dmg': '/assets/stat-icons/critdmg.png',
+        'energy regen': '/assets/stat-icons/energyregen.png'
+    };
+
     const weaponId = combatState.weaponId;
+    const selectedWeapon = weapons?.[weaponId] ?? null;
     const weaponLevel = combatState.weaponLevel ?? 1;
     const activeWeaponIconPath = weaponId
         ? `/assets/weapon-icons/${weaponId}.webp`
@@ -151,11 +161,8 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
     }, [activeCharacter, filteredWeapons]);
 
     return (
-        <div className="character-settings">
-            <h3>Weapon</h3>
-
-            {/* Weapon Icon Trigger */}
-            <div className="weapon-header-row">
+        <>
+            <div className="header-with-icon" style={{ paddingTop: '20px' }}>
                 <div
                     className={`weapon-icon-wrapper rarity-${combatState.weaponRarity ?? 1}`}
                     onClick={() => setWeaponMenuOpen(prev => !prev)}
@@ -172,78 +179,135 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                     />
                 </div>
 
-                <div className="weapon-sliders-column">
-                    {/* Level Slider */}
-                    <div className="weapon-slider">
-                        <div className="slider-label-inline">
-                            <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Level</label>
+                <div className="character-info-header">
+                    <h2>{selectedWeapon && (
+                            <div className="weapon-name" style={{ paddingLeft: '20px',  fontWeight: 'bold', marginTop: '0.5rem' }}>
+                                {selectedWeapon.Name}
+                            </div>
+                        )}
+                    </h2>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div className="character-settings">
+                {/* Weapon Icon Trigger */}
+                <div className="weapon-header-row">
+                    <div className="weapon-sliders-column">
+                        {/* Level Slider */}
+                        <div className="weapon-slider">
+                            <div className="slider-label-inline">
+                                <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Level</label>
+                                <input
+                                    type="number"
+                                    className="character-level-input"
+                                    value={weaponLevel}
+                                    min="1"
+                                    max="90"
+                                    onChange={(e) => handleLevelChange(Number(e.target.value))}
+                                />
+                            </div>
                             <input
-                                type="number"
-                                className="character-level-input"
-                                value={weaponLevel}
+                                type="range"
                                 min="1"
                                 max="90"
+                                step="1"
+                                value={weaponLevel}
                                 onChange={(e) => handleLevelChange(Number(e.target.value))}
                             />
                         </div>
-                        <input
-                            type="range"
-                            min="1"
-                            max="90"
-                            step="1"
-                            value={weaponLevel}
-                            onChange={(e) => handleLevelChange(Number(e.target.value))}
-                        />
-                    </div>
 
-                    {/* Rank Slider */}
-                    <div className="weapon-slider">
-                        <div className="slider-label-inline">
-                            <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Rank</label>
+                        {/* Rank Slider */}
+                        <div className="weapon-slider">
+                            <div className="slider-label-inline">
+                                <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Rank</label>
+                                <input
+                                    type="number"
+                                    className="character-level-input"
+                                    value={combatState.weaponRank ?? 1}
+                                    min="1"
+                                    max="5"
+                                    onChange={(e) => {
+                                        const value = Math.max(1, Math.min(5, Number(e.target.value) || 1));
+                                        setCombatState(prev => ({ ...prev, weaponRank: value }));
+                                    }}
+                                />
+                            </div>
                             <input
-                                type="number"
-                                className="character-level-input"
-                                value={combatState.weaponRank ?? 1}
+                                type="range"
                                 min="1"
                                 max="5"
+                                step="1"
+                                value={combatState.weaponRank ?? 1}
                                 onChange={(e) => {
-                                    const value = Math.max(1, Math.min(5, Number(e.target.value) || 1));
-                                    setCombatState(prev => ({ ...prev, weaponRank: value }));
+                                    setCombatState(prev => ({ ...prev, weaponRank: Number(e.target.value) }));
                                 }}
                             />
                         </div>
-                        <input
-                            type="range"
-                            min="1"
-                            max="5"
-                            step="1"
-                            value={combatState.weaponRank ?? 1}
-                            onChange={(e) => {
-                                setCombatState(prev => ({ ...prev, weaponRank: Number(e.target.value) }));
+                    </div>
+
+                </div>
+
+
+                {/* Weapon Menu */}
+                <WeaponMenu
+                    weapons={filteredWeapons}
+                    handleWeaponSelect={handleWeaponSelect}
+                    menuOpen={weaponMenuOpen}
+                    menuRef={weaponMenuRef}
+                    setMenuOpen={setWeaponMenuOpen}
+                    selectedRarities={selectedRarities}
+                    setSelectedRarities={setSelectedRarities}
+                />
+            </div>
+            <div className="inherent-skills-box">
+                {/* Weapon Base ATK display */}
+                <div className="slider-group">
+                    <div className="slider-label-with-input" style={{
+                        display: 'flex', alignItems: 'center', gap: '8px'
+                    }}>
+                        <div
+                            style={{
+                                width: 20,
+                                height: 20,
+                                backgroundColor: '#999',
+                                WebkitMaskImage: `url(${statIconMap['atk']})`,
+                                maskImage: `url(${statIconMap['atk']})`,
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskRepeat: 'no-repeat',
+                                WebkitMaskSize: 'contain',
+                                maskSize: 'contain'
                             }}
                         />
+                        <label style={{ fontWeight: 'bold', fontSize: '16px' }}>ATK:</label>
+                        <span style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                            {combatState.weaponBaseAtk ?? 0}
+                        </span>
                     </div>
                 </div>
-
+                {/* Weapon Stat Display */}
+                {combatState.weaponStat && (
+                    <div style={{ fontWeight: 'bold', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div
+                            style={{
+                                width: 20,
+                                height: 20,
+                                backgroundColor: '#999',
+                                WebkitMaskImage: `url(${statIconMap[combatState.weaponStat.Name.toLowerCase()] ?? '/assets/icons/default.png'})`,
+                                maskImage: `url(${statIconMap[combatState.weaponStat.Name.toLowerCase()] ?? '/assets/icons/default.png'})`,
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskRepeat: 'no-repeat',
+                                WebkitMaskSize: 'contain',
+                                maskSize: 'contain'
+                            }}
+                        />
+                        <span>{formatStatValue(combatState.weaponStat)}</span>
+                    </div>
+                )}
             </div>
-
-            {/* Weapon Base ATK display */}
-            <div className="slider-group">
-                <div className="slider-label-with-input">
-                    <label style={{ fontWeight: 'bold', fontSize: '16px' }}>ATK:</label>
-                    <span style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                        {combatState.weaponBaseAtk ?? 0}
-                    </span>
-                </div>
-            </div>
-
-            {/* Weapon Stat Display */}
-            {combatState.weaponStat && (
-                <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                    {formatStatValue(combatState.weaponStat)}
-                </p>
-            )}
-
             {WeaponUI ? (
                 <div className="inherent-skills-box">
                     <h4 style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
@@ -272,18 +336,8 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                     </div>
                 )
             )}
+        </>
 
-            {/* Weapon Menu */}
-            <WeaponMenu
-                weapons={filteredWeapons}
-                handleWeaponSelect={handleWeaponSelect}
-                menuOpen={weaponMenuOpen}
-                menuRef={weaponMenuRef}
-                setMenuOpen={setWeaponMenuOpen}
-                selectedRarities={selectedRarities}
-                setSelectedRarities={setSelectedRarities}
-            />
-        </div>
     );
 }
 

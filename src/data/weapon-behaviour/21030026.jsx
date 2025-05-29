@@ -76,7 +76,7 @@ export function applyWeaponLogic({
         mergedBuffs.aero = (mergedBuffs.aero ?? 0) + aero;
     }
 
-    if (characterState?.activeStates?.secondP && element === 'aero') {
+    if (characterState?.activeStates?.secondP && element === 'aero' && combatState.aeroErosion > 0) {
         mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + resShred;
     }
 

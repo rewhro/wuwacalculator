@@ -18,6 +18,26 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
     const baseDef = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Def"] ?? 0;
     const defBonus = (finalStats.def ?? 0) - baseDef;
 
+    const statIconMap = {
+        'ATK': '/assets/stat-icons/atk.png',
+        'HP': '/assets/stat-icons/hp.png',
+        'DEF': '/assets/stat-icons/def.png',
+        'Energy Regen': '/assets/stat-icons/energyregen.png',
+        'Crit Rate': '/assets/stat-icons/critrate.png',
+        'Crit DMG': '/assets/stat-icons/critdmg.png',
+        'Healing Bonus': '/assets/stat-icons/healing.png',
+        'Basic Attack DMG Bonus': '/assets/stat-icons/basic.png',
+        'Heavy Attack DMG Bonus': '/assets/stat-icons/heavy.png',
+        'Resonance Skill DMG Bonus': '/assets/stat-icons/skill.png',
+        'Resonance Liberation DMG Bonus': '/assets/stat-icons/liberation.png',
+        'Aero DMG Bonus': '/assets/stat-icons/aero.png',
+        'Glacio DMG Bonus': '/assets/stat-icons/glacio.png',
+        'Spectro DMG Bonus': '/assets/stat-icons/spectro.png',
+        'Fusion DMG Bonus': '/assets/stat-icons/fusion.png',
+        'Electro DMG Bonus': '/assets/stat-icons/electro.png',
+        'Havoc DMG Bonus': '/assets/stat-icons/havoc.png'
+    };
+
     const mainStats = [
         { label: 'ATK', base: baseAtk, bonus: atkBonus, total: finalStats.atk ?? 0 },
         { label: 'HP', base: baseHp, bonus: hpBonus, total: finalStats.hp ?? 0 },
@@ -89,7 +109,30 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
                 const displayValue = val => isFlatStat ? Math.floor(val) : `${val.toFixed(1)}%`;
                 return (
                     <div key={index} className="stat-row">
-                        <div className="stat-label" style={stat.color ? { color: stat.color } : {}}>
+                        <div
+                            className="stat-label"
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                ...(stat.color ? { color: stat.color } : {})
+                            }}
+                        >
+                            {statIconMap[stat.label] && (
+                                <div
+                                    style={{
+                                        width: 18,
+                                        height: 18,
+                                        backgroundColor: stat.color ?? '#999',
+                                        WebkitMaskImage: `url(${statIconMap[stat.label]})`,
+                                        maskImage: `url(${statIconMap[stat.label]})`,
+                                        WebkitMaskRepeat: 'no-repeat',
+                                        maskRepeat: 'no-repeat',
+                                        WebkitMaskSize: 'contain',
+                                        maskSize: 'contain'
+                                    }}
+                                />
+                            )}
                             {stat.label}
                         </div>
                         <div className="stat-value">{displayValue(stat.base)}</div>
