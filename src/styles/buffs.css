@@ -1,0 +1,38 @@
+.echo-buffs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.echo-buff {
+    background: #f9f9f9;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(143, 143, 143, 0.24);
+}
+
+.dark .echo-buff {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.echo-buff-name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.echo-buff-effect {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.highlight {
+    color: goldenrod;
+    font-weight: bold;
+}
+
+.dark .highlight {
+    color: blanchedalmond;
+}

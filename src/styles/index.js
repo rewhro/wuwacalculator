@@ -20,3 +20,6 @@ import './info.css';
 import './settings.css';
 import './characterMenu.css';
 import './weaponPane.css';
+import './buffspane.css';
+import './expandable.css';
+import './buffs.css';

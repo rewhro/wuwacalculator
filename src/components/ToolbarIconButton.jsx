@@ -11,7 +11,7 @@ export default function ToolbarIconButton({ iconName, onClick, altText, effectiv
 
     return (
         <button onClick={onClick} className="toolbar-icon-button">
-            <img src={iconPath} alt={altText} style={{ width: 28, height: 28 }} />
+            <img src={iconPath} alt={altText} style={{ width: 34, height: 34 }} />
         </button>
     );
 }

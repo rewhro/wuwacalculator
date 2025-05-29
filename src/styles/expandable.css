@@ -1,0 +1,19 @@
+.expandable-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 10px;
+    font-weight: 600;
+    font-size: 17px;
+    color: inherit;
+}
+
+.expandable-body-wrapper {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.expandable-body {
+    padding: 0px;
+}

@@ -1,0 +1,101 @@
+/* Buffs Box Container */
+.buffs-box {
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Dark theme adjustments */
+.dark .buffs-box {
+    background: linear-gradient(145deg, #1f2937, rgba(33, 48, 58, 0.16));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    color: #ddd;
+}
+
+/* Panel title (inside the box) */
+.buffs-box .menu-header {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 20px;
+}
+
+
+/* Flex wrapper for icons */
+.icon-body {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+/* Individual icon slot + name */
+.team-slot-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 8px;
+    min-width: 90px;
+}
+
+/* Icon slot */
+.team-slot {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+/* Hover effect for changeable slots */
+.team-slot:not(.locked):hover {
+    transform: scale(1.05);
+}
+
+
+/* Locked (main character) slot */
+.team-slot.locked {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Locked empty slots still clickable */
+.team-slot.locked .empty-slot {
+    pointer-events: auto;
+}
+
+/* Empty slot circle */
+.team-icon.empty-slot {
+    width: 90px;
+    height: 90px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    pointer-events: auto;
+}
+
+/* Character name below icon */
+.character-name {
+    margin-top: 6px;
+    font-size: 14px;
+    max-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #222;
+}
+
+.dark .character-name {
+    color: #ccc;
+}

@@ -217,6 +217,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `All other weapons are now fully functional.`
                 }
             ]
+        },
+        {
+            date: '29/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `Added echo buffs.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

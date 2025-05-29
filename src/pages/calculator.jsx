@@ -10,6 +10,7 @@ import CharacterStats from '../components/CharacterStats';
 import DamageSection from '../components/DamageSection';
 import WeaponPane from '../components/WeaponPane';
 import EnemyPane from '../components/EnemyPane';
+import BuffsPane from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
 import ToolbarIconButton from '../components/ToolbarIconButton';
 import ResetButton from '../components/ResetButton';
@@ -25,11 +26,11 @@ import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle } from 'lucide-
 import { useNavigate } from 'react-router-dom';
 import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
 import { getWeaponOverride } from '../data/weapon-behaviour/index.js';
-
+import { applyEchoLogic } from '../data/buffs/applyEchoLogic';
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-28 20:43';
+    const LATEST_CHANGELOG_VERSION = '2025-05-29 15:13';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -66,6 +67,7 @@ export default function Calculator() {
     const defaultCombatState = { characterLevel: 1, enemyLevel: 90, enemyRes: 10, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0, elementBonus: 0, elementDmgAmplify: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, flatDmg: 0, damageTypeAmplify: { basic: 0, heavy: 0, skill: 0, ultimate: 0 }, dmgReduction: 0, elementDmgReduction: 0, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0 };
     const [characterState, setCharacterState] = useState({ activeStates: {} });
     const [showDropdown, setShowDropdown] = useState(false);
+    const [echoStates, setEchoStates] = usePersistentState('echoStates', {});
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -240,6 +242,38 @@ export default function Calculator() {
         setMenuOpen(false);
     };
 
+    const [team, setTeam] = useState([activeCharacterId ?? null, null, null]);
+
+
+    useEffect(() => {
+        if (team[0] && team[0] !== activeCharacterId) {
+            localStorage.setItem('activeCharacterId', JSON.stringify(team[0]));
+            setActiveCharacterId(team[0]);
+        }
+    }, [team[0]]);
+
+    // on load
+    useEffect(() => {
+        const savedTeam = JSON.parse(localStorage.getItem('team') || '[null, null, null]');
+        setTeam(savedTeam);
+    }, []);
+
+// on change
+    useEffect(() => {
+        localStorage.setItem('team', JSON.stringify(team));
+    }, [team]);
+
+    useEffect(() => {
+        if (activeCharacterId) {
+            setTeam(prev => {
+                if (!prev || prev.length === 0 || prev[0] !== activeCharacterId) {
+                    return [activeCharacterId, null, null];
+                }
+                return prev;
+            });
+        }
+    }, [activeCharacterId]);
+
     const overrideLogic = getCharacterOverride(
         activeCharacter?.id ?? activeCharacter?.Id ?? activeCharacter?.link
     );
@@ -280,6 +314,16 @@ export default function Calculator() {
             mergedBuffs = result.mergedBuffs;
         }
     }
+
+    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+    mergedBuffs = applyEchoLogic({
+        mergedBuffs,
+        characterState: {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
+        },
+        baseCharacterState,
+        activeCharacter
+    });
 
     // ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
     if (overrideLogic && typeof overrideLogic === 'function') {
@@ -375,6 +419,12 @@ export default function Calculator() {
                             iconName="weapon"
                             altText="Weapon"
                             onClick={() => setLeftPaneView('weapon')}
+                            effectiveTheme={effectiveTheme}
+                        />
+                        <ToolbarIconButton
+                            iconName="teams"
+                            altText="Team"
+                            onClick={() => setLeftPaneView('teams')}
                             effectiveTheme={effectiveTheme}
                         />
                         <ToolbarIconButton
@@ -523,6 +573,19 @@ export default function Calculator() {
                                     )}
                                     {leftPaneView === 'buffs' && (
                                         <CustomBuffsPane customBuffs={customBuffs} setCustomBuffs={setCustomBuffs} />
+                                    )}
+                                    {leftPaneView === 'teams' && (
+                                        <BuffsPane
+                                            characters={characters}
+                                            team={team}
+                                            setTeam={setTeam}
+                                            setActiveCharacterId={setActiveCharacterId}
+                                            combatState={combatState}
+                                            setCombatState={setCombatState}
+                                            characterRuntimeStates={characterRuntimeStates}
+                                            activeCharacter={activeCharacter}
+                                            setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                        />
                                     )}
                                 </div>
 
