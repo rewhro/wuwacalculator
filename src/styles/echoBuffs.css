@@ -36,3 +36,27 @@
 .dark .highlight {
     color: blanchedalmond;
 }
+
+.echo-buff-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.echo-buff-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+    object-fit: cover;
+}
+
+/* Default (light mode) - apply black tint via filter */
+.echo-buff-icon.blackify {
+    filter: brightness(0) saturate(100%);
+}
+
+/* In dark mode - remove the filter */
+.dark .echo-buff-icon.blackify {
+    filter: none;
+}

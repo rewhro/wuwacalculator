@@ -349,7 +349,7 @@ function formatEffectWithParams(effect = '', param = [], rank = 1) {
     });
 }
 
-function getCurrentParamValues(param = [], rank = 1) {
+export function getCurrentParamValues(param = [], rank = 1) {
     const index = Math.max(0, Math.min((rank ?? 1) - 1, 4));
     return param.map(group => group?.[index] ?? null);
 }

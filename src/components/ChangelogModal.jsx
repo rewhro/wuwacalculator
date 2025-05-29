@@ -224,6 +224,10 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `Added echo buffs.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `Added weapon buffs.`
                 }
             ]
         }

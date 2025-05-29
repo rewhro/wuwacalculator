@@ -35,7 +35,7 @@
 /*   DARK MODE OVERRIDE       */
 /* ========================== */
 .dark .inherent-skills-box {
-        background: linear-gradient(145deg, #1f2937, rgba(33, 48, 58, 0.16));
+    background: rgba(31, 41, 55, 0.44);
         border-color: rgba(255,255,255,0.1);
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
         color: #ddd

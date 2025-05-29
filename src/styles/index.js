@@ -22,4 +22,4 @@ import './characterMenu.css';
 import './weaponPane.css';
 import './buffspane.css';
 import './expandable.css';
-import './buffs.css';
+import './echoBuffs.css';

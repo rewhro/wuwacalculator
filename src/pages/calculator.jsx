@@ -27,10 +27,11 @@ import { useNavigate } from 'react-router-dom';
 import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
 import { getWeaponOverride } from '../data/weapon-behaviour/index.js';
 import { applyEchoLogic } from '../data/buffs/applyEchoLogic';
+import {applyWeaponBuffLogic} from "../data/buffs/weaponBuffs.js";
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-29 15:13';
+    const LATEST_CHANGELOG_VERSION = '2025-05-29 19:16';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -322,6 +323,14 @@ export default function Calculator() {
             activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
         },
         baseCharacterState,
+        activeCharacter
+    });
+
+    mergedBuffs = applyWeaponBuffLogic({
+        mergedBuffs,
+        characterState: {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
+        },
         activeCharacter
     });
 

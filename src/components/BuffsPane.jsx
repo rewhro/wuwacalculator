@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import CharacterMenu from './CharacterMenu';
 import ExpandableSection from "./Expandable.jsx";
 import EchoBuffs from "./EchoBuffs.jsx";
+import WeaponBuffs from "./WeaponBuffs.jsx";
 
 export default function BuffsPane({
                                       characters,
@@ -93,6 +94,14 @@ export default function BuffsPane({
                 <EchoBuffs activeStates={activeStates} toggleState={toggleState} />
             </ExpandableSection>
 
+            <ExpandableSection title="Weapon Buffs">
+                <WeaponBuffs
+                    activeStates={activeStates}
+                    toggleState={toggleState}
+                    charId={charId}
+                    setCharacterRuntimeStates={setCharacterRuntimeStates}
+                />
+            </ExpandableSection>
 
             {characterMenuOpen && (
                 <CharacterMenu
