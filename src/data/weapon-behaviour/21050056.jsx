@@ -35,12 +35,12 @@ export function WeaponUI({
                     <p>
                         Casting Echo Skill within 10s after casting Intro Skill or Basic Attacks grants 1 stack of Gentle Dream. Echoes with the same name can only trigger this effect once, stacking up to 2 times, lasting for 10s. When reaching 2 stacks, casting Echo Skill no longer resets the duration of this effect. This effect activates up to once per 10s. Switching to another Resonator ends this effect early.</p>
                     <p>
-                        <li>
+                        <p>
                             With 1 stack: Grants {currentParamValues[6]} Basic Attack DMG Bonus.
-                        </li>
-                        <li>
+                        </p>
+                        <p>
                             With 2 stacks: Ignores {currentParamValues[8]} of the target's Havoc RES.
-                        </li>
+                        </p>
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect
@@ -86,7 +86,7 @@ export function applyWeaponLogic({
     mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + atk;
 
     if (stacks > 0) {
-        mergedBuffs.basicAtk = (mergedBuffs.enemyDefIgnore ?? 0) + basic;
+        mergedBuffs.basicAtk = (mergedBuffs.basicAtk ?? 0) + basic;
     }
 
     if (stacks > 1 && element === 'havoc') {
