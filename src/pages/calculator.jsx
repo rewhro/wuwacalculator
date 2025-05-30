@@ -70,6 +70,7 @@ export default function Calculator() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [echoStates, setEchoStates] = usePersistentState('echoStates', {});
     const [team, setTeam] = usePersistentState('team', [activeCharacterId ?? null, null, null]);
+    const [teamCache, setTeamCache] = usePersistentState('teamCache', {});
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -203,33 +204,45 @@ export default function Calculator() {
 
 
     const handleCharacterSelect = (char) => {
+        // Save current team setup for current main character before switching
         if (activeCharacter) {
-            const charId = activeCharacter.Id ?? activeCharacter.id ?? activeCharacter.link;
+            const currentMainId = activeCharacter.Id ?? activeCharacter.id ?? activeCharacter.link;
+            setTeamCache(prev => ({
+                ...prev,
+                [currentMainId]: team
+            }));
+
+            const charId = currentMainId;
             setCharacterRuntimeStates(prev => ({
                 ...prev,
                 [charId]: {
                     ...(prev[charId] ?? {}),
-                    Name: char.displayName,
+                    Name: activeCharacter.displayName,
                     Id: charId,
-                    Attribute: char.attribute,
-                    WeaponType: char.weaponType ?? char.Weapon ?? char.raw?.Weapon ?? 0,
+                    Attribute: activeCharacter.attribute,
+                    WeaponType: activeCharacter.weaponType ?? activeCharacter.Weapon ?? activeCharacter.raw?.Weapon ?? 0,
                     Stats: baseCharacterState?.Stats ?? {},
                     CharacterLevel: characterLevel,
                     SkillLevels: sliderValues,
                     TemporaryBuffs: traceNodeBuffs,
                     CustomBuffs: customBuffs,
                     CombatState: combatState,
-                    CharacterState: characterState
+                    CharacterState: characterState,
+                    Team: team
                 }
             }));
         }
 
+        const newMainId = char.Id ?? char.id ?? char.link;
+        const cached = characterRuntimeStates[newMainId];
+        const restoredTeam = cached?.Team ?? [newMainId, null, null];
+        setTeam(restoredTeam);
 
-        const charId = char.Id ?? char.id ?? char.link;
-        const cached = characterRuntimeStates[charId];
         setActiveCharacter(char);
-        setActiveCharacterId(charId);
-        setBaseCharacterState(cached ? { Stats: cached.Stats } : characterStates.find(c => String(c.Id) === String(charId)) ?? null);
+        setActiveCharacterId(newMainId);
+        setBaseCharacterState(
+            cached ? { Stats: cached.Stats } : characterStates.find(c => String(c.Id) === String(newMainId)) ?? null
+        );
         setCharacterLevel(cached?.CharacterLevel ?? 1);
         setSliderValues(cached?.SkillLevels ?? defaultSliderValues);
         setTraceNodeBuffs(cached?.TemporaryBuffs ?? defaultTraceBuffs);
@@ -257,9 +270,17 @@ export default function Calculator() {
     useEffect(() => {
         if (activeCharacterId) {
             setTeam(prev => {
-                if (!prev || prev.length === 0 || prev[0] !== activeCharacterId) {
-                    return [activeCharacterId, null, null];
+                if (!prev || prev.length < 3) {
+                    const updated = [activeCharacterId, null, null];
+                    return updated;
                 }
+
+                if (prev[0] !== activeCharacterId) {
+                    const updated = [...prev];
+                    updated[0] = activeCharacterId;
+                    return updated;
+                }
+
                 return prev;
             });
         }

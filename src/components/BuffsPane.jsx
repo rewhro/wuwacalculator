@@ -6,6 +6,7 @@ import EchoBuffs from "./EchoBuffs.jsx";
 import WeaponBuffs from "./WeaponBuffs.jsx";
 import {loadCharacterBuffUI} from "../data/character-ui/index.js";
 import { attributeColors } from '../utils/attributeHelpers';
+import { X } from 'lucide-react';
 
 export default function BuffsPane({
                                       characters,
@@ -42,6 +43,17 @@ export default function BuffsPane({
         const newTeam = [...team];
         newTeam[activeCharacterSlot] = char.link;
         setTeam(newTeam);
+
+        // ✅ Save per-main-character team
+        const mainCharId = team[0];
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [mainCharId]: {
+                ...(prev[mainCharId] ?? {}),
+                Team: newTeam
+            }
+        }));
+
         setCharacterMenuOpen(false);
     };
 
@@ -108,6 +120,31 @@ export default function BuffsPane({
                                     />
                                 ) : (
                                     <div className="team-icon empty-slot" />
+                                )}
+
+                                {/* ✅ "X" button for teammates only */}
+                                {!isDisabled && (
+                                    <button
+                                        className="remove-teammate-button"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent opening the menu
+                                            const newTeam = [...team];
+                                            newTeam[index] = null;
+                                            setTeam(newTeam);
+
+                                            // ✅ Save per-main-character team
+                                            const mainCharId = team[0];
+                                            setCharacterRuntimeStates(prev => ({
+                                                ...prev,
+                                                [mainCharId]: {
+                                                    ...(prev[mainCharId] ?? {}),
+                                                    Team: newTeam
+                                                }
+                                            }));
+                                        }}
+                                    >
+                                        <X size={14} strokeWidth={2.5} />
+                                    </button>
                                 )}
                             </div>
                             <div className="character-name">{character?.displayName ?? ''}</div>

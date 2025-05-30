@@ -33,7 +33,14 @@ export default function Setting() {
             return;
         }
 
-        const blob = new Blob([JSON.stringify({ [id]: runtime[id] }, null, 2)], {
+        const dataToSave = { ...runtime[id] };
+
+        // Only save teammates (exclude main character at index 0)
+        if (Array.isArray(dataToSave.Team)) {
+            dataToSave.Team = [null, dataToSave.Team[1] ?? null, dataToSave.Team[2] ?? null];
+        }
+
+        const blob = new Blob([JSON.stringify({ [id]: dataToSave }, null, 2)], {
             type: "application/json"
         });
 
@@ -218,6 +225,12 @@ export default function Setting() {
                                     }));
 
                                     localStorage.setItem("activeCharacterId", JSON.stringify(charId));
+
+                                    // Restore the team: main + 2 teammates (first is always the main)
+                                    localStorage.setItem(
+                                        "team",
+                                        JSON.stringify([charId, importPreview.Team?.[1] ?? null, importPreview.Team?.[2] ?? null])
+                                    );
                                     setShowImportModal(false);
                                     window.location.href = "/";
                                     //setImportSuccess(`Imported: ${importPreview?.Name} successfully.`);
