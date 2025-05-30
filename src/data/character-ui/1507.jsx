@@ -262,3 +262,57 @@ export function zaniSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Beacon For the Future</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro DMG</span> dealt by other Resonators in the team to the target marked by <span className="highlight">Heliacal Ember</span> is Amplified by <span className="highlight">20%</span> for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.beacon || false}
+                        onChange={() => toggleState('beacon')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: More Efficiency, Less Drama</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When Intro Skill <span className="highlight">Immediate Execution</span> is cast, the ATK of all Resonators in the team is increased by <span className="highlight">20%</span> for 30s.
+
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.efficiency || false}
+                        onChange={() => toggleState('efficiency')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

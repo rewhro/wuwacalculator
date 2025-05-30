@@ -143,3 +143,39 @@ export function brantSequenceToggles({ nodeKey, sequenceToggles, toggleSequence,
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: The Course is Set!</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Amplify the incoming Resonator's <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG</span> by <span className="highlight">20%</span> and <span className="highlight">Resonance Skill DMG</span> by <span className="highlight">25%</span> for <span className="highlight">14s</span> or until the Resonator is switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.course || false}
+                        onChange={() => toggleState('course')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

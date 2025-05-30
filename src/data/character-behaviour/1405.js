@@ -76,3 +76,24 @@ export const jianxinMultipliers = {
         }
     ]
 };
+
+export function jianxinBuffsLogic({
+                                    mergedBuffs, characterState, activeCharacter
+                                }) {
+    const state = characterState?.activeStates ?? {};
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.transcendence) {
+        mergedBuffs.resonanceLiberation = (mergedBuffs.resonanceLiberation ?? 0) + 38;
+    }
+
+    return { mergedBuffs };
+}

@@ -10,11 +10,16 @@ export function applyMortefiLogic({
                                       getSkillData
                                   }) {
     skillMeta = {
+        ...skillMeta,
+
         name: skillMeta?.name ?? '',
-        skillType: skillMeta?.skillType ?? 'basic',
+        skillType: Array.isArray(skillMeta?.skillType)
+            ? [...skillMeta.skillType]
+            : skillMeta?.skillType
+                ? [skillMeta.skillType]
+                : [],
         multiplier: skillMeta?.multiplier ?? 1,
-        amplify: skillMeta?.amplify ?? 0,
-        ...skillMeta
+        amplify: skillMeta?.amplify ?? 0
     };
 
     const isToggleActiveLocal = (key) => characterState?.activeStates?.[key] === true;
@@ -23,6 +28,10 @@ export function applyMortefiLogic({
 
     if (tab === 'forteCircuit') {
         skillMeta.skillType = 'skill';
+    }
+
+    if (name.includes('marcato')) {
+        skillMeta.skillType = ['ultimate', 'coord'];
     }
 
     if (name === "funerary quartet: marcato damage") {
@@ -84,4 +93,30 @@ export const mortefiMultipliers = {
             scaling: { atk: 1 }
         }
     ]
+}
+
+export function mortefiBuffsLogic({
+                                     mergedBuffs, characterState, activeCharacter
+                                 }) {
+    const state = characterState?.activeStates ?? {};
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.transposition) {
+        mergedBuffs.damageTypeAmplify.heavy = (mergedBuffs.damageTypeAmplify.heavy ?? 0) + 38;
+    }
+
+    if (state.apoplectic) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 20;
+    }
+
+    return { mergedBuffs };
 }

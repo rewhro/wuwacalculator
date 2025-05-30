@@ -129,3 +129,38 @@ export function yangSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, 
     );
 }
 
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: A Tribute to Life's Sweet Hymn</div>
+                </div>
+                <div className="echo-buff-effect">
+                    After casting Mid-air Attack <span className="highlight">Feather Release</span>, the ATK of all team members is increased by <span className="highlight">20%</span> for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.sweetHymn || false}
+                        onChange={() => toggleState('sweetHymn')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

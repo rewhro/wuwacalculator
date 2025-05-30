@@ -176,3 +176,56 @@ export function mortefiSequenceToggles({ nodeKey, sequenceToggles, toggleSequenc
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Rage Transposition</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator gains <span className="highlight">38% Heavy Attack DMG</span> Amplification for <span className="highlight">14s</span> or until they are switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.transposition || false}
+                        onChange={() => toggleState('transposition')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Apoplectic Instrumental</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When Resonance Liberation <span className="highlight">Violent Finale</span> is cast, ATK of all team members is increased by <span className="highlight">20%</span> for <span className="highlight">20s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.apoplectic || false}
+                        onChange={() => toggleState('apoplectic')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

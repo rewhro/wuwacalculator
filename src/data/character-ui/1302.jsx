@@ -135,3 +135,56 @@ export function yinlinSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Strategist</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span style={{ color: attributeColors['electro'], fontWeight: 'bold' }}>Electro DMG</span> Amplified by <span className="highlight">20%</span> and <span className="highlight">Resonance Liberation DMG</span> Amplified by <span className="highlight">25%</span> for <span className="highlight">14s</span> or until they are switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.strategist || false}
+                        onChange={() => toggleState('strategist')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Steadfast Conviction</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When Forte Circuit <span className="highlight">Judgment Strike</span> hits a target, the ATK of all team members is increased by <span className="highlight">20%</span> for <span className="highlight">12s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.conviction || false}
+                        onChange={() => toggleState('conviction')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

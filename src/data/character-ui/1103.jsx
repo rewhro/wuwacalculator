@@ -100,3 +100,13 @@ export function BaizhiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
         </label>
     );
 }
+
+
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates }) {
+    return (
+        <div style={{ border: '1px solid red', padding: '8px' }}>
+            Hello from
+        </div>
+    );
+}

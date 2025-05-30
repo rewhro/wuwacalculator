@@ -151,3 +151,39 @@ export function LingyangSequenceToggles({ nodeKey, sequenceToggles, toggleSequen
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Immortals Bow, in Reverence Flawed</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Outro Skill <span className="highlight">Frosty Marks</span> increases the <span style={{ color: attributeColors['glacio'], fontWeight: 'bold' }}>Glacio DMG Bonus</span> of all team members by <span className="highlight">20%</span> for 30s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.immortals || false}
+                        onChange={() => toggleState('immortals')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

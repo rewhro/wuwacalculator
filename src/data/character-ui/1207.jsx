@@ -218,3 +218,77 @@ export function LupaSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Resonance Liberation - Glory</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting Resonance Liberation <span className="highlight">Fire-Kissed Glory</span> grants <span className="highlight">Glory</span>. Within <span className="highlight">35s</span>:
+                    <p>
+                        Attacks of all Resonators in the team ignore <span className="highlight">3%</span> of the target's <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion RES</span>. For each <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion</span> Resonator in the team other than <span className="highlight">Lupa</span>, this effect increases by <span className="highlight">3%</span>, up to the maximum of <span className="highlight">9%</span>.
+                    </p>
+                    <p>
+                        When there are <span className="highlight">3</span> <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion</span> Resonators in the team, Resonators' attacks further ignore <span className="highlight">6%</span> <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion RES</span>
+                    </p>
+                </div>
+                <DropdownSelect
+                    label="Stacks"
+                    options={[0, 1, 2, 3]}
+                    value={activeStates.glory ?? 0}
+                    onChange={(value) => updateState('glory', value)}
+                    width="80px"
+                />
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Stand by Me, Warrior</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator will have their <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG</span> Amplified by <span className="highlight">20%</span> and <span className="highlight">Basic Attack DMG</span> Amplified by <span className="highlight">25%</span> for <span className="highlight">14s</span> or until the Resonator is switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.warrior || false}
+                        onChange={() => toggleState('warrior')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S2: Every Ground, Her Hunting Field</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Performing <span className="highlight">Fire-Kissed Glory</span>, Heavy Attack - <span className="highlight">Wolf's Gnawing</span>, Heavy Attack - <span className="highlight">Wolf's Claw</span>, or Mid-air Attack - <span className="highlight">Firestrike</span> gives <span className="highlight">20%</span> <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG Bonus</span> to all Resonators in the team for <span className="highlight">30s</span>, stacking up to <span className="highlight">2</span> times.
+                </div>
+                <DropdownSelect
+                    label="Stacks"
+                    options={[0, 1, 2]}
+                    value={activeStates.huntingField ?? 0}
+                    onChange={(value) => updateState('huntingField', value)}
+                    width="80px"
+                />
+            </div>
+        </div>
+    );
+}

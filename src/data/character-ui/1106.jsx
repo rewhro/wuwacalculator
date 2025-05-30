@@ -201,3 +201,39 @@ export function youhuSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Timeless Classics</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span className="highlight">Coordinated Attack DMG</span> Amplified by <span className="highlight">100%</span> for <span className="highlight">28s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.timeless || false}
+                        onChange={() => toggleState('timeless')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

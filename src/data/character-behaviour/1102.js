@@ -94,3 +94,26 @@ export function applySanhuaLogic({
 
     return { mergedBuffs, combatState, skillMeta };
 }
+
+export function sanhuaBuffsLogic({
+                                      mergedBuffs, characterState, activeCharacter
+                                  }) {
+    const state = characterState?.activeStates ?? {};
+    const stacks = (state.daybreak ?? 0) * 10;
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.silversnow) {
+        mergedBuffs.damageTypeAmplify.basic = (mergedBuffs.damageTypeAmplify.basic ?? 0) + 38;
+    }
+    mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + stacks;
+
+    return { mergedBuffs };
+}

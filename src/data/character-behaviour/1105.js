@@ -122,3 +122,30 @@ export const zhezhiMultipliers = {
         }
     ]
 };
+
+export function zhezhiBuffsLogic({
+                                 mergedBuffs, characterState, activeCharacter
+                             }) {
+    const state = characterState?.activeStates ?? {};
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.carveAndDraw) {
+        mergedBuffs.elementDmgAmplify.glacio = (mergedBuffs.elementDmgAmplify.glacio ?? 0) + 20;
+        mergedBuffs.damageTypeAmplify.skill = (mergedBuffs.damageTypeAmplify.skill ?? 0) + 25;
+    }
+
+    if (state.spectrum) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 20;
+    }
+
+    return { mergedBuffs };
+}

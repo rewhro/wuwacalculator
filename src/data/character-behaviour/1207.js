@@ -112,3 +112,37 @@ export function applyLupaLogic({
 
     return { mergedBuffs, combatState, skillMeta };
 }
+
+export function lupaBuffsLogic({
+                                     mergedBuffs, characterState, activeCharacter
+                                 }) {
+    const state = characterState?.activeStates ?? {};
+    const stacks = state.glory * 3;
+    const stacks2 = state.huntingField * 20;
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (element === 'fusion') {
+        mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + stacks;
+        if (state.glory >= 3) {
+            mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + 6;
+        }
+    }
+
+    if (state.warrior) {
+        mergedBuffs.damageTypeAmplify.basic = (mergedBuffs.damageTypeAmplify.basic ?? 0) + 25;
+        mergedBuffs.elementDmgAmplify.fusion = (mergedBuffs.elementDmgAmplify.fusion ?? 0) + 20;
+    }
+
+    mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + stacks2;
+
+    return { mergedBuffs };
+}

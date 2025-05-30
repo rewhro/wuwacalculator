@@ -1,5 +1,6 @@
 // src/data/character-ui/1506.jsx
 import {formatDescription} from "../../utils/formatDescription.js";
+import React from "react";
 
 export default function PheobeUI({ activeStates, toggleState }) {
     return (
@@ -59,5 +60,61 @@ export function PheobeSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
             />
             Enable
         </label>
+    );
+}
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Attentive Heart</div>
+                </div>
+                <div className="echo-buff-effect">
+                    <span className="highlight">Confession</span> Enhancement: Grant Silent Prayer to the Resonator on the field, reducing the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro RES</span> of nearby targets by <span className="highlight">10%</span> and granting <span className="highlight">100%</span> <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle DMG</span> Amplification. This effect lasts 30s or until Phoebe switches to Absolution status.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.attentive || false}
+                        onChange={() => toggleState('attentive')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S2: A Boat Adrift in Tears</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting <span className="highlight">Resonance Liberation</span> Living Canvas increases ATK of Resonators on the team <span className="highlight">20%</span> for <span className="highlight">30s</span>.
+
+                    When in <span className="highlight">Confession</span>, <span className="highlight">Silent Prayer</span> grants <span className="highlight">120%</span> more DMG Amplification for <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.boatAdrift || false}
+                        onChange={() => toggleState('boatAdrift')}
+                        disabled={!activeStates.attentive}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
     );
 }

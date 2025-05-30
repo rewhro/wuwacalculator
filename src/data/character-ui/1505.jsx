@@ -186,3 +186,108 @@ export function skSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, cu
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <label className="slider-label-with-input">
+                Energy Regen:
+                <input
+                    type="number"
+                    value={activeStates.innerEnergy ?? 0}
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    onChange={(e) => {
+                        const value = parseFloat(e.target.value) || 0;
+                        updateState('innerEnergy', value);
+                    }}
+                    className="character-level-input"
+                /> %
+            </label>
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Inner Stellarealm</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When a party member uses <span className="highlight">Intro Skill</span> within the <span className="highlight">Outer Stellarealm</span>, it evolves into the <span className="highlight">Inner Stellarealm</span>. Within the effective range of the <span className="highlight">Inner Stellarealm</span>, for every <span className="highlight">0.2%</span> of Shorekeeper's Energy Regen, all party members gain a <span className="highlight">0.01%</span> increase of Crit. Rate, up to <span className="highlight">12.5%%</span>.
+                    <span className="highlight">Inner Stellarealm</span> has all the effects of the <span className="highlight">Outer Stellarealm</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.inner || false}
+                        onChange={() => toggleState('inner')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Supernal Stellarealm</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When a party member uses <span className="highlight">Intro Skill</span> within the <span className="highlight">Inner Stellarealm</span>, it evolves into the <span className="highlight">Supernal Stellarealm</span>. Within the effective range of the <span className="highlight">Supernal Stellarealm</span>, for every <span className="highlight">0.1%</span> of <span className="highlight">Shorekeeper</span>'s Energy Regen, all party members gain a <span className="highlight">0.01%</span> increase of Crit. DMG, up to <span className="highlight">25%</span>.
+                    <span className="highlight">Supernal Stellarealm</span> has all the effects of the <span className="highlight">Inner Stellarealm</span>.
+                </div>
+                <label className="modern-checkbox" style={{ opacity: !activeStates.inner ? 0.5 : 1 }}>
+                    <input
+                        type="checkbox"
+                        checked={activeStates.supernal || false}
+                        onChange={() => toggleState('supernal')}
+                        disabled={!activeStates.inner}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Binary Butterfly</div>
+                </div>
+                <div className="echo-buff-effect">
+                    All nearby party members' DMG is Amplified by <span className="highlight">15%</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.butterfly || false}
+                        onChange={() => toggleState('butterfly')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S2: Night's Gift and Refusal</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The <span className="highlight">Outer Stellarealm</span> now increases the ATK of all nearby party members by <span className="highlight">40%</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.nightsGift || false}
+                        onChange={() => toggleState('nightsGift')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

@@ -181,3 +181,56 @@ export function SanhuaSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Silversnow</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span className="highlight">Basic Attack DMG</span> Amplified by <span className="highlight">38%</span> for <span className="highlight">14s</span> or until they are switched out.
+
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.silversnow || false}
+                        onChange={() => toggleState('silversnow')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Daybreak Radiance</div>
+                </div>
+                <div className="echo-buff-effect">
+                    After an <span className="highlight">Ice Prism</span> or a <span className="highlight">Glacier</span> is detonated, all team members' ATK is increased by <span className="highlight">10%</span> for <span className="highlight">20s</span>, stacking up to <span className="highlight">2</span> times.
+                </div>
+                <DropdownSelect
+                    label="Stacks"
+                    options={[0, 1, 2]}
+                    value={activeStates.daybreak ?? 0}
+                    onChange={(value) => updateState('daybreak', value)}
+                    width="80px"
+                />
+            </div>
+        </div>
+    );
+}

@@ -1,5 +1,7 @@
 // src/character-behaviors/1506.jsx
 
+import React from "react";
+
 export function applyPheobeLogic({
                                              mergedBuffs,
                                              combatState,
@@ -132,3 +134,32 @@ export const pheobeMultipliers = {
         }
     ]
 };
+
+export function pheobeBuffsLogic({
+                                     mergedBuffs, characterState, activeCharacter
+                                 }) {
+    const state = characterState?.activeStates ?? {};
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.attentive) {
+        if (element === 'spectro') {
+            mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + 10;
+        }
+        mergedBuffs.damageTypeAmplify.spectroFrazzle = (mergedBuffs.damageTypeAmplify.spectroFrazzle ?? 0) + 100;
+    }
+
+    if (state.boatAdrift) {
+        mergedBuffs.damageTypeAmplify.spectroFrazzle = (mergedBuffs.damageTypeAmplify.spectroFrazzle ?? 0) + 120;
+    }
+
+    return { mergedBuffs };
+}

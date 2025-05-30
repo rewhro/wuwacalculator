@@ -202,3 +202,39 @@ export function encoreSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Easter enture? Let's go!</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Heavy Attack <span className="highlight">Cosmos Rupture</span> increases the <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG Bonus</span> of all team members by <span className="highlight">20%</span> for 30s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.adventure || false}
+                        onChange={() => toggleState('adventure')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

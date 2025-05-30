@@ -119,3 +119,39 @@ export function jinhsiSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Benevolent Grace</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When <span className="highlight">Jinhsi</span> casts Resonance Liberation <span className="highlight">Purge of Light</span> or Resonance Skill<span className="highlight"> Illuminous Epiphany</span>, all nearby Resonators on the team gain <span className="highlight">20% Attribute DMG Bonus</span> for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.benevolent || false}
+                        onChange={() => toggleState('benevolent')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

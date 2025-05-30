@@ -131,3 +131,39 @@ export function chixiaSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Easter Egg Performance</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Resonance Skill <span className="highlight">Boom Boom</span> increases the <span className="highlight">Basic Attack DMG Bonus</span> of all team members by <span className="highlight">25%</span> for 15s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.easter || false}
+                        onChange={() => toggleState('easter')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

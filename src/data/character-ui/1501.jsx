@@ -128,3 +128,39 @@ export function spectroMSequenceToggles({ nodeKey, sequenceToggles, toggleSequen
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Echoes of Wanderlust</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Resonance Skill <span className="highlight">Resonating Slashes</span> and Resonance Skill <span className="highlight">Resonating Spin</span> reduces the target's <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro RES</span> by <span className="highlight">10%</span> on hit for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.wanderlust || false}
+                        onChange={() => toggleState('wanderlust')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

@@ -105,3 +105,64 @@ export function cartethyiaSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Inherent Skill: A Heart's Truest WishesOutro Skill: Transcendence</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When <span className="highlight">Cartethyia</span>'s <span className="highlight">Outro Skill</span> is triggered, the healing received by all Resonators other than <span className="highlight">Cartethyia</span>/<span className="highlight">Fleurdelys</span> in the team is increased by <span className="highlight">20%</span>. If <span className="highlight">Rover</span> is in the team, <span className="highlight">Rover</span>'s resistance to interruption is increased.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.wishes || false}
+                        onChange={() => toggleState('wishes')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Sacrifice Made for Salvation</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When <span className="highlight">Cartethyia</span>'s <span className="highlight">Outro Skill</span> is triggered, the healing received by all Resonators other than <span className="highlight">Cartethyia</span>/<span className="highlight">Fleurdelys</span> in the team is increased by <span className="highlight">20%</span>. If <span className="highlight">Rover</span> is in the team, <span className="highlight">Rover</span>'s resistance to interruption is increased.
+                    When Resonators in the team inflict
+                    <span style={{ color: attributeColors['havoc'], fontWeight: 'bold' }}>Havoc Bane</span>,
+                    <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}> Fusion Burst</span>,
+                    <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span>,
+                    <span style={{ color: attributeColors['electro'], fontWeight: 'bold' }}>Electro Flare</span>,
+                    <span style={{ color: attributeColors['glacio'], fontWeight: 'bold' }}>Glacio Chafe</span> and
+                    <span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero Erosion</span>, all Resonators in the team gain <span className="highlight">20%</span> DMG Bonus for all Attributes for 20s.
+
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.sacrifice || false}
+                        onChange={() => toggleState('sacrifice')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

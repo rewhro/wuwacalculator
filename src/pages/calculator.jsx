@@ -20,7 +20,7 @@ import { getFinalStats } from '../utils/getStatsForLevel';
 import { getUnifiedStatPool } from '../utils/getUnifiedStatPool';
 import { usePersistentState } from '../hooks/usePersistentState';
 import useDarkMode from '../hooks/useDarkMode';
-import { getCharacterOverride } from '../data/character-behaviour';
+import {getBuffsLogic, getCharacterOverride} from '../data/character-behaviour';
 import ChangelogModal from '../components/ChangelogModal';
 import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -69,6 +69,7 @@ export default function Calculator() {
     const [characterState, setCharacterState] = useState({ activeStates: {} });
     const [showDropdown, setShowDropdown] = useState(false);
     const [echoStates, setEchoStates] = usePersistentState('echoStates', {});
+    const [team, setTeam] = usePersistentState('team', [activeCharacterId ?? null, null, null]);
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -242,8 +243,7 @@ export default function Calculator() {
         setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
-
-    const [team, setTeam] = useState([activeCharacterId ?? null, null, null]);
+    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
 
 
     useEffect(() => {
@@ -253,16 +253,6 @@ export default function Calculator() {
         }
     }, [team[0]]);
 
-    // on load
-    useEffect(() => {
-        const savedTeam = JSON.parse(localStorage.getItem('team') || '[null, null, null]');
-        setTeam(savedTeam);
-    }, []);
-
-// on change
-    useEffect(() => {
-        localStorage.setItem('team', JSON.stringify(team));
-    }, [team]);
 
     useEffect(() => {
         if (activeCharacterId) {
@@ -283,6 +273,27 @@ export default function Calculator() {
         [traceNodeBuffs, combatState, customBuffs],
         overrideLogic
     );
+
+    team.forEach((id, index) => {
+        if (!id || index === 0) return;
+
+        const buffsLogic = getBuffsLogic(id);
+        if (!buffsLogic) return;
+
+        const characterState = {
+            activeStates: characterRuntimeStates?.[id]?.activeStates ?? {}
+        };
+
+        const result = buffsLogic({
+            mergedBuffs,
+            characterState,
+            activeCharacter
+        });
+
+        if (result?.mergedBuffs) {
+            mergedBuffs = result.mergedBuffs;
+        }
+    });
 
     const weaponOverride = getWeaponOverride(combatState?.weaponId);
     if (weaponOverride?.applyWeaponLogic) {
@@ -310,13 +321,11 @@ export default function Calculator() {
             activeCharacter
         });
 
-
         if (result?.mergedBuffs) {
             mergedBuffs = result.mergedBuffs;
         }
     }
 
-    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     mergedBuffs = applyEchoLogic({
         mergedBuffs,
         characterState: {

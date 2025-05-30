@@ -118,3 +118,38 @@ export const skMultipliers = {
         }
     ]
 };
+
+export function SKBuffsLogic({
+                                    mergedBuffs, characterState, activeCharacter
+                                }) {
+    const state = characterState?.activeStates ?? {};
+    const critRate = state.innerEnergy * 0.05;
+
+    if (state.inner) {
+        mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + critRate;
+    }
+
+    if (state.supernal) {
+        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + critRate * 2;
+    }
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.butterfly) {
+        mergedBuffs.elementDmgAmplify[element] = (mergedBuffs.elementDmgAmplify[element] ?? 0) + 15;
+    }
+
+    if (state.nightsGift) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 40;
+    }
+
+    return { mergedBuffs };
+}

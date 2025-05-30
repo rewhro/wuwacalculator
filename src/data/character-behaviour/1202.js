@@ -69,3 +69,24 @@ export const chixiaMultipliers = {
         }
     ]
 };
+
+export function chixiaBuffsLogic({
+                                    mergedBuffs, characterState, activeCharacter
+                                }) {
+    const state = characterState?.activeStates ?? {};
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.easter) {
+        mergedBuffs.basicAtk = (mergedBuffs.basicAtk ?? 0) + 25;
+    }
+
+    return { mergedBuffs };
+}

@@ -129,3 +129,56 @@ export function taoqiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence,
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Inherent Skill: Steadfast Protection</div>
+                </div>
+                <div className="echo-buff-effect">
+                    While Resonance Skill <span className="highlight">Rocksteady Shield</span> lasts, the Character's DEF is increased by <span className="highlight">15</span>%.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.steadfast || false}
+                        onChange={() => toggleState('steadfast')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Iron Will</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span className="highlight">Resonance Skill DMG</span> Amplified by <span className="highlight">38%</span> for 14s or until they are switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.ironWill || false}
+                        onChange={() => toggleState('ironWill')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

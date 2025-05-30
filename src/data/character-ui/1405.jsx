@@ -40,3 +40,40 @@ export function jianxinSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Transcendence</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span className="highlight">Resonance Liberation DMG</span> Amplified by <span className="highlight">38%</span> for 14s or until they are switched out.
+
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.transcendence || false}
+                        onChange={() => toggleState('transcendence')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

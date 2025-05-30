@@ -152,3 +152,24 @@ function extractFlatAndPercent(str) {
         percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0
     };
 }
+
+export function youhuBuffsLogic({
+                                     mergedBuffs, characterState, activeCharacter
+                                 }) {
+    const state = characterState?.activeStates ?? {};
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.timeless) {
+        mergedBuffs.damageTypeAmplify.coord = (mergedBuffs.damageTypeAmplify.coord ?? 0) + 100;
+    }
+
+    return { mergedBuffs };
+}

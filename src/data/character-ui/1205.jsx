@@ -150,3 +150,56 @@ export function changliSequenceToggles({ nodeKey, sequenceToggles, toggleSequenc
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Strategy of Duality</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG</span> Amplified by <span className="highlight">20%</span> and <span className="highlight">Resonance Liberation DMG</span> Amplified by <span className="highlight">25%</span> for <span className="highlight">10s</span> or until the Resonator is switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.duality || false}
+                        onChange={() => toggleState('duality')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Polished Words</div>
+                </div>
+                <div className="echo-buff-effect">
+                    After <span className="highlight">Intro Skill</span> is cast, all team members' ATK is increased by <span className="highlight">20%</span> for <span className="highlight">30s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.polished || false}
+                        onChange={() => toggleState('polished')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

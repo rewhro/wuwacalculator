@@ -166,3 +166,56 @@ export function ZhezhiSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Carve and Draw</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span style={{ color: attributeColors['glacio'], fontWeight: 'bold' }}>Glacio DMG</span> Amplified by <span className="highlight">20%</span> and <span className="highlight">Resonance Skill DMG</span> Amplified by <span className="highlight">25%</span> for <span className="highlight">14s</span> or until they are switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.carveAndDraw || false}
+                        onChange={() => toggleState('carveAndDraw')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Hue's Spectrum</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting <span className="highlight">Resonance Liberation</span> Living Canvas increases ATK of Resonators on the team <span className="highlight">20%</span> for <span className="highlight">30s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.spectrum || false}
+                        onChange={() => toggleState('spectrum')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

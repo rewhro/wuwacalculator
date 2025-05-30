@@ -198,3 +198,56 @@ export function danjinSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Duality</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span style={{ color: attributeColors['havoc'], fontWeight: 'bold' }}>Havoc DMG</span> Amplified by <span className="highlight">23%</span> for 14s or until they are switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.dDuality || false}
+                        onChange={() => toggleState('dDuality')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Bloodied Jade</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Heavy Attack <span className="highlight">Chaoscleave</span> increases the ATK of all team members by <span className="highlight">20%</span> for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.bloodied || false}
+                        onChange={() => toggleState('bloodied')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

@@ -78,3 +78,36 @@ export const ciacconaMultipliers = {
         }
     ]
 };
+
+export function ciacconaBuffsLogic({
+                                    mergedBuffs, characterState, activeCharacter
+                               }) {
+    const state = characterState?.activeStates ?? {};
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    // 1️⃣ Windcalling Tune
+    if (state.windcalling) {
+        mergedBuffs.damageTypeAmplify.aeroErosion = (mergedBuffs.damageTypeAmplify.aeroErosion ?? 0) + 100;
+    }
+
+    // 2️⃣ Solo Concert
+    if (state.concert) {
+        mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 25;
+    }
+
+    // 3️⃣ Song of the Four Seasons
+    if (state.s2) {
+        mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 40;
+    }
+
+    return { mergedBuffs };
+}

@@ -59,3 +59,39 @@ export function CarolottaSequenceToggles({ nodeKey, sequenceToggles, toggleSeque
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Yesterday's Raindrops Make Finest Wine</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting <span className="highlight">Heavy Attack</span>, Heavy Attack <span className="highlight">Containment Tactics</span>, and Heavy Attack <span className="highlight">Imminent Oblivion</span> grants all Resonators in the team <span className="highlight">25% Resonance Skill DMG Bonus</span> for 30s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.raindrops || false}
+                        onChange={() => toggleState('raindrops')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

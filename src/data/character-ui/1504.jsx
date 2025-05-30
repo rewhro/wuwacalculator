@@ -137,3 +137,56 @@ export function lumiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, 
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Escorting</div>
+                </div>
+                <div className="echo-buff-effect">
+                    The incoming Resonator has their <span className="highlight">Resonance Skill DMG</span> Amplified by <span className="highlight">38%</span> for 10s or until they are switched out.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.escorting || false}
+                        onChange={() => toggleState('escorting')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Give Me A Five-star Rating T-T</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting Resonance Liberation <span className="highlight">Squeakie Express</span> increases all team members' ATK by <span className="highlight">20%</span> for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.rating || false}
+                        onChange={() => toggleState('rating')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

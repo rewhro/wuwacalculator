@@ -213,3 +213,39 @@ export function jiyanSequenceToggles({
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Prudence</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When casting Resonance Liberation <span className="highlight">Emerald Storm: Prelude</span> or Resonance Liberation <span className="highlight">Emerald Storm: Finale</span>, the H<span className="highlight">eavy Attack DMG Bonus</span> of all team members is increased by <span className="highlight">25%</span> for 30s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.prudence || false}
+                        onChange={() => toggleState('prudence')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

@@ -1,44 +1,46 @@
-import { applyPheobeLogic, pheobeMultipliers } from './1506.js';
-import { applySanhuaLogic } from './1102.js';
+import {applyPheobeLogic, pheobeBuffsLogic, pheobeMultipliers} from './1506.js';
+import {applySanhuaLogic, sanhuaBuffsLogic} from './1102.js';
 import { applyBaizhiLogic, baizhiMultipliers } from './1103.js';
-import {applyLingyangLogic, lingYangMultipliers} from "./1104.js";
-import {applyLupaLogic} from "./1207.js";
-import {applyZhezhiLogic, zhezhiMultipliers} from "./1105.js";
-import {applyYouhuLogic, youhuMultipliers} from "./1106.js";
-import {applyCarlottaLogic, carlottaMultipliers} from "./1107.js";
-import {applyCartethyiaLogic, cartethyiaMultipliers} from "./1409.js";
-import {applyChixiaLogic, chixiaMultipliers} from "./1202.js";
-import {applyEncoreLogic, encoreMultipliers} from "./1203.js";
-import {applyMortefiLogic, mortefiMultipliers} from "./1204.js";
-import {applyChangliLogic} from "./1205.js";
-import {applyBrantLogic, brantMultipliers} from "./1206.js";
-import {applyCalcharoLogic, calcharoMultipliers} from "./1301.js";
-import {applyYinlinLogic, yinlinMultipliers} from "./1302.js";
-import {applyYuanwuLogic, yuanwuMultipliers} from "./1303.js";
-import {applyJinhsiLogic} from "./1304.js";
-import {applyYaoLogic, yaoMultipliers} from "./1305.js";
-import {applyZaniLogic, zaniMultipliers} from "./1507.js";
-import {applyYangLogic} from "./1402.js";
+import {applyLingyangLogic, lingBuffsLogic, lingYangMultipliers} from "./1104.js";
+import {applyLupaLogic, lupaBuffsLogic} from "./1207.js";
+import {applyZhezhiLogic, zhezhiBuffsLogic, zhezhiMultipliers} from "./1105.js";
+import {applyYouhuLogic, youhuBuffsLogic, youhuMultipliers} from "./1106.js";
+import {applyCarlottaLogic, carlottaBuffsLogic, carlottaMultipliers} from "./1107.js";
+import {applyCartethyiaLogic, cartBuffsLogic, cartethyiaMultipliers} from "./1409.js";
+import {applyChixiaLogic, chixiaBuffsLogic, chixiaMultipliers} from "./1202.js";
+import {applyEncoreLogic, encoreBuffsLogic, encoreMultipliers} from "./1203.js";
+import {applyMortefiLogic, mortefiBuffsLogic, mortefiMultipliers} from "./1204.js";
+import {applyChangliLogic, changliBuffsLogic} from "./1205.js";
+import {applyBrantLogic, brantBuffsLogic, brantMultipliers} from "./1206.js";
+import {applyCalcharoLogic, calcBuffsLogic, calcharoMultipliers} from "./1301.js";
+import {applyYinlinLogic, yinlinBuffsLogic, yinlinMultipliers} from "./1302.js";
+import {applyYuanwuLogic, yuanwuBuffsLogic, yuanwuMultipliers} from "./1303.js";
+import {applyJinhsiLogic, jinhsiBuffsLogic} from "./1304.js";
+import {applyYaoLogic, yaoBuffsLogic, yaoMultipliers} from "./1305.js";
+import {applyZaniLogic, zaniBuffsLogic, zaniMultipliers} from "./1507.js";
+import {applyYangLogic, yangBuffsLogic} from "./1402.js";
 //import {applyAaltoLogic, aaltoMultipliers} from "./1403.js";
-import {applyJiyanLogic, jiyanMultipliers} from "./1404.js";
-import {applyJianxinLogic, jianxinMultipliers} from "./1405.js";
+import {applyJiyanLogic, jiyanBuffsLogic, jiyanMultipliers} from "./1404.js";
+import {applyJianxinLogic, jianxinBuffsLogic, jianxinMultipliers} from "./1405.js";
 import {applyAeroRoverMLogic, aeroRoverMMultipliers} from "./1406.js";
-import {applyCiacconaLogic, ciacconaMultipliers} from "./1407.js";
-import {applySpectroMLogic, spectroMMultipliers} from "./1501.js";
-import {applyVerinaLogic, verinaMultipliers} from "./1503.js";
-import {applyLumiLogic} from "./1504.js";
-import {applySkLogic, skMultipliers} from "./1505.js";
-import {applyTaoqiLogic, taoqiMultipliers} from "./1601.js";
-import {applyDanjinLogic, danjinMultipliers} from "./1602.js";
-import {applyCamellyaLogic, cammellyaMultipliers} from "./1603.js";
+import {ciacconaBuffsLogic, applyCiacconaLogic, ciacconaMultipliers} from "./1407.js";
+import {applySpectroMLogic, spectroMBuffsLogic, spectroMMultipliers} from "./1501.js";
+import {applyVerinaLogic, verinaMultipliers, verinauffsLogic} from "./1503.js";
+import {applyLumiLogic, lumiBuffsLogic} from "./1504.js";
+import {applySkLogic, SKBuffsLogic, skMultipliers} from "./1505.js";
+import {applyTaoqiLogic, taoqiBuffsLogic, taoqiMultipliers} from "./1601.js";
+import {applyDanjinLogic, danjinBuffsLogic, danjinMultipliers} from "./1602.js";
+import {applyCamellyaLogic, camBuffsLogic, cammellyaMultipliers} from "./1603.js";
 
 const overrides = {
     '1506': {
         logic: applyPheobeLogic,
-        multipliers: pheobeMultipliers
+        multipliers: pheobeMultipliers,
+        buffsLogic: pheobeBuffsLogic
     },
     '1102': {
-        logic: applySanhuaLogic
+        logic: applySanhuaLogic,
+        buffsLogic: sanhuaBuffsLogic,
     },
     '1103': {
         logic: applyBaizhiLogic,
@@ -46,79 +48,99 @@ const overrides = {
     },
     "1104": {
         logic: applyLingyangLogic,
-        multipliers: lingYangMultipliers
+        multipliers: lingYangMultipliers,
+        buffsLogic: lingBuffsLogic
     },
     "1207": {
-        logic: applyLupaLogic
+        logic: applyLupaLogic,
+        buffsLogic: lupaBuffsLogic
     },
     "1105": {
         logic: applyZhezhiLogic,
-        multipliers: zhezhiMultipliers
+        multipliers: zhezhiMultipliers,
+        buffsLogic: zhezhiBuffsLogic
     },
     "1106": {
         logic: applyYouhuLogic,
-        multipliers: youhuMultipliers
+        multipliers: youhuMultipliers,
+        buffsLogic: youhuBuffsLogic
     },
     "1107": {
         logic: applyCarlottaLogic,
-        multipliers: carlottaMultipliers
+        multipliers: carlottaMultipliers,
+        buffsLogic: carlottaBuffsLogic
     },
     "1409": {
         logic: applyCartethyiaLogic,
-        multipliers: cartethyiaMultipliers
+        multipliers: cartethyiaMultipliers,
+        buffsLogic: cartBuffsLogic
     },
     "1202": {
         logic: applyChixiaLogic,
-        multipliers: chixiaMultipliers
+        multipliers: chixiaMultipliers,
+        buffsLogic: chixiaBuffsLogic
     },
     "1203": {
         logic: applyEncoreLogic,
-        multipliers: encoreMultipliers
+        multipliers: encoreMultipliers,
+        buffsLogic: encoreBuffsLogic
     },
     "1204": {
         logic: applyMortefiLogic,
-        multipliers: mortefiMultipliers
+        multipliers: mortefiMultipliers,
+        buffsLogic: mortefiBuffsLogic
     },
     "1205": {
-        logic: applyChangliLogic
+        logic: applyChangliLogic,
+        buffsLogic: changliBuffsLogic
     },
     "1206": {
         logic: applyBrantLogic,
-        multipliers: brantMultipliers
+        multipliers: brantMultipliers,
+        buffsLogic: brantBuffsLogic
     },
     "1301": {
         logic: applyCalcharoLogic,
-        multipliers: calcharoMultipliers
+        multipliers: calcharoMultipliers,
+        buffsLogic: calcBuffsLogic
     },
     "1302": {
         logic: applyYinlinLogic,
-        multipliers: yinlinMultipliers
+        multipliers: yinlinMultipliers,
+        buffsLogic: yinlinBuffsLogic
     },
     "1303": {
         logic: applyYuanwuLogic,
-        multipliers: yuanwuMultipliers
+        multipliers: yuanwuMultipliers,
+        buffsLogic: yuanwuBuffsLogic,
     },
     "1304": {
-        logic: applyJinhsiLogic
+        logic: applyJinhsiLogic,
+        buffsLogic: jinhsiBuffsLogic
     },
     "1305": {
         logic: applyYaoLogic,
-        multipliers: yaoMultipliers
+        multipliers: yaoMultipliers,
+        buffsLogic: yaoBuffsLogic,
     },
     "1507": {
         logic: applyZaniLogic,
-        multipliers: zaniMultipliers
+        multipliers: zaniMultipliers,
+        buffsLogic: zaniBuffsLogic
     },
     "1402": {
-        logic: applyYangLogic
+        logic: applyYangLogic,
+        buffsLogic: yangBuffsLogic
     },
     "1404": {
         logic: applyJiyanLogic,
-        multipliers: jiyanMultipliers
+        multipliers: jiyanMultipliers,
+        buffsLogic: jiyanBuffsLogic
     },
     "1405": {
         logic: applyJianxinLogic,
-        multipliers: jianxinMultipliers
+        multipliers: jianxinMultipliers,
+        buffsLogic: jianxinBuffsLogic
     },
     "1406": {
         logic: applyAeroRoverMLogic,
@@ -130,38 +152,47 @@ const overrides = {
     },
     "1407": {
         logic: applyCiacconaLogic,
-        multipliers: ciacconaMultipliers
+        multipliers: ciacconaMultipliers,
+        buffsLogic: ciacconaBuffsLogic
     },
     "1501": {
         logic: applySpectroMLogic,
-        multipliers: spectroMMultipliers
+        multipliers: spectroMMultipliers,
+        buffsLogic: spectroMBuffsLogic
     },
     "1502": {
         logic: applySpectroMLogic,
-        multipliers: spectroMMultipliers
+        multipliers: spectroMMultipliers,
+        buffsLogic: spectroMBuffsLogic
     },
     "1503": {
         logic: applyVerinaLogic,
-        multipliers: verinaMultipliers
+        multipliers: verinaMultipliers,
+        buffsLogic: verinauffsLogic
     },
     "1504": {
-        logic: applyLumiLogic
+        logic: applyLumiLogic,
+        buffsLogic: lumiBuffsLogic
     },
     "1505": {
         logic: applySkLogic,
-        multipliers: skMultipliers
+        multipliers: skMultipliers,
+        buffsLogic: SKBuffsLogic
     },
     "1601": {
         logic: applyTaoqiLogic,
-        multipliers: taoqiMultipliers
+        multipliers: taoqiMultipliers,
+        buffsLogic: taoqiBuffsLogic
     },
     "1602": {
         logic: applyDanjinLogic,
-        multipliers: danjinMultipliers
+        multipliers: danjinMultipliers,
+        buffsLogic: danjinBuffsLogic
     },
     "1603": {
         logic: applyCamellyaLogic,
-        multipliers: cammellyaMultipliers
+        multipliers: cammellyaMultipliers,
+        buffsLogic: camBuffsLogic
     },
 };
 
@@ -171,4 +202,8 @@ export function getCharacterOverride(charId) {
 
 export function getHardcodedMultipliers(charId) {
     return overrides[String(charId)]?.multipliers ?? {};
+}
+
+export function getBuffsLogic(charId) {
+    return overrides[String(charId)]?.buffsLogic ?? null;
 }

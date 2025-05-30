@@ -137,3 +137,73 @@ export function verinaSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Inherent Skill: Grace of Life</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When Verina casts Heavy Attack <span className="highlight">Starflower Blooms</span>, Mid-air Attack Starflower <span className="highlight">Blooms</span>, Resonance Liberation <span className="highlight">Arboreal Flourish</span> or Outro Skill <span className="highlight">Blossom</span>, all team members' ATK are increased by <span className="highlight">20%</span> for <span className="highlight">20s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.graceOfLife || false}
+                        onChange={() => toggleState('graceOfLife')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Outro Skill: Blossom</div>
+                </div>
+                <div className="echo-buff-effect">
+                    All Resonators on nearby teams have their DMG Amplified by <span className="highlight">15%</span> for <span className="highlight">30s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.blossom || false}
+                        onChange={() => toggleState('blossom')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Blossoming Embrace</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Heavy Attack <span className="highlight">Starflower Blooms</span>, Mid-Air Attack <span className="highlight">Starflower Blooms</span>, Resonance Liberation <span className="highlight">Arboreal Flourish</span> and Outro Skill <span className="highlight">Blossom</span> increases the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro DMG Bonus</span> of all team members by <span className="highlight">15%</span> for <span className="highlight">24s</span>.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.blossoming || false}
+                        onChange={() => toggleState('blossoming')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

@@ -30,3 +30,39 @@ export function yuanwuSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S6: Defender of All Realms</div>
+                </div>
+                <div className="echo-buff-effect">
+                    All team members nearby within the range of Resonance Skill <span className="highlight">Thunder Wedge</span> will gain a <span className="highlight">32%</span> DEF increase, lasting 3s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.defender || false}
+                        onChange={() => toggleState('defender')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

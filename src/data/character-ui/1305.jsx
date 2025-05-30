@@ -154,3 +154,39 @@ export function yoaSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, c
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Vessel of Rebirth</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting Resonance Liberation <span className="highlight">Cogitation Model</span> grants a <span className="highlight">25%</span> DMG Bonus to all team members' <span className="highlight">Resonance Liberation</span> for 30s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.rebirth || false}
+                        onChange={() => toggleState('rebirth')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}

@@ -4,6 +4,8 @@ import CharacterMenu from './CharacterMenu';
 import ExpandableSection from "./Expandable.jsx";
 import EchoBuffs from "./EchoBuffs.jsx";
 import WeaponBuffs from "./WeaponBuffs.jsx";
+import {loadCharacterBuffUI} from "../data/character-ui/index.js";
+import { attributeColors } from '../utils/attributeHelpers';
 
 export default function BuffsPane({
                                       characters,
@@ -52,6 +54,30 @@ export default function BuffsPane({
         const character = characters.find(c => String(c.link) === String(charId));
         return character?.displayName ?? '';
     };
+
+    const [characterBuffUIs, setCharacterBuffUIs] = useState({});
+
+    useEffect(() => {
+        const loadAllBuffUIs = async () => {
+            const results = {};
+            const teammateIds = team.slice(1).filter(Boolean);
+
+            for (const id of teammateIds) {
+                try {
+                    const mod = await loadCharacterBuffUI(id);
+                    if (mod) {
+                        results[id] = mod;
+                    }
+                } catch (err) {
+                    console.warn(`No buffUI for character ${id}`, err);
+                }
+            }
+
+            setCharacterBuffUIs(results);
+        };
+
+        loadAllBuffUIs();
+    }, [team]);
 
     return (
         <div className="team-pane">
@@ -102,6 +128,37 @@ export default function BuffsPane({
                     setCharacterRuntimeStates={setCharacterRuntimeStates}
                 />
             </ExpandableSection>
+
+            {team.slice(1).map((id, idx) => {
+                if (!id || !characterBuffUIs[id]) return null;
+
+                const TeammateBuffUI = characterBuffUIs[id];
+                const states = characterRuntimeStates?.[id]?.activeStates ?? {};
+                const toggle = (key) => {
+                    setCharacterRuntimeStates(prev => ({
+                        ...prev,
+                        [id]: {
+                            ...(prev[id] ?? {}),
+                            activeStates: {
+                                ...(prev[id]?.activeStates ?? {}),
+                                [key]: !(prev[id]?.activeStates?.[key] ?? false)
+                            }
+                        }
+                    }));
+                };
+
+                return (
+                    <ExpandableSection key={id} title={`${getCharacterName(id)} Buffs`}>
+                        <TeammateBuffUI
+                            activeStates={states}
+                            toggleState={toggle}
+                            charId={id}
+                            setCharacterRuntimeStates={setCharacterRuntimeStates}
+                            attributeColors={attributeColors}
+                        />
+                    </ExpandableSection>
+                );
+            })}
 
             {characterMenuOpen && (
                 <CharacterMenu

@@ -110,3 +110,34 @@ export const verinaMultipliers = {
         }
     ]
 };
+
+
+export function verinauffsLogic({
+                                     mergedBuffs, characterState, activeCharacter
+                                 }) {
+    const state = characterState?.activeStates ?? {};
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.graceOfLife) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 20;
+    }
+
+    if (state.blossom) {
+        mergedBuffs.elementDmgAmplify[element] = (mergedBuffs.elementDmgAmplify[element] ?? 0) + 15;
+    }
+
+    if (state.blossoming) {
+        mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 15;
+    }
+
+    return { mergedBuffs };
+}

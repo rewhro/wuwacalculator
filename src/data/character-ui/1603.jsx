@@ -89,3 +89,39 @@ export function camellyaSequenceToggles({ nodeKey, sequenceToggles, toggleSequen
         </label>
     );
 }
+
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
+                }
+            }
+        }));
+    };
+
+    return (
+        <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">S4: Roots Set Deep In Eternity</div>
+                </div>
+                <div className="echo-buff-effect">
+                    Casting <span className="highlight">Everblooming</span> gives all team members <span className="highlight">25% Basic Attack DMG Bonus</span> for 30s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.eternity || false}
+                        onChange={() => toggleState('eternity')}
+                    />
+                    Enable
+                </label>
+            </div>
+        </div>
+    );
+}
