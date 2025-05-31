@@ -267,7 +267,7 @@ export default function CharacterSelector({
                             })}
                     </div>
                     {CustomCharacterUI && (
-                        <div className="inherent-skills-box">
+                        <div className="echo-buff">
                             <CustomCharacterUI
                                 activeStates={activeStates}
                                 toggleState={toggleState}

@@ -308,7 +308,7 @@ export default function Calculator() {
         const result = buffsLogic({
             mergedBuffs,
             characterState,
-            activeCharacter
+            activeCharacter, combatState
         });
 
         if (result?.mergedBuffs) {

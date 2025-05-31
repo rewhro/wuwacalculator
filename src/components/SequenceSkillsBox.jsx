@@ -42,12 +42,12 @@ export default function SequenceSkillsBox({
 
     return (
         <div className="inherent-skills-box">
-            <h3>Resonance Chain</h3>
+            <h2>Resonance Chain</h2>
 
-            <div className="inherent-skills">
+            <div className="echo-buff">
                 {unlockedChains.map(([key, chain]) => (
                     <div key={key} className="inherent-skill">
-                        <h4>Sequence Node {key}: {chain.Name}</h4>
+                        <h3>Sequence Node {key}: {chain.Name}</h3>
                         <p dangerouslySetInnerHTML={{
                             __html: formatDescription(chain.Desc, chain.Param, currentSliderColor)
                         }} />

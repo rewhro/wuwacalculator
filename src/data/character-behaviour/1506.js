@@ -19,6 +19,9 @@ export function applyPheobeLogic({
         ...skillMeta
     };
 
+    const name = skillMeta.name?.toLowerCase();
+    const tab = skillMeta.tab ?? '';
+
     const state =
         characterState?.activeStates?.absolution
             ? 'Absolution'
@@ -63,9 +66,9 @@ export function applyPheobeLogic({
             skillMeta.multiplier *= scale;
         }
 
-        if (skillMeta.skillType === 'outro' && combatState.spectroFrazzle > 0) {
+        if (tab === 'outroSkill' && combatState.spectroFrazzle > 0) {
             if (!mergedBuffs.__pheobeOutroApplied && isActiveSequence(2)) {
-                mergedBuffs.outroAmplify = (mergedBuffs.outroAmplify ?? 0) + 120;
+                mergedBuffs.damageTypeAmplify.outro = (mergedBuffs.damageTypeAmplify.outro ?? 0) + 120;
                 mergedBuffs.__pheobeOutroApplied = true;
             }
             skillMeta.multiplier *= (1 + 2.55);

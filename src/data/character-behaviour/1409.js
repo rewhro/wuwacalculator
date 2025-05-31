@@ -31,9 +31,11 @@ export function applyCartethyiaLogic({
         skillMeta.skillType = ['basic'];
         if (name === 'sword to answer waves\' call dmg') {
             skillMeta.skillType = ['skill'];
-        } else if (tab === 'forteCircuit' && name.includes('heavy attack')) {
+        } else if (name.includes('heavy attack')) {
             skillMeta.skillType = ['heavy'];
         }
+    } if (tab === 'normalAttack' && name.includes('heavy')) {
+        skillMeta.skillType = ['heavy', 'aeroErosion'];
     }
 
     if (!characterState?.activeStates?.manifestActive) {
@@ -118,7 +120,7 @@ export const cartethyiaMultipliers = {
 };
 
 export function cartBuffsLogic({
-                                      mergedBuffs, characterState, activeCharacter
+                                      mergedBuffs, characterState, activeCharacter, combatState
                                   }) {
     const state = characterState?.activeStates ?? {};
     const elementMap = {
@@ -138,6 +140,11 @@ export function cartBuffsLogic({
     if (state.sacrifice) {
         mergedBuffs[element] = (mergedBuffs[element] ?? 0) + 20;
     }
+
+    if (state.blessing && (combatState.aeroErosion > 0 || combatState.spectroFrazzle > 0)) {
+        mergedBuffs.elementDmgAmplify.aero = (mergedBuffs.elementDmgAmplify.aero ?? 0) + 17.5;
+    }
+
 
     return { mergedBuffs };
 }

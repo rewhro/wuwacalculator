@@ -124,7 +124,24 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
         <div className="echo-buffs">
             <div className="echo-buff">
                 <div className="echo-buff-header">
-                    <div className="echo-buff-name">Inherent Skill: A Heart's Truest WishesOutro Skill: Transcendence</div>
+                    <div className="echo-buff-name">Outro Skill: Wind's Divine Blessing</div>
+                </div>
+                <div className="echo-buff-effect">
+                    <span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero DMG</span> dealt by the active Resonator in the team other than <span className="highlight">Cartethyia</span>/<span className="highlight">Fleurdelys</span> to targets with <span className="highlight">Negative Statuses</span> is Amplified by <span className="highlight">17.5%</span> for 20s.
+                </div>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.blessing || false}
+                        onChange={() => toggleState('blessing')}
+                    />
+                    Enable
+                </label>
+            </div>
+
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Inherent Skill: A Heart's Truest Wishes</div>
                 </div>
                 <div className="echo-buff-effect">
                     When <span className="highlight">Cartethyia</span>'s <span className="highlight">Outro Skill</span> is triggered, the healing received by all Resonators other than <span className="highlight">Cartethyia</span>/<span className="highlight">Fleurdelys</span> in the team is increased by <span className="highlight">20%</span>. If <span className="highlight">Rover</span> is in the team, <span className="highlight">Rover</span>'s resistance to interruption is increased.

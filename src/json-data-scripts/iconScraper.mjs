@@ -1,45 +1,56 @@
-// iconScraper.mjs
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import https from 'https';
 
-// Get __dirname equivalent in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const OUTPUT_DIR = path.resolve(__dirname, '../data/iconLinks.json');
+// Paths
+const ICONS_DIR = path.resolve(__dirname, '../char-icons');
+const OUTPUT_JSON = path.resolve(__dirname, '../data/iconLinks.json');
 const baseUrl = 'https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_';
 
-async function checkUrl(id) {
-    const url = `${baseUrl}${id}_UI.webp`;
-    try {
-        const response = await fetch(url, { method: 'HEAD' });
-        if (response.ok) {
-            console.log(`✅ Found: ${url}`);
-            return url;
-        } else {
-            console.warn(`❌ Not found: ${url}`);
-            return null;
-        }
-    } catch (err) {
-        console.error(`⚠️ Error fetching ${url}`, err);
-        return null;
-    }
+// Ensure icons directory exists
+if (!fs.existsSync(ICONS_DIR)) {
+    fs.mkdirSync(ICONS_DIR, { recursive: true });
+}
+
+async function downloadImage(url, dest) {
+    return new Promise((resolve, reject) => {
+        https.get(url, (res) => {
+            if (res.statusCode !== 200) return resolve(false); // ✅ skip without error
+
+            const fileStream = fs.createWriteStream(dest);
+            res.pipe(fileStream);
+            fileStream.on('finish', () => {
+                fileStream.close();
+                resolve(true);
+            });
+        }).on('error', (err) => {
+            resolve(false); // ✅ skip without error
+        });
+    });
 }
 
 async function run() {
-    console.log('🌐 Starting fixed range icon scan...');
+    const foundIcons = [];
 
-    const links = [];
+    for (let id = 1; id <= 50; id++) {
+        const url = `${baseUrl}${id}_UI.webp`;
+        const dest = path.join(ICONS_DIR, `${id}.webp`);
+        const downloaded = await downloadImage(url, dest);
 
-    for (let id = 1; id <= 40; id++) {
-        const result = await checkUrl(id);
-        if (result) links.push({ id, url: result });
+        if (downloaded) {
+            console.log(`✅ Downloaded icon ${id}`);
+            foundIcons.push({ id, url: `/icons/${id}.webp` });
+        } else {
+            console.log(`❌ Not found: ${id}`);
+        }
     }
 
-    // Save to file
-    fs.writeFileSync(OUTPUT_DIR, JSON.stringify(links, null, 2));
-    console.log(`✅ Saved ${links.length} icon links to ${OUTPUT_DIR}`);
+    //fs.writeFileSync(OUTPUT_JSON, JSON.stringify(foundIcons, null, 2));
+    console.log(`📦 Saved ${foundIcons.length} icon links to ${OUTPUT_JSON}`);
 }
 
 run();

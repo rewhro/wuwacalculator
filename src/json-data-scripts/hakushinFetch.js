@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const hakushinFilePath = path.resolve(__dirname, '../data/characters.json');
 
-export async function fetchHakushinCharacters() {
+async function run() {
     try {
         const fileContents = await fs.readFile(hakushinFilePath, 'utf-8');
         const data = JSON.parse(fileContents);
