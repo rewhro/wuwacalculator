@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {Sun, Moon, Sparkle, Info, Settings, History} from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
+import ResetSettingsButton from '../components/ResetSettingsButton.jsx';
 
 export default function Setting() {
     const navigate = useNavigate();
@@ -187,6 +188,11 @@ export default function Setting() {
                                 {importSuccess}
                             </p>
                         )}
+                        <h2>Delete All Data</h2>
+                        <p style={{ marginBottom: '1rem' }}>
+                            Reset all saved characters, weapons, and buffs. This action is irreversible.
+                        </p>
+                        <ResetSettingsButton />
                     </div>
                 </div>
             </div>

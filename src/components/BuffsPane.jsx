@@ -123,7 +123,7 @@ export default function BuffsPane({
                                 )}
 
                                 {/* ✅ "X" button for teammates only */}
-                                {!isDisabled && (
+                                {!isDisabled && character && (
                                     <button
                                         className="remove-teammate-button"
                                         onClick={(e) => {

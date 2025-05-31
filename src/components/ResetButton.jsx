@@ -1,24 +1,19 @@
-import { useState } from 'react';
-import { RotateCcw } from 'lucide-react';
+import {useState} from "react";
+import {RotateCcw} from "lucide-react";
 
 export default function ResetButton() {
     const [resetModalOpen, setResetModalOpen] = useState(false);
 
     const handleReset = () => {
-        localStorage.clear();
-        localStorage.setItem('enemyLevel', JSON.stringify(1));
-        localStorage.setItem('enemyRes', JSON.stringify(0));
-        localStorage.setItem('characterRuntimeStates', JSON.stringify({}));
-        localStorage.setItem('sliderValues', JSON.stringify({
-            normalAttack: 1,
-            resonanceSkill: 1,
-            forteCircuit: 1,
-            resonanceLiberation: 1,
-            introSkill: 1,
-            sequence: 0
-        }));
-        localStorage.setItem('activeCharacterId', JSON.stringify(1506));
-        window.location.href = window.location.href;
+        const activeId = JSON.parse(localStorage.getItem('activeCharacterId') || 'null');
+        if (!activeId) return;
+
+        const runtime = JSON.parse(localStorage.getItem('characterRuntimeStates') || '{}');
+        const updatedRuntime = { ...runtime };
+        delete updatedRuntime[activeId]; // ❌ Remove just the active character
+
+        localStorage.setItem('characterRuntimeStates', JSON.stringify(updatedRuntime));
+        window.location.href = window.location.href; // 🔁 Refresh to reset state
     };
 
     return (
@@ -35,13 +30,9 @@ export default function ResetButton() {
             {resetModalOpen && (
                 <div className="skills-modal-overlay" onClick={() => setResetModalOpen(false)}>
                     <div className="skills-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h3>...you sure?</h3>
-                        <p>
-                            this will clear all data and reset everything to it's default state.
-                        </p>
-                        <p>EVERYTHING</p>
+                        <h2>Reset Character?</h2>
                         <div className="reset-modal-actions">
-                            <button className="btn-danger" onClick={handleReset}>clear it all...</button>
+                            <button className="btn-danger" onClick={handleReset}>Reset Character</button>
                         </div>
                     </div>
                 </div>

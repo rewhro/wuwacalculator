@@ -1,6 +1,6 @@
 import {applyPheobeLogic, pheobeBuffsLogic, pheobeMultipliers} from './1506.js';
 import {applySanhuaLogic, sanhuaBuffsLogic} from './1102.js';
-import { applyBaizhiLogic, baizhiMultipliers } from './1103.js';
+import {applyBaizhiLogic, baizhiBuffsLogic, baizhiMultipliers} from './1103.js';
 import {applyLingyangLogic, lingBuffsLogic, lingYangMultipliers} from "./1104.js";
 import {applyLupaLogic, lupaBuffsLogic} from "./1207.js";
 import {applyZhezhiLogic, zhezhiBuffsLogic, zhezhiMultipliers} from "./1105.js";
@@ -19,7 +19,6 @@ import {applyJinhsiLogic, jinhsiBuffsLogic} from "./1304.js";
 import {applyYaoLogic, yaoBuffsLogic, yaoMultipliers} from "./1305.js";
 import {applyZaniLogic, zaniBuffsLogic, zaniMultipliers} from "./1507.js";
 import {applyYangLogic, yangBuffsLogic} from "./1402.js";
-//import {applyAaltoLogic, aaltoMultipliers} from "./1403.js";
 import {applyJiyanLogic, jiyanBuffsLogic, jiyanMultipliers} from "./1404.js";
 import {applyJianxinLogic, jianxinBuffsLogic, jianxinMultipliers} from "./1405.js";
 import {applyAeroRoverMLogic, aeroRoverMMultipliers} from "./1406.js";
@@ -31,6 +30,10 @@ import {applySkLogic, SKBuffsLogic, skMultipliers} from "./1505.js";
 import {applyTaoqiLogic, taoqiBuffsLogic, taoqiMultipliers} from "./1601.js";
 import {applyDanjinLogic, danjinBuffsLogic, danjinMultipliers} from "./1602.js";
 import {applyCamellyaLogic, camBuffsLogic, cammellyaMultipliers} from "./1603.js";
+import {applyHavocWLogic, havocWBuffsLogic, havocWMultipliers} from "./1604.js";
+import {applyRocciaLogic, rocciaBuffsLogic, rocciaMultipliers} from "./1606.js";
+import {applyCantLogic, cantBuffsLogic, cantMultipliers} from "./1607.js";
+import {applyAaltoLogic, aaltoMultipliers, aaltoBuffsLogic} from "./1403.js";
 
 const overrides = {
     '1506': {
@@ -44,7 +47,8 @@ const overrides = {
     },
     '1103': {
         logic: applyBaizhiLogic,
-        multipliers: baizhiMultipliers
+        multipliers: baizhiMultipliers,
+        buffsLogic: baizhiBuffsLogic
     },
     "1104": {
         logic: applyLingyangLogic,
@@ -132,6 +136,11 @@ const overrides = {
         logic: applyYangLogic,
         buffsLogic: yangBuffsLogic
     },
+    "1403": {
+        logic: applyAaltoLogic,
+        multipliers: aaltoMultipliers,
+        buffsLogic: aaltoBuffsLogic
+    },
     "1404": {
         logic: applyJiyanLogic,
         multipliers: jiyanMultipliers,
@@ -194,6 +203,26 @@ const overrides = {
         multipliers: cammellyaMultipliers,
         buffsLogic: camBuffsLogic
     },
+    "1604": {
+        logic: applyHavocWLogic,
+        multipliers: havocWMultipliers,
+        buffsLogic: havocWBuffsLogic
+    },
+    "1605": {
+        logic: applyHavocWLogic,
+        multipliers: havocWMultipliers,
+        buffsLogic: havocWBuffsLogic
+    },
+    "1606": {
+        logic: applyRocciaLogic,
+        multipliers: rocciaMultipliers,
+        buffsLogic: rocciaBuffsLogic
+    },
+    "1607": {
+        logic: applyCantLogic,
+        multipliers: cantMultipliers,
+        buffsLogic: cantBuffsLogic
+    }
 };
 
 export function getCharacterOverride(charId) {

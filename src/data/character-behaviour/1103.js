@@ -133,3 +133,33 @@ export const baizhiMultipliers = {
         }
     ]
 };
+
+export function baizhiBuffsLogic({
+                                    mergedBuffs, characterState, activeCharacter
+                                }) {
+    const state = characterState?.activeStates ?? {};
+
+    const elementMap = {
+        1: 'glacio',
+        2: 'fusion',
+        3: 'electro',
+        4: 'aero',
+        5: 'spectro',
+        6: 'havoc'
+    };
+    const element = elementMap?.[activeCharacter?.attribute];
+
+    if (state.euphonia) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 15;
+    }
+
+    if (state.rejuvinating) {
+        mergedBuffs.elementDmgAmplify[element] = (mergedBuffs.elementDmgAmplify[element] ?? 0) + 15;
+    }
+
+    if (state.devotion) {
+        mergedBuffs.glacio = (mergedBuffs.glacio ?? 0) + 12;
+    }
+
+    return { mergedBuffs };
+}

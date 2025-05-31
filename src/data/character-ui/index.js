@@ -30,6 +30,10 @@ import SkUI, {CustomInherentSkills as SkInherents, skSequenceToggles} from "./15
 import {CustomInherentSkills as TaoqiInherents, taoqiSequenceToggles} from "./1601.jsx";
 import DanjinUI, {CustomInherentSkills as DanjinInherents, danjinSequenceToggles} from "./1602.jsx";
 import CamellyaUI, {camellyaSequenceToggles} from "./1603.jsx";
+import {havocWSequenceToggles, CustomInherentSkills as HavocInherents} from "./1604.jsx";
+import RocciaUI, {rocciaSequenceToggles, CustomInherentSkills as RocciaInherents} from "./1606.jsx";
+import {cantSequenceToggles, CustomInherentSkills as CantInherents} from "./1607.jsx";
+import AaltoUI, {aaltoSequenceToggles, CustomInherentSkills as AaltoInherents} from "./1403.jsx";
 
 
 export function getCharacterUIComponent(characterId) {
@@ -50,6 +54,8 @@ export function getCharacterUIComponent(characterId) {
         case '1505': return SkUI;
         case '1602': return DanjinUI;
         case '1603': return CamellyaUI;
+        case '1606': return RocciaUI;
+        case '1403': return AaltoUI;
         default: return null;
     }
 }
@@ -82,6 +88,9 @@ export function getCustomInherentSkillsComponent(characterId) {
         case '1505': return SkInherents;
         case '1601': return TaoqiInherents;
         case '1602': return DanjinInherents;
+        case '1604': return HavocInherents;
+        case '1607': return CantInherents;
+        case '1403': return AaltoInherents;
         default: return null;
     }
 }
@@ -122,13 +131,18 @@ export function getSequenceToggleComponent(characterId) {
         case '1601': return taoqiSequenceToggles;
         case '1602': return danjinSequenceToggles;
         case '1603': return camellyaSequenceToggles;
+        case '1604': return havocWSequenceToggles;
+        case '1605': return havocWSequenceToggles;
+        case '1606': return rocciaSequenceToggles;
+        case '1607': return cantSequenceToggles;
+        case '1403': return aaltoSequenceToggles;
         default: return null;
     }
 }
 
 const characterBuffUIMap = {
     '1102': () => import('./1102.jsx').then(mod => mod.buffUI),
-    //'1103': () => import('./1103.jsx').then(mod => mod.buffUI),
+    '1103': () => import('./1103.jsx').then(mod => mod.buffUI),
     '1407': () => import('./1407.jsx').then(mod => mod.buffUI),
     '1505': () => import('./1505.jsx').then(mod => mod.buffUI),
     '1105': () => import('./1105.jsx').then(mod => mod.buffUI),
@@ -159,7 +173,11 @@ const characterBuffUIMap = {
     '1601': () => import('./1601.jsx').then(mod => mod.buffUI),
     '1602': () => import('./1602.jsx').then(mod => mod.buffUI),
     '1603': () => import('./1603.jsx').then(mod => mod.buffUI),
-
+    '1604': () => import('./1604.jsx').then(mod => mod.buffUI),
+    '1605': () => import('./1604.jsx').then(mod => mod.buffUI),
+    '1606': () => import('./1606.jsx').then(mod => mod.buffUI),
+    '1607': () => import('./1607.jsx').then(mod => mod.buffUI),
+    '1403': () => import('./1403.jsx').then(mod => mod.buffUI)
     // add other character IDs here
 };
 

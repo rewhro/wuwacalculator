@@ -1,17 +1,28 @@
-// src/data/character-ui/1103.jsx
-import React from 'react';
-import { formatDescription } from "../../utils/formatDescription.js";
+import React from "react";
+import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {formatDescription} from "../../utils/formatDescription.js";
+
+export default function HavocWUI({ characterRuntimeStates, setCharacterRuntimeStates, charId, activeStates, toggleState }) {
+    const hasToggles = false; // set to `false` if no actual toggles for this character yet
+
+    if (!hasToggles) return null; // prevents empty box rendering
+
+    return (
+        <div className="status-toggles">
+            {/* Your checkboxes and toggle logic here */}
+        </div>
+    );
+}
 
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates,
-                                         charLevel = 1,                     // 👈 passed from CharacterSelector
-                                         unlockLevels = [50, 70]           // 👈 optional override array
+                                         setCharacterRuntimeStates
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+    const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
 
     const toggleState = (key) => {
         setCharacterRuntimeStates(prev => ({
@@ -21,6 +32,19 @@ export function CustomInherentSkills({
                 activeStates: {
                     ...(prev[charId]?.activeStates ?? {}),
                     [key]: !(prev[charId]?.activeStates?.[key] ?? false)
+                }
+            }
+        }));
+    };
+
+    const updateState = (key, value) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    [key]: value
                 }
             }
         }));
@@ -36,13 +60,14 @@ export function CustomInherentSkills({
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
-                const unlockLevel = unlockLevels[index] ?? 1;
+                const lowerName = name.toLowerCase();
+
+                const metamorph = lowerName.includes("metamorph");
+                const unlockLevel = metamorph ? 50 : 70;
                 const locked = charLevel < unlockLevel;
 
-                // Force toggle off if locked
-                const toggleKey = index === 0 ? 'inherent1' : index === 1 ? 'inherent2' : null;
-                if (locked && toggleKey && activeStates?.[toggleKey]) {
-                    toggleState(toggleKey);
+                if (locked) {
+                    if (metamorph && activeStates.inherent2) updateState('inherent1', false);
                 }
 
                 return (
@@ -58,21 +83,26 @@ export function CustomInherentSkills({
                             }}
                         />
 
-                        {toggleKey && (
+                        {metamorph && (
                             <label className="modern-checkbox">
                                 <input
                                     type="checkbox"
-                                    checked={activeStates[toggleKey] ?? false}
-                                    onChange={() => !locked && toggleState(toggleKey)}
+                                    checked={activeStates.inherent1 ?? false}
+                                    onChange={() => !locked && toggleState('inherent1')}
                                     disabled={locked}
                                 />
                                 Enable
                                 {locked && (
                                     <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
-                            (Unlocks at Lv. {unlockLevel})
-                        </span>
+                                        (Unlocks at Lv. {unlockLevel})
+                                    </span>
                                 )}
                             </label>
+                        )}
+                        {!metamorph && locked && (
+                            <span style={{ fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
+                            </span>
                         )}
                     </div>
                 );
@@ -81,9 +111,8 @@ export function CustomInherentSkills({
     );
 }
 
-export function BaizhiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
-    const validKeys = ['2', '3', '4', '6'];
-    if (!validKeys.includes(String(nodeKey))) return null;
+export function havocWSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
+    if (!['4', '6'].includes(String(nodeKey))) return null;
 
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
@@ -100,8 +129,6 @@ export function BaizhiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence
         </label>
     );
 }
-
-
 
 export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
     const updateState = (key, value) => {
@@ -121,51 +148,16 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
         <div className="echo-buffs">
             <div className="echo-buff">
                 <div className="echo-buff-header">
-                    <div className="echo-buff-name">Euphonia</div>
+                    <div className="echo-buff-name">S4: Annihilated Silence</div>
                 </div>
                 <div className="echo-buff-effect">
-                    ATK of the Resonators who pick up Euphonia is increased by <span className="highlight">15%</span> for 20s.
+                    Heavy Attack <span className="highlight">Devastation</span> and Resonance Liberation <span className="highlight">Deadening Abyss</span> reduces enemy's <span style={{ color: attributeColors['havoc'], fontWeight: 'bold' }}>Havoc RES</span> by <span className="highlight">10%</span> for 20s on hit.
                 </div>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
-                        checked={activeStates.euphonia || false}
-                        onChange={() => toggleState('euphonia')}
-                    />
-                    Enable
-                </label>
-            </div>
-
-            <div className="echo-buff">
-                <div className="echo-buff-header">
-                    <div className="echo-buff-name">Outro Skill: Rejuvinating Flow</div>
-                </div>
-                <div className="echo-buff-effect">
-                    The healed Resonator has their DMG Amplified by <span className="highlight">15%</span> for 6s.
-                </div>
-                <label className="modern-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={activeStates.rejuvinating || false}
-                        onChange={() => toggleState('rejuvinating')}
-                    />
-                    Enable
-                </label>
-            </div>
-
-            <div className="echo-buff">
-                <div className="echo-buff-header">
-                    <div className="echo-buff-name">S6: Seeker's Devotion</div>
-                </div>
-                <div className="echo-buff-effect">
-                    When <span className="highlight">Euphonia</span> is picked up, increase the <span style={{ color: attributeColors['glacio'], fontWeight: 'bold' }}>Glacio DMG Bonus</span> of all characters nearby by <span className="highlight">12%</span> for 20s.
-                </div>
-                <label className="modern-checkbox" style={{ opacity: !activeStates.euphonia ? 0.5 : 1 }}>
-                    <input
-                        type="checkbox"
-                        checked={activeStates.devotion || false}
-                        onChange={() => toggleState('devotion')}
-                        disabled={!activeStates.euphonia}
+                        checked={activeStates.annihilated || false}
+                        onChange={() => toggleState('annihilated')}
                     />
                     Enable
                 </label>

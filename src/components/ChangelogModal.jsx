@@ -230,6 +230,31 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `Added weapon buffs.`
                 }
             ]
+        },
+        {
+            date: '30/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `<strong>Rover: Havoc Waifu</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Rover: Havoc Husbando</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Roccia</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `<strong>Cantarella</strong> is now fully functional.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `Added character buffs.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

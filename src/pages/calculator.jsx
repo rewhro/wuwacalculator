@@ -13,7 +13,7 @@ import EnemyPane from '../components/EnemyPane';
 import BuffsPane from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
 import ToolbarIconButton from '../components/ToolbarIconButton';
-import ResetButton from '../components/ResetButton';
+import ResetButton from '../components/ResetButton.jsx';
 import { getStatsForLevel } from '../utils/getStatsForLevel';
 import { attributeColors, attributeIcons, elementToAttribute } from '../utils/attributeHelpers';
 import { getFinalStats } from '../utils/getStatsForLevel';
@@ -31,7 +31,7 @@ import {applyWeaponBuffLogic} from "../data/buffs/weaponBuffs.js";
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-29 19:16';
+    const LATEST_CHANGELOG_VERSION = '2025-05-30 23:30';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
