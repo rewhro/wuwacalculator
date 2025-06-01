@@ -39,8 +39,6 @@
 }
 
 .toolbar-icon-button img {
-    width: 50%;
-    height: 50%;
     object-fit: contain;
 }
 
@@ -116,7 +114,7 @@
 
 .sidebar {
     height: 100%;
-    width: 180px;
+    width: 220px;
     background-color: #f9f9f9;
     transition: width 0.3s ease;
     overflow: hidden;
@@ -375,7 +373,7 @@
     padding-left: 8px;
     font-size: 16px;
     overflow: hidden;
-    max-width: 120px;
+    max-width: 180px;
     transition: max-width 0.3s ease;
 }
 

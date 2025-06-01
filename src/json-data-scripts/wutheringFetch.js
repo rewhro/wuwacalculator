@@ -27,8 +27,6 @@ export async function fetchCharacters() {
             };
         });
 
-        console.log(characters);
-
         return characters;
     } catch (error) {
         console.error('❌ Error loading characters-mapped.json:', error);

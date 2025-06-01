@@ -12,7 +12,7 @@ import WeaponPane from '../components/WeaponPane';
 import EnemyPane from '../components/EnemyPane';
 import BuffsPane from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
-import ToolbarIconButton from '../components/ToolbarIconButton';
+import ToolbarIconButton, {ToolbarSidebarButton} from '../components/ToolbarIconButton';
 import ResetButton from '../components/ResetButton.jsx';
 import { getStatsForLevel } from '../utils/getStatsForLevel';
 import { attributeColors, attributeIcons, elementToAttribute } from '../utils/attributeHelpers';
@@ -25,9 +25,10 @@ import ChangelogModal from '../components/ChangelogModal';
 import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
-import { getWeaponOverride } from '../data/weapon-behaviour/index.js';
+import { getWeaponOverride } from '../data/weapon-behaviour';
 import { applyEchoLogic } from '../data/buffs/applyEchoLogic';
 import {applyWeaponBuffLogic} from "../data/buffs/weaponBuffs.js";
+import RotationsPane from "../components/RotationsPane.jsx";
 
 export default function Calculator() {
     const navigate = useNavigate();
@@ -71,6 +72,10 @@ export default function Calculator() {
     const [echoStates, setEchoStates] = usePersistentState('echoStates', {});
     const [team, setTeam] = usePersistentState('team', [activeCharacterId ?? null, null, null]);
     const [teamCache, setTeamCache] = usePersistentState('teamCache', {});
+    const [moveToolbarToSidebar, setMoveToolbarToSidebar] = useState(false);
+    const [rotationState, setRotationState] = usePersistentState('rotationState', {});
+    const [rotationData, setRotationData] = usePersistentState('rotationData', {});
+
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -183,17 +188,18 @@ export default function Calculator() {
 
     useEffect(() => {
         const handleResize = () => {
-            const desktopThreshold = 1050;
+            const desktopThreshold = 1010;
             if (window.innerWidth >= desktopThreshold) {
                 setIsCollapsedMode(false);
                 return;
             }
             const leftPane = document.querySelector('#left-pane');
             const rightPane = document.querySelector('#right-pane');
+            const sidebar = document.querySelector('.sidebar');
             if (leftPane && rightPane) {
                 const leftWidth = leftPane.offsetWidth;
                 const rightWidth = rightPane.offsetWidth;
-                const totalPaneWidth = leftWidth + rightWidth;
+                const totalPaneWidth = 1010; //leftWidth + rightWidth + sidebar;
                 setIsCollapsedMode(window.innerWidth < totalPaneWidth);
             }
         };
@@ -202,23 +208,81 @@ export default function Calculator() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    useEffect(() => {
+        const handleResize = () => {
+            setMoveToolbarToSidebar(window.innerWidth < 900);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // check on mount
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const [rotationEntriesRaw, setRotationEntriesRaw] = usePersistentState('rotationEntriesStore', {});
+    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+    const rotationEntries = Array.isArray(rotationEntriesRaw?.[charId]) ? rotationEntriesRaw[charId] : [];
+    const setRotationEntries = (updater) => {
+        setRotationEntriesRaw(prev => {
+            const current = Array.isArray(prev[charId]) ? prev[charId] : [];
+            const next = typeof updater === 'function' ? updater(current) : updater;
+            return {
+                ...prev,
+                [charId]: next
+            };
+        });
+    };
+
+    useEffect(() => {
+        if (!activeCharacter?.id && !activeCharacter?.Id && !activeCharacter?.link) return;
+
+        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                rotationEntries: rotationEntries
+            }
+        }));
+    }, [rotationEntries, activeCharacter]);
+
+    useEffect(() => {
+        const currentCharId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+        if (currentCharId && Array.isArray(rotationEntries)) {
+            setRotationEntriesRaw(prev => {
+                // prevent overwrite if unchanged
+                const existing = prev[currentCharId];
+                const same = JSON.stringify(existing) === JSON.stringify(rotationEntries);
+                return same ? prev : { ...prev, [currentCharId]: rotationEntries };
+            });
+        }
+    }, [rotationEntries, activeCharacter]);
 
     const handleCharacterSelect = (char) => {
-        // Save current team setup for current main character before switching
+        // ✅ Save rotation for current character before switching
+        const currentCharId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+        if (currentCharId && rotationEntries?.length) {
+            setRotationEntriesRaw(prev => ({
+                ...prev,
+                [currentCharId]: rotationEntries
+            }));
+        }
+
+        // ✅ Save team setup for current character
         if (activeCharacter) {
-            const currentMainId = activeCharacter.Id ?? activeCharacter.id ?? activeCharacter.link;
+            const currentMainId = currentCharId;
             setTeamCache(prev => ({
                 ...prev,
                 [currentMainId]: team
             }));
 
-            const charId = currentMainId;
             setCharacterRuntimeStates(prev => ({
                 ...prev,
-                [charId]: {
-                    ...(prev[charId] ?? {}),
+                [currentMainId]: {
+                    ...(prev[currentMainId] ?? {}),
                     Name: activeCharacter.displayName,
-                    Id: charId,
+                    Id: currentMainId,
                     Attribute: activeCharacter.attribute,
                     WeaponType: activeCharacter.weaponType ?? activeCharacter.Weapon ?? activeCharacter.raw?.Weapon ?? 0,
                     Stats: baseCharacterState?.Stats ?? {},
@@ -238,6 +302,13 @@ export default function Calculator() {
         const restoredTeam = cached?.Team ?? [newMainId, null, null];
         setTeam(restoredTeam);
 
+        const rawEntries = rotationEntriesRaw?.[newMainId] ?? [];
+        const normalizedEntries = rawEntries.map(entry => ({
+            ...entry,
+            multiplier: typeof entry.multiplier === 'number' ? entry.multiplier : 1
+        }));
+        setRotationEntries(normalizedEntries);
+
         setActiveCharacter(char);
         setActiveCharacterId(newMainId);
         setBaseCharacterState(
@@ -256,8 +327,6 @@ export default function Calculator() {
         setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
-    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-
 
     useEffect(() => {
         if (team[0] && team[0] !== activeCharacterId) {
@@ -447,38 +516,46 @@ export default function Calculator() {
 
                 {/* Toolbar at top */}
                 <div className="toolbar">
-                    <div className="toolbar-group">
-                        <ToolbarIconButton
-                            iconName="character"
-                            altText="Characters"
-                            onClick={() => setLeftPaneView('characters')}
-                            effectiveTheme={effectiveTheme}
-                        />
-                        <ToolbarIconButton
-                            iconName="weapon"
-                            altText="Weapon"
-                            onClick={() => setLeftPaneView('weapon')}
-                            effectiveTheme={effectiveTheme}
-                        />
-                        <ToolbarIconButton
-                            iconName="teams"
-                            altText="Team"
-                            onClick={() => setLeftPaneView('teams')}
-                            effectiveTheme={effectiveTheme}
-                        />
-                        <ToolbarIconButton
-                            iconName="enemy"
-                            altText="Enemy"
-                            onClick={() => setLeftPaneView('enemy')}
-                            effectiveTheme={effectiveTheme}
-                        />
-                        <ToolbarIconButton
-                            iconName="buffs"
-                            altText="Buffs"
-                            onClick={() => setLeftPaneView('buffs')}
-                            effectiveTheme={effectiveTheme}
-                        />
-                    </div>
+                    {!moveToolbarToSidebar && (
+                        <div className="toolbar-group">
+                            <ToolbarIconButton
+                                iconName="character"
+                                altText="Characters"
+                                onClick={() => setLeftPaneView('characters')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                            <ToolbarIconButton
+                                iconName="weapon"
+                                altText="Weapon"
+                                onClick={() => setLeftPaneView('weapon')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                            <ToolbarIconButton
+                                iconName="teams"
+                                altText="Team"
+                                onClick={() => setLeftPaneView('teams')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                            <ToolbarIconButton
+                                iconName="enemy"
+                                altText="Enemy"
+                                onClick={() => setLeftPaneView('enemy')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                            <ToolbarIconButton
+                                iconName="buffs"
+                                altText="Buffs"
+                                onClick={() => setLeftPaneView('buffs')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                            <ToolbarIconButton
+                                iconName="rotations"
+                                altText="Rotation"
+                                onClick={() => setLeftPaneView('rotation')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                        </div>
+                    )}
                     <button
                         className={`hamburger-button ${hamburgerOpen ? 'open' : ''}`}
                         onClick={() => setHamburgerOpen(prev => !prev)}
@@ -544,6 +621,54 @@ export default function Calculator() {
                                     </div>
                                 </button>
                             </div>
+
+                            {moveToolbarToSidebar && (
+                                <div className="sidebar-toolbar">
+                                    <ToolbarSidebarButton
+                                        iconName="character"
+                                        label="Characters"
+                                        onClick={() => setLeftPaneView('characters')}
+                                        selected={leftPaneView === 'characters'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                    <ToolbarSidebarButton
+                                        iconName="weapon"
+                                        label="Weapon"
+                                        onClick={() => setLeftPaneView('weapon')}
+                                        selected={leftPaneView === 'weapon'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                    <ToolbarSidebarButton
+                                        iconName="teams"
+                                        label="Team Buffs"
+                                        onClick={() => setLeftPaneView('teams')}
+                                        selected={leftPaneView === 'teams'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                    <ToolbarSidebarButton
+                                        iconName="enemy"
+                                        label="Enemy"
+                                        onClick={() => setLeftPaneView('enemy')}
+                                        selected={leftPaneView === 'enemy'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                    <ToolbarSidebarButton
+                                        iconName="buffs"
+                                        label="Custom Bonuses"
+                                        onClick={() => setLeftPaneView('buffs')}
+                                        selected={leftPaneView === 'buffs'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                    <ToolbarSidebarButton
+                                        iconName="rotations"
+                                        label="Rotation"
+                                        onClick={() => setLeftPaneView('rotation')}
+                                        selected={leftPaneView === 'rotations'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                </div>
+                            )}
+
                             <button className="sidebar-button" onClick={toggleTheme}>
                                 <div className="icon-slot">
                                     <div className="icon-slot theme-toggle-icon">
@@ -626,6 +751,31 @@ export default function Calculator() {
                                             setCharacterRuntimeStates={setCharacterRuntimeStates}
                                         />
                                     )}
+                                    {leftPaneView === 'rotation' && (
+                                        <RotationsPane
+                                            activeCharacter={activeCharacter}
+                                            characterRuntimeStates={characterRuntimeStates}
+                                            characters={characters}
+                                            setActiveCharacter={setActiveCharacter}
+                                            setActiveCharacterId={setActiveCharacterId}
+                                            setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                            setTeam={setTeam}
+                                            setSliderValues={setSliderValues}
+                                            setCharacterLevel={setCharacterLevel}
+                                            setTraceNodeBuffs={setTraceNodeBuffs}
+                                            setCustomBuffs={setCustomBuffs}
+                                            setCombatState={setCombatState}
+                                            setBaseCharacterState={setBaseCharacterState}
+                                            characterStates={characterStates}
+                                            finalStats={finalStats}
+                                            combatState={combatState}
+                                            mergedBuffs={mergedBuffs}
+                                            sliderValues={sliderValues}
+                                            characterLevel={characterLevel}
+                                            rotationEntries={rotationEntries}
+                                            setRotationEntries={setRotationEntries}
+                                        />
+                                    )}
                                 </div>
 
                                 {/* Right Pane */}
@@ -647,6 +797,7 @@ export default function Calculator() {
                                         characterRuntimeStates={characterRuntimeStates}
                                         combatState={combatState}
                                         mergedBuffs={mergedBuffs}
+                                        rotationEntries={rotationEntries}
                                     />
                                 </div>
                             </div>

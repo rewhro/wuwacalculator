@@ -11,7 +11,25 @@ export default function ToolbarIconButton({ iconName, onClick, altText, effectiv
 
     return (
         <button onClick={onClick} className="toolbar-icon-button">
-            <img src={iconPath} alt={altText} style={{ width: 34, height: 34 }} />
+            <img src={iconPath} alt={altText} style={{ maxWidth: 30, maxHeight: 30, minWidth: 30, minHeight: 30 }} />
+        </button>
+    );
+}
+
+export function ToolbarSidebarButton({ iconName, label, onClick, selected, effectiveTheme }) {
+    const iconPath = `/assets/icons/${effectiveTheme === 'dark' ? 'dark' : 'light'}/${iconName}.png`;
+
+    return (
+        <button
+            className={`sidebar-button ${selected ? 'active' : ''}`}
+            onClick={onClick}
+        >
+            <div className="icon-slot">
+                <img src={iconPath} alt={label} style={{ maxWidth: 24, maxHeight: 24, minWidth: 24, minHeight: 24 }} />
+            </div>
+            <div className="label-slot">
+                <span className="label-text">{label}</span>
+            </div>
         </button>
     );
 }

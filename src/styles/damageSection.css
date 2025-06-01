@@ -113,7 +113,7 @@
 
 .damage-grid div {
     text-align: left;
-    padding: 0 100px 0 0;
+    padding: 0 10px 0 0;
 }
 
 .damage-grid div:first-child,

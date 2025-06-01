@@ -23,3 +23,4 @@ import './weaponPane.css';
 import './buffspane.css';
 import './expandable.css';
 import './echoBuffs.css';
+import './rotationsPane.css';

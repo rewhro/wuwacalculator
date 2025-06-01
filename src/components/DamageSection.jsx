@@ -1,10 +1,14 @@
-""// src/components/DamageSection.jsx
-import React from 'react';
+import Rotations from "./Rotations.jsx";
+
+// src/components/DamageSection.jsx
+import React, {useEffect} from 'react';
 import { calculateDamage } from '../utils/damageCalculator';
 import { calculateSupportEffect } from '../utils/supportCalculator';
 import { elementToAttribute } from '../utils/attributeHelpers';
 import { getCharacterOverride, getHardcodedMultipliers } from '../data/character-behaviour';
 import { getWeaponOverride } from '../data/weapon-behaviour/index';
+import {getSkillDamageCache, setSkillDamageCache} from '../utils/skillDamageCache';
+import { usePersistentState } from '../hooks/usePersistentState';
 
 
 export default function DamageSection({
@@ -14,9 +18,11 @@ export default function DamageSection({
                                           sliderValues,
                                           characterRuntimeStates,
                                           combatState,
-                                          mergedBuffs
+                                          mergedBuffs,
+    rotationEntries
                                       }) {
     if (!activeCharacter) return null;
+    const allSkillDamage = [];
 
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
     const element = elementToAttribute[activeCharacter?.attribute] ?? '';
@@ -39,7 +45,6 @@ export default function DamageSection({
                     }
 
                     const extra = getHardcodedMultipliers(charId, activeCharacter)?.[tab] ?? [];
-
                     const customLevels = extra.map(entry => ({
                         ...entry,
                         Name: entry.name
@@ -214,8 +219,19 @@ export default function DamageSection({
                                                 normal = result.normal;
                                                 crit = result.crit;
                                                 avg = result.avg;
-
+                                                allSkillDamage.push({
+                                                    name: level.Name,
+                                                    tab,
+                                                    type: Array.isArray(skillMeta.skillType) ? skillMeta.skillType.join(', ') : skillMeta.skillType,
+                                                    normal,
+                                                    crit,
+                                                    avg
+                                                });
                                             }
+
+                                            const match = getSkillDamageCache().find(
+                                                s => s.name === skill.name && s.tab === skill.tab
+                                            );
 
                                             return (
                                                 <React.Fragment key={index}>
@@ -249,6 +265,22 @@ export default function DamageSection({
                         </div>
                     );
                 })}
+                {/* 🔚 Final wrapper: custom component for rotation */}
+                {setSkillDamageCache(allSkillDamage)}
+                {rotationEntries.length > 0 && (
+                    <div className="box-wrapper">
+                        <div className="damage-inner-box">
+                            <Rotations
+                                activeCharacter={activeCharacter}
+                                finalStats={finalStats}
+                                combatState={combatState}
+                                mergedBuffs={mergedBuffs}
+                                allSkillDamage={allSkillDamage}
+                                rotationEntries={rotationEntries}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -262,7 +294,7 @@ function getSkillData(char, tab) {
     return tree?.Skill ?? null;
 }
 
-function parseCompoundMultiplier(formula) {
+export function parseCompoundMultiplier(formula) {
     if (!formula) return 0;
 
     const parts = formula.match(/\d+(\.\d+)?%(\*\d+)?/g);
