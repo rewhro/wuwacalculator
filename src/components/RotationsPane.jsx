@@ -45,7 +45,6 @@ export default function RotationsPane({
                                       }) {
     const [showSkillOptions, setShowSkillOptions] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
-    const skillOptions = getAllSkillEntries(activeCharacter, characterRuntimeStates, finalStats, combatState, mergedBuffs, sliderValues, characterLevel);
     const [viewMode, setViewMode] = useState('new');
     const [savedRotations, setSavedRotations] = usePersistentState('globalSavedRotations', []);
     const [editingId, setEditingId] = useState(null);
@@ -58,6 +57,17 @@ export default function RotationsPane({
             activationConstraint: { distance: 5 }
         })
     );
+    const skillOptions = viewMode === 'new'
+        ? getAllSkillEntries(
+            activeCharacter,
+            characterRuntimeStates,
+            finalStats,
+            combatState,
+            mergedBuffs,
+            sliderValues,
+            characterLevel
+        )
+        : [];
 
     const skillTypeIconMap = {
         basic: '/assets/stat-icons/basic.png',
