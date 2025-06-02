@@ -159,17 +159,13 @@ export default function RotationsPane({
         setExpandedTabs(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
-    const getCharId = (char) => String(char?.Id ?? char?.id ?? char?.link ?? '');
 
     useEffect(() => {
         if (!activeCharacter || !pendingRotationEntriesRef.current) return;
 
-        const pending = pendingRotationEntriesRef.current;
-        if (pending) {
-            setTimeout(() => {
-                setRotationEntries(pending);
-                pendingRotationEntriesRef.current = null;
-            }, 0);
+        if (pendingRotationEntriesRef.current) {
+            setRotationEntries(pendingRotationEntriesRef.current);
+            pendingRotationEntriesRef.current = null;
         }
     }, [activeCharacter]);
 
@@ -208,12 +204,24 @@ export default function RotationsPane({
         ]));
 
         // Step 3: defer rotation entry assignment until character state is ready
-        pendingRotationEntriesRef.current = saved.entries.map(e => ({
-            ...e,
-            multiplier: e.multiplier ?? 1,
-            locked: e.locked ?? false,
-            cached: e.locked ? (e.cached ?? null) : undefined
-        }));
+        pendingRotationEntriesRef.current = saved.entries.map(e => {
+            const base = {
+                ...e,
+                multiplier: e.multiplier ?? 1,
+                locked: e.locked ?? false
+            };
+
+            if (base.locked) {
+                const match = skillDamageCacheRef.current.find(s => s.name === e.label && s.tab === e.tab);
+                base.cached = e.cached ?? {
+                    normal: (match?.normal ?? 0),
+                    crit: (match?.crit ?? 0),
+                    avg: (match?.avg ?? 0)
+                };
+            }
+
+            return base;
+        });
     };
 
     useEffect(() => {
@@ -334,31 +342,25 @@ export default function RotationsPane({
                                 const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
                                 const charName = activeCharacter?.displayName ?? 'Unknown';
 
-                                const cache = getSkillDamageCache();
-
                                 const total = rotationEntries.reduce(
                                     (acc, entry) => {
+                                        const dmg = recalculateRotationEntryDamage({
+                                            entry,
+                                            activeCharacter,
+                                            characterRuntimeStates,
+                                            finalStats,
+                                            combatState,
+                                            mergedBuffs,
+                                            sliderValues,
+                                            characterLevel
+                                        });
+
                                         const mult = entry.multiplier ?? 1;
 
-                                        let normal = 0, crit = 0, avg = 0;
+                                        acc.normal += dmg.normal * mult;
+                                        acc.crit += dmg.crit * mult;
+                                        acc.avg += dmg.avg * mult;
 
-                                        if (entry.locked && entry.cached) {
-                                            normal = entry.cached.normal ?? 0;
-                                            crit = entry.cached.crit ?? 0;
-                                            avg = entry.cached.avg ?? 0;
-                                        } else {
-                                            const cached = cache.find(s =>
-                                                s.name === entry.label &&
-                                                (s.skillMeta?.skillType === entry.detail?.toLowerCase() || s.tab === entry.tab)
-                                            );
-                                            normal = (cached?.normal ?? 0) * mult;
-                                            crit = (cached?.crit ?? 0) * mult;
-                                            avg = (cached?.avg ?? 0) * mult;
-                                        }
-
-                                        acc.normal += normal;
-                                        acc.crit += crit;
-                                        acc.avg += avg;
                                         return acc;
                                     },
                                     { normal: 0, crit: 0, avg: 0 }
@@ -861,6 +863,7 @@ export function getAllSkillEntries(
                 ]
             };
 
+
             let localMergedBuffs = structuredClone(mergedBuffs);
 
             if (override) {
@@ -878,6 +881,7 @@ export function getAllSkillEntries(
                     element,
                     characterLevel
                 });
+
 
                 localMergedBuffs = result.mergedBuffs;
                 skillMeta.skillType = result.skillMeta?.skillType ?? skillMeta.skillType;
@@ -912,8 +916,98 @@ export function getAllSkillEntries(
                 tab,
                 param: level.Param
             });
+
         }
     }
 
     return entries;
+}
+
+import { calculateDamage } from '../utils/damageCalculator';
+
+export function recalculateRotationEntryDamage({
+                                                   entry,
+                                                   activeCharacter,
+                                                   characterRuntimeStates,
+                                                   finalStats,
+                                                   combatState,
+                                                   mergedBuffs,
+                                                   sliderValues,
+                                                   characterLevel
+                                               }) {
+    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+    const element = elementToAttribute[activeCharacter?.attribute] ?? '';
+    const override = getCharacterOverride(charId);
+
+    const skillMeta = {
+        name: entry.label,
+        skillType: '',
+        multiplier: 1,
+        amplify: 0,
+        tab: entry.tab,
+        visible: true,
+        tags: [],
+    };
+
+    const characterState = {
+        activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
+        toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
+    };
+
+    const isActiveSequence = (seqNum) => sliderValues?.sequence >= seqNum;
+    const isToggleActive = (toggleId) =>
+        characterState.toggles?.[toggleId] === true ||
+        characterState.activeStates?.[toggleId] === true;
+
+    if (override) {
+        const result = override({
+            mergedBuffs,
+            combatState,
+            skillMeta,
+            characterState,
+            isActiveSequence,
+            isToggleActive,
+            baseCharacterState: activeCharacter,
+            sliderValues,
+            getSkillData: () => null,
+            finalStats,
+            element,
+            characterLevel
+        });
+
+        Object.assign(skillMeta, result.skillMeta ?? {});
+        mergedBuffs = result.mergedBuffs ?? mergedBuffs;
+    }
+
+    // Do not recalculate if locked — just return cached
+    if (entry.locked && entry.cached) {
+        return {
+            normal: entry.cached.normal ?? 0,
+            crit: entry.cached.crit ?? 0,
+            avg: entry.cached.avg ?? 0
+        };
+    }
+
+    const scaling = {
+        atk: skillMeta.atk ?? 1,
+        hp: skillMeta.hp ?? 0,
+        def: skillMeta.def ?? 0,
+        energyRegen: skillMeta.energyRegen ?? 0,
+    };
+
+    return calculateDamage({
+        finalStats,
+        combatState,
+        scaling,
+        multiplier: skillMeta.multiplier ?? 1,
+        element,
+        skillType: skillMeta.skillType,
+        characterLevel,
+        mergedBuffs,
+        amplify: skillMeta.amplify ?? 0,
+        skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
+        critDmgBonus: skillMeta.critDmgBonus ?? 0,
+        critRateBonus: skillMeta.critRateBonus ?? 0,
+        skillDefIgnore: skillMeta.skillDefIgnore ?? 0
+    });
 }
