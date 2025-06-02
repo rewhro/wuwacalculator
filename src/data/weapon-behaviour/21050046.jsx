@@ -51,7 +51,7 @@ export function WeaponUI({
                     <label className="modern-checkbox">
                         <input
                             type="checkbox"
-                            checked={activeStates.secondP || false}
+                            checked={!!activeStates?.secondP} // ✅ fix here
                             onChange={() => toggleState('secondP')}
                         />
                         Enable

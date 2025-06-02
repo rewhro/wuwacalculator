@@ -29,9 +29,7 @@ export default function RotationsPane({
                                           sliderValues,
                                           characterLevel,
                                           rotationEntries,
-                                          setRotationEntries, // ✅ provided already
-
-                                          // 🔽 Add these to support full in-memory load
+                                          setRotationEntries,
                                           characters,
                                           setActiveCharacter,
                                           setActiveCharacterId,
@@ -124,14 +122,7 @@ export default function RotationsPane({
             tab: skill.tab, // ✅ required to look it up later
             multiplier: 1,
             createdAt: Date.now(),
-            overrides: {
-                customBuffs: {},
-                echoBuffs: [],
-                weaponBuffs: [],
-                characterStates: {},
-                sequenceToggles: {},
-                inherentToggles: {}
-            }
+            locked: false
         };
 
         setRotationEntries(prev => {
@@ -224,12 +215,6 @@ export default function RotationsPane({
         ]));
     };
 
-    useEffect(() => {
-        console.log('🌀 Active character updated:', activeCharacter);
-        console.log('📦 Pending rotations:', pendingRotationEntriesRef.current);
-        // ...
-    }, [activeCharacter]);
-
     return (
         <div className="rotation-pane">
             <div className="rotation-view-toggle">
@@ -272,11 +257,23 @@ export default function RotationsPane({
                                 const total = rotationEntries.reduce(
                                     (acc, entry) => {
                                         const mult = entry.multiplier ?? 1;
-                                        const cached = cache.find(s => s.name === entry.label && s.tab === entry.tab);
 
-                                        acc.normal += (cached?.normal ?? 0) * mult;
-                                        acc.crit += (cached?.crit ?? 0) * mult;
-                                        acc.avg += (cached?.avg ?? 0) * mult;
+                                        let normal, crit, avg;
+
+                                        if (entry.locked && entry.cached) {
+                                            normal = entry.cached.normal ?? 0;
+                                            crit = entry.cached.crit ?? 0;
+                                            avg = entry.cached.avg ?? 0;
+                                        } else {
+                                            const cached = cache.find(s => s.name === entry.label && s.tab === entry.tab);
+                                            normal = (cached?.normal ?? 0) * mult;
+                                            crit = (cached?.crit ?? 0) * mult;
+                                            avg = (cached?.avg ?? 0) * mult;
+                                        }
+
+                                        acc.normal += normal;
+                                        acc.crit += crit;
+                                        acc.avg += avg;
 
                                         return acc;
                                     },
@@ -286,11 +283,31 @@ export default function RotationsPane({
                                 const fullRuntime = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
                                 const fullCharacterState = fullRuntime[charId] ?? {};
 
+                                const entriesWithCache = rotationEntries.map(e => {
+                                    const base = {
+                                        ...e,
+                                        multiplier: e.multiplier ?? 1,
+                                        locked: e.locked ?? false,
+                                    };
+
+                                    // Ensure cached damage values are present if locked
+                                    if (base.locked && !base.cached) {
+                                        const match = getSkillDamageCache().find(s => s.name === e.label && s.tab === e.tab);
+                                        base.cached = {
+                                            normal: (match?.normal ?? 0) * base.multiplier,
+                                            crit: (match?.crit ?? 0) * base.multiplier,
+                                            avg: (match?.avg ?? 0) * base.multiplier,
+                                        };
+                                    }
+
+                                    return base;
+                                });
+
                                 const newSaved = {
                                     id: Date.now(),
                                     characterId: charId,
                                     characterName: charName,
-                                    entries: rotationEntries,
+                                    entries: entriesWithCache,
                                     total,
                                     fullCharacterState
                                 };
@@ -400,6 +417,7 @@ export default function RotationsPane({
                                         onDelete={(i) => {
                                             setRotationEntries(prev => prev.filter((_, j) => j !== i));
                                         }}
+                                        setRotationEntries={setRotationEntries}  // ✅ Add this line
                                     />
                                 ))}
                             </SortableContext>
@@ -540,7 +558,16 @@ export default function RotationsPane({
 
 }
 
-function SortableRotationItem({ id, index, entry, onMultiplierChange, onEdit, onDelete, characterColor }) {
+function SortableRotationItem({
+                                  id,
+                                  index,
+                                  entry,
+                                  onMultiplierChange,
+                                  onEdit,
+                                  onDelete,
+                                  characterColor,
+                                  setRotationEntries
+                              }) {
     const {
         attributes,
         listeners,
@@ -554,17 +581,50 @@ function SortableRotationItem({ id, index, entry, onMultiplierChange, onEdit, on
         transition
     };
 
-    // ✅ Refresh damage values using latest buffs
     const cache = getSkillDamageCache();
-    const liveMatch = cache.find(s => s.name === entry.label && s.tab === entry.tab);
     const multiplier = entry.multiplier ?? 1;
-    const normal = (liveMatch?.normal ?? 0) * multiplier;
-    const crit = (liveMatch?.crit ?? 0) * multiplier;
-    const avg = (liveMatch?.avg ?? 0) * multiplier;
+
+    // Use cached or live damage values
+    const source = entry.locked ? entry.cached : cache.find(s => s.name === entry.label && s.tab === entry.tab);
+
+    const normal = (source?.normal ?? 0) * multiplier;
+    const crit = (source?.crit ?? 0) * multiplier;
+    const avg = (source?.avg ?? 0) * multiplier;
+
+    const toggleLock = () => {
+        setRotationEntries(prev => {
+            const copy = [...prev];
+            const item = copy[index];
+            const liveMatch = cache.find(s => s.name === item.label && s.tab === item.tab);
+            const locked = !item.locked;
+
+            copy[index] = {
+                ...item,
+                locked,
+                cached: locked
+                    ? {
+                        // ⚠️ no multiplier applied here
+                        normal: liveMatch?.normal ?? 0,
+                        crit: liveMatch?.crit ?? 0,
+                        avg: liveMatch?.avg ?? 0
+                    }
+                    : undefined
+            };
+
+            return copy;
+        });
+    };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="rotation-item-wrapper">
-            <div className="rotation-item">
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className={`rotation-item-wrapper ${entry.locked ? 'locked' : ''}`}
+            onClick={toggleLock}
+        >
+            <div className={`rotation-item ${entry.locked ? 'locked' : ''}`}>
                 <div className="rotation-header">
                     <span className="entry-name" style={{ color: characterColor }}>
                         {entry.label} {multiplier > 1 ? `(x${multiplier})` : ''}
@@ -590,7 +650,7 @@ function SortableRotationItem({ id, index, entry, onMultiplierChange, onEdit, on
                     <span className="value">{Math.round(crit).toLocaleString()}</span>
                     <span className="value-label">Avg</span>
                     <span className="value avg">{Math.round(avg).toLocaleString()}</span>
-                    <div className="rotation-multiplier-inline">
+                    <div className="rotation-multiplier-inline" onClick={(e) => e.stopPropagation()}>
                         <label style={{ fontSize: '13px' }}>×</label>
                         <input
                             type="number"
@@ -604,7 +664,7 @@ function SortableRotationItem({ id, index, entry, onMultiplierChange, onEdit, on
                     </div>
                 </div>
             </div>
-            <div className="rotation-actions external-actions">
+            <div className="rotation-actions external-actions" onClick={(e) => e.stopPropagation()}>
                 <button className="rotation-button" title="Edit" onClick={() => onEdit(index)}><Pencil size={18} /></button>
                 <button className="rotation-button" title="Delete" onClick={() => onDelete(index)}><Trash2 size={18} /></button>
             </div>

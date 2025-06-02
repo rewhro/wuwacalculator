@@ -90,6 +90,11 @@
     margin-left: auto; /* pushes it to the right */
 }
 
+.rotation-item.locked {
+    border: 2px dashed rgba(179, 8, 8, 0.4) !important;
+    background-color: rgba(113, 113, 113, 0.04) !important;
+}
+
 .value-label {
     opacity: 0.7;
 }

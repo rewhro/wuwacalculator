@@ -10,11 +10,11 @@ export default function Rotations({ activeCharacter, rotationEntries }) {
 
     for (const entry of rotationEntries) {
         const mult = entry.multiplier ?? 1;
-        const cached = cache.find(s => s.name === entry.label && s.tab === entry.tab);
 
-        const normal = (cached?.normal ?? 0) * mult;
-        const crit = (cached?.crit ?? 0) * mult;
-        const avg = (cached?.avg ?? 0) * mult;
+        const source = entry.locked ? entry.cached : cache.find(s => s.name === entry.label && s.tab === entry.tab);
+        const normal = (source?.normal ?? 0) * mult;
+        const crit = (source?.crit ?? 0) * mult;
+        const avg = (source?.avg ?? 0) * mult;
 
         total.normal += normal;
         total.crit += crit;
@@ -68,7 +68,7 @@ export default function Rotations({ activeCharacter, rotationEntries }) {
 function getSkillType(entry) {
     const detail = entry.detail?.toLowerCase?.() ?? '';
 
-    if (detail.includes('basic')) return 'basic';
+    if (detail.includes('basic')) return 'Basic Attack';
     if (detail.includes('heavy')) return 'Heavy Attack';
     if (detail === 'resonance skill') return 'Resonance Skill';
     if (detail.includes('liberation')) return 'Resonance Liberation';
