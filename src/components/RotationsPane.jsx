@@ -526,6 +526,7 @@ export default function RotationsPane({
                 <div className="saved-rotation-list">
                     <div className="saved-rotation-header">
                         <h2 className="panel-title">Saved Rotations</h2>
+                        {/*
                         <button
                             className="rotation-button"
                             style={{ marginLeft: 'auto', marginBottom: '8px' }}
@@ -533,6 +534,7 @@ export default function RotationsPane({
                         >
                             Import
                         </button>
+                        */}
                     </div>
                     <div className="sort-controls">
                         <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
@@ -625,6 +627,7 @@ export default function RotationsPane({
                                             >
                                                 Load
                                             </button>
+                                            {/*
                                             <button
                                                 className="rotation-button"
                                                 title="Export Rotation"
@@ -632,6 +635,7 @@ export default function RotationsPane({
                                             >
                                                 Export
                                             </button>
+                                            */}
                                         </div>
                                     </div>
 
