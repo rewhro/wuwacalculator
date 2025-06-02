@@ -125,11 +125,11 @@ export function SKBuffsLogic({
     const state = characterState?.activeStates ?? {};
     const critRate = state.innerEnergy * 0.05;
 
-    if (state.inner) {
+    if (state.innerS && critRate > 0) {
         mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + critRate;
     }
 
-    if (state.supernal) {
+    if (state.supernal && critRate > 0) {
         mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + critRate * 2;
     }
 

@@ -176,23 +176,41 @@ export default function RotationsPane({
     const loadSavedRotation = (saved) => {
         const id = saved.characterId;
 
-        // 1. Update in-memory character state first
         const newCharacter = characters.find(c => String(c.Id ?? c.id ?? c.link) === String(id));
         if (!newCharacter) return;
 
-        // Temporarily clear entries so they won't appear stale
         setRotationEntries([]);
 
-        if (getCharId(activeCharacter) === getCharId(newCharacter)) {
-            // ✅ Same character, apply rotation entries immediately
-            setRotationEntries(saved.entries);
-            pendingRotationEntriesRef.current = null;
-        } else {
-            // 🕐 Different character, defer until character loads
-            pendingRotationEntriesRef.current = saved.entries;
-            setActiveCharacter(newCharacter);
-        }
-        
+        const recalculatedEntries = saved.entries.map(e => {
+            const cache = getSkillDamageCache();
+
+            const base = {
+                ...e,
+                locked: e.locked ?? false,
+                multiplier: e.multiplier ?? 1
+            };
+
+            if (base.locked) {
+                if (e.cached) {
+                    // ✅ Use saved cached values if available
+                    base.cached = e.cached;
+                } else {
+                    // ✅ Recompute and store cache if not saved
+                    const match = cache.find(s => s.name === e.label && s.tab === e.tab);
+                    base.cached = {
+                        normal: (match?.normal ?? 0),
+                        crit: (match?.crit ?? 0),
+                        avg: (match?.avg ?? 0)
+                    };
+                }
+            }
+
+            return base;
+        });
+
+        pendingRotationEntriesRef.current = recalculatedEntries;
+
+        setActiveCharacter(newCharacter);
         setActiveCharacterId(id);
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -206,7 +224,6 @@ export default function RotationsPane({
         setCombatState(saved.fullCharacterState.CombatState ?? {});
         setBaseCharacterState({ Stats: saved.fullCharacterState.Stats ?? {} });
 
-        // Optionally update localStorage
         const prev = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
         localStorage.setItem("characterRuntimeStates", JSON.stringify({
             ...prev,
@@ -254,7 +271,34 @@ export default function RotationsPane({
                         return;
                     }
 
-                    setSavedRotations(prev => [...prev, data]);
+                    const cache = getSkillDamageCache();
+
+                    // Ensure all locked entries have valid cached data
+                    const cleanedEntries = data.entries.map(e => {
+                        const base = { ...e };
+
+                        if (base.locked) {
+                            if (!base.cached) {
+                                const match = cache.find(s => s.name === base.label && s.tab === base.tab);
+                                base.cached = {
+                                    normal: (match?.normal ?? 0),
+                                    crit: (match?.crit ?? 0),
+                                    avg: (match?.avg ?? 0)
+                                };
+                            }
+                        }
+
+                        return base;
+                    });
+
+                    // Append with cleaned entries
+                    setSavedRotations(prev => [
+                        ...prev,
+                        {
+                            ...data,
+                            entries: cleanedEntries
+                        }
+                    ]);
                 } catch (error) {
                     alert('Failed to import rotation: Invalid JSON format.');
                     console.error('Import error:', error);
@@ -310,14 +354,17 @@ export default function RotationsPane({
                                     (acc, entry) => {
                                         const mult = entry.multiplier ?? 1;
 
-                                        let normal, crit, avg;
+                                        let normal = 0, crit = 0, avg = 0;
 
                                         if (entry.locked && entry.cached) {
                                             normal = entry.cached.normal ?? 0;
                                             crit = entry.cached.crit ?? 0;
                                             avg = entry.cached.avg ?? 0;
                                         } else {
-                                            const cached = cache.find(s => s.name === entry.label && s.tab === entry.tab);
+                                            const cached = cache.find(s =>
+                                                s.name === entry.label &&
+                                                (s.skillMeta?.skillType === entry.detail?.toLowerCase() || s.tab === entry.tab)
+                                            );
                                             normal = (cached?.normal ?? 0) * mult;
                                             crit = (cached?.crit ?? 0) * mult;
                                             avg = (cached?.avg ?? 0) * mult;
@@ -326,7 +373,6 @@ export default function RotationsPane({
                                         acc.normal += normal;
                                         acc.crit += crit;
                                         acc.avg += avg;
-
                                         return acc;
                                     },
                                     { normal: 0, crit: 0, avg: 0 }
@@ -335,21 +381,19 @@ export default function RotationsPane({
                                 const fullRuntime = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
                                 const fullCharacterState = fullRuntime[charId] ?? {};
 
-                                const entriesWithCache = rotationEntries.map(e => {
+                                const entriesToSave = rotationEntries.map(e => {
                                     const base = {
-                                        ...e,
+                                        label: e.label,
+                                        tab: e.tab,
+                                        detail: e.detail,
+                                        iconPath: e.iconPath,
                                         multiplier: e.multiplier ?? 1,
                                         locked: e.locked ?? false,
+                                        createdAt: e.createdAt ?? Date.now()
                                     };
 
-                                    // Ensure cached damage values are present if locked
-                                    if (base.locked && !base.cached) {
-                                        const match = getSkillDamageCache().find(s => s.name === e.label && s.tab === e.tab);
-                                        base.cached = {
-                                            normal: (match?.normal ?? 0) * base.multiplier,
-                                            crit: (match?.crit ?? 0) * base.multiplier,
-                                            avg: (match?.avg ?? 0) * base.multiplier,
-                                        };
+                                    if (e.locked && e.cached) {
+                                        base.cached = e.cached; // ✅ save cached values if locked
                                     }
 
                                     return base;
@@ -359,7 +403,7 @@ export default function RotationsPane({
                                     id: Date.now(),
                                     characterId: charId,
                                     characterName: charName,
-                                    entries: entriesWithCache,
+                                    entries: entriesToSave,
                                     total,
                                     fullCharacterState
                                 };
@@ -672,10 +716,11 @@ function SortableRotationItem({
                 locked,
                 cached: locked
                     ? {
-                        // ⚠️ no multiplier applied here
-                        normal: liveMatch?.normal ?? 0,
-                        crit: liveMatch?.crit ?? 0,
-                        avg: liveMatch?.avg ?? 0
+                        normal: (liveMatch?.normal ?? 0) * (item.multiplier ?? 1),
+                        crit: (liveMatch?.crit ?? 0) * (item.multiplier ?? 1),
+                        avg: (liveMatch?.avg ?? 0) * (item.multiplier ?? 1),
+                        tab: item.tab,
+                        label: item.label
                     }
                     : undefined
             };

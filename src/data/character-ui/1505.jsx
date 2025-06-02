@@ -229,8 +229,11 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
-                        checked={activeStates.inner || false}
-                        onChange={() => toggleState('inner')}
+                        checked={activeStates.innerS || false}
+                        onChange={() => {
+                            toggleState('innerS');
+                            if (activeStates.supernal) toggleState('supernal'); // turn off other
+                        }}
                     />
                     Enable
                 </label>
@@ -244,12 +247,12 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                     When a party member uses <span className="highlight">Intro Skill</span> within the <span className="highlight">Inner Stellarealm</span>, it evolves into the <span className="highlight">Supernal Stellarealm</span>. Within the effective range of the <span className="highlight">Supernal Stellarealm</span>, for every <span className="highlight">0.1%</span> of <span className="highlight">Shorekeeper</span>'s Energy Regen, all party members gain a <span className="highlight">0.01%</span> increase of Crit. DMG, up to <span className="highlight">25%</span>.
                     <span className="highlight">Supernal Stellarealm</span> has all the effects of the <span className="highlight">Inner Stellarealm</span>.
                 </div>
-                <label className="modern-checkbox" style={{ opacity: !activeStates.inner ? 0.5 : 1 }}>
+                <label className="modern-checkbox" style={{ opacity: !activeStates.innerS ? 0.5 : 1 }}>
                     <input
                         type="checkbox"
                         checked={activeStates.supernal || false}
                         onChange={() => toggleState('supernal')}
-                        disabled={!activeStates.inner}
+                        disabled={!activeStates.innerS}
                     />
                     Enable
                 </label>
