@@ -19,7 +19,6 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
-import {multipliers} from "../data/character-behaviour/teamplate.js";
 
 export default function RotationsPane({
                                           activeCharacter,
@@ -159,24 +158,41 @@ export default function RotationsPane({
         setExpandedTabs(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
+    const getCharId = (char) => String(char?.Id ?? char?.id ?? char?.link ?? '');
 
     useEffect(() => {
         if (!activeCharacter || !pendingRotationEntriesRef.current) return;
 
-        if (pendingRotationEntriesRef.current) {
-            setRotationEntries(pendingRotationEntriesRef.current);
-            pendingRotationEntriesRef.current = null;
+        const pending = pendingRotationEntriesRef.current;
+        if (pending) {
+            setTimeout(() => {
+                setRotationEntries(pending);
+                pendingRotationEntriesRef.current = null;
+            }, 0);
         }
     }, [activeCharacter]);
 
 
     const loadSavedRotation = (saved) => {
         const id = saved.characterId;
+
+        // 1. Update in-memory character state first
         const newCharacter = characters.find(c => String(c.Id ?? c.id ?? c.link) === String(id));
         if (!newCharacter) return;
 
-        // Step 1: hydrate character state
-        setActiveCharacter(newCharacter);
+        // Temporarily clear entries so they won't appear stale
+        setRotationEntries([]);
+
+        if (getCharId(activeCharacter) === getCharId(newCharacter)) {
+            // ✅ Same character, apply rotation entries immediately
+            setRotationEntries(saved.entries);
+            pendingRotationEntriesRef.current = null;
+        } else {
+            // 🕐 Different character, defer until character loads
+            pendingRotationEntriesRef.current = saved.entries;
+            setActiveCharacter(newCharacter);
+        }
+        
         setActiveCharacterId(id);
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -190,7 +206,7 @@ export default function RotationsPane({
         setCombatState(saved.fullCharacterState.CombatState ?? {});
         setBaseCharacterState({ Stats: saved.fullCharacterState.Stats ?? {} });
 
-        // Step 2: safely store in localStorage
+        // Optionally update localStorage
         const prev = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
         localStorage.setItem("characterRuntimeStates", JSON.stringify({
             ...prev,
@@ -202,66 +218,17 @@ export default function RotationsPane({
             saved.fullCharacterState.Team?.[1] ?? null,
             saved.fullCharacterState.Team?.[2] ?? null
         ]));
-
-        // Step 3: defer rotation entry assignment until character state is ready
-        pendingRotationEntriesRef.current = saved.entries.map(e => {
-            const base = {
-                ...e,
-                multiplier: e.multiplier ?? 1,
-                locked: e.locked ?? false
-            };
-
-            if (base.locked) {
-                const match = skillDamageCacheRef.current.find(s => s.name === e.label && s.tab === e.tab);
-                base.cached = e.cached ?? {
-                    normal: (match?.normal ?? 0),
-                    crit: (match?.crit ?? 0),
-                    avg: (match?.avg ?? 0)
-                };
-            }
-
-            return base;
-        });
     };
 
-    useEffect(() => {
-        if (!activeCharacter || !pendingRotationEntriesRef.current) return;
-
-        const cache = getSkillDamageCache(); // safe here
-
-        const updatedEntries = pendingRotationEntriesRef.current.map(e => {
-            const base = {
-                ...e,
-                multiplier: e.multiplier ?? 1,
-                locked: e.locked ?? false
-            };
-
-            if (base.locked) {
-                base.cached = e.cached ?? (() => {
-                    const match = cache.find(s => s.name === e.label && s.tab === e.tab);
-                    return {
-                        normal: (match?.normal ?? 0),
-                        crit: (match?.crit ?? 0),
-                        avg: (match?.avg ?? 0)
-                    };
-                })();
-            }
-
-            return base;
-        });
-
-        pendingRotationEntriesRef.current = null;
-        setRotationEntries(updatedEntries);
-    }, [activeCharacter?.Id]); // fire only once after character switches
-
     const exportRotation = (saved) => {
+        const fileName = `${saved.characterName.replace(/\s+/g, '_')}_rotation_${saved.id}.json`;
         const json = JSON.stringify(saved, null, 2);
         const blob = new Blob([json], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = `${saved.characterName.replace(/\s+/g, '_')}_rotation_${saved.id}.json`;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -272,6 +239,7 @@ export default function RotationsPane({
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.json';
+
         input.onchange = (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
@@ -280,22 +248,16 @@ export default function RotationsPane({
             reader.onload = (event) => {
                 try {
                     const data = JSON.parse(event.target.result);
+
                     if (!data.entries || !Array.isArray(data.entries)) {
                         alert('Invalid rotation file.');
                         return;
                     }
 
-                    // Defensive: mark cache as trusted if locked
-                    data.entries = data.entries.map(e => ({
-                        ...e,
-                        locked: e.locked ?? false,
-                        cached: e.locked ? e.cached ?? null : undefined
-                    }));
-
                     setSavedRotations(prev => [...prev, data]);
-                } catch (err) {
-                    alert('Invalid JSON file.');
-                    console.error('Import error:', err);
+                } catch (error) {
+                    alert('Failed to import rotation: Invalid JSON format.');
+                    console.error('Import error:', error);
                 }
             };
 
@@ -342,24 +304,28 @@ export default function RotationsPane({
                                 const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
                                 const charName = activeCharacter?.displayName ?? 'Unknown';
 
+                                const cache = getSkillDamageCache();
+
                                 const total = rotationEntries.reduce(
                                     (acc, entry) => {
-                                        const dmg = recalculateRotationEntryDamage({
-                                            entry,
-                                            activeCharacter,
-                                            characterRuntimeStates,
-                                            finalStats,
-                                            combatState,
-                                            mergedBuffs,
-                                            sliderValues,
-                                            characterLevel
-                                        });
-
                                         const mult = entry.multiplier ?? 1;
 
-                                        acc.normal += dmg.normal * mult;
-                                        acc.crit += dmg.crit * mult;
-                                        acc.avg += dmg.avg * mult;
+                                        let normal, crit, avg;
+
+                                        if (entry.locked && entry.cached) {
+                                            normal = entry.cached.normal ?? 0;
+                                            crit = entry.cached.crit ?? 0;
+                                            avg = entry.cached.avg ?? 0;
+                                        } else {
+                                            const cached = cache.find(s => s.name === entry.label && s.tab === entry.tab);
+                                            normal = (cached?.normal ?? 0) * mult;
+                                            crit = (cached?.crit ?? 0) * mult;
+                                            avg = (cached?.avg ?? 0) * mult;
+                                        }
+
+                                        acc.normal += normal;
+                                        acc.crit += crit;
+                                        acc.avg += avg;
 
                                         return acc;
                                     },
@@ -369,19 +335,21 @@ export default function RotationsPane({
                                 const fullRuntime = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
                                 const fullCharacterState = fullRuntime[charId] ?? {};
 
-                                const entriesToSave = rotationEntries.map(e => {
+                                const entriesWithCache = rotationEntries.map(e => {
                                     const base = {
-                                        label: e.label,
-                                        tab: e.tab,
-                                        detail: e.detail,
-                                        iconPath: e.iconPath,
+                                        ...e,
                                         multiplier: e.multiplier ?? 1,
                                         locked: e.locked ?? false,
-                                        createdAt: e.createdAt ?? Date.now()
                                     };
 
-                                    if (e.locked && e.cached) {
-                                        base.cached = e.cached; // ✅ save cached values if locked
+                                    // Ensure cached damage values are present if locked
+                                    if (base.locked && !base.cached) {
+                                        const match = getSkillDamageCache().find(s => s.name === e.label && s.tab === e.tab);
+                                        base.cached = {
+                                            normal: (match?.normal ?? 0) * base.multiplier,
+                                            crit: (match?.crit ?? 0) * base.multiplier,
+                                            avg: (match?.avg ?? 0) * base.multiplier,
+                                        };
                                     }
 
                                     return base;
@@ -391,7 +359,7 @@ export default function RotationsPane({
                                     id: Date.now(),
                                     characterId: charId,
                                     characterName: charName,
-                                    entries: entriesToSave,
+                                    entries: entriesWithCache,
                                     total,
                                     fullCharacterState
                                 };
@@ -514,7 +482,6 @@ export default function RotationsPane({
                 <div className="saved-rotation-list">
                     <div className="saved-rotation-header">
                         <h2 className="panel-title">Saved Rotations</h2>
-                        {/*
                         <button
                             className="rotation-button"
                             style={{ marginLeft: 'auto', marginBottom: '8px' }}
@@ -522,7 +489,6 @@ export default function RotationsPane({
                         >
                             Import
                         </button>
-*/}
                     </div>
                     <div className="sort-controls">
                         <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
@@ -615,7 +581,6 @@ export default function RotationsPane({
                                             >
                                                 Load
                                             </button>
-                                            {/*
                                             <button
                                                 className="rotation-button"
                                                 title="Export Rotation"
@@ -623,7 +588,6 @@ export default function RotationsPane({
                                             >
                                                 Export
                                             </button>
-*/}
                                         </div>
                                     </div>
 
@@ -655,8 +619,12 @@ export default function RotationsPane({
                     )}
                 </div>
             )}
+
+
         </div>
+
     );
+
 }
 
 function SortableRotationItem({
@@ -704,11 +672,10 @@ function SortableRotationItem({
                 locked,
                 cached: locked
                     ? {
-                        normal: (liveMatch?.normal ?? 0) * (item.multiplier ?? 1),
-                        crit: (liveMatch?.crit ?? 0) * (item.multiplier ?? 1),
-                        avg: (liveMatch?.avg ?? 0) * (item.multiplier ?? 1),
-                        tab: item.tab,
-                        label: item.label
+                        // ⚠️ no multiplier applied here
+                        normal: liveMatch?.normal ?? 0,
+                        crit: liveMatch?.crit ?? 0,
+                        avg: liveMatch?.avg ?? 0
                     }
                     : undefined
             };
@@ -863,7 +830,6 @@ export function getAllSkillEntries(
                 ]
             };
 
-
             let localMergedBuffs = structuredClone(mergedBuffs);
 
             if (override) {
@@ -881,7 +847,6 @@ export function getAllSkillEntries(
                     element,
                     characterLevel
                 });
-
 
                 localMergedBuffs = result.mergedBuffs;
                 skillMeta.skillType = result.skillMeta?.skillType ?? skillMeta.skillType;
@@ -916,101 +881,8 @@ export function getAllSkillEntries(
                 tab,
                 param: level.Param
             });
-
         }
     }
 
     return entries;
-}
-
-import { calculateDamage } from '../utils/damageCalculator';
-
-export function recalculateRotationEntryDamage({
-                                                   entry,
-                                                   activeCharacter,
-                                                   characterRuntimeStates,
-                                                   finalStats,
-                                                   combatState,
-                                                   mergedBuffs,
-                                                   sliderValues,
-                                                   characterLevel
-                                               }) {
-    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-    const element = elementToAttribute[activeCharacter?.attribute] ?? '';
-    const override = getCharacterOverride(charId);
-
-    const skillMeta = {
-        name: entry.label,
-        skillType: '',
-        multiplier: 1,
-        amplify: 0,
-        tab: entry.tab,
-        visible: true,
-        tags: [],
-    };
-
-    const characterState = {
-        activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
-        toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
-    };
-
-    const isActiveSequence = (seqNum) => sliderValues?.sequence >= seqNum;
-    const isToggleActive = (toggleId) =>
-        characterState.toggles?.[toggleId] === true ||
-        characterState.activeStates?.[toggleId] === true;
-
-    if (override) {
-        const result = override({
-            mergedBuffs,
-            combatState,
-            skillMeta,
-            characterState,
-            isActiveSequence,
-            isToggleActive,
-            baseCharacterState: activeCharacter,
-            sliderValues,
-            getSkillData: () => null,
-            finalStats,
-            element,
-            characterLevel
-        });
-
-        Object.assign(skillMeta, result.skillMeta ?? {});
-        mergedBuffs = result.mergedBuffs ?? mergedBuffs;
-    }
-
-    // Do not recalculate if locked — just return cached
-    if (entry.locked && entry.cached) {
-        return {
-            normal: entry.cached.normal ?? 0,
-            crit: entry.cached.crit ?? 0,
-            avg: entry.cached.avg ?? 0
-        };
-    }
-
-    const scaling = {
-        atk: skillMeta.atk ?? 1,
-        hp: skillMeta.hp ?? 0,
-        def: skillMeta.def ?? 0,
-        energyRegen: skillMeta.energyRegen ?? 0,
-    };
-
-    console.log(skillMeta.multiplier);
-
-
-    return calculateDamage({
-        finalStats,
-        combatState,
-        scaling,
-        multiplier: skillMeta.multiplier ?? 1,
-        element,
-        skillType: skillMeta.skillType,
-        characterLevel,
-        mergedBuffs,
-        amplify: skillMeta.amplify ?? 0,
-        skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
-        critDmgBonus: skillMeta.critDmgBonus ?? 0,
-        critRateBonus: skillMeta.critRateBonus ?? 0,
-        skillDefIgnore: skillMeta.skillDefIgnore ?? 0
-    });
 }
