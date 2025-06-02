@@ -176,45 +176,10 @@ export default function RotationsPane({
 
     const loadSavedRotation = (saved) => {
         const id = saved.characterId;
-
         const newCharacter = characters.find(c => String(c.Id ?? c.id ?? c.link) === String(id));
         if (!newCharacter) return;
 
-        setRotationEntries([]);
-
-        const cache = getSkillDamageCache();
-        console.log(cache);
-
-        const recalculatedEntries = saved.entries.map(e => {
-            const base = {
-                ...e,
-                locked: e.locked ?? false,
-                multiplier: e.multiplier ?? 1
-            };
-            console.log(e.multiplier);
-
-            if (base.locked) {
-                if (e.cached) {
-                    base.cached = e.cached; // Use saved snapshot
-                } else {
-                    const match = cache.find(s => s.name === e.label && s.tab === e.tab);
-                    console.log(match);
-                    base.cached = {
-                        normal: (match?.normal ?? 0),
-                        crit: (match?.crit ?? 0),
-                        avg: (match?.avg ?? 0)
-                    };
-                    console.log(base.cached);
-                }
-            }
-
-            console.log(base);
-
-            return base;
-        });
-
-        pendingRotationEntriesRef.current = recalculatedEntries;
-
+        // Step 1: hydrate character state
         setActiveCharacter(newCharacter);
         setActiveCharacterId(id);
         setCharacterRuntimeStates(prev => ({
@@ -229,6 +194,7 @@ export default function RotationsPane({
         setCombatState(saved.fullCharacterState.CombatState ?? {});
         setBaseCharacterState({ Stats: saved.fullCharacterState.Stats ?? {} });
 
+        // Step 2: safely store in localStorage
         const prev = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
         localStorage.setItem("characterRuntimeStates", JSON.stringify({
             ...prev,
@@ -240,17 +206,54 @@ export default function RotationsPane({
             saved.fullCharacterState.Team?.[1] ?? null,
             saved.fullCharacterState.Team?.[2] ?? null
         ]));
+
+        // Step 3: defer rotation entry assignment until character state is ready
+        pendingRotationEntriesRef.current = saved.entries.map(e => ({
+            ...e,
+            multiplier: e.multiplier ?? 1,
+            locked: e.locked ?? false,
+            cached: e.locked ? (e.cached ?? null) : undefined
+        }));
     };
 
+    useEffect(() => {
+        if (!activeCharacter || !pendingRotationEntriesRef.current) return;
+
+        const cache = getSkillDamageCache(); // safe here
+
+        const updatedEntries = pendingRotationEntriesRef.current.map(e => {
+            const base = {
+                ...e,
+                multiplier: e.multiplier ?? 1,
+                locked: e.locked ?? false
+            };
+
+            if (base.locked) {
+                base.cached = e.cached ?? (() => {
+                    const match = cache.find(s => s.name === e.label && s.tab === e.tab);
+                    return {
+                        normal: (match?.normal ?? 0),
+                        crit: (match?.crit ?? 0),
+                        avg: (match?.avg ?? 0)
+                    };
+                })();
+            }
+
+            return base;
+        });
+
+        pendingRotationEntriesRef.current = null;
+        setRotationEntries(updatedEntries);
+    }, [activeCharacter?.Id]); // fire only once after character switches
+
     const exportRotation = (saved) => {
-        const fileName = `${saved.characterName.replace(/\s+/g, '_')}_rotation_${saved.id}.json`;
         const json = JSON.stringify(saved, null, 2);
         const blob = new Blob([json], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = fileName;
+        link.download = `${saved.characterName.replace(/\s+/g, '_')}_rotation_${saved.id}.json`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -261,7 +264,6 @@ export default function RotationsPane({
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.json';
-
         input.onchange = (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
@@ -270,43 +272,22 @@ export default function RotationsPane({
             reader.onload = (event) => {
                 try {
                     const data = JSON.parse(event.target.result);
-
                     if (!data.entries || !Array.isArray(data.entries)) {
                         alert('Invalid rotation file.');
                         return;
                     }
 
-                    const cache = getSkillDamageCache();
+                    // Defensive: mark cache as trusted if locked
+                    data.entries = data.entries.map(e => ({
+                        ...e,
+                        locked: e.locked ?? false,
+                        cached: e.locked ? e.cached ?? null : undefined
+                    }));
 
-                    // Ensure all locked entries have valid cached data
-                    const cleanedEntries = data.entries.map(e => {
-                        const base = { ...e };
-
-                        if (base.locked) {
-                            if (!base.cached) {
-                                const match = cache.find(s => s.name === base.label && s.tab === base.tab);
-                                base.cached = {
-                                    normal: (match?.normal ?? 0),
-                                    crit: (match?.crit ?? 0),
-                                    avg: (match?.avg ?? 0)
-                                };
-                            }
-                        }
-
-                        return base;
-                    });
-
-                    // Append with cleaned entries
-                    setSavedRotations(prev => [
-                        ...prev,
-                        {
-                            ...data,
-                            entries: cleanedEntries
-                        }
-                    ]);
-                } catch (error) {
-                    alert('Failed to import rotation: Invalid JSON format.');
-                    console.error('Import error:', error);
+                    setSavedRotations(prev => [...prev, data]);
+                } catch (err) {
+                    alert('Invalid JSON file.');
+                    console.error('Import error:', err);
                 }
             };
 
