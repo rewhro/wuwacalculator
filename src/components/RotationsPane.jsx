@@ -183,11 +183,16 @@ export default function RotationsPane({
         // Temporarily clear entries so they won't appear stale
         setRotationEntries([]);
 
-        // Delay setting rotation entries after the character is fully loaded
-        pendingRotationEntriesRef.current = saved.entries;
-
-        // Update character info in state
-        setActiveCharacter(newCharacter);
+        if (getCharId(activeCharacter) === getCharId(newCharacter)) {
+            // ✅ Same character, apply rotation entries immediately
+            setRotationEntries(saved.entries);
+            pendingRotationEntriesRef.current = null;
+        } else {
+            // 🕐 Different character, defer until character loads
+            pendingRotationEntriesRef.current = saved.entries;
+            setActiveCharacter(newCharacter);
+        }
+        
         setActiveCharacterId(id);
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -213,6 +218,53 @@ export default function RotationsPane({
             saved.fullCharacterState.Team?.[1] ?? null,
             saved.fullCharacterState.Team?.[2] ?? null
         ]));
+    };
+
+    const exportRotation = (saved) => {
+        const fileName = `${saved.characterName.replace(/\s+/g, '_')}_rotation_${saved.id}.json`;
+        const json = JSON.stringify(saved, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
+    const importRotation = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+
+        input.onchange = (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+
+                    if (!data.entries || !Array.isArray(data.entries)) {
+                        alert('Invalid rotation file.');
+                        return;
+                    }
+
+                    setSavedRotations(prev => [...prev, data]);
+                } catch (error) {
+                    alert('Failed to import rotation: Invalid JSON format.');
+                    console.error('Import error:', error);
+                }
+            };
+
+            reader.readAsText(file);
+        };
+
+        input.click();
     };
 
     return (
@@ -428,6 +480,16 @@ export default function RotationsPane({
 
             {viewMode === 'saved' && (
                 <div className="saved-rotation-list">
+                    <div className="saved-rotation-header">
+                        <h2 className="panel-title">Saved Rotations</h2>
+                        <button
+                            className="rotation-button"
+                            style={{ marginLeft: 'auto', marginBottom: '8px' }}
+                            onClick={importRotation}
+                        >
+                            Import
+                        </button>
+                    </div>
                     <div className="sort-controls">
                         <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
                         <select value={sortKey} onChange={(e) => setSortKey(e.target.value)}>
@@ -518,6 +580,13 @@ export default function RotationsPane({
                                                 style={{ marginLeft: 'auto' }}
                                             >
                                                 Load
+                                            </button>
+                                            <button
+                                                className="rotation-button"
+                                                title="Export Rotation"
+                                                onClick={() => exportRotation(saved)}
+                                            >
+                                                Export
                                             </button>
                                         </div>
                                     </div>

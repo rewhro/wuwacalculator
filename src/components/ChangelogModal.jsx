@@ -255,6 +255,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `Added character buffs.`
                 }
             ]
+        },
+        {
+            date: '30/05/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `Added rotations >.<.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];
