@@ -19,6 +19,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+import {multipliers} from "../data/character-behaviour/teamplate.js";
 
 export default function RotationsPane({
                                           activeCharacter,
@@ -182,6 +183,7 @@ export default function RotationsPane({
         setRotationEntries([]);
 
         const cache = getSkillDamageCache();
+        console.log(cache);
 
         const recalculatedEntries = saved.entries.map(e => {
             const base = {
@@ -189,21 +191,24 @@ export default function RotationsPane({
                 locked: e.locked ?? false,
                 multiplier: e.multiplier ?? 1
             };
-
-            console.log(cache);
+            console.log(e.multiplier);
 
             if (base.locked) {
                 if (e.cached) {
                     base.cached = e.cached; // Use saved snapshot
                 } else {
                     const match = cache.find(s => s.name === e.label && s.tab === e.tab);
+                    console.log(match);
                     base.cached = {
                         normal: (match?.normal ?? 0),
                         crit: (match?.crit ?? 0),
                         avg: (match?.avg ?? 0)
                     };
+                    console.log(base.cached);
                 }
             }
+
+            console.log(base);
 
             return base;
         });
