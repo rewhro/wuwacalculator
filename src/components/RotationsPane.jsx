@@ -995,9 +995,8 @@ export function recalculateRotationEntryDamage({
         energyRegen: skillMeta.energyRegen ?? 0,
     };
 
-    if (skillMeta.name.includes('Nightfall')) {
-        console.log(skillMeta.multiplier);
-    }
+    console.log(skillMeta.multiplier);
+
 
     return calculateDamage({
         finalStats,
