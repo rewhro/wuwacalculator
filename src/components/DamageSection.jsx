@@ -75,7 +75,6 @@ export default function DamageSection({
                                         <div>CRIT</div>
                                         <div>AVG</div>
                                         {levels.map((level, index) => {
-                                            if (level.visible === false) return null;
 
                                             const label = level.Name?.toLowerCase() ?? '';
                                             let skillType = [];
@@ -177,7 +176,6 @@ export default function DamageSection({
                                                 }
                                             );
 
-                                            if (skillMeta.visible === false) return null; // 🔒 Also check here post-override
 
                                             const tag = skillMeta.tags?.[0];
                                             const isSupportSkill = tag === 'healing' || tag === 'shielding';
@@ -227,6 +225,7 @@ export default function DamageSection({
                                                     crit,
                                                     avg
                                                 });
+
                                             }
 
                                             const match = getSkillDamageCache().find(
@@ -234,27 +233,31 @@ export default function DamageSection({
                                             );
 
                                             return (
-                                                <React.Fragment key={index}>
-                                                    <div style={isSupportSkill ? { color: supportColor, fontWeight: 'bold' } : {}}>
-                                                        {level.Name}
-                                                    </div>
-
-                                                    {isSupportSkill ? (
-                                                        <>
-                                                            <div></div>
-                                                            <div></div>
-                                                            <div style={{ color: supportColor, fontWeight: 'bold' }}>
-                                                                {avg.toLocaleString()}
+                                                <>
+                                                    {skillMeta.visible === false ? null : (
+                                                        <React.Fragment key={index}>
+                                                            <div style={isSupportSkill ? { color: supportColor, fontWeight: 'bold' } : {}}>
+                                                                {level.Name}
                                                             </div>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <div>{normal.toLocaleString()}</div>
-                                                            <div>{crit.toLocaleString()}</div>
-                                                            <div>{avg.toLocaleString()}</div>
-                                                        </>
+
+                                                            {isSupportSkill ? (
+                                                                <>
+                                                                    <div></div>
+                                                                    <div></div>
+                                                                    <div style={{ color: supportColor, fontWeight: 'bold' }}>
+                                                                        {avg.toLocaleString()}
+                                                                    </div>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <div>{normal.toLocaleString()}</div>
+                                                                    <div>{crit.toLocaleString()}</div>
+                                                                    <div>{avg.toLocaleString()}</div>
+                                                                </>
+                                                            )}
+                                                        </React.Fragment>
                                                     )}
-                                                </React.Fragment>
+                                                </>
                                             );
                                         })}
                                     </div>

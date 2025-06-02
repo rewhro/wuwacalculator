@@ -397,7 +397,7 @@ export default function RotationsPane({
                                                     </div>
 
                                                     {expandedTabs[tabKey] && groupedSkillOptions[tabKey]
-                                                        //.filter(skill => skill.visible !== false)
+                                                        .filter(skill => skill.visible !== false)
                                                         .map((skill, index) => (
                                                         <button
                                                             key={index}
@@ -754,15 +754,7 @@ export function getAllSkillEntries(
 ) {
     if (!activeCharacter?.raw?.SkillTrees) return [];
 
-    const tabs = [
-        'normalAttack',
-        'resonanceSkill',
-        'forteCircuit',
-        'resonanceLiberation',
-        'introSkill',
-        'outroSkill'
-    ];
-
+    const tabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
     const entries = [];
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const element = elementToAttribute[activeCharacter?.attribute] ?? '';
@@ -786,19 +778,21 @@ export function getAllSkillEntries(
 
         const skill = tree?.Skill;
         const treeLevels = skill?.Level
-            ? Object.values(skill.Level).filter(level =>
-                Array.isArray(level.Param?.[0]) && level.Param[0].length > 0
+            ? Object.values(skill.Level).filter(
+                level => Array.isArray(level.Param?.[0]) && level.Param[0].length > 0
             )
             : [];
 
         const levelMap = new Map();
 
-        // Step 1: Insert original skill levels
+        // Step 1: Add original levels
         for (const level of treeLevels) {
-            levelMap.set(level.Name, { ...level });
+            levelMap.set(level.Name, {
+                ...level
+            });
         }
 
-        // Step 2: Overwrite or inject hardcoded skill levels
+        // Step 2: Overwrite or insert hardcoded levels
         for (const hc of (hardcoded?.[tab] ?? [])) {
             levelMap.set(hc.name, {
                 ...hc,
@@ -811,13 +805,14 @@ export function getAllSkillEntries(
 
         const combinedLevels = Array.from(levelMap.values()).filter(level => {
             const param = level.Param?.[0];
-
             const hasPercent =
                 typeof param === 'string'
                     ? param.includes('%')
                     : Array.isArray(param) && param.some(v => typeof v === 'string' && v.includes('%'));
 
             const isSupportSkill = level.healing || level.shielding;
+
+            // ✅ Always include outroSkill tab, even if it doesn't have %
             const alwaysInclude = tab === 'outroSkill';
 
             return hasPercent || isSupportSkill || alwaysInclude;
@@ -839,7 +834,6 @@ export function getAllSkillEntries(
 
             let localMergedBuffs = structuredClone(mergedBuffs);
 
-            // Apply character-specific override logic (if present)
             if (override) {
                 const result = override({
                     mergedBuffs: localMergedBuffs,
@@ -861,7 +855,6 @@ export function getAllSkillEntries(
                 skillMeta.visible = result.skillMeta?.visible ?? skillMeta.visible;
             }
 
-            // Fallback: infer skill type based on naming and tab
             if (!skillMeta.skillType || (Array.isArray(skillMeta.skillType) && skillMeta.skillType.length === 0)) {
                 const name = level.Name?.toLowerCase() ?? '';
 
@@ -889,6 +882,7 @@ export function getAllSkillEntries(
                     : skillMeta.skillType,
                 tab,
                 param: level.Param,
+                visible: skillMeta.visible !== false
             });
         }
     }
