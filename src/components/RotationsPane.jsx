@@ -397,7 +397,7 @@ export default function RotationsPane({
                                                     </div>
 
                                                     {expandedTabs[tabKey] && groupedSkillOptions[tabKey]
-                                                        .filter(skill => skill.visible !== false)
+                                                        //.filter(skill => skill.visible !== false)
                                                         .map((skill, index) => (
                                                         <button
                                                             key={index}
