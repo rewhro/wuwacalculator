@@ -181,21 +181,21 @@ export default function RotationsPane({
 
         setRotationEntries([]);
 
-        const recalculatedEntries = saved.entries.map(e => {
-            const cache = getSkillDamageCache();
+        const cache = getSkillDamageCache();
 
+        const recalculatedEntries = saved.entries.map(e => {
             const base = {
                 ...e,
                 locked: e.locked ?? false,
                 multiplier: e.multiplier ?? 1
             };
 
+            console.log(cache);
+
             if (base.locked) {
                 if (e.cached) {
-                    // ✅ Use saved cached values if available
-                    base.cached = e.cached;
+                    base.cached = e.cached; // Use saved snapshot
                 } else {
-                    // ✅ Recompute and store cache if not saved
                     const match = cache.find(s => s.name === e.label && s.tab === e.tab);
                     base.cached = {
                         normal: (match?.normal ?? 0),
@@ -526,7 +526,7 @@ export default function RotationsPane({
                 <div className="saved-rotation-list">
                     <div className="saved-rotation-header">
                         <h2 className="panel-title">Saved Rotations</h2>
-                        {/*
+
                         <button
                             className="rotation-button"
                             style={{ marginLeft: 'auto', marginBottom: '8px' }}
@@ -534,7 +534,7 @@ export default function RotationsPane({
                         >
                             Import
                         </button>
-                        */}
+
                     </div>
                     <div className="sort-controls">
                         <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
@@ -627,7 +627,7 @@ export default function RotationsPane({
                                             >
                                                 Load
                                             </button>
-                                            {/*
+
                                             <button
                                                 className="rotation-button"
                                                 title="Export Rotation"
@@ -635,7 +635,7 @@ export default function RotationsPane({
                                             >
                                                 Export
                                             </button>
-                                            */}
+
                                         </div>
                                     </div>
 
