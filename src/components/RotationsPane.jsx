@@ -396,7 +396,9 @@ export default function RotationsPane({
                                                         <span className="collapse-icon">{expandedTabs[tabKey] ? '▾' : '▸'}</span>
                                                     </div>
 
-                                                    {expandedTabs[tabKey] && groupedSkillOptions[tabKey].map((skill, index) => (
+                                                    {expandedTabs[tabKey] && groupedSkillOptions[tabKey]
+                                                        .filter(skill => skill.visible !== false)
+                                                        .map((skill, index) => (
                                                         <button
                                                             key={index}
                                                             className="skill-option"
@@ -850,7 +852,7 @@ export function getAllSkillEntries(
 
                 localMergedBuffs = result.mergedBuffs;
                 skillMeta.skillType = result.skillMeta?.skillType ?? skillMeta.skillType;
-                if (result?.skillMeta?.visible === false) continue;
+                skillMeta.visible = result.skillMeta?.visible ?? skillMeta.visible;
             }
 
             if (!skillMeta.skillType || (Array.isArray(skillMeta.skillType) && skillMeta.skillType.length === 0)) {
@@ -879,7 +881,8 @@ export function getAllSkillEntries(
                     ? skillMeta.skillType[0]
                     : skillMeta.skillType,
                 tab,
-                param: level.Param
+                param: level.Param,
+                visible: skillMeta.visible !== false
             });
         }
     }
