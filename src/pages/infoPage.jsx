@@ -110,7 +110,7 @@ export default function InfoPage() {
 
                     <div className="info-section">
                         <h3>How to contact MOI?</h3>
-                        <p>Might create a discord server down the line... for now <a href="mailto:your.rewhro@icloud.com">email me</a>.</p>
+                        <p>Join the <a href="https://discord.gg/nPyA9Rwa" target="_blank" rel="noopener noreferrer">discord</a> bro.</p>
                     </div>
                 </div>
             </div>
