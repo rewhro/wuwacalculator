@@ -17,7 +17,9 @@ export default function CartethyiaUI({ activeStates, toggleState }) {
                         <input
                             type="checkbox"
                             checked={manifestActive || false}
-                            onChange={() => toggleState('manifestActive')}
+                            onChange={() => { toggleState('manifestActive');
+                                if (activeStates.divinity) toggleState('divinity'); // turn off other
+                            }}
                         />
                         Enable
                     </label>

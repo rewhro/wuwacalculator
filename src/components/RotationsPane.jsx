@@ -1,9 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { Pencil, Trash2, Clock3 } from 'lucide-react';
-import { getSkillDamageCache } from '../utils/skillDamageCache';
-import {getCharacterOverride, getHardcodedMultipliers} from '../data/character-behaviour';
-import { elementToAttribute, attributeColors } from '../utils/attributeHelpers';
-import { usePersistentState } from '../hooks/usePersistentState';
 import {
     DndContext,
     closestCenter,
@@ -13,187 +9,179 @@ import {
 } from '@dnd-kit/core';
 import {
     SortableContext,
-    useSortable,
     arrayMove,
     verticalListSortingStrategy
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+import {RotationItem} from "./RotationItem.jsx";
+import { getSkillDamageCache } from '../utils/skillDamageCache';
+import {usePersistentState} from "../hooks/usePersistentState.js";
+
+const tabDisplayOrder = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
+const tabDisplayNames = {
+    normalAttack: 'Normal Attack',
+    resonanceSkill: 'Resonance Skill',
+    forteCircuit: 'Forte Circuit',
+    resonanceLiberation: 'Resonance Liberation',
+    introSkill: 'Intro Skill',
+    outroSkill: 'Outro Skill'
+};
+
+const skillTypeIconMap = {
+    basic: '/assets/stat-icons/basic.png',
+    heavy: '/assets/stat-icons/heavy.png',
+    skill: '/assets/stat-icons/skill.png',
+    ultimate: '/assets/stat-icons/liberation.png',
+    intro: '/assets/stat-icons/intro.png',
+    outro: '/assets/stat-icons/outro.png',
+    healing: '/assets/stat-icons/healing.png',
+    shielding: '/assets/stat-icons/shield.png'
+};
+
+const skillTypeLabelMap = {
+    basic: 'Basic Attack',
+    skill: 'Resonance Skill',
+    heavy: 'Heavy Attack',
+    ultimate: 'Resonance Liberation',
+    intro: 'Intro Skill',
+    outro: 'Outro Skill'
+};
 
 export default function RotationsPane({
+                                          currentSliderColor,
                                           activeCharacter,
-                                          characterRuntimeStates,
-                                          finalStats,
-                                          combatState,
-                                          mergedBuffs,
-                                          sliderValues,
-                                          characterLevel,
                                           rotationEntries,
                                           setRotationEntries,
-                                          characters,
+                                          characterRuntimeStates,
                                           setActiveCharacter,
-                                          setActiveCharacterId,
                                           setCharacterRuntimeStates,
+                                          setActiveCharacterId,
                                           setTeam,
                                           setSliderValues,
                                           setCharacterLevel,
-                                          setTraceNodeBuffs,
                                           setCustomBuffs,
-                                          setCombatState,
+                                          setTraceNodeBuffs,
                                           setBaseCharacterState,
-                                          characterStates,
+                                          setCombatState,
+                                          characters
                                       }) {
-    const [showSkillOptions, setShowSkillOptions] = useState(false);
-    const [editIndex, setEditIndex] = useState(null);
-    const skillOptions = getAllSkillEntries(activeCharacter, characterRuntimeStates, finalStats, combatState, mergedBuffs, sliderValues, characterLevel);
     const [viewMode, setViewMode] = useState('new');
+    const [showSkillOptions, setShowSkillOptions] = useState(false);
+    const [expandedTabs, setExpandedTabs] = useState(() =>
+        Object.fromEntries(tabDisplayOrder.map(key => [key, true]))
+    );
+    const sensors = useSensors(useSensor(PointerSensor, {
+        activationConstraint: { distance: 5 }
+    }));
     const [savedRotations, setSavedRotations] = usePersistentState('globalSavedRotations', []);
+    const groupedSkillOptions = React.useMemo(() => {
+        const allSkills = getSkillDamageCache().filter(skill => skill.visible !== false);
+        const groups = {};
+
+        for (const skill of allSkills) {
+            const tab = skill.tab ?? 'unknown';
+            if (!groups[tab]) groups[tab] = [];
+            groups[tab].push({
+                name: skill.name,
+                type: skill.skillType,
+                tab: tab
+            });
+        }
+        return groups;
+    }, []);
+    const [sortKey, setSortKey] = useState('date');
+    const [sortOrder, setSortOrder] = useState('desc');
     const [editingId, setEditingId] = useState(null);
     const [editedName, setEditedName] = useState('');
-    const [sortKey, setSortKey] = useState('date'); // 'date' | 'name' | 'dmg'
-    const [sortOrder, setSortOrder] = useState('desc'); // 'asc' | 'desc'
-    const pendingRotationEntriesRef = useRef(null);
-    const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: { distance: 5 }
-        })
-    );
-
-    const skillTypeIconMap = {
-        basic: '/assets/stat-icons/basic.png',
-        heavy: '/assets/stat-icons/heavy.png',
-        skill: '/assets/stat-icons/skill.png',
-        ultimate: '/assets/stat-icons/liberation.png',
-        intro: '/assets/stat-icons/intro.png',
-        outro: '/assets/stat-icons/outro.png',
-        healing: '/assets/stat-icons/healing.png',
-        shielding: '/assets/stat-icons/shield.png'
+    const [, forceUpdate] = useState(0);
+    useEffect(() => {
+        let lastSeen = 0;
+        const interval = setInterval(() => {
+            const next = window.lastSkillCacheUpdate ?? 0;
+            if (next > lastSeen) {
+                lastSeen = next;
+                forceUpdate(Date.now());
+            }
+        }, 300);
+        return () => clearInterval(interval);
+    }, []);
+    const toggleTab = (key) => {
+        setExpandedTabs(prev => ({ ...prev, [key]: !prev[key] }));
     };
-
-    const skillTypeLabelMap = {
-        basic: 'Basic Attack',
-        skill: 'Resonance Skill',
-        heavy: 'Heavy Attack',
-        ultimate: 'Resonance Liberation',
-        intro: 'Intro Skill',
-        outro: 'Outro Skill',
-        aeroErosion: 'Aero Erosion',
-        spectroFrazzle: 'Spectro Frazzle'
-    };
-
-    const tabDisplayOrder = [
-        'normalAttack',
-        'resonanceSkill',
-        'forteCircuit',
-        'resonanceLiberation',
-        'introSkill',
-        'outroSkill'
-    ];
-
-    const tabDisplayNames = {
-        normalAttack: 'Normal Attack',
-        resonanceSkill: 'Resonance Skill',
-        forteCircuit: 'Forte Circuit',
-        resonanceLiberation: 'Resonance Liberation',
-        introSkill: 'Intro Skill',
-        outroSkill: 'Outro Skill'
-    };
-
-
-    const attribute = elementToAttribute[activeCharacter?.attribute];
-    const characterColor = attributeColors[attribute] ?? '#aaa';
-
+    const [editIndex, setEditIndex] = useState(null);
     const handleAddSkill = (skill) => {
-        const allDamage = getSkillDamageCache();
-        const match = allDamage.find(
-            s => s.name === skill.name && s.tab === skill.tab
-        );
-
-
-        const skillTypeKey = skill.type?.toLowerCase();
-        const iconPath = skillTypeKey && skillTypeKey in skillTypeIconMap
-            ? skillTypeIconMap[skillTypeKey]
+        const type = Array.isArray(skill.type) ? skill.type[0] : skill.type;
+        const iconPath = type && typeof type === 'string' && skillTypeIconMap[type.toLowerCase?.()]
+            ? skillTypeIconMap[type.toLowerCase()]
             : null;
 
-        const newEntry = {
-            iconPath: iconPath,
+        const newEntryBase = {
+            id: crypto.randomUUID(),
             label: skill.name,
-            detail: skillTypeLabelMap[skill.type?.toLowerCase()] ?? skill.type,
-            tab: skill.tab, // ✅ required to look it up later
+            detail: skillTypeLabelMap[type] ?? type,
+            tab: skill.tab,
+            iconPath,
             multiplier: 1,
-            createdAt: Date.now(),
-            locked: false
+            locked: false,
+            snapshot: undefined,
+            createdAt: Date.now()
         };
 
         setRotationEntries(prev => {
             const copy = [...prev];
-            const entryWithId = {
-                createdAt: Date.now(), // fallback if missing
-                ...newEntry
-            };
+
             if (editIndex !== null && copy[editIndex]) {
-                copy[editIndex] = entryWithId;
+                const prevMultiplier = copy[editIndex].multiplier ?? 1;
+                copy[editIndex] = {
+                    ...newEntryBase,
+                    multiplier: prevMultiplier
+                };
             } else {
-                copy.push(entryWithId);
+                copy.push(newEntryBase);
             }
+
             return copy;
         });
 
         setEditIndex(null);
         setShowSkillOptions(false);
     };
-
-    const groupedSkillOptions = skillOptions.reduce((acc, skill) => {
-        const tabName = skill.tab;
-        if (!acc[tabName]) acc[tabName] = [];
-        acc[tabName].push(skill);
-        return acc;
-    }, {});
-
-    const [expandedTabs, setExpandedTabs] = useState(() =>
-        Object.fromEntries(tabDisplayOrder.map(key => [key, true]))
-    );
-
-    const toggleTab = (key) => {
-        setExpandedTabs(prev => ({ ...prev, [key]: !prev[key] }));
-    };
-
-    const getCharId = (char) => String(char?.Id ?? char?.id ?? char?.link ?? '');
+    const charId = activeCharacter?.Id?.toString();
 
     useEffect(() => {
-        if (!activeCharacter || !pendingRotationEntriesRef.current) return;
+        if (!charId) return;
+        const savedRotation = characterRuntimeStates?.[charId]?.rotationEntries ?? [];
 
-        const pending = pendingRotationEntriesRef.current;
-        if (pending) {
-            setTimeout(() => {
-                setRotationEntries(pending);
-                pendingRotationEntriesRef.current = null;
-            }, 0);
-        }
-    }, [activeCharacter]);
+        const patched = savedRotation.map(entry => ({
+            ...entry,
+            createdAt: entry.createdAt ?? Date.now() + Math.random()
+        }));
 
+        setRotationEntries(patched);
+    }, [charId]);
+
+    // Save rotation to character runtime state on change
+    useEffect(() => {
+        if (!charId) return;
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                rotationEntries: rotationEntries
+            }
+        }));
+    }, [rotationEntries, charId]);
 
     const loadSavedRotation = (saved) => {
         const id = saved.characterId;
-
-        // 1. Update in-memory character state first
         const newCharacter = characters.find(c => String(c.Id ?? c.id ?? c.link) === String(id));
         if (!newCharacter) return;
 
-        // Temporarily clear entries so they won't appear stale
-        setRotationEntries([]);
-
-        if (getCharId(activeCharacter) === getCharId(newCharacter)) {
-            // ✅ Same character, apply rotation entries immediately
-            setRotationEntries(saved.entries);
-            pendingRotationEntriesRef.current = null;
-        } else {
-            // 🕐 Different character, defer until character loads
-            pendingRotationEntriesRef.current = saved.entries;
-            setActiveCharacter(newCharacter);
-        }
-        
+        // Set character
+        setActiveCharacter(newCharacter);
         setActiveCharacterId(id);
+
+        // Set state in React
         setCharacterRuntimeStates(prev => ({
             ...prev,
             [id]: saved.fullCharacterState
@@ -206,10 +194,17 @@ export default function RotationsPane({
         setCombatState(saved.fullCharacterState.CombatState ?? {});
         setBaseCharacterState({ Stats: saved.fullCharacterState.Stats ?? {} });
 
-        // Optionally update localStorage
-        const prev = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
+        setRotationEntries(
+            (saved.entries ?? []).map(e => ({
+                ...e,
+                createdAt: e.createdAt ?? Date.now() + Math.random()
+            }))
+        );
+
+        // Store persistently
+        const prevRuntime = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
         localStorage.setItem("characterRuntimeStates", JSON.stringify({
-            ...prev,
+            ...prevRuntime,
             [id]: saved.fullCharacterState
         }));
         localStorage.setItem("activeCharacterId", JSON.stringify(id));
@@ -218,68 +213,27 @@ export default function RotationsPane({
             saved.fullCharacterState.Team?.[1] ?? null,
             saved.fullCharacterState.Team?.[2] ?? null
         ]));
+
+        // Store rotation entries persistently if needed
+        const prevRotations = JSON.parse(localStorage.getItem("rotationEntriesStore") || "{}");
+        localStorage.setItem("rotationEntriesStore", JSON.stringify({
+            ...prevRotations,
+            [id]: saved.entries ?? []
+        }));
     };
 
-    const exportRotation = (saved) => {
-        const fileName = `${saved.characterName.replace(/\s+/g, '_')}_rotation_${saved.id}.json`;
-        const json = JSON.stringify(saved, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    };
-
-    const importRotation = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json';
-
-        input.onchange = (e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const data = JSON.parse(event.target.result);
-
-                    if (!data.entries || !Array.isArray(data.entries)) {
-                        alert('Invalid rotation file.');
-                        return;
-                    }
-
-                    setSavedRotations(prev => [...prev, data]);
-                } catch (error) {
-                    alert('Failed to import rotation: Invalid JSON format.');
-                    console.error('Import error:', error);
-                }
-            };
-
-            reader.readAsText(file);
-        };
-
-        input.click();
-    };
+    const normalizedEntries = rotationEntries.map((entry, idx) => ({
+        ...entry,
+        createdAt: entry.createdAt ?? Date.now() + idx + Math.random()
+    }));
 
     return (
         <div className="rotation-pane">
             <div className="rotation-view-toggle">
-                <button
-                    className={`view-toggle-button ${viewMode === 'new' ? 'active' : ''}`}
-                    onClick={() => setViewMode('new')}
-                >
+                <button className={`view-toggle-button ${viewMode === 'new' ? 'active' : ''}`} onClick={() => setViewMode('new')}>
                     New
                 </button>
-                <button
-                    className={`view-toggle-button ${viewMode === 'saved' ? 'active' : ''}`}
-                    onClick={() => setViewMode('saved')}
-                >
+                <button className={`view-toggle-button ${viewMode === 'saved' ? 'active' : ''}`} onClick={() => setViewMode('saved')}>
                     Saved
                 </button>
             </div>
@@ -290,80 +244,40 @@ export default function RotationsPane({
 
                     <div className="rotation-controls">
                         <div className="rotation-buttons-left">
-                            <button className="rotation-button" onClick={() => setShowSkillOptions(prev => !prev)}>+ Skill</button>
-                            {/*<button className="rotation-button">+ Condition</button>
-                    <button className="rotation-button">+ Block</button>*/}
+                            <button className="rotation-button" onClick={() => setShowSkillOptions(true)}>+ Skill</button>
                             <button className="rotation-button clear" onClick={() => setRotationEntries([])}>Clear</button>
                         </div>
-
                         <button
                             className="rotation-button add-button"
+                            title="Save Rotation"
                             onClick={() => {
-                                if (!activeCharacter || rotationEntries.length === 0) return;
+                                const characterId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+                                const characterName = activeCharacter?.displayName ?? 'Unknown';
+                                const dateId = Date.now(); // Use timestamp as unique ID
 
-                                const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-                                const charName = activeCharacter?.displayName ?? 'Unknown';
-
+                                // Compute totals using skill damage cache (as in your Rotations component)
                                 const cache = getSkillDamageCache();
+                                let total = { normal: 0, crit: 0, avg: 0 };
 
-                                const total = rotationEntries.reduce(
-                                    (acc, entry) => {
-                                        const mult = entry.multiplier ?? 1;
+                                for (const entry of rotationEntries) {
+                                    const multiplier = entry.multiplier ?? 1;
+                                    const source = entry.locked ? entry.snapshot : cache.find(s => s.name === entry.label && s.tab === entry.tab);
+                                    if (!source || source.isSupportSkill) continue;
 
-                                        let normal, crit, avg;
+                                    total.normal += (source.normal ?? 0) * multiplier;
+                                    total.crit += (source.crit ?? 0) * multiplier;
+                                    total.avg += (source.avg ?? 0) * multiplier;
+                                }
 
-                                        if (entry.locked && entry.cached) {
-                                            normal = entry.cached.normal ?? 0;
-                                            crit = entry.cached.crit ?? 0;
-                                            avg = entry.cached.avg ?? 0;
-                                        } else {
-                                            const cached = cache.find(s => s.name === entry.label && s.tab === entry.tab);
-                                            normal = (cached?.normal ?? 0) * mult;
-                                            crit = (cached?.crit ?? 0) * mult;
-                                            avg = (cached?.avg ?? 0) * mult;
-                                        }
-
-                                        acc.normal += normal;
-                                        acc.crit += crit;
-                                        acc.avg += avg;
-
-                                        return acc;
-                                    },
-                                    { normal: 0, crit: 0, avg: 0 }
-                                );
-
-                                const fullRuntime = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
-                                const fullCharacterState = fullRuntime[charId] ?? {};
-
-                                const entriesWithCache = rotationEntries.map(e => {
-                                    const base = {
-                                        ...e,
-                                        multiplier: e.multiplier ?? 1,
-                                        locked: e.locked ?? false,
-                                    };
-
-                                    // Ensure cached damage values are present if locked
-                                    if (base.locked && !base.cached) {
-                                        const match = getSkillDamageCache().find(s => s.name === e.label && s.tab === e.tab);
-                                        base.cached = {
-                                            normal: (match?.normal ?? 0) * base.multiplier,
-                                            crit: (match?.crit ?? 0) * base.multiplier,
-                                            avg: (match?.avg ?? 0) * base.multiplier,
-                                        };
-                                    }
-
-                                    return base;
-                                });
-
+                                // Save full rotation snapshot
                                 const newSaved = {
-                                    id: Date.now(),
-                                    characterId: charId,
-                                    characterName: charName,
-                                    entries: entriesWithCache,
+                                    id: dateId,
+                                    characterId,
+                                    characterName,
+                                    entries: rotationEntries,
                                     total,
-                                    fullCharacterState
+                                    fullCharacterState: characterRuntimeStates?.[characterId] ?? {}
                                 };
-
                                 setSavedRotations(prev => [...prev, newSaved]);
                             }}
                         >
@@ -371,34 +285,63 @@ export default function RotationsPane({
                         </button>
                     </div>
 
+                    <div className="rotation-list-container">
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            modifiers={[restrictToFirstScrollableAncestor]}
+                            onDragEnd={({ active, over }) => {
+                                if (active.id !== over?.id) {
+                                    const oldIndex = normalizedEntries.findIndex(e => e.createdAt.toString() === active.id);
+                                    const newIndex = normalizedEntries.findIndex(e => e.createdAt.toString() === over.id);
+                                    setRotationEntries((items) => arrayMove(items, oldIndex, newIndex));
+                                }
+                            }}
+                        >
+                            <SortableContext
+                                items={normalizedEntries.map(e => e.createdAt.toString())}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {normalizedEntries.map((entry, idx) => (
+                                    <RotationItem
+                                        key={entry.createdAt.toString()}
+                                        id={entry.createdAt.toString()}
+                                        index={idx}
+                                        entry={entry}
+                                        onEdit={(i) => {
+                                            setEditIndex(i);
+                                            setShowSkillOptions(true);
+                                        }}
+                                        onDelete={(i) => setRotationEntries(prev => prev.filter((_, j) => j !== i))}
+                                        onMultiplierChange={(i, val) => {
+                                            const updated = [...rotationEntries];
+                                            updated[i].multiplier = val;
+                                            setRotationEntries(updated);
+                                        }}
+                                        setRotationEntries={setRotationEntries}
+                                        currentSliderColor={currentSliderColor}
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
+                    </div>
+
                     {showSkillOptions && (
                         <div className="skill-menu-overlay" onClick={() => setShowSkillOptions(false)}>
                             <div className="skill-menu-panel" onClick={(e) => e.stopPropagation()}>
                                 <div className="menu-header-with-buttons">
                                     <div className="menu-header">Select a Skill</div>
-                                    <button
-                                        className="rotation-button clear"
-                                        onClick={() => setShowSkillOptions(false)}
-                                    >
-                                        ✕
-                                    </button>
+                                    <button className="rotation-button clear" onClick={() => setShowSkillOptions(false)}>✕</button>
                                 </div>
-
                                 <div className="skill-menu-list">
                                     {tabDisplayOrder.map((tabKey) =>
                                             groupedSkillOptions[tabKey]?.length > 0 && (
                                                 <div key={tabKey} className="skill-tab-section">
-                                                    <div
-                                                        className="skill-tab-label collapsible-label"
-                                                        onClick={() => toggleTab(tabKey)}
-                                                    >
+                                                    <div className="skill-tab-label collapsible-label" onClick={() => toggleTab(tabKey)}>
                                                         <span>{tabDisplayNames[tabKey]}</span>
                                                         <span className="collapse-icon">{expandedTabs[tabKey] ? '▾' : '▸'}</span>
                                                     </div>
-
-                                                    {expandedTabs[tabKey] && groupedSkillOptions[tabKey]
-                                                        //.filter(skill => skill.visible !== false)
-                                                        .map((skill, index) => (
+                                                    {expandedTabs[tabKey] && groupedSkillOptions[tabKey].map((skill, index) => (
                                                         <button
                                                             key={index}
                                                             className="skill-option"
@@ -409,20 +352,26 @@ export default function RotationsPane({
                                                                     <span>{skill.name}</span>
                                                                 </div>
                                                                 <div className="dropdown-icons">
-                                                                    {skill.type &&
-                                                                        skillTypeIconMap[skill.type.toLowerCase()] && (
-                                                                            <img
-                                                                                src={skillTypeIconMap[skill.type.toLowerCase()]}
-                                                                                alt={skill.type}
-                                                                                className="skill-type-icon"
-                                                                                onError={(e) => {
-                                                                                    e.target.style.display = 'none'; // Hides broken images
-                                                                                }}
-                                                                            />
-                                                                        )}
+                                                                    {(() => {
+                                                                        const type = Array.isArray(skill.type) ? skill.type[0] : skill.type;
+                                                                        if (typeof type === 'string' && skillTypeIconMap[type.toLowerCase()]) {
+                                                                            return (
+                                                                                <img
+                                                                                    src={skillTypeIconMap[type.toLowerCase()]}
+                                                                                    alt={type}
+                                                                                    className="skill-type-icon"
+                                                                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                                                                />
+                                                                            );
+                                                                        }
+                                                                        return null;
+                                                                    })()}
                                                                     <span style={{ opacity: 0.75, fontSize: '13px' }}>
-                                                              {skillTypeLabelMap[skill.type] ?? skill.type}
-                                                            </span>
+                                                                        {(() => {
+                                                                            const type = Array.isArray(skill.type) ? skill.type[0] : skill.type;
+                                                                            return typeof type === 'string' ? (skillTypeLabelMap[type] ?? type) : 'Unknown';
+                                                                        })()}
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </button>
@@ -434,49 +383,6 @@ export default function RotationsPane({
                             </div>
                         </div>
                     )}
-
-                    <div className="rotation-list-container">
-                        <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            modifiers={[restrictToFirstScrollableAncestor]}
-                            onDragEnd={({ active, over }) => {
-                                if (active.id !== over?.id) {
-                                    const oldIndex = rotationEntries.findIndex(e => e.createdAt?.toString() === active.id);
-                                    const newIndex = rotationEntries.findIndex(e => e.createdAt?.toString() === over.id);
-                                    setRotationEntries((items) => arrayMove(items, oldIndex, newIndex));
-                                }
-                            }}
-                        >
-                            <SortableContext
-                                items={rotationEntries.map(e => e.createdAt?.toString())}
-                                strategy={verticalListSortingStrategy}
-                            >
-                                {rotationEntries.map((entry, idx) => (
-                                    <SortableRotationItem
-                                        key={entry.createdAt?.toString()}
-                                        id={entry.createdAt?.toString()}
-                                        index={idx}
-                                        entry={entry}
-                                        characterColor={characterColor}
-                                        onMultiplierChange={(i, value) => {
-                                            const updated = [...rotationEntries];
-                                            updated[i].multiplier = Math.max(1, value);
-                                            setRotationEntries(updated);
-                                        }}
-                                        onEdit={(i) => {
-                                            setEditIndex(i);
-                                            setShowSkillOptions(true);
-                                        }}
-                                        onDelete={(i) => {
-                                            setRotationEntries(prev => prev.filter((_, j) => j !== i));
-                                        }}
-                                        setRotationEntries={setRotationEntries}  // ✅ Add this line
-                                    />
-                                ))}
-                            </SortableContext>
-                        </DndContext>
-                    </div>
                 </>
             )}
 
@@ -484,13 +390,14 @@ export default function RotationsPane({
                 <div className="saved-rotation-list">
                     <div className="saved-rotation-header">
                         <h2 className="panel-title">Saved Rotations</h2>
+                        {/*
                         <button
                             className="rotation-button"
                             style={{ marginLeft: 'auto', marginBottom: '8px' }}
-                            onClick={importRotation}
                         >
                             Import
                         </button>
+                        */}
                     </div>
                     <div className="sort-controls">
                         <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
@@ -583,13 +490,14 @@ export default function RotationsPane({
                                             >
                                                 Load
                                             </button>
+                                            {/*
                                             <button
                                                 className="rotation-button"
                                                 title="Export Rotation"
-                                                onClick={() => exportRotation(saved)}
                                             >
                                                 Export
                                             </button>
+*/}
                                         </div>
                                     </div>
 
@@ -621,271 +529,6 @@ export default function RotationsPane({
                     )}
                 </div>
             )}
-
-
-        </div>
-
-    );
-
-}
-
-function SortableRotationItem({
-                                  id,
-                                  index,
-                                  entry,
-                                  onMultiplierChange,
-                                  onEdit,
-                                  onDelete,
-                                  characterColor,
-                                  setRotationEntries
-                              }) {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition
-    } = useSortable({ id });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition
-    };
-
-    const cache = getSkillDamageCache();
-    const multiplier = entry.multiplier ?? 1;
-
-    // Use cached or live damage values
-    const source = entry.locked ? entry.cached : cache.find(s => s.name === entry.label && s.tab === entry.tab);
-
-    const normal = (source?.normal ?? 0) * multiplier;
-    const crit = (source?.crit ?? 0) * multiplier;
-    const avg = (source?.avg ?? 0) * multiplier;
-
-    const toggleLock = () => {
-        setRotationEntries(prev => {
-            const copy = [...prev];
-            const item = copy[index];
-            const liveMatch = cache.find(s => s.name === item.label && s.tab === item.tab);
-            const locked = !item.locked;
-
-            copy[index] = {
-                ...item,
-                locked,
-                cached: locked
-                    ? {
-                        // ⚠️ no multiplier applied here
-                        normal: liveMatch?.normal ?? 0,
-                        crit: liveMatch?.crit ?? 0,
-                        avg: liveMatch?.avg ?? 0
-                    }
-                    : undefined
-            };
-
-            return copy;
-        });
-    };
-
-    return (
-        <div
-            ref={setNodeRef}
-            style={style}
-            {...attributes}
-            {...listeners}
-            className={`rotation-item-wrapper ${entry.locked ? 'locked' : ''}`}
-            onClick={toggleLock}
-        >
-            <div className={`rotation-item ${entry.locked ? 'locked' : ''}`}>
-                <div className="rotation-header">
-                    <span className="entry-name" style={{ color: characterColor }}>
-                        {entry.label} {multiplier > 1 ? `(x${multiplier})` : ''}
-                    </span>
-                    <span className="entry-type-detail">
-                        {entry.iconPath && (
-                            <img
-                                src={entry.iconPath}
-                                alt=""
-                                className="skill-type-icon"
-                                onError={(e) => {
-                                    e.target.style.display = 'none';
-                                }}
-                            />
-                        )}
-                        <span className="entry-detail-text">{entry.detail}</span>
-                    </span>
-                </div>
-                <div className="rotation-values">
-                    <span className="value-label">Normal</span>
-                    <span className="value">{Math.round(normal).toLocaleString()}</span>
-                    <span className="value-label">Crit</span>
-                    <span className="value">{Math.round(crit).toLocaleString()}</span>
-                    <span className="value-label">Avg</span>
-                    <span className="value avg">{Math.round(avg).toLocaleString()}</span>
-                    <div className="rotation-multiplier-inline" onClick={(e) => e.stopPropagation()}>
-                        <label style={{ fontSize: '13px' }}>×</label>
-                        <input
-                            type="number"
-                            min="1"
-                            max="99"
-                            className="character-level-input"
-                            value={multiplier}
-                            onChange={(e) => onMultiplierChange(index, parseInt(e.target.value) || 1)}
-                            style={{ width: '40px', fontSize: '13px', marginLeft: '4px', textAlign: 'right' }}
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className="rotation-actions external-actions" onClick={(e) => e.stopPropagation()}>
-                <button className="rotation-button" title="Edit" onClick={() => onEdit(index)}><Pencil size={18} /></button>
-                <button className="rotation-button" title="Delete" onClick={() => onDelete(index)}><Trash2 size={18} /></button>
-            </div>
         </div>
     );
-}
-
-export function getAllSkillEntries(
-    activeCharacter,
-    characterRuntimeStates,
-    finalStats,
-    combatState,
-    mergedBuffs,
-    sliderValues,
-    characterLevel
-) {
-    if (!activeCharacter?.raw?.SkillTrees) return [];
-
-    const tabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
-    const entries = [];
-    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-    const element = elementToAttribute[activeCharacter?.attribute] ?? '';
-
-    const override = getCharacterOverride(charId);
-    const hardcoded = getHardcodedMultipliers(charId, activeCharacter);
-    const characterState = {
-        activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
-        toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {}
-    };
-
-    const isActiveSequence = (seqNum) => sliderValues?.sequence >= seqNum;
-    const isToggleActive = (toggleId) =>
-        characterState?.toggles?.[toggleId] === true || characterState?.activeStates?.[toggleId] === true;
-
-    for (const tab of tabs) {
-        const tree = Object.values(activeCharacter.raw.SkillTrees).find(tree => {
-            const type = tree.Skill?.Type?.toLowerCase()?.replace(/\s/g, '');
-            return type?.includes(tab.toLowerCase());
-        });
-
-        const skill = tree?.Skill;
-        const treeLevels = skill?.Level
-            ? Object.values(skill.Level).filter(
-                level => Array.isArray(level.Param?.[0]) && level.Param[0].length > 0
-            )
-            : [];
-
-        const levelMap = new Map();
-
-        // Step 1: Add original levels
-        for (const level of treeLevels) {
-            levelMap.set(level.Name, {
-                ...level
-            });
-        }
-
-        // Step 2: Overwrite or insert hardcoded levels
-        for (const hc of (hardcoded?.[tab] ?? [])) {
-            levelMap.set(hc.name, {
-                ...hc,
-                Name: hc.name,
-                Param: hc.param ?? [],
-                healing: hc.healing,
-                shielding: hc.shielding
-            });
-        }
-
-        const combinedLevels = Array.from(levelMap.values()).filter(level => {
-            const param = level.Param?.[0];
-            const hasPercent =
-                typeof param === 'string'
-                    ? param.includes('%')
-                    : Array.isArray(param) && param.some(v => typeof v === 'string' && v.includes('%'));
-
-            const isSupportSkill = level.healing || level.shielding;
-
-            // ✅ Always include outroSkill tab, even if it doesn't have %
-            const alwaysInclude = tab === 'outroSkill';
-
-            return hasPercent || isSupportSkill || alwaysInclude;
-        });
-
-        for (const level of combinedLevels) {
-            const skillMeta = {
-                name: level.Name,
-                skillType: '',
-                multiplier: 1,
-                amplify: 0,
-                tab,
-                visible: true,
-                tags: [
-                    ...(level.healing ? ['healing'] : []),
-                    ...(level.shielding ? ['shielding'] : [])
-                ]
-            };
-
-            let localMergedBuffs = structuredClone(mergedBuffs);
-
-            if (override) {
-                const result = override({
-                    mergedBuffs: localMergedBuffs,
-                    combatState,
-                    skillMeta,
-                    characterState,
-                    isActiveSequence,
-                    isToggleActive,
-                    baseCharacterState: activeCharacter,
-                    sliderValues,
-                    getSkillData: () => skill,
-                    finalStats,
-                    element,
-                    characterLevel
-                });
-
-                localMergedBuffs = result.mergedBuffs;
-                skillMeta.skillType = result.skillMeta?.skillType ?? skillMeta.skillType;
-                skillMeta.visible = result.skillMeta?.visible ?? skillMeta.visible;
-            }
-
-            if (!skillMeta.skillType || (Array.isArray(skillMeta.skillType) && skillMeta.skillType.length === 0)) {
-                const name = level.Name?.toLowerCase() ?? '';
-
-                if (name.includes('heavy attack')) {
-                    skillMeta.skillType = 'heavy';
-                } else if (tab === 'resonanceSkill') {
-                    skillMeta.skillType = 'skill';
-                } else if (tab === 'resonanceLiberation') {
-                    skillMeta.skillType = 'ultimate';
-                } else if (tab === 'normalAttack') {
-                    skillMeta.skillType = 'basic';
-                } else if (tab === 'introSkill') {
-                    skillMeta.skillType = 'intro';
-                } else if (tab === 'outroSkill') {
-                    skillMeta.skillType = 'outro';
-                } else {
-                    skillMeta.skillType = 'basic';
-                }
-            }
-
-            entries.push({
-                name: level.Name,
-                type: Array.isArray(skillMeta.skillType)
-                    ? skillMeta.skillType[0]
-                    : skillMeta.skillType,
-                tab,
-                param: level.Param,
-                visible: skillMeta.visible !== false
-            });
-        }
-    }
-
-    return entries;
 }

@@ -225,18 +225,26 @@ export default function Setting() {
                                     const charId = importPreview?.Id ?? importPreview?.id ?? importPreview?.link;
                                     const prev = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
 
-                                    localStorage.setItem("characterRuntimeStates", JSON.stringify({
+                                    const newRuntimeStates = {
                                         ...prev,
                                         [charId]: importPreview
-                                    }));
+                                    };
 
+                                    localStorage.setItem("characterRuntimeStates", JSON.stringify(newRuntimeStates));
                                     localStorage.setItem("activeCharacterId", JSON.stringify(charId));
 
-                                    // Restore the team: main + 2 teammates (first is always the main)
-                                    localStorage.setItem(
-                                        "team",
-                                        JSON.stringify([charId, importPreview.Team?.[1] ?? null, importPreview.Team?.[2] ?? null])
-                                    );
+                                    localStorage.setItem("team", JSON.stringify([
+                                        charId,
+                                        importPreview.Team?.[1] ?? null,
+                                        importPreview.Team?.[2] ?? null
+                                    ]));
+
+                                    const rotationEntriesRaw = JSON.parse(localStorage.getItem("rotationEntriesStore") || "{}");
+                                    const newRotationEntries = {
+                                        ...rotationEntriesRaw,
+                                        [charId]: importPreview.rotationEntries ?? []
+                                    };
+                                    localStorage.setItem("rotationEntriesStore", JSON.stringify(newRotationEntries));
                                     setShowImportModal(false);
                                     window.location.href = "/";
                                     //setImportSuccess(`Imported: ${importPreview?.Name} successfully.`);

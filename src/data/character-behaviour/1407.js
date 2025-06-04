@@ -31,6 +31,7 @@ export function applyCiacconaLogic({
     if (name.includes('interlude tune')) {
         skillMeta.visible = characterLevel >= 50;
         skillMeta.multiplier = 1;
+        skillMeta.scaling = { atk: 0, hp: 1, def: 0, energyRegen: 0 };
     }
 
     if (characterLevel >= 70 && name.includes('quadruple downbeat')) {
@@ -69,7 +70,6 @@ export const ciacconaMultipliers = {
     resonanceLiberation: [
         {
             name: "Interlude Tune: Shield",
-            scaling: { hp: 1 },
             shielding: true
         },
         {

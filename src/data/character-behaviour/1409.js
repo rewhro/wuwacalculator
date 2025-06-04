@@ -39,7 +39,7 @@ export function applyCartethyiaLogic({
     }
 
     if (!characterState?.activeStates?.manifestActive) {
-        if (name === 'resonance liberation damage' && !mergedBuffs.__ultBuff1) {
+        if (tab === 'resonanceLiberation' && !mergedBuffs.__ultBuff1) {
             skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 60;
             mergedBuffs.__ultBuff1 = true;
         }
@@ -50,7 +50,7 @@ export function applyCartethyiaLogic({
         }
     }
 
-    if (!mergedBuffs.__ultBuff2 && name === 'resonance liberation damage') {
+    if (!mergedBuffs.__ultBuff2 && tab === 'resonanceLiberation') {
         skillMeta.amplify = (skillMeta.amplify ?? 0) + Math.min(combatState.aeroErosion * 20, 100);
         mergedBuffs.__ultBuff2 = true;
     }
@@ -88,7 +88,7 @@ export function applyCartethyiaLogic({
         }
     }
 
-    if (isActiveSequence(3) && name === 'resonance liberation damage') {
+    if (isActiveSequence(3) && tab === 'resonanceLiberation') {
         skillMeta.multiplier *= 2;
     }
 
@@ -116,7 +116,94 @@ export function applyCartethyiaLogic({
 
 // Manual healing skill declarations only
 export const cartethyiaMultipliers = {
-
+    resonanceLiberation: [
+        {
+            name: 'Blade of Howling Squall DMG',
+            scaling: { hp: 1 },
+            Param: [
+                [
+                    "6.92%*7",
+                    "7.49%*7",
+                    "8.06%*7",
+                    "8.85%*7",
+                    "9.42%*7",
+                    "10.07%*7",
+                    "10.98%*7",
+                    "11.89%*7",
+                    "12.80%*7",
+                    "13.76%*7",
+                    "14.90%*7",
+                    "16.03%*7",
+                    "17.16%*7",
+                    "18.30%*7",
+                    "19.43%*7",
+                    "20.57%*7",
+                    "21.70%*7",
+                    "22.84%*7",
+                    "23.97%*7",
+                    "25.11%*7"
+                ]
+            ]
+        }
+    ],
+    forteCircuit: [
+        {
+            name: 'Sword to Answer Waves\' Call DMG',
+            scaling: { hp: 1 },
+            Param: [
+                [
+                    "0.81%*4+7.52%",
+                    "0.88%*4+8.13%",
+                    "0.94%*4+8.75%",
+                    "1.03%*4+9.61%",
+                    "1.10%*4+10.23%",
+                    "1.18%*4+10.93%",
+                    "1.28%*4+11.92%",
+                    "1.39%*4+12.90%",
+                    "1.49%*4+13.89%",
+                    "1.60%*4+14.94%",
+                    "1.74%*4+16.17%",
+                    "1.87%*4+17.40%",
+                    "2.00%*4+18.63%",
+                    "2.13%*4+19.86%",
+                    "2.26%*4+21.10%",
+                    "2.40%*4+22.33%",
+                    "2.53%*4+23.56%",
+                    "2.66%*4+24.79%",
+                    "2.79%*4+26.02%",
+                    "2.92%*4+27.25%"
+                ]
+            ]
+        },
+        {
+            name: 'May Tempest Break the Tides DMG',
+            scaling: { hp: 1 },
+            Param: [
+                [
+                    "0.81%*2+3.04%*3",
+                    "0.88%*2+3.29%*3",
+                    "0.94%*2+3.54%*3",
+                    "1.03%*2+3.89%*3",
+                    "1.10%*2+4.14%*3",
+                    "1.18%*2+4.43%*3",
+                    "1.28%*2+4.83%*3",
+                    "1.39%*2+5.23%*3",
+                    "1.49%*2+5.62%*3",
+                    "1.60%*2+6.05%*3",
+                    "1.74%*2+6.55%*3",
+                    "1.87%*2+7.05%*3",
+                    "2.00%*2+7.54%*3",
+                    "2.13%*2+8.04%*3",
+                    "2.26%*2+8.54%*3",
+                    "2.40%*2+9.04%*3",
+                    "2.53%*2+9.54%*3",
+                    "2.66%*2+10.04%*3",
+                    "2.79%*2+10.54%*3",
+                    "2.92%*2+11.03%*3"
+                ]
+            ]
+        }
+    ]
 };
 
 export function cartBuffsLogic({

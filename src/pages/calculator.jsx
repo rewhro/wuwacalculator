@@ -221,68 +221,55 @@ export default function Calculator() {
 
     const [rotationEntriesRaw, setRotationEntriesRaw] = usePersistentState('rotationEntriesStore', {});
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-    const rotationEntries = Array.isArray(rotationEntriesRaw?.[charId]) ? rotationEntriesRaw[charId] : [];
-    const setRotationEntries = (updater) => {
-        setRotationEntriesRaw(prev => {
-            const current = Array.isArray(prev[charId]) ? prev[charId] : [];
-            const next = typeof updater === 'function' ? updater(current) : updater;
-            return {
-                ...prev,
-                [charId]: next
-            };
-        });
-    };
+    const [rotationEntries, setRotationEntries] = useState([]);
 
+// Load rotationEntries from persistent state on character switch
     useEffect(() => {
-        if (!activeCharacter?.id && !activeCharacter?.Id && !activeCharacter?.link) return;
+        if (!charId) return;
+        const saved = Array.isArray(rotationEntriesRaw?.[charId]) ? rotationEntriesRaw[charId] : [];
+        setRotationEntries(saved);
+    }, [charId]);
 
-        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-
-        setCharacterRuntimeStates(prev => ({
+// Save rotationEntries to persistent state on change
+    useEffect(() => {
+        if (!charId) return;
+        setRotationEntriesRaw(prev => ({
             ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                rotationEntries: rotationEntries
-            }
+            [charId]: rotationEntries
         }));
-    }, [rotationEntries, activeCharacter]);
+    }, [rotationEntries, charId]);
 
+// Sync to characterRuntimeStates when rotationEntries change
     useEffect(() => {
-        const currentCharId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-        if (currentCharId && Array.isArray(rotationEntries)) {
-            setRotationEntriesRaw(prev => {
-                // prevent overwrite if unchanged
-                const existing = prev[currentCharId];
-                const same = JSON.stringify(existing) === JSON.stringify(rotationEntries);
-                return same ? prev : { ...prev, [currentCharId]: rotationEntries };
-            });
-        }
-    }, [rotationEntries, activeCharacter]);
-
-    const handleCharacterSelect = (char) => {
-        // ✅ Save rotation for current character before switching
-        const currentCharId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-        if (currentCharId && rotationEntries?.length) {
-            setRotationEntriesRaw(prev => ({
+        if (!charId) return;
+        const existing = characterRuntimeStates?.[charId]?.rotationEntries ?? [];
+        const isEqual = JSON.stringify(existing) === JSON.stringify(rotationEntries);
+        if (!isEqual) {
+            setCharacterRuntimeStates(prev => ({
                 ...prev,
-                [currentCharId]: rotationEntries
+                [charId]: {
+                    ...(prev[charId] ?? {}),
+                    rotationEntries
+                }
             }));
         }
+    }, [rotationEntries, charId]);
 
-        // ✅ Save team setup for current character
+    const handleCharacterSelect = (char) => {
+        // ✅ Save full runtime state for current character
         if (activeCharacter) {
-            const currentMainId = currentCharId;
+            const currentCharId = charId;
             setTeamCache(prev => ({
                 ...prev,
-                [currentMainId]: team
+                [currentCharId]: team
             }));
 
             setCharacterRuntimeStates(prev => ({
                 ...prev,
-                [currentMainId]: {
-                    ...(prev[currentMainId] ?? {}),
+                [currentCharId]: {
+                    ...(prev[currentCharId] ?? {}),
                     Name: activeCharacter.displayName,
-                    Id: currentMainId,
+                    Id: currentCharId,
                     Attribute: activeCharacter.attribute,
                     WeaponType: activeCharacter.weaponType ?? activeCharacter.Weapon ?? activeCharacter.raw?.Weapon ?? 0,
                     Stats: baseCharacterState?.Stats ?? {},
@@ -297,6 +284,7 @@ export default function Calculator() {
             }));
         }
 
+        // ✅ Load new character state
         const newMainId = char.Id ?? char.id ?? char.link;
         const cached = characterRuntimeStates[newMainId];
         const restoredTeam = cached?.Team ?? [newMainId, null, null];
@@ -774,6 +762,7 @@ export default function Calculator() {
                                             characterLevel={characterLevel}
                                             rotationEntries={rotationEntries}
                                             setRotationEntries={setRotationEntries}
+                                            currentSliderColor={currentSliderColor}
                                         />
                                     )}
                                 </div>
