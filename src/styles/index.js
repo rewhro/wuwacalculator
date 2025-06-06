@@ -24,3 +24,6 @@ import './buffspane.css';
 import './expandable.css';
 import './echoBuffs.css';
 import './rotationsPane.css';
+import './EchoesPane.css';
+import './substatModal.css';
+import './echoBag.css'

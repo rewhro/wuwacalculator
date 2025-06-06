@@ -29,10 +29,13 @@ import { getWeaponOverride } from '../data/weapon-behaviour';
 import { applyEchoLogic } from '../data/buffs/applyEchoLogic';
 import {applyWeaponBuffLogic} from "../data/buffs/weaponBuffs.js";
 import RotationsPane from "../components/RotationsPane.jsx";
+import EchoesPane, {getEchoStatsFromEquippedEchoes} from '../components/EchoesPane';
+import {echoes} from "../json-data-scripts/getEchoes.js";
+import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../data/buffs/setEffect.js";
 
 export default function Calculator() {
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-05-30 23:30';
+    const LATEST_CHANGELOG_VERSION = '2025-06-06 19:34';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -73,9 +76,6 @@ export default function Calculator() {
     const [team, setTeam] = usePersistentState('team', [activeCharacterId ?? null, null, null]);
     const [teamCache, setTeamCache] = usePersistentState('teamCache', {});
     const [moveToolbarToSidebar, setMoveToolbarToSidebar] = useState(false);
-    const [rotationState, setRotationState] = usePersistentState('rotationState', {});
-    const [rotationData, setRotationData] = usePersistentState('rotationData', {});
-
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -222,15 +222,17 @@ export default function Calculator() {
     const [rotationEntriesRaw, setRotationEntriesRaw] = usePersistentState('rotationEntriesStore', {});
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const [rotationEntries, setRotationEntries] = useState([]);
+    const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
+    const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
 
-// Load rotationEntries from persistent state on character switch
+    // Load rotationEntries from persistent state on character switch
     useEffect(() => {
         if (!charId) return;
         const saved = Array.isArray(rotationEntriesRaw?.[charId]) ? rotationEntriesRaw[charId] : [];
         setRotationEntries(saved);
     }, [charId]);
 
-// Save rotationEntries to persistent state on change
+    // Save rotationEntries to persistent state on change
     useEffect(() => {
         if (!charId) return;
         setRotationEntriesRaw(prev => ({
@@ -239,7 +241,7 @@ export default function Calculator() {
         }));
     }, [rotationEntries, charId]);
 
-// Sync to characterRuntimeStates when rotationEntries change
+    // Sync to characterRuntimeStates when rotationEntries change
     useEffect(() => {
         if (!charId) return;
         const existing = characterRuntimeStates?.[charId]?.rotationEntries ?? [];
@@ -348,7 +350,7 @@ export default function Calculator() {
     );
 
     let mergedBuffs = getUnifiedStatPool(
-        [traceNodeBuffs, combatState, customBuffs],
+        [traceNodeBuffs, combatState, customBuffs, echoStats],
         overrideLogic
     );
 
@@ -421,6 +423,41 @@ export default function Calculator() {
         activeCharacter
     });
 
+    mergedBuffs = applyEchoLogic({
+        mergedBuffs,
+        characterState: {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
+        },
+        activeCharacter
+    })
+
+    mergedBuffs = applyEchoSetBuffLogic({
+        mergedBuffs,
+
+        activeCharacter,
+        equippedEchoes
+    })
+
+    mergedBuffs = applySetEffect({
+        characterState: {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
+        },
+        activeCharacter,
+        mergedBuffs,
+        combatState
+    })
+
+    mergedBuffs = applyMainEchoBuffLogic({
+        equippedEchoes,
+        mergedBuffs,
+        characterState: {
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
+        },
+        activeCharacter,
+        combatState,
+        charId
+    })
+
     // ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
     if (overrideLogic && typeof overrideLogic === 'function') {
         const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
@@ -482,10 +519,7 @@ export default function Calculator() {
         }));
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
 
-
-    //console.log(mergedBuffs);
     let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
-    //console.log(finalStats);
 
     return (
         <>
@@ -516,6 +550,12 @@ export default function Calculator() {
                                 iconName="weapon"
                                 altText="Weapon"
                                 onClick={() => setLeftPaneView('weapon')}
+                                effectiveTheme={effectiveTheme}
+                            />
+                            <ToolbarIconButton
+                                iconName="echoes"
+                                altText="Echoes"
+                                onClick={() => setLeftPaneView('echoes')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
@@ -624,6 +664,13 @@ export default function Calculator() {
                                         label="Weapon"
                                         onClick={() => setLeftPaneView('weapon')}
                                         selected={leftPaneView === 'weapon'}
+                                        effectiveTheme={effectiveTheme}
+                                    />
+                                    <ToolbarSidebarButton
+                                        iconName="echoes"
+                                        label="Echoes"
+                                        onClick={() => setLeftPaneView('echoes')}
+                                        selected={leftPaneView === 'echoes'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
@@ -763,6 +810,16 @@ export default function Calculator() {
                                             rotationEntries={rotationEntries}
                                             setRotationEntries={setRotationEntries}
                                             currentSliderColor={currentSliderColor}
+                                        />
+                                    )}
+                                    {leftPaneView === 'echoes' && (
+                                        <EchoesPane
+                                            echoId={echoes}
+                                            charId={charId}
+                                            characterState={characterState}
+                                            setCharacterState={setCharacterState}
+                                            characterRuntimeStates={characterRuntimeStates}
+                                            setCharacterRuntimeStates={setCharacterRuntimeStates}
                                         />
                                     )}
                                 </div>

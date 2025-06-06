@@ -38,6 +38,8 @@ html, body, #root {
     flex: 1;
     min-width: 0;
     overflow: auto;
+    transition: all 0.3s ease;
+
 }
 
 .horizontal-layout {
@@ -60,8 +62,11 @@ html, body, #root {
     min-width: 350px;
 }
 
-#left-pane.buffs-mode {
-    min-width: 450px;
+#left-pane.buffs-mode,
+#left-pane.rotation-mode,
+#left-pane.teams-mode,
+#left-pane.echoes-mode {
+    min-width: 500px;
 }
 
 .dark #left-pane,

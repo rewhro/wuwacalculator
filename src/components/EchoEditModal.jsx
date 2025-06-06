@@ -1,0 +1,289 @@
+import React, { useEffect, useState } from 'react';
+import {setIconMap, validSubstatRanges} from '../constants/echoSetData.jsx';
+
+const ALL_SUBSTAT_KEYS = [
+    'atkPercent', 'atkFlat', 'hpPercent', 'hpFlat',
+    'defPercent', 'defFlat', 'critRate', 'critDmg',
+    'energyRegen', 'basicAtk', 'heavyAtk', 'skill', 'ultimate'
+];
+
+
+export function getSubstatRange(key) {
+    return validSubstatRanges[key] ?? null;
+}
+
+export function getSubstatStep(key) {
+    const range = getSubstatRange(key);
+    if (!range) return 0.1;
+
+    const rawStep = (range.max - range.min) / range.divisions;
+
+    // If the stat is a percentage, round to 1 decimal place
+    if (!key.endsWith('Flat')) {
+        return Math.round(rawStep * 10) / 10;
+    }
+    return rawStep;
+}
+
+export function getSubstatStepOptions(key) {
+    const range = validSubstatRanges[key];
+    if (!range) return [];
+
+    const { min, max, divisions } = range;
+    const step = (max - min) / divisions;
+
+    const isFlatStat = key.endsWith('Flat');
+
+    const values = [];
+    for (let i = 0; i <= divisions; i++) {
+        let val = min + step * i;
+        if (isFlatStat) {
+            val = Math.ceil(val / 10) * 10; // round up to nearest 10
+        } else {
+            val = parseFloat(val.toFixed(1)); // keep decimal precision for %
+        }
+        if (!values.includes(val)) values.push(val); // ensure unique values
+    }
+
+    return values;
+}
+
+function snapToNearestSubstatValue(key, value) {
+    const options = getSubstatStepOptions(key);
+    if (!options.length) return value;
+
+    let closest = options[0];
+    let minDiff = Math.abs(value - closest);
+
+    for (const opt of options) {
+        const diff = Math.abs(value - opt);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closest = opt;
+        }
+    }
+
+    return closest;
+}
+
+const formatStatKey = (key) => {
+    const labelMap = {
+        atkPercent: 'ATK%', atkFlat: 'ATK',
+        hpPercent: 'HP%', hpFlat: 'HP',
+        defPercent: 'DEF%', defFlat: 'DEF',
+        critRate: 'Crit Rate', critDmg: 'Crit DMG',
+        energyRegen: 'Energy Regen', basicAtk: 'Basic Attack DMG Bonus',
+        heavyAtk: 'Heavy Attack DMG Bonus', skill: 'Resonance Skill DMG Bonus',
+        ultimate: 'Resonance Liberation DMG Bonus', healingBonus: 'Healing Bonus',
+        aero: 'Aero DMG Bonus', spectro: 'Spectro DMG Bonus', fusion: 'Fusion DMG Bonus',
+        glacio: 'Glacio DMG Bonus', havoc: 'Havoc DMG Bonus', electro: 'Electro DMG Bonus'
+    };
+    return labelMap[key] ?? key;
+};
+
+export default function EditSubstatsModal({
+                                              isOpen,
+                                              echo,
+                                              substats = {},
+                                              onClose,
+                                              onSave,
+                                              getValidMainStats,
+                                              mainStats,
+                                              selectedSet: selectedSetProp, // ✅ Destructure as a separate variable
+                                          }) {
+    const [localSubstats, setLocalSubstats] = useState(Object.entries(substats));
+    const [mainStat, setMainStat] = useState(Object.keys(mainStats)[0] || null);
+    const [selectedSet, setSelectedSet] = useState(selectedSetProp ?? echo.sets?.[0] ?? null);
+    const handleTypeChange = (index, newType) => {
+        const isDuplicate = localSubstats.some(([key], i) =>
+            key === newType && i !== index
+        ) && newType !== mainStat;
+
+        if (isDuplicate) return;
+
+        const updated = [...localSubstats];
+        updated[index][0] = newType;
+        setLocalSubstats(updated);
+    };
+
+    const handleValueChange = (index, newValue) => {
+        const [key] = localSubstats[index];
+        const parsed = parseFloat(newValue);
+        if (isNaN(parsed)) return;
+
+        const validValues = getSubstatStepOptions(key);
+        if (!validValues.length) return;
+
+        const min = Math.min(...validValues);
+        const max = Math.max(...validValues);
+        const clamped = Math.max(min, Math.min(max, parsed));
+
+        let snapped = snapToNearestSubstatValue(key, clamped);
+
+        // ✅ Round % stats to 1 decimal place
+        if (key.includes('%')) {
+            snapped = parseFloat(snapped.toFixed(1));
+        }
+
+        const updated = [...localSubstats];
+        updated[index][1] = snapped;
+        setLocalSubstats(updated);
+    };
+
+    const handleAdd = () => {
+        if (localSubstats.length < 5) {
+            const defaultKey = 'atkPercent';
+            const options = getSubstatStepOptions(defaultKey);
+            const defaultValue = options.length > 0 ? options[0] : 0;
+            setLocalSubstats([...localSubstats, [defaultKey, defaultValue]]);
+        }
+    };
+
+    const handleRemove = (index) => {
+        const updated = [...localSubstats];
+        updated.splice(index, 1);
+        setLocalSubstats(updated);
+    };
+
+    const handleSave = () => {
+        if (!mainStat) return; // Prevent save without main stat
+
+        const filteredSubstats = localSubstats;
+
+        const mainStatsObject = {
+            [mainStat]: getValidMainStats(echo.cost)[mainStat],
+            ...(echo.cost === 1 ? { hpFlat: 2280 } :
+                echo.cost === 3 ? { atkFlat: 100 } :
+                    echo.cost === 4 ? { atkFlat: 150 } : {})
+        };
+
+        const validatedSubstats = filteredSubstats.map(([key, value]) => {
+            const snapped = snapToNearestSubstatValue(key, value);
+            return [key, snapped];
+        });
+        const subStatsObject = Object.fromEntries(validatedSubstats);
+
+        onSave({
+            ...echo,
+            mainStats: mainStatsObject,
+            subStats: subStatsObject,
+            selectedSet,
+        });
+
+        onClose();
+    };
+
+    useEffect(() => {
+        setLocalSubstats(Object.entries(substats));
+
+        // Try to get the actual main stat key
+        const mainStatKey = Object.keys(echo.mainStats ?? {})[0] ?? Object.keys(mainStats)[0] ?? null;
+        setMainStat(mainStatKey);
+
+        setSelectedSet(echo.selectedSet ?? echo.originalSets?.[0] ?? null);
+    }, [substats, echo]);
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="menu-overlay">
+            <div className="edit-substats-modal">
+                <div className="modal-header">
+                    <img src={echo.icon} className="modal-echo-icon" alt="" />
+                    <div>
+                        <div className="modal-echo-name">{echo.name}</div>
+                        <div className="echo-slot-cost-badge">Cost {echo.cost}</div>
+                        <div className="set-icon-toggle-group">
+                            {echo.originalSets?.map(setId => (
+                                <img
+                                    key={setId}
+                                    src={setIconMap[setId]}
+                                    alt={`Set ${setId}`}
+                                    className={`set-icon-toggle ${selectedSet === setId ? 'selected' : ''}`}
+                                    onClick={() => setSelectedSet(setId)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="main-stat-box">
+                        <label htmlFor="main-stat-select" className="main-stat-label">Main Stat:</label>
+                        <select
+                            id="main-stat-select"
+                            className="main-stat-select"
+                            value={mainStat || ''}
+                            onChange={(e) => setMainStat(e.target.value)}
+                        >
+                            <option value="" disabled>Select Main Stat</option>
+                            {Object.keys(getValidMainStats(echo.cost)).map((key) => (
+                                <option key={key} value={key}>
+                                    {formatStatKey(key)}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="modal-body">
+                    {localSubstats.map(([type, value], index) => (
+                        <div className="substat-row" key={index}>
+                            <button
+                                className="remove-substat-button"
+                                onClick={() => handleRemove(index)}
+                                title="Remove substat"
+                            >
+                                −
+                            </button>
+                            <div className="substat-edit-row">
+                                <div className="toggle-group">
+                                    {ALL_SUBSTAT_KEYS.map(statKey => {
+                                        const isSelectedElsewhere = localSubstats.some(([key], i) =>
+                                            key === statKey && i !== index
+                                        ) && statKey !== mainStat;
+                                        return (
+                                            <div
+                                                key={statKey}
+                                                className={`stat-toggle ${statKey === type ? 'active' : ''} ${isSelectedElsewhere ? 'disabled' : ''}`}
+                                                onClick={() => !isSelectedElsewhere && handleTypeChange(index, statKey)}
+                                            >
+                                                {formatStatKey(statKey)}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <input
+                                className="substat-input"
+                                type="number"
+                                step={ type === 'hpFlat' ? 10 : getSubstatStep(type)}
+                                min={Math.min(...getSubstatStepOptions(type))}
+                                max={Math.max(...getSubstatStepOptions(type))}
+                                value={value}
+                                onChange={(e) => {
+                                    const updated = [...localSubstats];
+                                    updated[index][1] = parseFloat(e.target.value) || 0;
+                                    setLocalSubstats(updated);
+                                }}
+                                onBlur={(e) => handleValueChange(index, e.target.value)}
+                            />
+                        </div>
+                    ))}
+
+                    {localSubstats.length < 5 && (
+                        <button className="add-substat" onClick={handleAdd}>+ Add Substat</button>
+                    )}
+                </div>
+
+                <div className="modal-footer">
+                    <button className="edit-substat-button" onClick={onClose}>Cancel</button>
+                    <button
+                        className="edit-substat-button"
+                        onClick={handleSave}
+                        disabled={!mainStat}
+                    >
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

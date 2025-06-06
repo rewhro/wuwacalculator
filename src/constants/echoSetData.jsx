@@ -1,0 +1,196 @@
+import { attributeColors } from '../utils/attributeHelpers';
+import React from "react";
+
+export const skillKeywords = [
+    'Resonance Liberation', 'Outro Skill', 'Intro Skill',
+    'Resonance Skill', 'Basic Attack', 'Heavy Attack'
+];
+
+export const statKeywords = [
+    'ATK', 'HP', 'DEF', 'Crit. Rate', 'Crit. DMG', 'Energy Regen', 'Healing Bonus',
+    'Basic Attack', 'Heavy Attack',
+    'Resonance Skill', 'Resonance Liberation'
+];
+
+export function highlightKeywordsInText(text) {
+    if (typeof text !== 'string') return text;
+
+    const elementKeywords = Object.keys(attributeColors);
+    const staticKeywords = [...skillKeywords, ...statKeywords, ...elementKeywords];
+
+    const escapedKeywords = staticKeywords.map(k =>
+        k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+    );
+
+    const percentPattern = '\\d+(\\.\\d+)?%'; // removed \b to allow decimal values like 20.61%
+    const allPatterns = [...escapedKeywords, percentPattern];
+    const pattern = new RegExp(`(${allPatterns.join('|')})`, 'gi');
+
+    const highlightedHTML = text.replace(pattern, (match) => {
+        const lower = match.toLowerCase();
+
+        if (/^\d+(\.\d+)?%$/.test(match)) {
+            return `<strong class="highlight">${match}</strong>`;
+        }
+
+        if (skillKeywords.includes(match)) {
+            return `<strong class="highlight">${match}</strong>`;
+        }
+
+        if (statKeywords.includes(match)) {
+            return `<strong class="highlight">${match}</strong>`;
+        }
+
+        if (elementKeywords.includes(lower)) {
+            const color = attributeColors[lower];
+            return `<strong style="color: ${color}; font-weight: bold;">${match}</strong>`;
+        }
+
+        return match;
+    });
+
+    return <span dangerouslySetInnerHTML={{ __html: highlightedHTML }} />;
+}
+
+const echoSets = [
+    {
+        id: 1,
+        name: 'Freezing Frost',
+        twoPiece: 'Glacio DMG +10%',
+        fivePiece: 'Upon using Basic Attack or Heavy Attack, Glacio DMG increases by 10%, stacking up to three times, lasting for15s.'
+    },
+    {
+        id: 2,
+        name: 'Molten Rift',
+        twoPiece: 'Fusion DMG% +10%.',
+        fivePiece: 'Upon using Resonance Skill, Fusion DMG increases by 30% for 15s.'
+    },
+    {
+        id: 3,
+        name: 'Void Thunder',
+        twoPiece: 'Electro DMG +10%.',
+        fivePiece: 'Upon using Heavy Attack or Resonance Skill, Electro DMG increases by 15%, stacking up to 2 times, each stack lasting for 15s.'
+    },
+    {
+        id: 4,
+        name: 'Sierra Gale',
+        twoPiece: 'Aero DMG +10%.',
+        fivePiece: 'Upon using Intro Skill, Aero DMG increases by 30% for 15s.'
+    },
+    {
+        id: 5,
+        name: 'Celestial Light',
+        twoPiece: 'Spectro DMG +10%.',
+        fivePiece: 'Upon using Intro Skill, Spectro DMG increases by 30% for 15s.'
+    },
+    {
+        id: 6,
+        name: 'Sun-sinking Eclipse',
+        twoPiece: 'Havoc DMG +10%.',
+        fivePiece: 'Upon using Basic Attack or Heavy Attack, Havoc DMG increases by 7.5%, stacking up to four times for 15s.'
+    },
+    {
+        id: 7,
+        name: 'Rejuvenating Glow',
+        twoPiece: 'Healing +10%.',
+        fivePiece: 'Upon healing allies, increase ATK of the entire team by 15%, lasting 30s.'
+    },
+    {
+        id: 8,
+        name: 'Moonlit Clouds',
+        twoPiece: 'Energy Regen +10%.',
+        fivePiece: 'Upon using Outro Skill, ATK of the next Resonator increases by 22.5% for 15s.'
+    },
+    {
+        id: 9,
+        name: 'Lingering Tunes',
+        twoPiece: 'ATK +10%',
+        fivePiece: 'While on the field, ATK increases by 5% every 1.5s, stacking up to 4 times. Outro Skill DMG increases by 60%.'
+    },
+    {
+        id: 10,
+        name: 'Frosty Resolve',
+        twoPiece: 'Resonance Skill DMG +12%.',
+        fivePiece: 'Casting Resonance Skill grants 22.5% Glacio DMG Bonus for 15s and casting Resonance Liberation increases Resonance Skill DMG by 18%, lasting for 5s. This effect stacks up to 2 times.'
+    },
+    {
+        id: 11,
+        name: 'Eternal Radiance',
+        twoPiece: 'Spectro DMG +10%.',
+        fivePiece: 'Inflicting enemies with Spectro Frazzle increases Crit. Rate by 20% for 15s. Attacking enemies with 10 stacks of Spectro Frazzle grants 15% Spectro DMG Bonus for 15s.'
+    },
+    {
+        id: 12,
+        name: 'Midnight Veil',
+        twoPiece: 'Havoc DMG +10%.',
+        fivePiece: 'When Outro Skill is triggered, deal additional 480% Havoc DMG to surrounding enemies, considered Outro Skill DMG, and grant the incoming Resonator 15% Havoc DMG Bonus for 15s.'
+    },
+    {
+        id: 13,
+        name: 'Empyrean Anthem',
+        twoPiece: 'Energy Regen +10%.',
+        fivePiece: 'Increase the Resonator\'s Coordinated Attack DMG by 80%. Upon a critical hit of Coordinated Attack, increase the active Resonator\'s ATK by 20% for 4s.'
+    },
+    {
+        id: 14,
+        name: 'Tidebreaking Courage',
+        twoPiece: 'Energy Regen +10%.',
+        fivePiece: 'Increase the Resonator\'s ATK by 15%. Reaching 250% Energy Regen increases all Attribute DMG by 30% for the Resonator.'
+    },
+    {
+        id: 16,
+        name: 'Gusts of Welkin',
+        twoPiece: 'Aero DMG +10%.',
+        fivePiece: 'Inflicting Aero Erosion upon enemies increases Aero DMG for all Resonators in the team by 15%, and for the Resonator triggering this effect by an additional 15%, lasting for 20s.'
+    },
+    {
+        id: 17,
+        name: 'Windward Pilgrimage',
+        twoPiece: 'Aero DMG + 10%.',
+        fivePiece: 'Hitting a target with Aero Erosion increases Crit. Rate by 10% and grants 30% Aero DMG Bonus, lasting for 10s.'
+    },
+    {
+        id: 18,
+        name: 'Flaming Clawprint',
+        twoPiece: 'Fusion DMG + 10%.',
+        fivePiece: 'Casting Resonance Liberation grants all Resonators in the team 15% Fusion DMG Bonus and the caster 20% Resonance Liberation DMG Bonus, lasting for 35s.'
+    }
+];
+
+export const setIconMap = {
+    1: '/assets/echo-icons/freezingFrost.webp',
+    2: '/assets/echo-icons/moltenRift.webp',
+    3: '/assets/echo-icons/voidThunder.webp',
+    4: '/assets/echo-icons/sierraGale.webp',
+    5: '/assets/echo-icons/celestialLight.webp',
+    6: '/assets/echo-icons/sun-sinkingEclipse.webp',
+    7: '/assets/echo-icons/rejuvenatingGlow.webp',
+    8: '/assets/echo-icons/moonlitClouds.webp',
+    9: '/assets/echo-icons/lingeringTunes.webp',
+    10: '/assets/echo-icons/frostyResolve.webp',
+    11: '/assets/echo-icons/eternalRadiance.webp',
+    12: '/assets/echo-icons/midnightVeil.webp',
+    13: '/assets/echo-icons/empyreanAnthem.webp',
+    14: '/assets/echo-icons/tidebreakingCourage.webp',
+    16: '/assets/echo-icons/gustsOfWelkin.webp',
+    17: '/assets/echo-icons/windwardPilgrimage.webp',
+    18: '/assets/echo-icons/flamingClawprint.webp'
+};
+
+export const validSubstatRanges = {
+    atkPercent:   { min: 6.4,  max: 11.6, divisions: 7 },
+    atkFlat:      { min: 30,   max: 60,   divisions: 3 },
+    hpPercent:    { min: 6.4,  max: 11.6, divisions: 7 },
+    hpFlat:       { min: 320,  max: 580,  divisions: 7 },
+    defPercent:   { min: 8.1,  max: 14.7, divisions: 7 },
+    defFlat:      { min: 40,   max: 70,   divisions: 3 },
+    critRate:     { min: 6.3,  max: 10.5, divisions: 7 },
+    critDmg:      { min: 12.6, max: 21.0, divisions: 7 },
+    energyRegen:  { min: 6.8,  max: 12.4, divisions: 7 },
+    basicAtk:     { min: 6.4,  max: 11.6, divisions: 7 },
+    heavyAtk:     { min: 6.4,  max: 11.6, divisions: 7 },
+    skill:        { min: 6.4,  max: 11.6, divisions: 7 },
+    ultimate:     { min: 6.4,  max: 11.6, divisions: 7 }
+};
+
+export default echoSets;

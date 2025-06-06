@@ -264,6 +264,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `Added rotations >.<.`
                 }
             ]
+        },
+        {
+            date: '06/06/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `Added ECHOES (WIP >.<).`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

@@ -1,0 +1,65 @@
+.echo-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.echo-menu-content {
+    background: var(--background);
+    border-radius: 12px;
+    padding: 16px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.echo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.echo-tile {
+    background: #f9f9f9;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.open-bag-button {
+    border: none;
+    background: var(--primary);
+    color: var(--primary);
+    transition: ease all 0.3s;
+}
+
+.open-bag-button:hover {
+    outline: none;
+    transform: scale(1.09);
+}
+
+.save-to-bag-button.inline {
+    margin-top: 6px;
+    color: var(--primary);
+    background: none;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    transition: ease all 0.2s;
+}
+
+.dark .save-to-bag-button.inline:hover {
+    color: white;
+}
+
+.save-to-bag-button.inline:hover {
+    color: black;
+}
