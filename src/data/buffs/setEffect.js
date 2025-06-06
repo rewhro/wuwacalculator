@@ -56,6 +56,11 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
     if (effect.frosty5p1 ) {
         mergedBuffs.glacio = (mergedBuffs.glacio ?? 0) + 22.5;
     }
+
+    const frostStacks = effect.frost5pc ?? 0;
+    const frostBonus = Math.min(frostStacks * 10, 30);
+    mergedBuffs.glacio = (mergedBuffs.glacio ?? 0) + frostBonus;
+
     const frostyStacks = effect.frosty5p2 ?? 0;
     const frostySkill = Math.min(frostyStacks * 18, 36);
     mergedBuffs.resonanceSkill = (mergedBuffs.resonanceSkill ?? 0) + frostySkill;

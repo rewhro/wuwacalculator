@@ -406,15 +406,6 @@ export default function Calculator() {
         }
     }
 
-    mergedBuffs = applyEchoLogic({
-        mergedBuffs,
-        characterState: {
-            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
-        },
-        baseCharacterState,
-        activeCharacter
-    });
-
     mergedBuffs = applyWeaponBuffLogic({
         mergedBuffs,
         characterState: {
@@ -433,7 +424,6 @@ export default function Calculator() {
 
     mergedBuffs = applyEchoSetBuffLogic({
         mergedBuffs,
-
         activeCharacter,
         equippedEchoes
     })

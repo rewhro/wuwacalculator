@@ -12,6 +12,7 @@ import five10 from "./10.jsx";
 import five9 from "./9.jsx";
 import five6 from "./6.jsx";
 import five3 from "./3.jsx";
+import five1 from "./1.jsx";
 
 export function getEchoSetUIOverrides(setId) {
     switch (setId) {
@@ -66,6 +67,10 @@ export function getEchoSetUIOverrides(setId) {
         case 3:
             return {
                 fivePiece: five3
+            };
+        case 1:
+            return {
+                fivePiece: five1
             }
         default:
             return {};

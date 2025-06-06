@@ -567,6 +567,7 @@ export default function EchoesPane({
                             if (!setInfo || count < 2) return null;
 
                             const { twoPiece: TwoPieceUI, fivePiece: FivePieceUI } = getEchoSetUIOverrides(numericId);
+                            console.log( setInfo );
 
                             return (
                                 <div key={setId} className="echo-set-content">
@@ -580,14 +581,20 @@ export default function EchoesPane({
                                                     <div className="echo-buff-name">{setInfo.name} (2-piece)</div>
                                                 </div>
                                                 <div className="echo-buff-effect">
-                                                    {setInfo.twoPiece}
+                                                    {highlightKeywordsInText(setInfo.twoPiece)}
                                                 </div>
                                             </div>
                                         )
                                     )}
                                     {count === 5 && (
                                         FivePieceUI ? (
-                                            <FivePieceUI setInfo={setInfo} activeStates={activeStates} toggleState={toggleState} />
+                                            <FivePieceUI
+                                                setInfo={setInfo}
+                                                activeStates={activeStates}
+                                                toggleState={toggleState}
+                                                charId={charId}
+                                                setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                            />
                                         ) : (
                                             <div className="echo-buff">
                                                 <div className="echo-buff-header">
@@ -595,7 +602,7 @@ export default function EchoesPane({
                                                     <div className="echo-buff-name">{setInfo.name} (5-piece)</div>
                                                 </div>
                                                 <div className="echo-buff-effect">
-                                                    {setInfo.fivePiece}
+                                                    {highlightKeywordsInText(setInfo.fivePiece)}
                                                 </div>
                                             </div>
                                         )

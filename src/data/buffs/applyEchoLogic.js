@@ -19,9 +19,8 @@ export function applyEchoLogic({ mergedBuffs, characterState, activeCharacter })
         mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 22.5;
     }
 
-    if (echo.impermanenceHeron && !mergedBuffs.__impermanenceHeron) {
+    if (echo.impermanenceHeron) {
         mergedBuffs[element]= (mergedBuffs[element] ?? 0) + 12;
-        mergedBuffs.__impermanenceHeron = false;
     }
 
     if (echo.bellBorne) {
