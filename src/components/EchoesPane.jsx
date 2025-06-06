@@ -275,8 +275,6 @@ export default function EchoesPane({
         });
     };
 
-    console.log(echoBag);
-
     const handleEchoSelect = (selectedEcho) => {
         const currentEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [null, null, null, null, null];
 
