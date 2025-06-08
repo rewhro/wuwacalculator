@@ -299,11 +299,13 @@ export default function EchoesPane({
             return;
         }
 
+        const oldEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[activeSlot];
+
         const newEcho = {
             ...selectedEcho,
-            mainStats: {},
-            subStats: {},
-            selectedSet: selectedEcho.sets?.[0] ?? null,
+            mainStats: oldEcho?.mainStats ?? {},
+            subStats: oldEcho?.subStats ?? {},
+            selectedSet: oldEcho?.selectedSet ?? selectedEcho.sets?.[0] ?? null,
             originalSets: selectedEcho.sets ?? [],
             uid: crypto.randomUUID?.() ?? Date.now().toString(),
         };
@@ -719,13 +721,16 @@ export default function EchoesPane({
                             return;
                         }
 
-                        // Otherwise proceed to equip
-                        const updatedState = { ...characterRuntimeStates[charId] };
-                        updatedState.equippedEchoes[slotIndex] = echo;
+                        const prevEchoes = characterRuntimeStates[charId]?.equippedEchoes ?? [null, null, null, null, null];
+                        const updatedEchoes = [...prevEchoes];
+                        updatedEchoes[slotIndex] = echo;
 
                         setCharacterRuntimeStates(prev => ({
                             ...prev,
-                            [charId]: updatedState
+                            [charId]: {
+                                ...(prev[charId] ?? {}),
+                                equippedEchoes: updatedEchoes
+                            }
                         }));
 
                         setBagOpen(false);

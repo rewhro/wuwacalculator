@@ -175,7 +175,10 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                                                 className="edit-substat-button slot"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    onEquip(echo, slotIndex - 1);
+                                                    const freshEcho = echoBag.find(e => e.uid === echo.uid);
+                                                    if (freshEcho) {
+                                                        onEquip(freshEcho, slotIndex - 1);
+                                                    }
                                                 }}
                                             >
                                                 {slotIndex}
