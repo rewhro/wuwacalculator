@@ -84,7 +84,7 @@ export default function EchoBuffs({ activeStates, toggleState }) {
             {echoBuffs.map(({ key, name, effect, element, icon, className }) => (
                 <div className="echo-buff" key={key}>
                     <div className="echo-buff-header">
-                        <img src={icon} alt={name} className={`echo-buff-icon ${className ?? ''}`} />
+                        <img src={icon} alt={name} className={`echo-buff-icon ${className ?? ''}`} loading="lazy" />
                         <div
                             className="echo-buff-name"
                             style={element ? { color: attributeColors[element] ?? '#ccc' } : {}}

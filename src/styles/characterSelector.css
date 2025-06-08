@@ -31,10 +31,9 @@
 .icon-menu-vertical {
     display: flex;
     flex-direction: column;
-    position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: scale(0.9);
     background: rgba(245, 245, 245, 0.78);
     backdrop-filter: blur(10px);
     border-radius: 12px;
@@ -46,6 +45,7 @@
     max-height: 70vh;
     opacity: 0;
     pointer-events: none;
+    animation: fadeInScale 0.3s ease;
     transition: opacity 0.3s ease, transform 0.3s ease;
     overflow: hidden;
 }
@@ -53,13 +53,33 @@
 .icon-menu-vertical.show {
     pointer-events: auto;
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
 }
 
-.icon-menu-vertical.show {
-    pointer-events: auto;
+.icon-menu-vertical.hiding {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* dark blur effect */
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.show {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.menu-overlay.hiding {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .dark .icon-menu-vertical {
@@ -87,17 +107,19 @@
 .dropdown-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px 20px;        /* larger padding = bigger box */
-    height: 60px;              /* fixed height for larger boxes */
+    gap: 1em;
+    padding: 1em; /* use em instead of fixed px */
+    height: 10%;  /* make height relative to parent */
+    min-height: 3rem;
+    max-height: 5rem;
     border-radius: 10px;
     background-color: rgba(224, 224, 224, 0.46);
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
     color: #222;
     font-weight: 500;
+    flex-shrink: 0; /* prevent squishing in flex column */
 }
-
 
 .dropdown-item:hover {
     background-color: #e0e0e0;
@@ -223,7 +245,7 @@
 
 .menu-body {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 12px;
     padding: 20px;
     overflow-y: auto;

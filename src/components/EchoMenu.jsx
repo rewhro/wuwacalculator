@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {setIconMap} from "../constants/echoSetData.jsx";
 
 export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, setMenuOpen }) {
     const [selectedCost, setSelectedCost] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedSet, setSelectedSet] = useState(null);
+
+    const [isVisible, setIsVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+
+    useEffect(() => {
+        if (menuOpen) {
+            setIsVisible(true);
+            setIsAnimatingOut(false);
+        } else if (isVisible) {
+            setIsAnimatingOut(true);
+            setTimeout(() => {
+                setIsVisible(false);
+                setIsAnimatingOut(false);
+            }, 300);
+        }
+    }, [menuOpen]);
 
     const filteredEchoes = echoes.filter(echo => {
         const matchesCost = selectedCost === null || echo.cost === selectedCost;
@@ -13,11 +29,18 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
         return matchesCost && matchesName && matchesSet;
     });
 
-    if (!menuOpen) return null;
+    if (!isVisible) return null;
 
     return (
-        <div className="menu-overlay" onClick={() => setMenuOpen(false)}>
-            <div ref={menuRef} className="icon-menu-vertical show" onClick={e => e.stopPropagation()}>
+        <div
+            className={`menu-overlay ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+            onClick={() => setMenuOpen(false)}
+        >
+            <div
+                ref={menuRef}
+                className={`icon-menu-vertical ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="menu-header-with-buttons echo">
                     <div className="menu-header">Select Echo</div>
                     <div className="button-group-container echo">
@@ -52,14 +75,14 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                                 <span className="dropdown-label">{echo.name}</span>
                             </div>
                             <div className="echo-meta">
-                                <div className="echo-slot-cost-badge">Cost {echo.cost}</div>
+                                <div className="echo-slot-cost-badge menu">Cost {echo.cost}</div>
                                 <div className="set-icons-row">
                                     {echo.sets?.map(setId => (
                                         <img
                                             key={setId}
                                             src={setIconMap[setId]}
                                             alt={`Set ${setId}`}
-                                            className="set-icon"
+                                            className="set-icon menu"
                                         />
                                     ))}
                                 </div>

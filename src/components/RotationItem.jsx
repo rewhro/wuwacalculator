@@ -100,6 +100,7 @@ export function RotationItem({
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                 }}
+                                loading="lazy"
                             />
                         )}
                         <span className="entry-detail-text">{entry.detail}</span>

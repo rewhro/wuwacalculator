@@ -1,37 +1,151 @@
-.echo-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 9999;
+.edit-substats-modal.echo-bag-modal {
+    padding: 0;
+    width: 1090px;
+}
+
+.edit-substats-modal.echo-bag-modal.show {
+    opacity: 1 !important;
+    transform: scale(1)!important;
+}
+
+.echo-bag-modal.hiding {
+    transform: scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.echo-bag-modal .modal-header {
+    font-size: 1.5rem;
     display: flex;
-    justify-content: center;
+    padding: 10px 0 10px 0;
+    margin: unset;
     align-items: center;
-}
-
-.echo-menu-content {
-    background: var(--background);
-    border-radius: 12px;
-    padding: 16px;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-.echo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 12px;
-}
-
-.echo-tile {
-    background: #f9f9f9;
-    padding: 8px;
-    border-radius: 8px;
+    font-weight: bold;
+    color: var(--text-primary);
     text-align: center;
+    border-bottom: 1px solid rgba(34, 34, 34, 0.09);
+}
+
+.echo-bag-modal .modal-footer {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto; /* pushes it to bottom */
+}
+
+.echo-bag-modal .echo-grid {
+    padding: 15px;
+    display: grid;
+    overflow-y: auto;
+    max-height: 600px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.echo-bag-modal .echo-tile {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: background 0.2s ease;
+}
+
+.echo-set-cost-header {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.echo-set-icon-bag {
+    width: 30px !important;
+    height: 30px !important;
+    object-fit: contain;
+}
+
+.echo-slot-cost-badge.bag {
+    width: 13px;
+    margin: unset;
+    height: 24px;
+    border-radius: 50%;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.echo-cost-badge {
+    background-color: #333;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.echo-bag-modal .echo-tile:hover {
+    background: rgba(131, 131, 131, 0.1);
+    cursor: pointer;
+}
+
+.dark .echo-bag-modal .echo-tile {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.echo-bag-modal .echo-tile img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.echo-stats-preview {
+    margin: 0.25rem 0;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: var(--text-primary);
+}
+
+.echo-stats-preview .stat-row {
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    background: rgba(154, 154, 154, 0.13);
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.echo-stats-preview .stat-label {
+    opacity: 0.75;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.echo-stats-preview .stat-value {
+    font-weight: bold;
+    color: #222;
+}
+
+.echo-bag-info-main {
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.echo-name {
+    font-weight: bold;
+    font-size: 13px;
 }
 
 .open-bag-button {
@@ -62,4 +176,47 @@
 
 .save-to-bag-button.inline:hover {
     color: black;
+}
+
+.save-to-bag-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.equip-buttons {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    justify-content: center;
+}
+
+.echo-tile {
+    position: relative;
+    /* your existing styling */
+}
+
+.remove-button-container {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+.remove-substat-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.2s;
+}
+
+.remove-substat-button:hover {
+    color: #f44;
+}
+
+.edit-substat-button.slot {
+    width: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

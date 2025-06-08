@@ -37,10 +37,18 @@
     justify-content: center;
 }
 
-.echo-slot-title {
-    font-weight: 600;
+.echo-slot-title,
+.echo-name {
+    font-weight: bold;
+    color: goldenrod;
+    margin-bottom: 0.5rem;
     font-size: 1rem;
 }
+
+.dark .echo-slot-title,
+.dark .echo-name {
+     color: blanchedalmond;
+ }
 
 .echo-slot-desc {
     font-size: 0.875rem;
@@ -137,6 +145,7 @@
 
 .echo-stat-label {
     color: #555;
+    text-align: left;
 }
 
 .echo-stat-value {
@@ -174,7 +183,11 @@
     padding: 0;
     opacity: 0.5;
     width: 35px;
+    height: 25px;
     font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 0;
 }
 
@@ -206,7 +219,6 @@
     flex-direction: column;
     align-items: flex-end;   /* Right-align the contents inside */
     margin-left: auto;       /* Push the whole wrapper to the right */
-    margin-top: 4px;
 }
 
 .set-icons-row {
@@ -232,15 +244,17 @@
 }
 
 .button-group-container.echo {
+    padding: 16px 20px 12px 20px;
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
     align-items: center;
     justify-content: center;
 }
 
 .set-icon-filter {
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
     cursor: pointer;
     border-radius: 4px;
     opacity: 0.5;
@@ -405,4 +419,23 @@
 
 .modern-checkbox.echo {
     margin-top: 12px;
+}
+
+.echo-slot-cost-badge.menu {
+    display: flex;
+    height: 15px;
+    width: 40px;
+    margin: unset;
+    align-items: center;
+    justify-content: center;
+}
+
+.set-icon.menu {
+    flex: 1 1 5px;               /* allow it to grow/shrink */
+    max-width: 17px;              /* cap size on large screens */
+    min-width: 5px;              /* prevent too small */
+    height: auto;
+    aspect-ratio: 1;              /* ensure it's square */
+    object-fit: contain;
+    transition: transform 0.2s ease;
 }

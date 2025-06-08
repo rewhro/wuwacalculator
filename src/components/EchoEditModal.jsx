@@ -4,7 +4,7 @@ import {setIconMap, validSubstatRanges} from '../constants/echoSetData.jsx';
 const ALL_SUBSTAT_KEYS = [
     'atkPercent', 'atkFlat', 'hpPercent', 'hpFlat',
     'defPercent', 'defFlat', 'critRate', 'critDmg',
-    'energyRegen', 'basicAtk', 'heavyAtk', 'skill', 'ultimate'
+    'energyRegen', 'basicAtk', 'heavyAtk', 'resonanceSkill', 'resonanceLiberation'
 ];
 
 
@@ -73,8 +73,8 @@ const formatStatKey = (key) => {
         defPercent: 'DEF%', defFlat: 'DEF',
         critRate: 'Crit Rate', critDmg: 'Crit DMG',
         energyRegen: 'Energy Regen', basicAtk: 'Basic Attack DMG Bonus',
-        heavyAtk: 'Heavy Attack DMG Bonus', skill: 'Resonance Skill DMG Bonus',
-        ultimate: 'Resonance Liberation DMG Bonus', healingBonus: 'Healing Bonus',
+        heavyAtk: 'Heavy Attack DMG Bonus', resonanceSkill: 'Resonance Skill DMG Bonus',
+        resonanceLiberation: 'Resonance Liberation DMG Bonus', healingBonus: 'Healing Bonus',
         aero: 'Aero DMG Bonus', spectro: 'Spectro DMG Bonus', fusion: 'Fusion DMG Bonus',
         glacio: 'Glacio DMG Bonus', havoc: 'Havoc DMG Bonus', electro: 'Electro DMG Bonus'
     };
@@ -83,14 +83,15 @@ const formatStatKey = (key) => {
 
 export default function EditSubstatsModal({
                                               isOpen,
-                                              echo,
+                                              echo = {}, // ✅ Default to empty object
                                               substats = {},
                                               onClose,
                                               onSave,
-                                              getValidMainStats,
+                                              getValidMainStats = () => ({}), // ✅ Safe fallback
                                               mainStats,
                                               selectedSet: selectedSetProp, // ✅ Destructure as a separate variable
                                           }) {
+    if (!isOpen || !echo || !echo.icon) return null; // ✅ Safe early return
     const [localSubstats, setLocalSubstats] = useState(Object.entries(substats));
     const [mainStat, setMainStat] = useState(Object.keys(mainStats)[0] || null);
     const [selectedSet, setSelectedSet] = useState(selectedSetProp ?? echo.sets?.[0] ?? null);
@@ -105,6 +106,22 @@ export default function EditSubstatsModal({
         updated[index][0] = newType;
         setLocalSubstats(updated);
     };
+
+    const [isVisible, setIsVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setIsVisible(true);
+            setIsAnimatingOut(false);
+        } else if (isVisible) {
+            setIsAnimatingOut(true);
+            setTimeout(() => {
+                setIsVisible(false);
+                setIsAnimatingOut(false);
+            }, 300); // same as your transition duration
+        }
+    }, [isOpen]);
 
     const handleValueChange = (index, newValue) => {
         const [key] = localSubstats[index];
@@ -174,22 +191,34 @@ export default function EditSubstatsModal({
     };
 
     useEffect(() => {
-        setLocalSubstats(Object.entries(substats));
+        if (!echo || !echo.mainStats) return;
 
-        // Try to get the actual main stat key
-        const mainStatKey = Object.keys(echo.mainStats ?? {})[0] ?? Object.keys(mainStats)[0] ?? null;
+        setLocalSubstats(Object.entries(substats ?? {}));
+        const mainStatKey = Object.keys(echo.mainStats ?? mainStats ?? {})[0] ?? null;
         setMainStat(mainStatKey);
-
         setSelectedSet(echo.selectedSet ?? echo.originalSets?.[0] ?? null);
     }, [substats, echo]);
 
-    if (!isOpen) return null;
+
+    if (!isVisible || !echo || !echo.icon) return null;
 
     return (
-        <div className="menu-overlay">
-            <div className="edit-substats-modal">
+        <div
+            className={`menu-overlay ${isOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+            onClick={() => {
+                setIsAnimatingOut(true);
+                setTimeout(() => {
+                    setIsAnimatingOut(false);
+                    onClose();
+                }, 300);
+            }}
+        >
+            <div
+                className={`edit-substats-modal ${isOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="modal-header">
-                    <img src={echo.icon} className="modal-echo-icon" alt="" />
+                    <img src={echo.icon} className="modal-echo-icon" alt="" loading="lazy" />
                     <div>
                         <div className="modal-echo-name">{echo.name}</div>
                         <div className="echo-slot-cost-badge">Cost {echo.cost}</div>
@@ -201,6 +230,7 @@ export default function EditSubstatsModal({
                                     alt={`Set ${setId}`}
                                     className={`set-icon-toggle ${selectedSet === setId ? 'selected' : ''}`}
                                     onClick={() => setSelectedSet(setId)}
+                                    loading="lazy"
                                 />
                             ))}
                         </div>
@@ -238,7 +268,7 @@ export default function EditSubstatsModal({
                                     {ALL_SUBSTAT_KEYS.map(statKey => {
                                         const isSelectedElsewhere = localSubstats.some(([key], i) =>
                                             key === statKey && i !== index
-                                        ) && statKey !== mainStat;
+                                        );
                                         return (
                                             <div
                                                 key={statKey}
@@ -274,7 +304,15 @@ export default function EditSubstatsModal({
                 </div>
 
                 <div className="modal-footer">
-                    <button className="edit-substat-button" onClick={onClose}>Cancel</button>
+                    <button className="edit-substat-button" onClick={() => {
+                        setIsAnimatingOut(true);
+                        setTimeout(() => {
+                            setIsAnimatingOut(false);
+                            onClose();
+                        }, 300);
+                    }}
+                    >Cancel
+                    </button>
                     <button
                         className="edit-substat-button"
                         onClick={handleSave}

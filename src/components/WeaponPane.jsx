@@ -160,6 +160,12 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         }
     }, [activeCharacter, filteredWeapons]);
 
+    useEffect(() => {
+        if (filteredWeapons.length) {
+            preloadWeaponIcons(filteredWeapons);
+        }
+    }, [filteredWeapons]);
+
     return (
         <>
             <div className="header-with-icon" style={{ paddingTop: '20px' }}>
@@ -352,4 +358,17 @@ function formatEffectWithParams(effect = '', param = [], rank = 1) {
 export function getCurrentParamValues(param = [], rank = 1) {
     const index = Math.max(0, Math.min((rank ?? 1) - 1, 4));
     return param.map(group => group?.[index] ?? null);
+}
+
+export function preloadWeaponIcons(weapons = []) {
+    const loaded = new Set();
+
+    weapons.forEach(weapon => {
+        const iconPath = `/assets/weapon-icons/${weapon.Id}.webp`;
+        if (!loaded.has(iconPath)) {
+            const img = new Image();
+            img.src = iconPath;
+            loaded.add(iconPath);
+        }
+    });
 }

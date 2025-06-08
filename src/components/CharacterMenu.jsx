@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function CharacterMenu({
                                           characters,
@@ -7,7 +7,22 @@ export default function CharacterMenu({
                                           menuOpen,
                                           setMenuOpen
                                       }) {
-    if (!menuOpen) return null;
+    const [isVisible, setIsVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+
+    useEffect(() => {
+        if (menuOpen) {
+            setIsVisible(true);
+            setIsAnimatingOut(false);
+        } else if (isVisible) {
+            setIsAnimatingOut(true);
+            const timeout = setTimeout(() => {
+                setIsVisible(false);
+                setIsAnimatingOut(false);
+            }, 300);
+            return () => clearTimeout(timeout); // clean up
+        }
+    }, [menuOpen]);
 
     const attributeMap = {
         glacio: 1,
@@ -26,44 +41,44 @@ export default function CharacterMenu({
         rectifier: 5
     };
 
-    const getAttributeName = (value) => {
-        const entry = Object.entries(attributeMap).find(([, val]) => val === value);
-        return entry ? entry[0] : 'unknown';
-    };
+    const getAttributeName = (value) =>
+        Object.entries(attributeMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
 
-    const getWeaponName = (value) => {
-        const entry = Object.entries(weaponMap).find(([, val]) => val === value);
-        return entry ? entry[0] : 'unknown';
-    };
+    const getWeaponName = (value) =>
+        Object.entries(weaponMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
 
     const [selectedWeapon, setSelectedWeapon] = useState(null);
     const [selectedAttribute, setSelectedAttribute] = useState(null);
 
-    const filteredCharacters = characters.filter(char => {
+    const filteredCharacters = characters.filter((char) => {
         const weaponMatch = selectedWeapon === null || char.weaponType === weaponMap[selectedWeapon];
         const attributeMatch = selectedAttribute === null || char.attribute === attributeMap[selectedAttribute];
         return weaponMatch && attributeMatch;
     });
 
+    if (!isVisible) return null; // optional: hide if fully finished animating out
+
     return (
-        <div className="menu-overlay" onClick={() => setMenuOpen(false)}>
+        <div
+            className={`menu-overlay ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+            onClick={() => setMenuOpen(false)}
+        >
             <div
                 ref={menuRef}
-                className="icon-menu-vertical show"
+                className={`icon-menu-vertical ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Header with buttons */}
+                {/* Menu Header */}
                 <div className="menu-header-with-buttons">
                     <div className="menu-header">Select Character</div>
 
                     <div className="button-group-container">
-                        {/* Weapon buttons */}
                         <div className="weapon-button-group">
-                            {Object.keys(weaponMap).map(weapon => (
+                            {Object.keys(weaponMap).map((weapon) => (
                                 <button
                                     key={weapon}
                                     className={`weapon-button ${selectedWeapon === weapon ? 'selected' : ''}`}
-                                    onClick={() => setSelectedWeapon(prev => prev === weapon ? null : weapon)}
+                                    onClick={() => setSelectedWeapon((prev) => (prev === weapon ? null : weapon))}
                                     title={weapon}
                                 >
                                     <img src={`/assets/weapons/${weapon}.webp`} alt={weapon} />
@@ -71,13 +86,12 @@ export default function CharacterMenu({
                             ))}
                         </div>
 
-                        {/* Attribute buttons */}
                         <div className="attribute-button-group">
-                            {Object.keys(attributeMap).map(attr => (
+                            {Object.keys(attributeMap).map((attr) => (
                                 <button
                                     key={attr}
                                     className={`attribute-button ${selectedAttribute === attr ? 'selected' : ''}`}
-                                    onClick={() => setSelectedAttribute(prev => prev === attr ? null : attr)}
+                                    onClick={() => setSelectedAttribute((prev) => (prev === attr ? null : attr))}
                                     title={attr}
                                 >
                                     <img src={`/assets/attributes/attributes alt/${attr}.webp`} alt={attr} />
@@ -90,11 +104,7 @@ export default function CharacterMenu({
                 <div className="menu-body">
                     {filteredCharacters.length > 0 ? (
                         filteredCharacters.map((char, i) => (
-                            <div
-                                key={i}
-                                className="dropdown-item"
-                                onClick={() => handleCharacterSelect(char)}
-                            >
+                            <div key={i} className="dropdown-item" onClick={() => handleCharacterSelect(char)}>
                                 <div className="dropdown-item-content">
                                     <div className="dropdown-main">
                                         <img src={char.icon} alt={char.displayName} className="icon-menu-img" />

@@ -12,7 +12,7 @@
 /* Dark theme adjustments */
 .dark .buffs-box {
     background: rgba(31, 41, 55, 0.44);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.19);
     color: #ddd;
 }
 

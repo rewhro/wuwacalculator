@@ -32,6 +32,7 @@ import RotationsPane from "../components/RotationsPane.jsx";
 import EchoesPane, {getEchoStatsFromEquippedEchoes} from '../components/EchoesPane';
 import {echoes} from "../json-data-scripts/getEchoes.js";
 import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../data/buffs/setEffect.js";
+import {setIconMap} from "../constants/echoSetData";
 
 export default function Calculator() {
     const navigate = useNavigate();
@@ -845,4 +846,38 @@ export default function Calculator() {
             <ChangelogModal open={showChangelog} onClose={() => setShowChangelog(false)} />
         </>
     );
+}
+
+export function preloadImagesFromCharacters(characters) {
+    characters.forEach(char => {
+        new Image().src = char.icon;
+        new Image().src = `/assets/weapons/${getWeaponName(char.weaponType)}.webp`;
+        new Image().src = `/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`;
+    });
+}
+
+// Include helpers if needed:
+const attributeMap = {
+    glacio: 1,
+    fusion: 2,
+    electro: 3,
+    aero: 4,
+    spectro: 5,
+    havoc: 6,
+};
+
+const weaponMap = {
+    broadblade: 1,
+    sword: 2,
+    pistols: 3,
+    gauntlets: 4,
+    rectifier: 5,
+};
+
+function getAttributeName(value) {
+    return Object.entries(attributeMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
+}
+
+function getWeaponName(value) {
+    return Object.entries(weaponMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
 }

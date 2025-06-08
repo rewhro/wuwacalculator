@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import EchoMenu from './EchoMenu.jsx';
 import EditSubstatsModal from './EchoEditModal.jsx';
 import echoSets, {setIconMap, skillKeywords, statKeywords} from "../constants/echoSetData.jsx";
@@ -9,8 +9,14 @@ import {Backpack, X, Save} from "lucide-react";
 import {mainEchoBuffs} from "../data/buffs/setEffect.js";
 import DropdownSelect from "./DropdownSelect.jsx";
 import EchoBagMenu from "./EchoBagMenu.jsx";
-import {useGlobalEchoBag } from "../hooks/useGlobalEchoBag.js";
-
+import {
+    getEchoBag,
+    subscribeEchoBag,
+    addEchoToBag,
+    removeEchoFromBag,
+    updateEchoInBag
+} from '../state/echoBagStore';
+import ExpandableSection from "./Expandable";
 
 export function highlightKeywordsInText(text, extraKeywords = []) {
     if (typeof text !== 'string') return text;
@@ -61,7 +67,7 @@ export function highlightKeywordsInText(text, extraKeywords = []) {
     );
 }
 
-const formatStatKey = (key) => {
+export const formatStatKey = (key) => {
     const labelMap = {
         atkPercent: 'ATK%', atkFlat: 'ATK',
         hpPercent: 'HP%', hpFlat: 'HP',
@@ -69,8 +75,8 @@ const formatStatKey = (key) => {
         critRate: 'Crit Rate', critDmg: 'Crit DMG',
         energyRegen: 'Energy Regen', healingBonus: 'Healing Bonus',
         basicAtk: 'Basic Attack DMG Bonus',
-        heavyAtk: 'Heavy Attack DMG Bonus', skill: 'Resonance Skill DMG Bonus',
-        ultimate: 'Resonance Liberation DMG Bonus',
+        heavyAtk: 'Heavy Attack DMG Bonus', resonanceSkill: 'Resonance Skill DMG Bonus',
+        resonanceLiberation: 'Resonance Liberation DMG Bonus',
         aero: 'Aero DMG Bonus', spectro: 'Spectro DMG Bonus', fusion: 'Fusion DMG Bonus',
         glacio: 'Glacio DMG Bonus', havoc: 'Havoc DMG Bonus', electro: 'Electro DMG Bonus'
     };
@@ -100,7 +106,7 @@ const statIconMap = {
     'Havoc DMG Bonus': '/assets/stat-icons/havoc.png'
 };
 
-const getValidMainStats = (cost) => {
+export const getValidMainStats = (cost) => {
     if (cost === 1) {
         return { hpPercent: 22.8, atkPercent: 18, defPercent: 18 };
     } else if (cost === 3) {
@@ -160,6 +166,16 @@ export function getEchoStatsFromEquippedEchoes(equippedEchoes = []) {
     return echoStats;
 }
 
+const statDisplayOrder = [
+    'hpFlat', 'hpPercent',
+    'atkFlat', 'atkPercent',
+    'defFlat', 'defPercent',
+    'critRate', 'critDmg',
+    'energyRegen', 'healingBonus',
+    'basicAtk', 'heavyAtk', 'skill', 'ultimate',
+    'aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc'
+];
+
 function getSetCounts(equippedEchoes) {
     const counts = {};
     const seenEchoIdsPerSet = {};
@@ -190,12 +206,14 @@ export default function EchoesPane({
                                         setCharacterRuntimeStates,
                                         characterRuntimeStates,
                                    }) {
+    useEffect(() => {
+        preloadEchoIcons(echoes, setIconMap);
+    }, []);
     const echoSlots = [0, 1, 2, 3, 4];
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeSlot, setActiveSlot] = useState(null);
     const [substatModalSlot, setSubstatModalSlot] = useState(null);
     const menuRef = useRef(null);
-    // Placeholder echo data
     const echoData = characterRuntimeStates?.[charId]?.equippedEchoes ?? [null, null, null, null, null];
     const [popupMessage, setPopupMessage] = useState('');
     const [showEffect, setShowEffect] = useState(false);
@@ -204,6 +222,8 @@ export default function EchoesPane({
         setTimeout(() => setPopupMessage(''), duration);
     };
     const [bagOpen, setBagOpen] = useState(false);
+    const [editingEcho, setEditingEcho] = useState(null);
+
     const handleRemoveEcho = (slotIndex) => {
         const currentEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [null, null, null, null, null];
         const updated = [...currentEchoes];
@@ -218,8 +238,12 @@ export default function EchoesPane({
         }));
     };
 
-    const { addEchoToBag } = useGlobalEchoBag();
-    const { echoBag } = useGlobalEchoBag();
+    const [echoBag, setEchoBag] = useState(getEchoBag());
+
+    useEffect(() => {
+        const unsubscribe = subscribeEchoBag(setEchoBag);
+        return unsubscribe;
+    }, []);
 
     const handleEchoIconClick = (slotIndex) => {
         setActiveSlot(slotIndex);
@@ -243,11 +267,10 @@ export default function EchoesPane({
             };
         });
 
-        setSubstatModalSlot(null); // ✅ Close the modal
+        setSubstatModalSlot(null);
     };
 
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
-
     const toggleState = (key) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -259,20 +282,6 @@ export default function EchoesPane({
                 }
             }
         }));
-    };
-
-    const handleSaveToBag = (echo) => {
-        setEchoBag(prev => {
-            const alreadyExists = prev.some(e =>
-                e.id === echo.id &&
-                JSON.stringify(e.mainStats) === JSON.stringify(echo.mainStats) &&
-                JSON.stringify(e.subStats) === JSON.stringify(echo.subStats)
-            );
-
-            if (alreadyExists) return prev; // Don't save duplicates
-
-            return [...prev, { ...echo }];
-        });
     };
 
     const handleEchoSelect = (selectedEcho) => {
@@ -315,10 +324,12 @@ export default function EchoesPane({
     const setCounts = getSetCounts(echoData);
     const hasSetEffects = Object.entries(setCounts).some(([setId, count]) => count >= 2);
 
+    const echoStatTotals = getEchoStatsFromEquippedEchoes(echoData);
+
+
     return (
         <div className="echoes-pane">
             <div className="echoes-header">
-                {/*}
                 <button
                     className="open-bag-button"
                     onClick={() => setBagOpen(true)}
@@ -326,7 +337,6 @@ export default function EchoesPane({
                 >
                     <Backpack size={26} />
                 </button>
-                */}
             </div>
             {echoSlots.map((slotIndex) => {
                 const echo = echoData[slotIndex];
@@ -375,17 +385,20 @@ export default function EchoesPane({
                                                             className="echo-set-icon"
                                                         />
                                                     )}
-                                                    {/*}
                                                     {echo && (
                                                         <button
                                                             className="save-to-bag-button inline"
-                                                            onClick={() => addEchoToBag(echo)}
+                                                            onClick={() => {
+                                                                const freshEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[slotIndex];
+                                                                if (freshEcho) {
+                                                                    addEchoToBag(freshEcho);
+                                                                }
+                                                            }}
                                                             title="Save Echo to Bag"
                                                         >
-                                                            <Save/>
+                                                            <Save />
                                                         </button>
                                                     )}
-                                                    */}
                                                 </div>
                                             </>
                                         ) : (
@@ -518,7 +531,6 @@ export default function EchoesPane({
                                                 </label>
                                             )}
 
-                                            {/* Stackable Buffs */}
                                             {isMain && echo?.id && mainEchoBuffs?.[echo.id]?.stackable && (() => {
                                                 const stackKey = mainEchoBuffs[echo.id]?.stackable?.key ?? 'mainEchoStack';
                                                 const currentStackValue = activeStates?.[stackKey] ?? 0;
@@ -567,7 +579,6 @@ export default function EchoesPane({
                             if (!setInfo || count < 2) return null;
 
                             const { twoPiece: TwoPieceUI, fivePiece: FivePieceUI } = getEchoSetUIOverrides(numericId);
-                            console.log( setInfo );
 
                             return (
                                 <div key={setId} className="echo-set-content">
@@ -598,7 +609,7 @@ export default function EchoesPane({
                                         ) : (
                                             <div className="echo-buff">
                                                 <div className="echo-buff-header">
-                                                    <img className="echo-buff-icon" src={setIconMap[setInfo.id]} alt={setInfo.name} />
+                                                    <img className="echo-buff-icon" src={setIconMap[setInfo.id]} alt={setInfo.name} loading="lazy" />
                                                     <div className="echo-buff-name">{setInfo.name} (5-piece)</div>
                                                 </div>
                                                 <div className="echo-buff-effect">
@@ -613,6 +624,56 @@ export default function EchoesPane({
                     </div>
                 </div>
             )}
+
+            <ExpandableSection title="Totals">
+                {Object.keys(echoStatTotals).length > 0 && (
+                    <div className="stats-grid">
+                        {Object.entries(echoStatTotals)
+                            .sort(([a], [b]) => {
+                                const indexA = statDisplayOrder.indexOf(a);
+                                const indexB = statDisplayOrder.indexOf(b);
+                                return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB);
+                            })
+                            .map(([key, val]) => {
+                                const label = formatStatKey(key);
+                                const iconUrl = statIconMap[label];
+
+                                return (
+                                    <div key={key} className="stat-row">
+                                          <span className="echo-stat-label">
+                                              {iconUrl && (
+                                                  <div
+                                                      className="stat-icon"
+                                                      style={{
+                                                          width: 18,
+                                                          height: 18,
+                                                          backgroundColor: '#999',
+                                                          WebkitMaskImage: `url(${iconUrl})`,
+                                                          maskImage: `url(${iconUrl})`,
+                                                          WebkitMaskRepeat: 'no-repeat',
+                                                          maskRepeat: 'no-repeat',
+                                                          WebkitMaskSize: 'contain',
+                                                          maskSize: 'contain',
+                                                          display: 'inline-block',
+                                                          marginRight: '0.25rem',
+                                                          verticalAlign: 'middle',
+                                                          paddingRight: '0.25rem',
+                                                      }}
+                                                  />
+                                              )}
+                                              {label}
+                                          </span>
+                                        <div className="stat-value"></div>
+                                        <div className="stat-bonus"></div>
+                                        <div className="stat-total">
+                                            {key.endsWith('Flat') ? val : `${val.toFixed(1)}%`}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                    </div>
+                )}
+            </ExpandableSection>
 
             <EchoMenu
                 echoes={echoes}
@@ -637,19 +698,40 @@ export default function EchoesPane({
                     applyFixedSecondMainStat={applyFixedSecondMainStat}
                 />
             )}
-            {/*}
             {bagOpen && (
                 <EchoBagMenu
-                    onClose={() => setBagOpen(false)}
-                    onEquip={(echo) => {
-                        // Call your equip logic here
-                        handleEchoSelect(echo);
+                    editingEcho={editingEcho}
+                    setEditingEcho={setEditingEcho}
+                    onClose={() => {
+                        setEditingEcho(null);
+                        setBagOpen(false);
+                    }}
+                    onEquip={(echo, slotIndex) => {
+                        const currentEchoes = characterRuntimeStates[charId]?.equippedEchoes ?? [];
+                        const currentTotalCost = currentEchoes.reduce((sum, e, i) => {
+                            return i === slotIndex ? sum : sum + (e?.cost ?? 0); // exclude the slot being replaced
+                        }, 0);
+
+                        const newTotalCost = currentTotalCost + (echo.cost ?? 0);
+
+                        if (newTotalCost > 12) {
+                            showPopup("Cost (" + newTotalCost + ") > 12");
+                            return;
+                        }
+
+                        // Otherwise proceed to equip
+                        const updatedState = { ...characterRuntimeStates[charId] };
+                        updatedState.equippedEchoes[slotIndex] = echo;
+
+                        setCharacterRuntimeStates(prev => ({
+                            ...prev,
+                            [charId]: updatedState
+                        }));
+
                         setBagOpen(false);
                     }}
                 />
             )}
-            */}
-
             {popupMessage && (
                 <div className="popup-message">
                     {popupMessage}
@@ -657,4 +739,24 @@ export default function EchoesPane({
             )}
         </div>
     );
+}
+
+function preloadEchoIcons(echoes, setIconMap = {}) {
+    const loaded = new Set();
+
+    echoes.forEach((echo) => {
+        if (echo?.icon && !loaded.has(echo.icon)) {
+            const img = new Image();
+            img.src = echo.icon;
+            loaded.add(echo.icon);
+        }
+
+        const selectedSet = echo?.selectedSet ?? echo?.sets?.[0];
+        const setIcon = setIconMap[selectedSet];
+        if (setIcon && !loaded.has(setIcon)) {
+            const img = new Image();
+            img.src = setIcon;
+            loaded.add(setIcon);
+        }
+    });
 }

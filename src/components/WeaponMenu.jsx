@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { FaStar } from 'react-icons/fa'; // Make sure react-icons is installed
 
 export default function WeaponMenu({
@@ -11,7 +11,21 @@ export default function WeaponMenu({
                                        setSelectedRarities
                                    }) {
 
-    if (!menuOpen) return null;
+    const [isVisible, setIsVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+
+    useEffect(() => {
+        if (menuOpen) {
+            setIsVisible(true);
+            setIsAnimatingOut(false);
+        } else if (isVisible) {
+            setIsAnimatingOut(true);
+            setTimeout(() => {
+                setIsVisible(false);
+                setIsAnimatingOut(false);
+            }, 300);
+        }
+    }, [menuOpen]);
 
     const toggleRarity = (rarity) => {
         setSelectedRarities((prev) =>
@@ -31,9 +45,18 @@ export default function WeaponMenu({
         return value.toFixed(0);
     };
 
+    if (!isVisible) return null;
+
     return (
-        <div className="menu-overlay" onClick={() => setMenuOpen(false)}>
-            <div className="icon-menu-vertical show" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+        <div
+            className={`menu-overlay ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+            onClick={() => setMenuOpen(false)}
+        >
+            <div
+                ref={menuRef}
+                className={`icon-menu-vertical ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="menu-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span>Select Weapon</span>
                     <div className="rarity-stars">

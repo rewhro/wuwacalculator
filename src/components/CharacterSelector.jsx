@@ -1,5 +1,5 @@
 // src/CharacterSelector.jsx
-import React from 'react';
+import React, {useEffect} from 'react';
 import SequenceSkillsBox from './SequenceSkillsBox';
 import CharacterHeader from './CharacterHeader';
 import CharacterMenu from './CharacterMenu';
@@ -7,6 +7,9 @@ import SkillSettings from './SkillSettings';
 import { formatDescription } from '../utils/formatDescription';
 import { getCharacterUIComponent } from '../data/character-ui';
 import { getCustomInherentSkillsComponent } from '../data/character-ui';
+import {preloadImagesFromCharacters} from "../pages/calculator";
+import {echoes} from "../json-data-scripts/getEchoes";
+import {setIconMap} from "../constants/echoSetData";
 
 const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
 
@@ -36,8 +39,11 @@ export default function CharacterSelector({
                                               temporaryBuffs, setTemporaryBuffs,
                                               characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef
                                           }) {
-    const safeLevel = Math.min(Math.max(Number(characterLevel ?? 1), 1), 90);
+    useEffect(() => {
+        preloadImagesFromCharacters(characters);
+    }, []);
 
+    const safeLevel = Math.min(Math.max(Number(characterLevel ?? 1), 1), 90);
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
     const CustomCharacterUI = getCharacterUIComponent(charId);
