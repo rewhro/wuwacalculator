@@ -287,6 +287,7 @@ export default function EchoesPane({
     const handleEchoSelect = (selectedEcho) => {
         const currentEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [null, null, null, null, null];
 
+        // 1. Validate cost
         const totalCost = currentEchoes.reduce((sum, echo, index) => {
             if (index === activeSlot || !echo) return sum;
             return sum + (echo.cost ?? 0);
@@ -299,17 +300,37 @@ export default function EchoesPane({
             return;
         }
 
+        // 2. Inherit stats from old echo
         const oldEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[activeSlot];
+        const oldCost = oldEcho?.cost;
+        const newCost = selectedEcho.cost;
 
+        // mainStats: only inherit if cost matches, else pick first valid
+        let mainStats;
+        if (oldCost === newCost && oldEcho?.mainStats) {
+            mainStats = { ...oldEcho.mainStats };
+        } else {
+            const validMainStatKeys = Object.keys(getValidMainStats(newCost));
+            const firstValid = validMainStatKeys[0];
+            mainStats = applyFixedSecondMainStat({
+                [firstValid]: getValidMainStats(newCost)?.[firstValid]
+            }, newCost);
+        }
+
+        // subStats: always inherit
+        const subStats = { ...(oldEcho?.subStats ?? {}) };
+
+        // 3. Construct new echo
         const newEcho = {
             ...selectedEcho,
-            mainStats: oldEcho?.mainStats ?? {},
-            subStats: oldEcho?.subStats ?? {},
+            mainStats,
+            subStats,
             selectedSet: oldEcho?.selectedSet ?? selectedEcho.sets?.[0] ?? null,
             originalSets: selectedEcho.sets ?? [],
             uid: crypto.randomUUID?.() ?? Date.now().toString(),
         };
 
+        // 4. Equip it
         setCharacterRuntimeStates(prev => ({
             ...prev,
             [charId]: {
