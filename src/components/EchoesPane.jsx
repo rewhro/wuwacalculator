@@ -293,19 +293,18 @@ export default function EchoesPane({
             return sum + (echo.cost ?? 0);
         }, 0);
 
-        const newEchoCost = selectedEcho.cost ?? 0;
-        if (totalCost + newEchoCost > 12) {
-            const badEchoCost = totalCost + newEchoCost;
+        const newCost = selectedEcho.cost ?? 0;
+        if (totalCost + newCost > 12) {
+            const badEchoCost = totalCost + newCost;
             showPopup("Cost (" + badEchoCost + ") > 12");
             return;
         }
 
         // 2. Inherit stats from old echo
-        const oldEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[activeSlot];
+        const oldEcho = currentEchoes[activeSlot];
         const oldCost = oldEcho?.cost;
-        const newCost = selectedEcho.cost;
 
-        // mainStats: only inherit if cost matches, else pick first valid
+        // mainStats: only inherit if cost matches
         let mainStats;
         if (oldCost === newCost && oldEcho?.mainStats) {
             mainStats = { ...oldEcho.mainStats };
@@ -320,13 +319,18 @@ export default function EchoesPane({
         // subStats: always inherit
         const subStats = { ...(oldEcho?.subStats ?? {}) };
 
+        // selectedSet: only keep it if it's in the new echo's set list
+        const validSets = selectedEcho.sets ?? [];
+        const inheritedSet = oldEcho?.selectedSet;
+        const selectedSet = validSets.includes(inheritedSet) ? inheritedSet : validSets[0] ?? null;
+
         // 3. Construct new echo
         const newEcho = {
             ...selectedEcho,
             mainStats,
             subStats,
-            selectedSet: oldEcho?.selectedSet ?? selectedEcho.sets?.[0] ?? null,
-            originalSets: selectedEcho.sets ?? [],
+            selectedSet,
+            originalSets: validSets,
             uid: crypto.randomUUID?.() ?? Date.now().toString(),
         };
 
