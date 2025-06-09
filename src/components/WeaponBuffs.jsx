@@ -95,7 +95,13 @@ export default function WeaponBuffs({ activeStates, toggleState, setCharacterRun
                 return (
                     <div className="echo-buff" key={key}>
                         <div className="echo-buff-header">
-                            <img src={icon} alt={name} className="echo-buff-icon" loading="lazy" />
+                            <img src={icon} alt={name} className="echo-buff-icon" loading="lazy"
+                                 onError={(e) => {
+                                     e.target.onerror = null; // prevent infinite loop
+                                     e.target.src = '/assets/weapon-icons/default.webp';
+                                     e.currentTarget.classList.add('fallback-icon');
+                                 }}
+                            />
                             <div className="echo-buff-name">{name}</div>
                         </div>
                         <div className="echo-buff-effect">{effect(paramValues)}</div>

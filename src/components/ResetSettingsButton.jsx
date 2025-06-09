@@ -21,6 +21,16 @@ export default function ResetSettingsButton() {
         window.location.href = '/';
     };
 
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setShowConfirm(false);
+            setIsClosing(false);
+        }, 300);
+    };
+
     return (
         <>
             <button
@@ -33,9 +43,12 @@ export default function ResetSettingsButton() {
             </button>
 
             {showConfirm && (
-                <div className="skills-modal-overlay" onClick={() => setShowConfirm(false)}>
+                <div
+                    className={`skills-modal-overlay ${isClosing ? 'closing' : ''}`}
+                    onClick={handleClose}
+                >
                     <div
-                        className="skills-modal-content"
+                        className={`skills-modal-content ${isClosing ? 'closing' : ''}`}
                         onClick={(e) => e.stopPropagation()}
                         style={{ padding: '2rem', maxWidth: '400px', textAlign: 'center' }}
                     >
@@ -44,7 +57,7 @@ export default function ResetSettingsButton() {
                         <p><strong>This cannot be undone.</strong></p>
 
                         <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-around' }}>
-                            <button className="btn-primary" onClick={() => setShowConfirm(false)}>
+                            <button className="btn-primary" onClick={handleClose}>
                                 Cancel
                             </button>
                             <button className="btn-danger" onClick={handleReset}>

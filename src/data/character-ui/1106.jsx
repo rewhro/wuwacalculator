@@ -9,7 +9,7 @@ export default function YouhuUI({ activeStates, toggleState }) {
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>Poetic Essence</h3>
 
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Antithesis</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Antithesis</h4>
                     <ul style={{ paddingLeft: '20px' }}>
                         <li>A pair of Auspices. Increase Poetic Essence's DMG by 70%.</li>
                     </ul>
@@ -24,7 +24,7 @@ export default function YouhuUI({ activeStates, toggleState }) {
                 </div>
 
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Triplet</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Triplet</h4>
                     <ul style={{ paddingLeft: '20px' }}>
                         <li>Three identical Auspices. Increase Poetic Essence's DMG by 175%.</li>
                     </ul>
@@ -93,7 +93,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(

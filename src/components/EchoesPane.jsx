@@ -17,189 +17,14 @@ import {
     updateEchoInBag
 } from '../state/echoBagStore';
 import ExpandableSection from "./Expandable";
-
-export function highlightKeywordsInText(text, extraKeywords = []) {
-    if (typeof text !== 'string') return text;
-
-    const elementKeywords = Object.keys(attributeColors);
-    const staticKeywords = [...skillKeywords, ...statKeywords, ...elementKeywords];
-    const allKeywords = [...staticKeywords, ...extraKeywords];
-
-    // Escape keywords for RegExp
-    const escapedKeywords = allKeywords.map(k =>
-        k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
-    );
-
-    const percentPattern = '\\d+(\\.\\d+)?%';
-    const keywordPattern = escapedKeywords.length > 0 ? `\\b(${escapedKeywords.join('|')})\\b` : '';
-    const allPattern = [percentPattern, keywordPattern].filter(Boolean).join('|');
-    const regex = new RegExp(allPattern, 'gi');
-
-    return (
-        <span dangerouslySetInnerHTML={{
-            __html: text.replace(regex, (match) => {
-                const lower = match.toLowerCase();
-
-                if (/^\d+(\.\d+)?%$/.test(match)) {
-                    return `<strong class="highlight">${match}</strong>`;
-                }
-
-                if (skillKeywords.includes(match)) {
-                    return `<strong class="highlight">${match}</strong>`;
-                }
-
-                if (statKeywords.includes(match)) {
-                    return `<strong class="highlight">${match}</strong>`;
-                }
-
-                if (elementKeywords.includes(lower)) {
-                    const color = attributeColors[lower];
-                    return `<strong style="color: ${color}; font-weight: bold;">${match}</strong>`;
-                }
-
-                if (extraKeywords.includes(match)) {
-                    return `<strong class="highlight echo-name">${match}</strong>`;
-                }
-
-                return match;
-            })
-        }} />
-    );
-}
-
-export const formatStatKey = (key) => {
-    const labelMap = {
-        atkPercent: 'ATK%', atkFlat: 'ATK',
-        hpPercent: 'HP%', hpFlat: 'HP',
-        defPercent: 'DEF%', defFlat: 'DEF',
-        critRate: 'Crit Rate', critDmg: 'Crit DMG',
-        energyRegen: 'Energy Regen', healingBonus: 'Healing Bonus',
-        basicAtk: 'Basic Attack DMG Bonus',
-        heavyAtk: 'Heavy Attack DMG Bonus', resonanceSkill: 'Resonance Skill DMG Bonus',
-        resonanceLiberation: 'Resonance Liberation DMG Bonus',
-        aero: 'Aero DMG Bonus', spectro: 'Spectro DMG Bonus', fusion: 'Fusion DMG Bonus',
-        glacio: 'Glacio DMG Bonus', havoc: 'Havoc DMG Bonus', electro: 'Electro DMG Bonus'
-    };
-    return labelMap[key] ?? key;
-};
-
-const statIconMap = {
-    'ATK': '/assets/stat-icons/atk.png',
-    'ATK%': '/assets/stat-icons/atk.png',
-    'HP': '/assets/stat-icons/hp.png',
-    'HP%': '/assets/stat-icons/hp.png',
-    'DEF': '/assets/stat-icons/def.png',
-    'DEF%': '/assets/stat-icons/def.png',
-    'Energy Regen': '/assets/stat-icons/energyregen.png',
-    'Crit Rate': '/assets/stat-icons/critrate.png',
-    'Crit DMG': '/assets/stat-icons/critdmg.png',
-    'Healing Bonus': '/assets/stat-icons/healing.png',
-    'Basic Attack DMG Bonus': '/assets/stat-icons/basic.png',
-    'Heavy Attack DMG Bonus': '/assets/stat-icons/heavy.png',
-    'Resonance Skill DMG Bonus': '/assets/stat-icons/skill.png',
-    'Resonance Liberation DMG Bonus': '/assets/stat-icons/liberation.png',
-    'Aero DMG Bonus': '/assets/stat-icons/aero.png',
-    'Glacio DMG Bonus': '/assets/stat-icons/glacio.png',
-    'Spectro DMG Bonus': '/assets/stat-icons/spectro.png',
-    'Fusion DMG Bonus': '/assets/stat-icons/fusion.png',
-    'Electro DMG Bonus': '/assets/stat-icons/electro.png',
-    'Havoc DMG Bonus': '/assets/stat-icons/havoc.png'
-};
-
-export const getValidMainStats = (cost) => {
-    if (cost === 1) {
-        return { hpPercent: 22.8, atkPercent: 18, defPercent: 18 };
-    } else if (cost === 3) {
-        return {
-            hpPercent: 30, atkPercent: 30, defPercent: 38,
-            energyRegen: 32,
-            aero: 30, glacio: 30, electro: 30, fusion: 30, havoc: 30, spectro: 30
-        };
-    } else if (cost === 4) {
-        return {
-            hpPercent: 33, atkPercent: 33, defPercent: 41.5,
-            critRate: 22, critDmg: 44, healingBonus: 26
-        };
-    }
-    return {};
-};
-
-const applyFixedSecondMainStat = (mainStats, cost) => {
-    const updated = { ...mainStats };
-
-    if (cost === 1) {
-        updated.hpFlat = 2280;
-    }
-    if (cost === 3) {
-        updated.atkFlat = 100;
-    }
-    if (cost === 4) {
-        updated.atkFlat = 150;
-    }
-
-    return updated;
-};
-
-export function formatDescription(rawDesc, paramArray) {
-    if (!rawDesc || !Array.isArray(paramArray)) return rawDesc ?? '';
-
-    return rawDesc.replace(/{(\d+)}/g, (_, index) => paramArray[index] ?? `{${index}}`);
-}
-
-export function getEchoStatsFromEquippedEchoes(equippedEchoes = []) {
-    const echoStats = {};
-
-    for (const echo of equippedEchoes) {
-        if (!echo) continue;
-
-        // Add mainStats
-        for (const [key, value] of Object.entries(echo.mainStats ?? {})) {
-            echoStats[key] = (echoStats[key] ?? 0) + value;
-        }
-
-        // Add subStats (even if key overlaps, we add)
-        for (const [key, value] of Object.entries(echo.subStats ?? {})) {
-            echoStats[key] = (echoStats[key] ?? 0) + value;
-        }
-    }
-
-    return echoStats;
-}
-
-const statDisplayOrder = [
-    'hpFlat', 'hpPercent',
-    'atkFlat', 'atkPercent',
-    'defFlat', 'defPercent',
-    'critRate', 'critDmg',
-    'energyRegen', 'healingBonus',
-    'basicAtk', 'heavyAtk', 'skill', 'ultimate',
-    'aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc'
-];
-
-function getSetCounts(equippedEchoes) {
-    const counts = {};
-    const seenEchoIdsPerSet = {};
-
-    for (const echo of equippedEchoes) {
-        const setId = echo?.selectedSet;
-        const echoId = echo?.id;
-
-        if (!setId || !echoId) continue;
-
-        // Initialize a Set for this setId if not already done
-        if (!seenEchoIdsPerSet[setId]) {
-            seenEchoIdsPerSet[setId] = new Set();
-        }
-
-        // Only count if this echo ID hasn't been seen yet for this set
-        if (!seenEchoIdsPerSet[setId].has(echoId)) {
-            seenEchoIdsPerSet[setId].add(echoId);
-            counts[setId] = (counts[setId] ?? 0) + 1;
-        }
-    }
-
-    return counts;
-}
+import EchoParser from "./EchoParser.jsx";
+import {applyParsedEchoesToEquipped} from "../utils/buildEchoObjectsFromParsedResults.js";
+import {
+    applyFixedSecondMainStat, formatDescription, formatStatKey,
+    getEchoStatsFromEquippedEchoes,
+    getSetCounts,
+    getValidMainStats, statDisplayOrder, statIconMap
+} from "../utils/echoHelper.js";
 
 export default function EchoesPane({
                                        charId,
@@ -353,9 +178,15 @@ export default function EchoesPane({
 
     const echoStatTotals = getEchoStatsFromEquippedEchoes(echoData);
 
-
     return (
         <div className="echoes-pane">
+            <EchoParser
+                charId={charId}
+                setCharacterRuntimeStates={setCharacterRuntimeStates}
+                onEchoesParsed={(parsedList) => {
+                    applyParsedEchoesToEquipped(parsedList, charId, setCharacterRuntimeStates);
+                }}
+            />
             <div className="echoes-header">
                 <button
                     className="open-bag-button"
@@ -377,9 +208,20 @@ export default function EchoesPane({
                                         {echo ? (
                                             <>
                                                 <img
-                                                    src={echo.icon} alt={echo.name}
+                                                    src={echo.icon}
+                                                    alt={echo.name}
                                                     className="header-icon"
                                                     onClick={() => handleEchoIconClick(slotIndex)}
+                                                    onLoad={(e) => {
+                                                        if (e.currentTarget.classList.contains('fallback-icon')) {
+                                                            e.currentTarget.classList.remove('fallback-icon');
+                                                        }
+                                                    }}
+                                                    onError={(e) => {
+                                                        e.currentTarget.onerror = null;
+                                                        e.currentTarget.src = '/assets/echoes/default.webp';
+                                                        e.currentTarget.classList.add('fallback-icon');
+                                                    }}
                                                 />
                                                 <button
                                                     className="remove-teammate-button"
@@ -789,4 +631,53 @@ function preloadEchoIcons(echoes, setIconMap = {}) {
             loaded.add(setIcon);
         }
     });
+}
+
+export function highlightKeywordsInText(text, extraKeywords = []) {
+    if (typeof text !== 'string') return text;
+
+    const elementKeywords = Object.keys(attributeColors);
+    const staticKeywords = [...skillKeywords, ...statKeywords, ...elementKeywords];
+    const allKeywords = [...staticKeywords, ...extraKeywords];
+
+    // Escape keywords for RegExp
+    const escapedKeywords = allKeywords.map(k =>
+        k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+    );
+
+    const percentPattern = '\\d+(\\.\\d+)?%';
+    const keywordPattern = escapedKeywords.length > 0 ? `\\b(${escapedKeywords.join('|')})\\b` : '';
+    const allPattern = [percentPattern, keywordPattern].filter(Boolean).join('|');
+    const regex = new RegExp(allPattern, 'gi');
+
+    return (
+        <span dangerouslySetInnerHTML={{
+            __html: text.replace(regex, (match) => {
+                const lower = match.toLowerCase();
+
+                if (/^\d+(\.\d+)?%$/.test(match)) {
+                    return `<strong class="highlight">${match}</strong>`;
+                }
+
+                if (skillKeywords.includes(match)) {
+                    return `<strong class="highlight">${match}</strong>`;
+                }
+
+                if (statKeywords.includes(match)) {
+                    return `<strong class="highlight">${match}</strong>`;
+                }
+
+                if (elementKeywords.includes(lower)) {
+                    const color = attributeColors[lower];
+                    return `<strong style="color: ${color}; font-weight: bold;">${match}</strong>`;
+                }
+
+                if (extraKeywords.includes(match)) {
+                    return `<strong class="highlight echo-name">${match}</strong>`;
+                }
+
+                return match;
+            })
+        }} />
+    );
 }

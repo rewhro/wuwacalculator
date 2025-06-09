@@ -22,7 +22,7 @@ export default function CamellyaUI({ characterRuntimeStates, setCharacterRuntime
             <div className="status-toggle-box">
                 {/* Sweet Dream toggle */}
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Sweet Dream</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Sweet Dream</h4>
                     <p>
                         Increase the DMG Multiplier of Normal Attack, Basic Attack Vining Waltz,
                         Basic Attack Blazing Waltz, Basic Attack Vining Ronde, Dodge Counter Atonement,

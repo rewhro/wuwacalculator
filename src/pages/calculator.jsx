@@ -29,10 +29,11 @@ import { getWeaponOverride } from '../data/weapon-behaviour';
 import { applyEchoLogic } from '../data/buffs/applyEchoLogic';
 import {applyWeaponBuffLogic} from "../data/buffs/weaponBuffs.js";
 import RotationsPane from "../components/RotationsPane.jsx";
-import EchoesPane, {getEchoStatsFromEquippedEchoes} from '../components/EchoesPane';
+import EchoesPane from '../components/EchoesPane';
 import {echoes} from "../json-data-scripts/getEchoes.js";
 import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../data/buffs/setEffect.js";
 import {setIconMap} from "../constants/echoSetData";
+import {getEchoStatsFromEquippedEchoes} from "../utils/echoHelper.js";
 
 export default function Calculator() {
     const navigate = useNavigate();
@@ -511,6 +512,26 @@ export default function Calculator() {
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
 
     let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
+
+    useEffect(() => {
+        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+        if (!charId) return;
+
+        // ✅ Preload weapon icon
+        const weaponId = combatState?.weaponId;
+        if (weaponId) {
+            const weaponIconPath = `/assets/weapon-icons/${weaponId}.webp`;
+            new Image().src = weaponIconPath;
+        }
+
+        // ✅ Preload echo icons
+        const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
+        equippedEchoes.forEach(echo => {
+            if (echo?.icon) {
+                new Image().src = echo.icon;
+            }
+        });
+    }, [activeCharacter, characterRuntimeStates, combatState?.weaponId]);
 
     return (
         <>

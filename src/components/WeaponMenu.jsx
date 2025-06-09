@@ -27,14 +27,6 @@ export default function WeaponMenu({
         }
     }, [menuOpen]);
 
-    const toggleRarity = (rarity) => {
-        setSelectedRarities((prev) =>
-            prev.includes(rarity)
-                ? prev.filter((r) => r !== rarity)
-                : [...prev, rarity]
-        );
-    };
-
     const filteredWeapons = weapons.filter(w => selectedRarities.includes(w.Rarity ?? 1));
 
     const formatStat = (stat) => {
@@ -98,7 +90,8 @@ export default function WeaponMenu({
                                     loading="lazy"
                                     onError={(e) => {
                                         e.target.onerror = null;
-                                        e.target.src = '/assets/default-icon.webp';
+                                        e.target.src = '/assets/weapon-icons/default.webp';
+                                        e.currentTarget.classList.add('fallback-icon');
                                     }}
                                 />
                                 <div>

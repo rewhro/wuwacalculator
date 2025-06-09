@@ -5,13 +5,13 @@ export default function BrantUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Theatrical Moment</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Theatrical Moment</h4>
                 <div>
                     <p>Brant gains additional ATK based on his Energy Regen: For every 1% of his Energy Regen over 150%, Brant gains additional 12 points of ATK, up to 1560.</p>
                 </div>
             </div>
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>"My" Moment</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>"My" Moment</h4>
                 <p>Brant gains additional ATK based on his Energy Regen: For every 1% of his Energy Regen over 150%, Brant gains additional 20 points of ATK, up to 2600.</p>
                 <label className="modern-checkbox">
                     <input

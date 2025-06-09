@@ -27,3 +27,4 @@ import './rotationsPane.css';
 import './EchoesPane.css';
 import './substatModal.css';
 import './echoBag.css'
+import './parser.css';

@@ -47,7 +47,7 @@ export default function SequenceSkillsBox({
             <div className="echo-buff">
                 {unlockedChains.map(([key, chain]) => (
                     <div key={key} className="inherent-skill">
-                        <h3>Sequence Node {key}: {chain.Name}</h3>
+                        <h3 className={'highlight'}>Sequence Node {key}: {chain.Name}</h3>
                         <p dangerouslySetInnerHTML={{
                             __html: formatDescription(chain.Desc, chain.Param, currentSliderColor)
                         }} />

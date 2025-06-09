@@ -1,5 +1,5 @@
 // src/components/SkillsModal.jsx
-import React from 'react';
+import React, {useState} from 'react';
 import { formatDescription } from '../utils/formatDescription';
 import skillTabs from '../constants/skillTabs';
 
@@ -15,8 +15,18 @@ export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activ
         return tree?.Skill ?? null;
     };
 
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setSkillsModalOpen(false);
+            setIsClosing(false);
+        }, 300);
+    };
+
     return (
-        <div className="skills-modal-overlay" onClick={() => setSkillsModalOpen(false)}>
+        <div className={`skills-modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
             <div className="skills-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="skills-modal-tabs">
                     {skillTabs.map(tab => (
@@ -52,7 +62,7 @@ export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activ
                     })()}
                 </div>
 
-                <button onClick={() => setSkillsModalOpen(false)}>Close</button>
+                <button onClick={handleClose}>Close</button>
             </div>
         </div>
     );

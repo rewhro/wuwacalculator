@@ -9,7 +9,7 @@ export default function CartethyiaUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 {/* Manifest Toggle */}
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Manifest</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Manifest</h4>
                     <ul style={{ paddingLeft: '20px' }}>
                         <li>When in Manifest, Fleurdelys gains 60% Aero DMG Bonus.</li>
                     </ul>
@@ -27,7 +27,7 @@ export default function CartethyiaUI({ activeStates, toggleState }) {
 
                 {/* Mandate of Divinity Toggle (disabled if Manifest is off) */}
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Mandate of Divinity</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Mandate of Divinity</h4>
                     <ul style={{ paddingLeft: '20px' }}>
                         <li>When Fleurdelys has Mandate of Divinity in Manifest Aero Erosion's DMG is Amplified by 50%</li>
                     </ul>

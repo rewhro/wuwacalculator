@@ -23,7 +23,7 @@ async function buildFullCharacterList() {
             }
         }
 
-        await fs.writeFile('../data/characters-mapped.generated.json', JSON.stringify(allCharacters, null, 2));
+        await fs.writeFile('../data/characters-mapped.json', JSON.stringify(allCharacters, null, 2));
         console.log('🎉 characters-mapped.generated.json has been saved.');
     } catch (err) {
         console.error('💥 Failed to build character list:', err.message);

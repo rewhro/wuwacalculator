@@ -5,7 +5,7 @@ export default function LingYangUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Lion's Vigor</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Lion's Vigor</h4>
                 <div>
                     <p>Lingyang gains 50% Glacio DMG Bonus.</p>
                 </div>

@@ -6,7 +6,7 @@ export default function PheobeUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Absolution</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Absolution</h4>
                 <div>
                     <p>Increase DMG Multiplier by 255% for Dawn of Enlightenment.</p>
                     <p>Increase DMG Multiplier by 255% for Attentive Heart.</p>
@@ -26,7 +26,7 @@ export default function PheobeUI({ activeStates, toggleState }) {
                 </label>
             </div>
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Confession</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Confession</h4>
                 <p>Grant Silent Prayer - reducing the Spectro RES of nearby targets by 10% and granting 100% Spectro Frazzle DMG Amplification.</p>
                 <label className="modern-checkbox">
                     <input

@@ -7,7 +7,7 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Inner Stellarealm</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Inner Stellarealm</h4>
                     <div>
                         <p>When a party member uses Intro Skill within the Outer Stellarealm, it evolves into the Inner Stellarealm. Within the effective range of the Inner Stellarealm, for every 0.2% of Shorekeeper's Energy Regen, all party members gain a 0.01% increase of Crit. Rate, up to 12.5%.</p>
                     </div>
@@ -30,7 +30,7 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                 </div>
 
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Supernal Stellarealm</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Supernal Stellarealm</h4>
                     <div>
                         <p>When a party member uses Intro Skill within the Inner Stellarealm, it evolves into the Supernal Stellarealm. Within the effective range of the Supernal Stellarealm, for every 0.1% of Shorekeeper's Energy Regen, all party members gain a 0.01% increase of Crit. DMG, up to 25%.<br/>
                             Supernal Stellarealm has all the effects of the Inner Stellarealm.</p>
@@ -52,7 +52,7 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                 </div>
                 <div className="status-toggles">
                     <div className="status-toggle-box">
-                        <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Binary Butterfly</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Binary Butterfly</h4>
                         <p>All nearby party members' DMG is Amplified by 15%.</p>
                         <label className="modern-checkbox">
                             <input
@@ -129,7 +129,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(

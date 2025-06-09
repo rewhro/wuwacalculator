@@ -7,7 +7,7 @@ export default function ZhezhiUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Creation's Zenith</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Creation's Zenith</h4>
                 <div>
                     <p>When a Phantasmic Imprint is nearby and there are 2 stacks of Painter's Delight, Stroke of Genius is replaced with Creation's Zenith, which can be cast while in mid-air. When it is cast, Zhezhi will:</p>
                     <li>Lose all stacks of Painter's Delight</li>

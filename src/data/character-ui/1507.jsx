@@ -8,7 +8,7 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Inferno Mode</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Inferno Mode</h4>
                     <div>
                         <p>When in Inferno Mode, the DMG Multiplier of Basic Attack is increased.</p>
                     </div>
@@ -22,7 +22,7 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                     </label>
                 </div>
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Heliacal Ember</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Sunburst</h4>
                     <div>
                         <p>The Spectro Frazzle DMG dealt by Zani to the target is Amplified by 20%.</p>
                     </div>
@@ -36,10 +36,10 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                     </label>
                 </div>
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Heliacal Ember</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Heliacal Ember</h4>
                     <div>
                         <p>When Zani is in the team and a nearby Resonator inflicts Spectro Frazzle upon a target, immediately consume all Spectro Frazzle stacks and trigger the corresponding DMG, then convert Spectro Frazzle into an equal number of Heliacal Embers. Heliacal Ember is capped at 60 stacks.</p>
-                        <p><li>Beacon For the Future: Each stack increases the DMG dealt by 10%.</li></p>
+                        <p>Beacon For the Future: Each stack increases the DMG dealt by 10%.</p>
                     </div>
                     <div className="slider-label-with-input" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <label style={{ fontWeight: 'bold' }}>
@@ -68,7 +68,7 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                     </div>
                 </div>
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Heavy Slash - Nightfall: Blaze</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Heavy Slash - Nightfall: Blaze</h4>
                     <div>
                         <p>Consume up to 40 Blazes on hit, with each Blaze increasing the DMG Multiplier of Heavy Slash - Nightfall</p>
                     </div>
@@ -161,7 +161,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(

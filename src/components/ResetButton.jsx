@@ -3,6 +3,7 @@ import {RotateCcw} from "lucide-react";
 
 export default function ResetButton() {
     const [resetModalOpen, setResetModalOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
 
     const handleReset = () => {
         const activeId = JSON.parse(localStorage.getItem('activeCharacterId') || 'null');
@@ -14,6 +15,14 @@ export default function ResetButton() {
 
         localStorage.setItem('characterRuntimeStates', JSON.stringify(updatedRuntime));
         window.location.href = window.location.href; // 🔁 Refresh to reset state
+    };
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setResetModalOpen(false);
+            setIsClosing(false);
+        }, 300);
     };
 
     return (
@@ -28,8 +37,8 @@ export default function ResetButton() {
             </button>
 
             {resetModalOpen && (
-                <div className="skills-modal-overlay" onClick={() => setResetModalOpen(false)}>
-                    <div className="skills-modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className={`skills-modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
+                    <div className={`skills-modal-content ${isClosing ? 'closing' : ''}`} onClick={(e) => e.stopPropagation()}>
                         <h2>Reset Character?</h2>
                         <div className="reset-modal-actions">
                             <button className="btn-danger" onClick={handleReset}>Reset Character</button>

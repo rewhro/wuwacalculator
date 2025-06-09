@@ -6,7 +6,7 @@ export default function JiyanUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Qingloong at War</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Qingloong at War</h4>
                 <p>When casting Resonance Skill Windqueller, if Jiyan has 30 or more "Resolve", he consumes 30 "Resolve" to increase the DMG of this Resonance Skill Windqueller by 20%.
                     When Jiyan is in Qingloong Mode, DMG of Resonance Skill Windqueller is increased by 20% and no longer consumes "Resolve"</p>
                 <label className="modern-checkbox">
@@ -77,7 +77,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(

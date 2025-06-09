@@ -459,7 +459,7 @@ export default function RotationsPane({
                                                     className="entry-name-edit"
                                                 />
                                             ) : (
-                                                <span className="entry-name">{saved.characterName}</span>
+                                                <span className="highlight">{saved.characterName}</span>
                                             )}
                                             <span className="entry-type-detail">
                                     <span className="entry-detail-text">

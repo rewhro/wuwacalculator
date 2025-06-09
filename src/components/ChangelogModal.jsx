@@ -1,5 +1,5 @@
 // src/components/ChangelogModal.jsx
-import React from 'react';
+import React, {useState} from 'react';
 
 export default function ChangelogModal({ open, onClose }) {
     if (!open) return null;
@@ -277,9 +277,25 @@ export default function ChangelogModal({ open, onClose }) {
         // Add more changelogs as needed
     ];
 
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            onClose();
+            setIsClosing(false);
+        }, 300);
+    };
+
     return (
-        <div className="skills-modal-overlay" onClick={onClose}>
-            <div className="skills-modal-content changelog-modal" onClick={(e) => e.stopPropagation()}>
+        <div
+            className={`skills-modal-overlay ${isClosing ? 'closing' : ''}`}
+            onClick={handleClose}
+        >
+            <div
+                className={`skills-modal-content changelog-modal ${isClosing ? 'closing' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <h2>Changelog</h2>
                 <div className="changelog-entries">
                     {changelogData.map((log, index) => (
@@ -296,7 +312,7 @@ export default function ChangelogModal({ open, onClose }) {
                         </div>
                     ))}
                 </div>
-                <button className="btn-secondary" onClick={onClose}>Close</button>
+                <button className="btn-secondary" onClick={handleClose}>Close</button>
             </div>
         </div>
     );

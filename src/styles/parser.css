@@ -1,0 +1,107 @@
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: unset;
+    margin-top: 0.7rem;
+    color: var(--primary);
+}
+
+.modal-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.skills-modal-content.parser {
+    display: flex;
+    max-width: 750px;
+}
+
+.modal-list li {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.modal-dropzone {
+    cursor: pointer;
+    border: 1px dashed rgba(32, 191, 185, 0.45);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.modal-dropzone-text {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+}
+
+.btn-primary {
+    transition: ease all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:active {
+    transform: scale(0.97);
+}
+
+
+.dropzone-click-text {
+    text-decoration: underline;
+}
+
+.dropzone-click-text:hover {
+    transition: ease all 0.3s;
+    transform: scale(1.01);
+    color: #222;
+}
+
+.dropzone-click-text:active {
+    transform: scale(0.97);
+}
+
+.dark .dropzone-click-text:hover {
+    color: rgba(249, 250, 251, 0.42);
+}
+
+.modal-sample-image {
+    width: 50%;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem ;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+.loader-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 6px solid rgba(96, 255, 250, 0.43);
+    border-top: 6px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    margin-top: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

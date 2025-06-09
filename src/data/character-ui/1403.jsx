@@ -6,7 +6,7 @@ export default function AaltoUI({ activeStates, toggleState }) {
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Gate of Quandary</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Gate of Quandary</h4>
                     <p>When bullets pass through the "Gate of Quandary", ATK is increased by 10%. "Gate of Quandary" lasts for 10s.</p>
                     <label className="modern-checkbox">
                         <input
@@ -80,7 +80,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(

@@ -1,7 +1,6 @@
 // src/components/EchoBagMenu.jsx
 import React, {useEffect, useState} from 'react';
 import { X } from 'lucide-react';
-import {formatStatKey, getValidMainStats} from "./EchoesPane.jsx";
 import EditSubstatsModal from './EchoEditModal';
 import {setIconMap} from "../constants/echoSetData";
 import { isEqual } from 'lodash'; // optional if you prefer deep comparison
@@ -11,6 +10,7 @@ import {
     removeEchoFromBag,
     updateEchoInBag
 } from '../state/echoBagStore';
+import {formatStatKey, getValidMainStats} from "../utils/echoHelper.js";
 
 function isEchoModified(oldEcho, updatedEcho) {
     return (
@@ -140,7 +140,13 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                                         <div className="echo-slot-cost-badge bag">{echo.cost}</div>
                                     </div>
 
-                                    <img src={echo.icon} alt={echo.name} />
+                                    <img src={echo.icon} alt={echo.name}
+                                         onError={(e) => {
+                                             e.currentTarget.onerror = null;
+                                             e.currentTarget.src = '/assets/echoes/default.webp';
+                                             e.currentTarget.classList.add('fallback-icon');
+                                         }}
+                                    />
                                     <div className="echo-name">{echo.name}</div>
 
                                     <div className="echo-stats-preview">

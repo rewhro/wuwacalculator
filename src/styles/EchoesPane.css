@@ -439,3 +439,11 @@
     object-fit: contain;
     transition: transform 0.2s ease;
 }
+
+.fallback-icon {
+    filter: grayscale(100%);
+    opacity: 0.7;
+    background-color: rgba(34, 34, 34, 0.25);
+    border-radius: 50%;
+    object-fit: contain;
+}

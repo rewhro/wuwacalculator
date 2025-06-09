@@ -21,7 +21,7 @@ export default function LupaUI({ characterRuntimeStates, setCharacterRuntimeStat
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Pack Hunt</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Pack Hunt</h4>
                 <div>
                     <p>The DMG Bonus of Resonators with Pack Hunt increases by 6%, non-stackable. When the active Resonator performs Intro Skill, Pack Hunt is enhanced, further increasing the DMG Bonus of other Resonators in the team by 6%, up to a maximum of 18%.</p>
                     <p>If Lupa's Pack Hunt reaches its cap and remains active, she enters Wild Hunt state to perform Intro Skill - Nowhere to Run!. Wild Hunt can trigger once per Pack Hunt.</p>
@@ -104,7 +104,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(

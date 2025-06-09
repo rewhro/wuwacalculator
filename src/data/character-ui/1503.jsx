@@ -5,7 +5,7 @@ export default function VerinaUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Blossom</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Blossom</h4>
                 <p>All Resonators on nearby teams have their DMG Amplified by 15%.</p>
                 <label className="modern-checkbox">
                     <input
@@ -64,7 +64,7 @@ export function CustomInherentSkills({
 
     return (
         <div className="inherent-skills">
-            <h4 style={{ fontSize: '20px', marginBottom: '8px' }}>Inherent Skills</h4>
+            <h4 className={'highlight'} style={{ fontSize: '20px', marginBottom: '8px' }}>Inherent Skills</h4>
 
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';

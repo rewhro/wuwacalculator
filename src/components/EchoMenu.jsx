@@ -71,7 +71,13 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                     {filteredEchoes.map((echo, i) => (
                         <div key={i} className="dropdown-item" onClick={() => handleEchoSelect(echo)}>
                             <div className="dropdown-main">
-                                <img src={echo.icon} alt={echo.name} className="icon-menu-img" />
+                                <img src={echo.icon} alt={echo.name} className="icon-menu-img"
+                                     onError={(e) => {
+                                         e.currentTarget.onerror = null;
+                                         e.currentTarget.src = '/assets/echoes/default.webp';
+                                         e.currentTarget.classList.add('fallback-icon');
+                                     }}
+                                />
                                 <span className="dropdown-label">{echo.name}</span>
                             </div>
                             <div className="echo-meta">

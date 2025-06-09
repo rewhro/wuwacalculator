@@ -5,7 +5,7 @@ export default function CarlottaUI({ activeStates, toggleState }) {
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Deconstruction</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Deconstruction</h4>
                     <ul style={{ paddingLeft: '20px' }}>
                         <li>Dealing DMG to targets inflicted with Deconstruction ignores 18% of their DEF.</li>
                     </ul>
@@ -20,7 +20,7 @@ export default function CarlottaUI({ activeStates, toggleState }) {
                 </div>
 
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Final Blow</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Final Blow</h4>
                     <ul style={{ paddingLeft: '20px' }}>
                         <li>Increase the DMG Multiplier of Resonance Liberation Era of New Wave, Resonance Liberation Death Knell, and Resonance Liberation Fatal Finale by 80%.</li>
                     </ul>

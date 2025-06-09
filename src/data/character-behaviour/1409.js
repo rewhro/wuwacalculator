@@ -25,17 +25,19 @@ export function applyCartethyiaLogic({
     const name = skillMeta.name?.toLowerCase();
     const tab = skillMeta.tab ?? '';
 
-    if (tab === 'normalAttack' || tab === 'resonanceSkill' || tab === 'introSkill') {
-        skillMeta.skillType = ['basic', 'aeroErosion'];
-    } else if (tab === 'forteCircuit') {
+    if (tab === 'normalAttack') {
+        if (name.includes('mid-air')) {
+            skillMeta.skillType = ['basic', 'aeroErosion'];
+        } else {
+            skillMeta.skillType = ['basic'];
+        }
+    } else if (tab === 'forteCircuit' || tab === 'resonanceSkill') {
         skillMeta.skillType = ['basic'];
         if (name === 'sword to answer waves\' call dmg') {
             skillMeta.skillType = ['skill'];
         } else if (name.includes('heavy attack')) {
             skillMeta.skillType = ['heavy'];
         }
-    } if (tab === 'normalAttack' && name.includes('heavy')) {
-        skillMeta.skillType = ['heavy', 'aeroErosion'];
     }
 
     if (!characterState?.activeStates?.manifestActive) {

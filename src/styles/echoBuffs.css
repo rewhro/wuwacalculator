@@ -29,12 +29,12 @@
 }
 
 .highlight {
-    color: goldenrod;
+    color: goldenrod !important;
     font-weight: bold;
 }
 
 .dark .highlight {
-    color: blanchedalmond;
+    color: blanchedalmond !important;
 }
 
 .echo-buff-header {

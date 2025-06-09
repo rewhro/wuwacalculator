@@ -181,7 +181,7 @@ export default function CharacterSelector({
 
                                     return (
                                         <div key={index} className="inherent-skill">
-                                            <h4>{node.Skill?.Name}</h4>
+                                            <h4 className={'highlight'}>{node.Skill?.Name}</h4>
                                             <p
                                                 dangerouslySetInnerHTML={{
                                                     __html: formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor)
@@ -189,8 +189,8 @@ export default function CharacterSelector({
                                             />
                                             {isLocked && (
                                                 <span style={{ fontSize: '12px', color: 'gray' }}>
-                                Unlocks at Lv. {unlockLevel}
-                            </span>
+                                                    Unlocks at Lv. {unlockLevel}
+                                                </span>
                                             )}
                                         </div>
                                     );

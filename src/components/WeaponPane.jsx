@@ -37,7 +37,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
     const weaponLevel = combatState.weaponLevel ?? 1;
     const activeWeaponIconPath = weaponId
         ? `/assets/weapon-icons/${weaponId}.webp`
-        : '/assets/default-icon.webp';
+        : '/assets/weapon-icons/default.webp';
 
     const WeaponUI = getWeaponUIComponent(weaponId);
 
@@ -180,7 +180,8 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                         className="header-icon"
                         onError={(e) => {
                             e.target.onerror = null; // prevent infinite loop
-                            e.target.src = '/assets/default-icon.webp';
+                            e.target.src = '/assets/weapon-icons/default.webp';
+                            e.currentTarget.classList.add('fallback-icon');
                         }}
                     />
                 </div>
@@ -316,7 +317,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             </div>
             {WeaponUI ? (
                 <div className="inherent-skills-box">
-                    <h4 style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
+                    <h4 className={'highlight'} style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
                     <WeaponUI
                         combatState={combatState}
                         setCombatState={setCombatState}
@@ -331,7 +332,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             ) : (
                 combatState.weaponEffect && (
                     <div className="inherent-skills-box">
-                        <h4 style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
+                        <h4 className={'highlight'} style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
                         <p>
                             {formatEffectWithParams(
                                 combatState.weaponEffect,

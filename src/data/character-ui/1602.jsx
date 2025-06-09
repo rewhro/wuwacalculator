@@ -7,9 +7,9 @@ export default function DanjinUI({ activeStates, toggleState }) {
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>Incinerating Will</h4>
+                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Incinerating Will</h4>
                     <ul style={{ paddingLeft: '20px' }}>
-                        <li>Danjin's damage dealt to targets marked with Incinerating Will is increased by 20%.</li>
+                        <p>Danjin's damage dealt to targets marked with Incinerating Will is increased by 20%.</p>
                     </ul>
                     <label className="modern-checkbox">
                         <input
@@ -78,7 +78,7 @@ export function CustomInherentSkills({
 
                 return (
                     <div key={index} className="inherent-skill">
-                        <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
+                        <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
                         <p
                             dangerouslySetInnerHTML={{
                                 __html: formatDescription(
