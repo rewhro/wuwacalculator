@@ -88,10 +88,14 @@
 .spinner {
     width: 20px;
     height: 20px;
-    border: 6px solid rgba(96, 255, 250, 0.43);
+    border: 6px solid rgba(32, 191, 185, 0.89);
     border-top: 6px solid transparent;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+.dark .spinner {
+    border: 6px solid rgba(96, 255, 250, 0.43);
 }
 
 .loading-text {
