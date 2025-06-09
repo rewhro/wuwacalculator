@@ -24,7 +24,6 @@
 }
 
 .modal-dropzone {
-    cursor: pointer;
     border: 1px dashed rgba(32, 191, 185, 0.45);
     border-radius: 1.5rem;
     padding: 3rem;
@@ -50,6 +49,7 @@
 
 
 .dropzone-click-text {
+    cursor: pointer;
     text-decoration: underline;
 }
 
