@@ -96,6 +96,9 @@
 
 .dark .spinner {
     border: 6px solid rgba(96, 255, 250, 0.43);
+    border-top: 6px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 .loading-text {
