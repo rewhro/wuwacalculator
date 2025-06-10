@@ -148,7 +148,7 @@ export function computeSkillDamage({
     }
 
     // === Final damage ===
-    const { normal, crit, avg } = calculateDamage({
+    let { normal, crit, avg } = calculateDamage({
         finalStats,
         combatState,
         multiplier: skillMeta.multiplier,
@@ -164,7 +164,62 @@ export function computeSkillDamage({
         skillDefIgnore: skillMeta.skillDefIgnore ?? 0
     });
 
-    return { normal, crit, avg, skillMeta };
+    let subHits = [];
+
+    const rawMultiplierString = typeof levelData?.Param?.[0] === 'string'
+        ? levelData.Param[0]
+        : levelData.Param?.[0]?.[sliderValues?.[tab] - 1];
+
+    const parts = parseMultiplierParts(rawMultiplierString);
+
+    const rawTotalMultiplier = parts.reduce((sum, p) => {
+        const val = parseFloat(p.value) / 100;
+        return sum + val * p.count;
+    }, 0);
+
+    const overrideMultiplier = skillMeta.multiplier ?? rawTotalMultiplier;
+    const multiplierRatio = rawTotalMultiplier > 0 ? (overrideMultiplier / rawTotalMultiplier) : 1;
+
+    if (parts.length > 1 || (parts.length === 1 && parts[0].count > 1)) {
+        subHits = parts.map((part) => {
+            const baseMultiplier = parseFloat(part.value) / 100;
+            const adjustedMultiplier = baseMultiplier * multiplierRatio;
+
+            const oneHitMeta = structuredClone(skillMeta);
+            oneHitMeta.multiplier = adjustedMultiplier;
+
+            const { normal, crit, avg } = calculateDamage({
+                finalStats,
+                combatState,
+                multiplier: oneHitMeta.multiplier,
+                amplify: oneHitMeta.amplify,
+                scaling,
+                element,
+                skillType: oneHitMeta.skillType,
+                characterLevel,
+                mergedBuffs: localMergedBuffs,
+                skillDmgBonus: oneHitMeta.skillDmgBonus ?? 0,
+                critDmgBonus: oneHitMeta.critDmgBonus ?? 0,
+                critRateBonus: oneHitMeta.critRateBonus ?? 0,
+                skillDefIgnore: oneHitMeta.skillDefIgnore ?? 0
+            });
+
+            return {
+                label: part.count > 1 ? `${part.count} Hits` : '',
+                count: part.count,
+                normal,
+                crit,
+                avg
+            };
+        });
+
+        // Main skill = total of all sub-hits (factoring in their count)
+        normal = subHits.reduce((sum, hit, i) => sum + hit.normal * parts[i].count, 0);
+        crit = subHits.reduce((sum, hit, i) => sum + hit.crit * parts[i].count, 0);
+        avg = subHits.reduce((sum, hit, i) => sum + hit.avg * parts[i].count, 0);
+    }
+
+    return { normal, crit, avg, skillMeta, subHits };
 }
 
 export function getSkillData(char, tab) {
@@ -214,4 +269,21 @@ export function extractFlatAndPercent(str) {
         percent: percentMatch ? parseFloat(percentMatch[1]) / 100 : 0,
         stat: statMatch ? statMatch[1].trim().toLowerCase() : null
     };
+}
+
+function parseMultiplierParts(multiplierString) {
+    if (typeof multiplierString !== 'string') return [];
+
+    const parts = multiplierString.match(/[\d.]+%\s*(\*\s*\d+)?/g);
+    if (!parts) return [];
+
+    return parts.map(part => {
+        const match = part.trim().match(/^([\d.]+%)\s*(?:\*\s*(\d+))?$/);
+        if (!match) return null;
+        const [, value, repeat] = match;
+        return {
+            value,
+            count: repeat ? parseInt(repeat, 10) : 1
+        };
+    }).filter(Boolean);
 }

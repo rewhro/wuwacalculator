@@ -202,7 +202,7 @@ export default function BuffsPane({
                     characters={characters.filter(
                         (char) =>
                             !team.includes(char.link) ||
-                            char.link === team[activeCharacterSlot] // allow re-selecting current
+                            char.link === team[activeCharacterSlot]
                     )}
                     handleCharacterSelect={handleCharacterSelect}
                     menuRef={menuRef}

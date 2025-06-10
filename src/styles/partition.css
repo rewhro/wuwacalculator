@@ -5,6 +5,7 @@
 /* Default: desktop → allow Split.js scrolls */
 #left-pane, #right-pane {
     box-sizing: border-box;
+    overflow-x: hidden;
     height: 100%;
     max-width: 100%;
 }

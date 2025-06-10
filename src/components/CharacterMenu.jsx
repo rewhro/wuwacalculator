@@ -56,7 +56,7 @@ export default function CharacterMenu({
         return weaponMatch && attributeMatch;
     });
 
-    if (!isVisible) return null; // optional: hide if fully finished animating out
+    if (!isVisible) return null;
 
     return (
         <div

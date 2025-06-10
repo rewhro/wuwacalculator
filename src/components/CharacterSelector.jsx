@@ -226,6 +226,9 @@ export default function CharacterSelector({
                                             src={iconPath}
                                             alt={iconFile}
                                             className={`buff-icon ${isActive ? 'active' : ''}`}
+                                            style={{
+                                                '--slider-color': currentSliderColor,
+                                            }}
                                             onClick={() => {
                                                 const nodeIdNum = Number(nodeId);
                                                 const skillName = node.Skill?.Name;

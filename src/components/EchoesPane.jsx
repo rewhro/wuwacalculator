@@ -178,6 +178,14 @@ export default function EchoesPane({
 
     const echoStatTotals = getEchoStatsFromEquippedEchoes(echoData);
 
+    useEffect(() => {
+        const preloadSampleImage = () => {
+            const img = new Image();
+            img.src = '/assets/sample-import-image.png';
+        };
+        preloadSampleImage();
+    }, []);
+
     return (
         <div className="echoes-pane">
             <EchoParser

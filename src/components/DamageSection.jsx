@@ -1,10 +1,12 @@
 import Rotations from "./Rotations.jsx";
 
 // src/components/DamageSection.jsx
-import React from 'react';
+import React, {useState} from 'react';
 import { getHardcodedMultipliers } from '../data/character-behaviour';
 import { computeSkillDamage, getSkillData } from "../utils/computeSkillDamage.js";
 import { setSkillDamageCache } from "../utils/skillDamageCache";
+import {elementToAttribute} from "../utils/attributeHelpers.js";
+import {calculateDamage} from "../utils/damageCalculator.js";
 
 export default function DamageSection({
                                           activeCharacter,
@@ -21,6 +23,7 @@ export default function DamageSection({
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const allSkillResults = [];
+    const [showSubHits, setShowSubHits] = useState(true);
 
     const skillUI = skillTabs.map((tab) => {
         const skill = getSkillData(activeCharacter, tab);
@@ -64,6 +67,7 @@ export default function DamageSection({
                             <div>Normal</div>
                             <div>CRIT</div>
                             <div>AVG</div>
+
                             {levels.map((level, index) => {
                                 const result = computeSkillDamage({
                                     entry: {
@@ -83,7 +87,6 @@ export default function DamageSection({
                                 });
 
                                 const { normal, crit, avg, skillMeta = {} } = result;
-
                                 const isSupportSkill = skillMeta.tags?.includes('healing') || skillMeta.tags?.includes('shielding');
                                 const supportColor = skillMeta.tags?.includes('healing') ? 'limegreen' : '#838383';
 
@@ -94,19 +97,31 @@ export default function DamageSection({
                                     normal: result.normal,
                                     crit: result.crit,
                                     avg: result.avg,
-                                    isSupportSkill: isSupportSkill,
-                                    supportColor: supportColor,
+                                    isSupportSkill,
+                                    supportColor,
                                     supportLabel: skillMeta.tags?.includes('healing') ? 'Healing' :
                                         skillMeta.tags?.includes('shielding') ? 'Shield' : null,
-                                    visible: skillMeta.visible
+                                    visible: skillMeta.visible,
                                 });
 
-                                return skillMeta.visible === false ? null : (
+                                if (skillMeta.visible === false) return null;
+
+                                const getSubHitFormula = (hits, type) => {
+                                    if (!hits || hits.length === 0) return '';
+                                    return hits.map(hit => {
+                                        const val = Math.round(hit[type]);
+                                        return hit.count > 1
+                                            ? `${val.toLocaleString()} × ${hit.count}`
+                                            : `${val.toLocaleString()}`;
+                                    }).join(' + ');
+                                };
+
+                                return (
                                     <React.Fragment key={index}>
+                                        {/* Main Skill Row */}
                                         <div style={isSupportSkill ? { color: supportColor, fontWeight: 'bold' } : {}}>
                                             {level.Name}
                                         </div>
-
                                         {isSupportSkill ? (
                                             <>
                                                 <div></div>
@@ -117,11 +132,38 @@ export default function DamageSection({
                                             </>
                                         ) : (
                                             <>
-                                                <div>{normal.toLocaleString()}</div>
-                                                <div>{crit.toLocaleString()}</div>
-                                                <div>{avg.toLocaleString()}</div>
+                                                <div
+                                                    className="damage-tooltip-wrapper"
+                                                    data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'normal')}` : `${normal.toLocaleString()}`}
+                                                >
+                                                    {normal.toLocaleString()}
+                                                </div>
+                                                <div
+                                                    className="damage-tooltip-wrapper"
+                                                    data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'crit')}` : `${crit.toLocaleString()}`}
+                                                >
+                                                    {crit.toLocaleString()}
+                                                </div>
+                                                <div
+                                                    className="damage-tooltip-wrapper"
+                                                    data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'avg')}` : `${avg.toLocaleString()}`}
+                                                >
+                                                    {avg.toLocaleString()}
+                                                </div>
                                             </>
                                         )}
+
+                                        {/* Sub-hits */}
+                                        {showSubHits && result.subHits?.length > 0 && result.subHits.map((hit, i) => (
+                                            <React.Fragment key={`${index}-subhit-${i}`}>
+                                                <div style={{ paddingLeft: '0.5rem', fontStyle: 'italic', fontSize: '0.9rem', opacity: 0.8 }}>
+                                                    ↳ {level.Name}-{i + 1}{hit.label && ` (${hit.label})`}
+                                                </div>
+                                                <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
+                                                <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
+                                                <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
+                                            </React.Fragment>
+                                        ))}
                                     </React.Fragment>
                                 );
                             })}
@@ -140,9 +182,20 @@ export default function DamageSection({
         window.lastSkillCacheUpdate = Date.now();
     }
 
+
     return (
         <div className="damage-box">
-            <h2 className="panel-title">Damage</h2>
+            <h2 className="panel-title">
+                Damage
+                <label className='modern-checkbox' style={{ fontSize: '1rem', gap: '0.3rem' }}>
+                    Show Sub-Hits
+                    <input
+                        type="checkbox"
+                        checked={showSubHits}
+                        onChange={(e) => setShowSubHits(e.target.checked)}
+                    />
+                </label>
+            </h2>
             <div className="damage-section">
                 {skillUI}
 

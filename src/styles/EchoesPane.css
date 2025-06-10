@@ -71,6 +71,7 @@
 }
 
 .echo-details {
+    transition: ease all 0.3s;
     flex-grow: 1;
     border-radius: 8px;
     border: 1px solid rgba(143, 143, 143, 0.24);

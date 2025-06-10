@@ -10,6 +10,9 @@
     font-size: 24px;
     font-weight: bold;
     text-align: left;
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 20px;
     color: #333;
 }
@@ -157,4 +160,38 @@
 .dark #right-pane h2,
 .dark .damage-box-title {
     color: #ddd;
+}
+
+.damage-tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.damage-tooltip-wrapper::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(50, 50, 50, 0.9);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-size: 15px;
+    text-align: left;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    max-width: 140px; /* wider than the default */
+    width: max-content;
+}
+
+.damage-tooltip-wrapper:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+    transition-delay: 0.8s;
 }

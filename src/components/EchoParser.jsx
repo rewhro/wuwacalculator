@@ -309,6 +309,12 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
                                     - Do <strong>NOT</strong> resize, compress, or crop the image.
                                 </li>
                                 <li>
+                                    - Should be <strong>1920</strong> x <strong>1080</strong> (make sure to confirm).
+                                </li>
+                                <li>
+                                    - Might not be 100% correct all the time so you may have to edit them post-import.
+                                </li>
+                                <li>
                                     - Only works well with en texts.
                                 </li>
                                 <li>
