@@ -3,12 +3,29 @@ import Tesseract from 'tesseract.js';
 import { echoImageMap, setNameImageMap } from '../utils/autoEchoImageMap';
 import {applyParsedEchoesToEquipped} from "../utils/buildEchoObjectsFromParsedResults.js";
 
+const echoImageCache = {};
+const setIconImageCache = {};
+
 const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
     const [imageSrc, setImageSrc] = useState(null);
     const [imageElement, setImageElement] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errorImageSize, setErrorImageSize] = useState(false);
     const fileInputRef = useRef(null);
+
+    const preloadReferenceImages = async (referenceMap, size, cache) => {
+        const entries = Object.entries(referenceMap);
+        for (const [label, src] of entries) {
+            if (cache[label]) continue;
+            try {
+                const img = await loadImage(src);
+                const ctx = imageToCanvasContext(img, size.width, size.height);
+                cache[label] = ctx;
+            } catch (err) {
+                //console.warn(`⚠️ Failed to preload ${label}: ${src}`);
+            }
+        }
+    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -72,6 +89,8 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
     };
 
     const parseEchoes = async (img, worker) => {
+        await preloadReferenceImages(echoImageMap, { width: 192, height: 182 }, echoImageCache);
+        await preloadReferenceImages(setNameImageMap, { width: 56, height: 56 }, setIconImageCache);
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = img.width;
@@ -106,8 +125,21 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
                 substats.push(cleaned);
             }
 
-            const echoName = await matchImageRegion(canvas, echoImageRegion(index), echoImageMap, { width: 192, height: 182 });
-            const setName = await matchImageRegion(canvas, setIconRegion(index), setNameImageMap, { width: 56, height: 56 });
+            const echoName = await matchImageRegion(
+                canvas,
+                echoImageRegion(index),
+                echoImageMap,
+                { width: 192, height: 182 },
+                echoImageCache
+            );
+
+            const setName = await matchImageRegion(
+                canvas,
+                setIconRegion(index),
+                setNameImageMap,
+                { width: 56, height: 56 },
+                setIconImageCache
+            );
 
             results.push({ cost, mainStatLabel, substats, echo: echoName, set: setName });
         }
@@ -164,23 +196,16 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
         return diff;
     };
 
-    const matchImageRegion = async (canvas, region, referenceMap, size) => {
+    const matchImageRegion = async (canvas, region, referenceMap, size, cache) => {
         const inputCtx = extractImageRegion(canvas, region);
         let bestMatch = null;
         let minDiff = Infinity;
 
-        for (const [label, src] of Object.entries(referenceMap)) {
-            try {
-                const img = await loadImage(src);
-                const refCtx = imageToCanvasContext(img, size.width, size.height);
-                const diff = compareImageData(inputCtx, refCtx, size.width, size.height);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    bestMatch = label;
-                }
-            } catch (err) {
-                //console.warn(`⚠️ Failed to load echo icon: ${label} → ${src}`);
-                continue;
+        for (const [label, refCtx] of Object.entries(cache)) {
+            const diff = compareImageData(inputCtx, refCtx, size.width, size.height);
+            if (diff < minDiff) {
+                minDiff = diff;
+                bestMatch = label;
             }
         }
 
