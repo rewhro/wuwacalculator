@@ -38,7 +38,6 @@ export default function CharacterSelector({
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
                                               temporaryBuffs, setTemporaryBuffs,
                                               characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef,
-                                              weaponMap, attributeMap
                                           }) {
     useEffect(() => {
         const characterIconPaths = characters.map(char =>
@@ -149,11 +148,10 @@ export default function CharacterSelector({
 
             <CharacterMenu
                 characters={characters}
-                attributeMap={attributeMap}
-                weaponMap={weaponMap}
                 handleCharacterSelect={handleCharacterSelect}
                 menuRef={menuRef}
                 menuOpen={menuOpen}
+
             />
 
             <SkillSettings

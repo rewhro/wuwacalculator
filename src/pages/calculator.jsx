@@ -851,7 +851,7 @@ export default function Calculator() {
 }
 
 // Include helpers if needed:
-const attributeMap = {
+export const attributeMap = {
     glacio: 1,
     fusion: 2,
     electro: 3,
@@ -860,7 +860,7 @@ const attributeMap = {
     havoc: 6,
 };
 
-const weaponMap = {
+export const weaponMap = {
     broadblade: 1,
     sword: 2,
     pistols: 3,

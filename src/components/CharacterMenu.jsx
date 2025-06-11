@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { imageCache } from '../pages/calculator.jsx';
+import {attributeMap, weaponMap} from "../pages/calculator.jsx";
+
 export default function CharacterMenu({
                                           characters,
                                           handleCharacterSelect,
                                           menuRef,
                                           menuOpen,
-                                          setMenuOpen,
-    attributeMap,
-    weaponMap
+                                          setMenuOpen
                                       }) {
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -59,7 +59,7 @@ export default function CharacterMenu({
 
                     <div className="button-group-container">
                         <div className="weapon-button-group">
-                            {Object.keys(weaponMap).map((weapon) => (
+                            {Object.keys(weaponMap ?? {}).map((weapon) => (
                                 <button
                                     key={weapon}
                                     className={`weapon-button ${selectedWeapon === weapon ? 'selected' : ''}`}
@@ -76,7 +76,7 @@ export default function CharacterMenu({
                         </div>
 
                         <div className="attribute-button-group">
-                            {Object.keys(attributeMap).map((attr) => (
+                            {Object.keys(attributeMap ?? {}).map((attr) => (
                                 <button
                                     key={attr}
                                     className={`attribute-button ${selectedAttribute === attr ? 'selected' : ''}`}
