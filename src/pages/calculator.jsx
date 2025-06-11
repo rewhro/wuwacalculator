@@ -888,28 +888,41 @@ const skillIconPaths = traceIcons.flatMap(name => [
     `/assets/skill-icons/dark/${name}.webp?v=dark`
 ]);
 
-const preloadedImages = new Set();
-
 const baseImages = [
     '/assets/sample-import-image.png',
     '/assets/weapon-icons/default.webp',
     '/assets/echoes/default.webp'
 ];
 
-const attributeIconPaths = Object.keys(attributeMap).map(attr =>
-    `/assets/attributes/attributes alt/${attr}.webp`
-);
+const attributeIconPaths = Object.keys(attributeMap).flatMap(attr => [
+    `/assets/attributes/attributes alt/${attr}.webp`,
+    `/assets/attributes/${attr}.png`
+]);
 
 const weaponIconPaths = Object.keys(weaponMap).map(weapon =>
     `/assets/weapons/${weapon}.webp`
 );
 
 
+// Global cache
+export const imageCache = {}; // { [src]: HTMLImageElement }
+const preloadedImages = new Set();
+
+/**
+ * Preload a list of image URLs and store them in imageCache.
+ * @param {string[]} srcList
+ */
 export const preloadImages = (srcList = []) => {
     srcList.forEach(src => {
         if (preloadedImages.has(src)) return;
 
         const img = new Image();
+        img.onload = () => {
+            imageCache[src] = img;
+        };
+        img.onerror = () => {
+            console.warn(`Failed to preload image: ${src}`);
+        };
         img.src = src;
         preloadedImages.add(src);
     });

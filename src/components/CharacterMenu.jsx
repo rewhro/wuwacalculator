@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { imageCache } from '../pages/calculator.jsx';
 export default function CharacterMenu({
                                           characters,
                                           handleCharacterSelect,
@@ -66,7 +66,11 @@ export default function CharacterMenu({
                                     onClick={() => setSelectedWeapon((prev) => (prev === weapon ? null : weapon))}
                                     title={weapon}
                                 >
-                                    <img src={`/assets/weapons/${weapon}.webp`} alt={weapon} loading="lazy" />
+                                    <img
+                                        src={imageCache[`/assets/weapons/${weapon}.webp`]?.src || `/assets/weapons/${weapon}.webp`}
+                                        alt={weapon}
+                                        loading="eager"
+                                    />
                                 </button>
                             ))}
                         </div>
@@ -79,7 +83,11 @@ export default function CharacterMenu({
                                     onClick={() => setSelectedAttribute((prev) => (prev === attr ? null : attr))}
                                     title={attr}
                                 >
-                                    <img src={`/assets/attributes/attributes alt/${attr}.webp`} alt={attr} loading='lazy' />
+                                    <img
+                                        src={imageCache[`/assets/attributes/attributes alt/${attr}.webp`]?.src || `/assets/attributes/attributes alt/${attr}.webp`}
+                                        alt={attr}
+                                        loading="eager"
+                                    />
                                 </button>
                             ))}
                         </div>
@@ -92,21 +100,26 @@ export default function CharacterMenu({
                             <div key={i} className="dropdown-item" onClick={() => handleCharacterSelect(char)}>
                                 <div className="dropdown-item-content">
                                     <div className="dropdown-main">
-                                        <img src={char.icon} alt={char.displayName} className="icon-menu-img" loading="lazy" />
+                                        <img
+                                            src={imageCache[char.icon]?.src || char.icon}
+                                            alt={char.displayName}
+                                            className="icon-menu-img"
+                                            loading="eager"
+                                        />
                                         <span className="dropdown-label">{char.displayName}</span>
                                     </div>
                                     <div className="dropdown-icons">
                                         <img
-                                            src={`/assets/weapons/${getWeaponName(char.weaponType)}.webp`}
+                                            src={imageCache[`/assets/weapons/${getWeaponName(char.weaponType)}.webp`]?.src || `/assets/weapons/${getWeaponName(char.weaponType)}.webp`}
                                             alt="Weapon"
                                             className="mini-weapon-icon"
-                                            loading='lazy'
+                                            loading="eager"
                                         />
                                         <img
-                                            src={`/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`}
+                                            src={imageCache[`/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`]?.src || `/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`}
                                             alt="Element"
                                             className="mini-icon"
-                                            loading='lazy'
+                                            loading="eager"
                                         />
                                     </div>
                                 </div>

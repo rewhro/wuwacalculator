@@ -1,4 +1,5 @@
 import React from 'react';
+import {imageCache} from "../pages/calculator.jsx";
 
 const weaponMap = {
     broadblade: 1,
@@ -21,10 +22,10 @@ export default function CharacterHeader({ activeCharacter, setMenuOpen, attribut
             {activeCharacter && (
                 <img
                     ref={triggerRef}
-                    src={activeCharacter.icon}
+                    src={imageCache[activeCharacter.icon]?.src || activeCharacter.icon}
                     alt={activeCharacter.displayName}
                     className="header-icon"
-                    loading="lazy"
+                    loading="eager"
                     onClick={() => setMenuOpen(!menuOpen)}
                 />
             )}
@@ -33,14 +34,19 @@ export default function CharacterHeader({ activeCharacter, setMenuOpen, attribut
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     {weaponName !== 'unknown' && (
                         <img
-                            src={`/assets/weapons/${weaponName}.webp`}
+                            src={imageCache[`/assets/weapons/${weaponName}.webp`]?.src || `/assets/weapons/${weaponName}.webp`}
                             alt="weapon"
                             className="weapon-icon"
-                            loading="lazy"
+                            loading="eager"
                         />
                     )}
                     {attributeIconPath && (
-                        <img src={attributeIconPath} alt="attribute" className="attribute-icon" />
+                        <img
+                            src={imageCache[attributeIconPath]?.src || attributeIconPath}
+                            alt="attribute"
+                            className="attribute-icon"
+                            loading="eager"
+                        />
                     )}
                 </div>
             </div>

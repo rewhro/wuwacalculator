@@ -11,6 +11,7 @@ import {
     updateEchoInBag
 } from '../state/echoBagStore';
 import {formatStatKey, getValidMainStats} from "../utils/echoHelper.js";
+import {imageCache} from "../pages/calculator.jsx";
 
 function isEchoModified(oldEcho, updatedEcho) {
     return (
@@ -83,7 +84,7 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                             {Object.entries(setIconMap).map(([setId, iconPath]) => (
                                 <img
                                     key={setId}
-                                    src={iconPath}
+                                    src={imageCache[iconPath]?.src || iconPath}
                                     alt={`Set ${setId}`}
                                     className={`set-icon-filter ${selectedSet === Number(setId) ? 'selected' : ''}`}
                                     onClick={() =>
@@ -140,7 +141,10 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                                         <div className="echo-slot-cost-badge bag">{echo.cost}</div>
                                     </div>
 
-                                    <img src={echo.icon} alt={echo.name}
+                                    <img
+                                        src={imageCache[echo.icon]?.src || echo.icon}
+                                        alt={echo.name}
+                                         loading="eager"
                                          onError={(e) => {
                                              e.currentTarget.onerror = null;
                                              e.currentTarget.src = '/assets/echoes/default.webp';

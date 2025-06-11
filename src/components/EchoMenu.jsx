@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {setIconMap} from "../constants/echoSetData.jsx";
+import { imageCache } from '../pages/calculator.jsx';
 
 export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, setMenuOpen }) {
     const [selectedCost, setSelectedCost] = useState(null);
@@ -47,9 +48,9 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                         {Object.entries(setIconMap).map(([setId, iconPath]) => (
                             <img
                                 key={setId}
-                                src={iconPath}
+                                src={imageCache[iconPath]?.src || iconPath}
                                 alt={`Set ${setId}`}
-                                loading="lazy"
+                                loading="eager"
                                 className={`set-icon-filter ${selectedSet === Number(setId) ? 'selected' : ''}`}
                                 onClick={() =>
                                     setSelectedSet(prev => prev === Number(setId) ? null : Number(setId))
@@ -72,13 +73,16 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                     {filteredEchoes.map((echo, i) => (
                         <div key={i} className="dropdown-item" onClick={() => handleEchoSelect(echo)}>
                             <div className="dropdown-main">
-                                <img src={echo.icon} alt={echo.name} className="icon-menu-img"
-                                     loading="lazy"
-                                     onError={(e) => {
-                                         e.currentTarget.onerror = null;
-                                         e.currentTarget.src = '/assets/echoes/default.webp';
-                                         e.currentTarget.classList.add('fallback-icon');
-                                     }}
+                                <img
+                                    src={imageCache[echo.icon]?.src || echo.icon}
+                                    alt={echo.name}
+                                    className="icon-menu-img"
+                                    loading="eager"
+                                    onError={(e) => {
+                                        e.currentTarget.onerror = null;
+                                        e.currentTarget.src = '/assets/echoes/default.webp';
+                                        e.currentTarget.classList.add('fallback-icon');
+                                    }}
                                 />
                                 <span className="dropdown-label">{echo.name}</span>
                             </div>
@@ -88,10 +92,10 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                                     {echo.sets?.map(setId => (
                                         <img
                                             key={setId}
-                                            src={setIconMap[setId]}
-                                            loading='lazy'
+                                            src={imageCache[setIconMap[setId]]?.src || setIconMap[setId]}
                                             alt={`Set ${setId}`}
                                             className="set-icon menu"
+                                            loading="eager"
                                         />
                                     ))}
                                 </div>
