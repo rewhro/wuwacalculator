@@ -126,7 +126,7 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
                             }}
                         >
                             {statIconMap[stat.label] && (
-                                <img
+                                <div
                                     style={{
                                         width: 18,
                                         height: 18,
@@ -138,8 +138,6 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
                                         WebkitMaskSize: 'contain',
                                         maskSize: 'contain'
                                     }}
-                                    loading="lazy"
-                                    alt={stat.label}
                                 />
                             )}
                             {stat.label}
