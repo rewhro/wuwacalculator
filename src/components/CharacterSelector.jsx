@@ -92,21 +92,75 @@ export default function CharacterSelector({
             <div className="character-settings">
                 {/* Level input + slider */}
                 <div className="slider-group">
-                    <div className="slider-label-with-input">
-                        <label>Level</label>
-                        <input
-                            type="number"
-                            className="character-level-input"
-                            value={safeLevel}
-                            min="1"
-                            max="90"
-                            onChange={(e) => {
-                                const val = Number(e.target.value);
-                                if (!isNaN(val)) {
-                                    setCharacterLevel(Math.min(Math.max(val, 1), 90));
-                                }
+                    <div
+                        className='level-group'
+                        style={{display:'flex', justifyContent: 'space-between'}}
+                    >
+                        <div className="slider-label-with-input">
+                            <label>Level</label>
+                            <input
+                                type="number"
+                                className="character-level-input"
+                                value={safeLevel}
+                                min="1"
+                                max="90"
+                                onChange={(e) => {
+                                    const val = Number(e.target.value);
+                                    if (!isNaN(val)) {
+                                        setCharacterLevel(Math.min(Math.max(val, 1), 90));
+                                    }
+                                }}
+                            />
+                        </div>
+                        <button
+                            className="btn-primary max"
+                            style={{
+                                padding:'1px 5px 1px 5px',
+                                background: 'none',
+                                opacity: '0.5'
                             }}
-                        />
+                            onClick={() => {
+                                // Set level to 90
+                                setCharacterLevel(90);
+
+                                // Set all skill levels to 10
+                                setSliderValues(prev => {
+                                    const newValues = { ...prev };
+                                    for (const key of Object.keys(prev)) {
+                                        if (key !== 'sequence') {
+                                            newValues[key] = 10;
+                                        }
+                                    }
+                                    return newValues;
+                                });
+
+                                // Toggle all buff icons on
+                                setTemporaryBuffs(prev => {
+                                    const allActiveNodes = {};
+                                    const buffs = {};
+
+                                    for (const [nodeId, node] of Object.entries(activeCharacter.raw?.SkillTrees ?? {})) {
+                                        if (node.NodeType === 4 && node.Skill?.Name) {
+                                            allActiveNodes[nodeId] = true;
+                                            const buffKey = skillToBuffMap[node.Skill.Name];
+                                            const value = parseFloat((node.Skill?.Param?.[0] ?? "0").replace('%', ''));
+
+                                            if (buffKey) {
+                                                buffs[buffKey] = (buffs[buffKey] ?? 0) + value;
+                                            }
+                                        }
+                                    }
+
+                                    return {
+                                        ...prev,
+                                        activeNodes: allActiveNodes,
+                                        ...buffs
+                                    };
+                                });
+                            }}
+                        >
+                            Max
+                        </button>
                     </div>
                     <div className="slider-controls">
                         <input

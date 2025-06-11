@@ -152,10 +152,11 @@
     bottom: 110%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(50, 50, 50, 0.9);
+    background-color: rgba(37, 37, 37, 0.75);
     color: #fff;
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: 12px;
+    font-weight: bold;
     white-space: pre-wrap;
     opacity: 0;
     pointer-events: none;
@@ -274,4 +275,21 @@
     to {
         opacity: 1;
     }
+}
+
+.btn-primary.max {
+    color: var(--primary-color);
+}
+
+.btn-primary.max:hover {
+    background-color: rgba(0, 0, 0, 0.12) !important;
+    opacity: 1 !important;
+}
+
+.dark .btn-primary.max:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.btn-primary.min:active {
+    transform: scale(0.95);
 }

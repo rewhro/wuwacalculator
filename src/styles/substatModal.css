@@ -140,6 +140,7 @@
 
 .edit-substats-modal .substat-input {
     width: 60px;
+    outline: none;
     padding: 0.4rem 0.6rem;
     font-size: 0.9rem;
     border-radius: 6px;
@@ -149,6 +150,16 @@
     align-self: center;
     background: rgba(133, 133, 133, 0.52);
     border: none;
+}
+
+.edit-substats-modal .substat-input::-webkit-outer-spin-button,
+.edit-substats-modal .substat-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.edit-substats-modal .substat-input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .substat-row {
@@ -317,4 +328,10 @@
 
 .remove-substat-button:hover {
     color: #222;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none;    /* For Firefox */
 }

@@ -1,4 +1,3 @@
-// ✅ FINAL APP WITH SYSTEM DARK MODE + USER OVERRIDE
 import React, { useState, useEffect, useRef } from 'react';
 import Split from 'split.js';
 import { fetchCharacters } from '../json-data-scripts/wutheringFetch';
@@ -8,7 +7,7 @@ import SkillsModal from '../components/SkillsModal';
 import CharacterSelector, {traceIcons} from '../components/CharacterSelector';
 import CharacterStats from '../components/CharacterStats';
 import DamageSection from '../components/DamageSection';
-import WeaponPane from '../components/WeaponPane';
+import WeaponPane, {mapExtraStatToCombat} from '../components/WeaponPane';
 import EnemyPane from '../components/EnemyPane';
 import BuffsPane from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
@@ -80,61 +79,64 @@ export default function Calculator() {
     const [weapons, setWeapons] = useState({});
 
     useEffect(() => {
-        fetchCharacters().then(data => {
+        Promise.all([fetchCharacters(), fetchWeapons()]).then(([charData, weaponData]) => {
+            setWeapons(weaponData);
 
-            const sorted = [...data].sort((a, b) =>
+            const sorted = [...charData].sort((a, b) =>
                 a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
             );
-
             setCharacters(sorted);
 
+            const resolvedCharId = activeCharacterId ?? 1506;
+            const foundChar = sorted.find(c => String(c.Id ?? c.id ?? c.link) === String(resolvedCharId));
+            if (!foundChar) return;
 
-            if (activeCharacterId) {
-                const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(activeCharacterId));
-                if (foundChar) {
-                    setActiveCharacter({
-                        ...foundChar,
-                        weaponType: foundChar.weaponType ?? foundChar.Weapon ?? foundChar.raw?.Weapon ?? 0,
-                    });
+            const weaponType = foundChar.weaponType ?? foundChar.Weapon ?? foundChar.raw?.Weapon ?? 0;
 
-                    const state = characterStates.find(c => String(c.Id) === String(foundChar.link));
-                    setBaseCharacterState(state ?? null);
+            setActiveCharacter({ ...foundChar, weaponType });
+            if (!activeCharacterId) setActiveCharacterId(resolvedCharId);
 
-                    const profile = characterRuntimeStates[activeCharacterId] ?? {};
-                    setCharacterLevel(profile.CharacterLevel ?? 1);
-                    setSliderValues(profile.SkillLevels ?? defaultSliderValues);
-                    setTraceNodeBuffs(profile.TemporaryBuffs ?? defaultTraceBuffs);
-                    setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
-                    setCombatState(prev => ({
-                        ...defaultCombatState,
-                        ...(profile.CombatState ?? {}),
-                        enemyLevel: prev.enemyLevel,
-                        enemyRes: prev.enemyRes
-                    }));
+            const profile = characterRuntimeStates[resolvedCharId] ?? {};
+            const state = characterStates.find(c => String(c.Id) === String(foundChar.link));
+            setBaseCharacterState(state ?? null);
+            setCharacterLevel(profile.CharacterLevel ?? 1);
+            setSliderValues(profile.SkillLevels ?? defaultSliderValues);
+            setTraceNodeBuffs(profile.TemporaryBuffs ?? defaultTraceBuffs);
+            setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
 
-                    return;
-                }
-            } else {
-                const defaultCharacterId = 1506;
-                const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(defaultCharacterId));
-                if (foundChar) {
-                    setActiveCharacter({
-                        ...foundChar,
-                        weaponType: foundChar.weaponType ?? foundChar.Weapon ?? foundChar.raw?.Weapon ?? 0,
-                    });
+            // ✅ Set default weapon only after weapons are loaded
+            const defaultWeapon = Object.values(weaponData)
+                .filter(w => w.Type === weaponType)
+                .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0))[0];
 
-                    setActiveCharacterId(defaultCharacterId);
-                    const state = characterStates.find(c => String(c.Id) === String(defaultCharacterId));
-                    setBaseCharacterState(state ?? null);
+            if (defaultWeapon) {
+                const levelData = defaultWeapon.Stats?.["0"]?.["1"] ?? defaultWeapon.Stats?.["0"]?.["0"];
+                const baseAtk = levelData?.[0]?.Value ?? 0;
+                const stat = levelData?.[1] ?? null;
+                const mappedStat = mapExtraStatToCombat(stat);
 
-                    const profile = characterRuntimeStates[defaultCharacterId] ?? {};
-                    setCharacterLevel(profile.CharacterLevel ?? 1);
-                    setSliderValues(profile.SkillLevels ?? defaultSliderValues);
-                    setTraceNodeBuffs(profile.TemporaryBuffs ?? defaultTraceBuffs);
-                    setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
-                    setCombatState(profile.CombatState ?? defaultCombatState);
-                    return;
-                }
+                setCombatState(prev => ({
+                    ...defaultCombatState,
+                    ...(profile.CombatState ?? {}),
+                    enemyLevel: prev.enemyLevel,
+                    enemyRes: prev.enemyRes,
+                    weaponId: defaultWeapon.Id,
+                    weaponLevel: 1,
+                    weaponBaseAtk: baseAtk,
+                    weaponStat: stat,
+                    weaponRarity: defaultWeapon.Rarity ?? 1,
+                    weaponEffect: defaultWeapon.Effect ?? null,
+                    weaponEffectName: defaultWeapon.EffectName ?? null,
+                    weaponParam: defaultWeapon.Param ?? [],
+                    weaponRank: 1,
+                    atkPercent: 0,
+                    defPercent: 0,
+                    hpPercent: 0,
+                    critRate: 0,
+                    critDmg: 0,
+                    energyRegen: 0,
+                    ...mappedStat
+                }));
             }
         });
     }, []);
@@ -259,7 +261,6 @@ export default function Calculator() {
     }, [rotationEntries, charId]);
 
     const handleCharacterSelect = (char) => {
-        // ✅ Save full runtime state for current character
         if (activeCharacter) {
             const currentCharId = charId;
             setTeamCache(prev => ({
@@ -309,12 +310,49 @@ export default function Calculator() {
         setSliderValues(cached?.SkillLevels ?? defaultSliderValues);
         setTraceNodeBuffs(cached?.TemporaryBuffs ?? defaultTraceBuffs);
         setCustomBuffs(cached?.CustomBuffs ?? defaultCustomBuffs);
-        setCombatState(prev => ({
+        const cachedCombatState = {
             ...defaultCombatState,
             ...(cached?.CombatState ?? {}),
-            enemyLevel: prev.enemyLevel,
-            enemyRes: prev.enemyRes
-        }));
+            enemyLevel: combatState.enemyLevel,
+            enemyRes: combatState.enemyRes
+        };
+
+        const alreadyHasWeapon = cachedCombatState?.weaponId != null;
+
+        if (!alreadyHasWeapon) {
+            const weaponType = char.weaponType ?? char.Weapon ?? char.raw?.Weapon ?? 0;
+            const defaultWeapon = Object.values(weapons)
+                .filter(w => w.Type === weaponType)
+                .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0))[0];
+
+            if (defaultWeapon) {
+                const levelData = defaultWeapon.Stats?.["0"]?.["1"] ?? defaultWeapon.Stats?.["0"]?.["0"];
+                const baseAtk = levelData?.[0]?.Value ?? 0;
+                const stat = levelData?.[1] ?? null;
+                const mappedStat = mapExtraStatToCombat(stat);
+
+                Object.assign(cachedCombatState, {
+                    weaponId: defaultWeapon.Id,
+                    weaponLevel: 1,
+                    weaponBaseAtk: baseAtk,
+                    weaponStat: stat,
+                    weaponRarity: defaultWeapon.Rarity ?? 1,
+                    weaponEffect: defaultWeapon.Effect ?? null,
+                    weaponEffectName: defaultWeapon.EffectName ?? null,
+                    weaponParam: defaultWeapon.Param ?? [],
+                    weaponRank: 1,
+                    atkPercent: 0,
+                    defPercent: 0,
+                    hpPercent: 0,
+                    critRate: 0,
+                    critDmg: 0,
+                    energyRegen: 0,
+                    ...mappedStat
+                });
+            }
+        }
+
+        setCombatState(cachedCombatState);
         setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
@@ -837,6 +875,7 @@ export default function Calculator() {
                                         combatState={combatState}
                                         mergedBuffs={mergedBuffs}
                                         rotationEntries={rotationEntries}
+                                        currentSliderColor={currentSliderColor}
                                     />
                                 </div>
                             </div>

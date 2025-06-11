@@ -36,6 +36,7 @@
 }
 
 .btn-primary:hover {
+    transform: scale(1.05);
     background-color: #7c7b7b;
 }
 

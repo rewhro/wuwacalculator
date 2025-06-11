@@ -3,6 +3,26 @@ import WeaponMenu from './WeaponMenu';
 import { getWeaponUIComponent } from '../data/weapon-behaviour/index';
 import {preloadImages} from "../pages/calculator.jsx";
 
+export function mapExtraStatToCombat(stat) {
+    if (!stat || !stat.Name) return {};
+
+    const value = stat.Value ?? 0;
+    const name = stat.Name.toLowerCase();
+
+    // Handle ratio and percent
+    const scaled = stat.IsRatio ? value * 100 : stat.IsPercent ? value / 100 : value;
+
+    switch (name) {
+        case 'atk': return stat.IsRatio ? { atkPercent: scaled } : { atk: scaled };
+        case 'hp': return stat.IsRatio ? { hpPercent: scaled } : { hp: scaled };
+        case 'def': return stat.IsRatio ? { defPercent: scaled } : { def: scaled };
+        case 'crit. rate': return { critRate: scaled };
+        case 'crit. dmg': return { critDmg: scaled };
+        case 'energy regen': return { energyRegen: scaled };
+        default: return {};
+    }
+}
+
 export default function WeaponPane({ activeCharacter, combatState, setCombatState, weapons,
                                        characterRuntimeStates, setCharacterRuntimeStates }) {
     const filteredWeapons = Object.values(weapons)
@@ -13,19 +33,15 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                 (activeCharacter?.weaponType == null || weapon.Type === activeCharacter.weaponType)
         )
         .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0));
-
     const weaponId = combatState.weaponId;
     const activeWeaponIconPath = weaponId
         ? `/assets/weapon-icons/${weaponId}.webp`
         : '/assets/weapon-icons/default.webp';
-
     const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
     const weaponMenuRef = useRef(null);
     const weaponTriggerRef = useRef(null);
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
-
-
 
     const toggleState = (stateKey) => {
         setCharacterRuntimeStates(prev => ({
@@ -39,7 +55,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             }
         }));
     };
-
     const statIconMap = {
         'atk': '/assets/stat-icons/atk.png',
         'hp': '/assets/stat-icons/hp.png',
@@ -48,24 +63,16 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         'crit. dmg': '/assets/stat-icons/critdmg.png',
         'energy regen': '/assets/stat-icons/energyregen.png'
     };
-
     const selectedWeapon = weapons?.[weaponId] ?? null;
     const weaponLevel = combatState.weaponLevel ?? 1;
-
-
     const WeaponUI = getWeaponUIComponent(weaponId);
-
     const [selectedRarities, setSelectedRarities] = useState([1, 2, 3, 4, 5]);
-
     const handleWeaponSelect = (weapon) => {
         if (combatState.weaponId === weapon.Id) return;
-
         const levelData = weapon.Stats?.["0"]?.["1"] ?? weapon.Stats?.["0"]?.["0"];
         const baseAtk = levelData?.[0]?.Value ?? 0;
         const stat = levelData?.[1] ?? null;
-
         const mappedStat = mapExtraStatToCombat(stat);
-
         setCombatState(prev => ({
             ...prev,
             weaponId: weapon.Id,
@@ -74,13 +81,11 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             weaponStat: stat,
             weaponRarity: weapon.Rarity ?? 1,
 
-            // ✅ Weapon effect fields
             weaponEffect: weapon.Effect ?? null,
             weaponEffectName: weapon.EffectName ?? null,
             weaponParam: weapon.Param ?? [],
             weaponRank: 1,
 
-            // 🔁 Reset all mapped stat fields before applying the new one
             atkPercent: 0,
             defPercent: 0,
             hpPercent: 0,
@@ -138,32 +143,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
 
         return `${name}: ${formattedValue}`;
     };
-
-    function mapExtraStatToCombat(stat) {
-        if (!stat || !stat.Name) return {};
-
-        const value = stat.Value ?? 0;
-        const name = stat.Name.toLowerCase();
-
-        // Handle ratio and percent
-        const scaled = stat.IsRatio ? value * 100 : stat.IsPercent ? value / 100 : value;
-
-        switch (name) {
-            case 'atk': return stat.IsRatio ? { atkPercent: scaled } : { atk: scaled };
-            case 'hp': return stat.IsRatio ? { hpPercent: scaled } : { hp: scaled };
-            case 'def': return stat.IsRatio ? { defPercent: scaled } : { def: scaled };
-            case 'crit. rate': return { critRate: scaled };
-            case 'crit. dmg': return { critDmg: scaled };
-            case 'energy regen': return { energyRegen: scaled };
-            default: return {};
-        }
-    }
-
-    useEffect(() => {
-        if (!combatState.weaponId && filteredWeapons.length > 0) {
-            handleWeaponSelect(filteredWeapons[0]);
-        }
-    }, [activeCharacter, filteredWeapons]);
 
     useEffect(() => {
         const weaponIconPaths = filteredWeapons

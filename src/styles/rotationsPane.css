@@ -23,8 +23,9 @@
     transition: ease all 0.3s;
 }
 
-.rotation-button:active {
-    transform: scale(0.97);
+.rotation-button:active,
+.rotation-button.clear:active {
+    transform: scale(1);
 }
 
 .dark .rotation-button {
@@ -39,7 +40,6 @@
 .rotation-button:hover {
     background: rgba(119, 116, 116, 0.85);
     color: white;
-    transition: background 0.2s;
     transform: scale(1.05);
 }
 
@@ -287,8 +287,16 @@
     max-height: 500px;
     display: flex;
     flex-direction: column;
-    animation: fadeInScale 0.2s ease-out;
+    animation: fadeInScale 0.3s ease-out;
     overflow: hidden;
+}
+
+.skill-menu-panel.fade-out {
+    animation: fadeOutScale 0.2s ease-in forwards;
+}
+
+.skill-menu-overlay.fade-out {
+    animation: fadeOutOverlay 0.2s ease-in forwards;
 }
 
 .menu-header-with-buttons {
@@ -363,6 +371,7 @@
 }
 
 .skill-menu-overlay {
+    animation: fadeInOverlay 0.3s ease;
     position: fixed;
     top: 0;
     left: 0;

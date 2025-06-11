@@ -23,7 +23,7 @@
 
 .stats-box {
     /*border: 1px solid #ddd;*/
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 15px 20px;
     background-color: #f9f9f9;
     margin-bottom: 50px;
@@ -40,8 +40,8 @@
 }
 
 .stats-grid {
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 0.05rem solid #ddd;
+    border-radius: 12px;
     overflow: hidden;
     margin-bottom: 10px;
     font-size: 16px;
@@ -77,7 +77,7 @@
 
 .damage-box {
     /*border: 1px solid #ddd;*/
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 15px 20px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -91,7 +91,7 @@
 
 .damage-inner-box {
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 10px 15px;
     background-color: #f5f5f5;
     margin-bottom: 10px;
@@ -173,9 +173,10 @@
     bottom: 110%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(50, 50, 50, 0.9);
-    color: #fff;
+    background-color: rgba(37, 37, 37, 0.75);
     padding: 4px 8px;
+    color: #f9fafb;
+    font-weight: bold;
     border-radius: 6px;
     white-space: pre-wrap;
     opacity: 0;
@@ -185,7 +186,6 @@
     text-align: left;
     z-index: 10;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-
     max-width: 140px; /* wider than the default */
     width: max-content;
 }

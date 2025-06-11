@@ -227,6 +227,16 @@ export default function RotationsPane({
         createdAt: entry.createdAt ?? Date.now() + idx + Math.random()
     }));
 
+    const [isClosing, setIsClosing] = useState(false);
+
+    const closeMenu = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setShowSkillOptions(false);
+            setIsClosing(false);
+        }, 200);
+    };
+
     return (
         <div className="rotation-pane">
             <div className="rotation-view-toggle">
@@ -327,8 +337,14 @@ export default function RotationsPane({
                     </div>
 
                     {showSkillOptions && (
-                        <div className="skill-menu-overlay" onClick={() => setShowSkillOptions(false)}>
-                            <div className="skill-menu-panel" onClick={(e) => e.stopPropagation()}>
+                        <div
+                            className={`skill-menu-overlay ${isClosing ? 'fade-out' : ''}`}
+                            onClick={closeMenu}
+                        >
+                            <div
+                                className={`skill-menu-panel ${isClosing ? 'fade-out' : 'fade-in'}`}
+                                onClick={(e) => e.stopPropagation()}
+                            >
                                 <div className="menu-header-with-buttons">
                                     <div className="menu-header">Select a Skill</div>
                                     <button className="rotation-button clear" onClick={() => setShowSkillOptions(false)}>✕</button>

@@ -10,8 +10,10 @@ export default function ZhezhiUI({ activeStates, toggleState }) {
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Creation's Zenith</h4>
                 <div>
                     <p>When a Phantasmic Imprint is nearby and there are 2 stacks of Painter's Delight, Stroke of Genius is replaced with Creation's Zenith, which can be cast while in mid-air. When it is cast, Zhezhi will:</p>
-                    <li>Lose all stacks of Painter's Delight</li>
-                    <li>Move to the location of the Phantasmic Imprint, remove it, and then summon an Ivory Herald to attack the target, dealing greater Glacio DMG, considered as Basic Attack DMG, additionally increasing the Basic Attack DMG Bonus by 18% for 27s. Refresh the mid-air Dodge attempts if the target Phatasmic Imprint is in mid-air.</li>
+                    <ul style={{paddingLeft: '20px'}} >
+                        <li>Lose all stacks of Painter's Delight</li>
+                        <li>Move to the location of the Phantasmic Imprint, remove it, and then summon an Ivory Herald to attack the target, dealing greater Glacio DMG, considered as Basic Attack DMG, additionally increasing the Basic Attack DMG Bonus by 18% for 27s. Refresh the mid-air Dodge attempts if the target Phatasmic Imprint is in mid-air.</li>
+                    </ul>
                 </div>
                 <label className="modern-checkbox">
                     <input

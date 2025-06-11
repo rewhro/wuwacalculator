@@ -16,7 +16,8 @@ export default function DamageSection({
                                           characterRuntimeStates,
                                           combatState,
                                           mergedBuffs,
-                                          rotationEntries
+                                          rotationEntries,
+    currentSliderColor
                                       }) {
     if (!activeCharacter) return null;
 

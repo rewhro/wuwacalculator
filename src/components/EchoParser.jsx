@@ -253,7 +253,10 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
                 accept="image/*"
                 style={{ display: 'none' }}
             />
-            <div className='rotation-buttons-left'>
+            <div
+                className='rotation-buttons-left'
+                style={{display: 'flex', justifyContent: 'space-between'}}
+            >
                 <button
                     onClick={() => {
                         setIsShaking(false);
@@ -262,6 +265,20 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
                     className="btn-primary"
                 >
                     Import Echo
+                </button>
+                <button
+                    onClick={() => {
+                        setCharacterRuntimeStates(prev => ({
+                            ...prev,
+                            [charId]: {
+                                ...(prev[charId] ?? {}),
+                                equippedEchoes: [null, null, null, null, null]
+                            }
+                        }));
+                    }}
+                    className="rotation-button clear"
+                >
+                    Unequip All
                 </button>
             </div>
 
