@@ -1,5 +1,5 @@
 // src/CharacterSelector.jsx
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import SequenceSkillsBox from './SequenceSkillsBox';
 import CharacterHeader from './CharacterHeader';
 import CharacterMenu from './CharacterMenu';
@@ -7,9 +7,7 @@ import SkillSettings from './SkillSettings';
 import { formatDescription } from '../utils/formatDescription';
 import { getCharacterUIComponent } from '../data/character-ui';
 import { getCustomInherentSkillsComponent } from '../data/character-ui';
-import {preloadImagesFromCharacters} from "../pages/calculator";
-import {echoes} from "../json-data-scripts/getEchoes";
-import {setIconMap} from "../constants/echoSetData";
+import {preloadImages} from "../pages/calculator.jsx";
 
 const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
 
@@ -20,6 +18,8 @@ const traceNodeIconMap = {
     'Spectro DMG Bonus+': 'spectro-bonus', 'Fusion DMG Bonus+': 'fusion-bonus',
     'Electro DMG Bonus+': 'electro-bonus', 'Havoc DMG Bonus+': 'havoc-bonus'
 };
+
+export const traceIcons = Object.values(traceNodeIconMap);
 
 const skillToBuffMap = {
     'ATK+': 'atkPercent', 'HP+': 'hpPercent', 'DEF+': 'defPercent',
@@ -37,12 +37,15 @@ export default function CharacterSelector({
                                               attributeIconPath, currentSliderColor, sliderValues, setSliderValues,
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
                                               temporaryBuffs, setTemporaryBuffs,
-                                              characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef
+                                              characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef,
+                                              weaponMap, attributeMap
                                           }) {
     useEffect(() => {
-        preloadImagesFromCharacters(characters);
-    }, []);
-
+        const characterIconPaths = characters.map(char =>
+            char.icon || 'https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_1_UI.webp'
+        );
+        preloadImages([...characterIconPaths]);
+    }, [characters]);
     const safeLevel = Math.min(Math.max(Number(characterLevel ?? 1), 1), 90);
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -146,6 +149,8 @@ export default function CharacterSelector({
 
             <CharacterMenu
                 characters={characters}
+                attributeMap={attributeMap}
+                weaponMap={weaponMap}
                 handleCharacterSelect={handleCharacterSelect}
                 menuRef={menuRef}
                 menuOpen={menuOpen}

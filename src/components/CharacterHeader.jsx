@@ -24,6 +24,7 @@ export default function CharacterHeader({ activeCharacter, setMenuOpen, attribut
                     src={activeCharacter.icon}
                     alt={activeCharacter.displayName}
                     className="header-icon"
+                    loading="lazy"
                     onClick={() => setMenuOpen(!menuOpen)}
                 />
             )}
@@ -35,6 +36,7 @@ export default function CharacterHeader({ activeCharacter, setMenuOpen, attribut
                             src={`/assets/weapons/${weaponName}.webp`}
                             alt="weapon"
                             className="weapon-icon"
+                            loading="lazy"
                         />
                     )}
                     {attributeIconPath && (

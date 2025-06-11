@@ -5,7 +5,9 @@ export default function CharacterMenu({
                                           handleCharacterSelect,
                                           menuRef,
                                           menuOpen,
-                                          setMenuOpen
+                                          setMenuOpen,
+    attributeMap,
+    weaponMap
                                       }) {
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -23,23 +25,6 @@ export default function CharacterMenu({
             return () => clearTimeout(timeout); // clean up
         }
     }, [menuOpen]);
-
-    const attributeMap = {
-        glacio: 1,
-        fusion: 2,
-        electro: 3,
-        aero: 4,
-        spectro: 5,
-        havoc: 6
-    };
-
-    const weaponMap = {
-        broadblade: 1,
-        sword: 2,
-        pistols: 3,
-        gauntlets: 4,
-        rectifier: 5
-    };
 
     const getAttributeName = (value) =>
         Object.entries(attributeMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
@@ -81,7 +66,7 @@ export default function CharacterMenu({
                                     onClick={() => setSelectedWeapon((prev) => (prev === weapon ? null : weapon))}
                                     title={weapon}
                                 >
-                                    <img src={`/assets/weapons/${weapon}.webp`} alt={weapon} />
+                                    <img src={`/assets/weapons/${weapon}.webp`} alt={weapon} loading="lazy" />
                                 </button>
                             ))}
                         </div>
@@ -94,7 +79,7 @@ export default function CharacterMenu({
                                     onClick={() => setSelectedAttribute((prev) => (prev === attr ? null : attr))}
                                     title={attr}
                                 >
-                                    <img src={`/assets/attributes/attributes alt/${attr}.webp`} alt={attr} />
+                                    <img src={`/assets/attributes/attributes alt/${attr}.webp`} alt={attr} loading='lazy' />
                                 </button>
                             ))}
                         </div>
@@ -107,7 +92,7 @@ export default function CharacterMenu({
                             <div key={i} className="dropdown-item" onClick={() => handleCharacterSelect(char)}>
                                 <div className="dropdown-item-content">
                                     <div className="dropdown-main">
-                                        <img src={char.icon} alt={char.displayName} className="icon-menu-img" />
+                                        <img src={char.icon} alt={char.displayName} className="icon-menu-img" loading="lazy" />
                                         <span className="dropdown-label">{char.displayName}</span>
                                     </div>
                                     <div className="dropdown-icons">
@@ -115,11 +100,13 @@ export default function CharacterMenu({
                                             src={`/assets/weapons/${getWeaponName(char.weaponType)}.webp`}
                                             alt="Weapon"
                                             className="mini-weapon-icon"
+                                            loading='lazy'
                                         />
                                         <img
                                             src={`/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`}
                                             alt="Element"
                                             className="mini-icon"
+                                            loading='lazy'
                                         />
                                     </div>
                                 </div>

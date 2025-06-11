@@ -25,15 +25,13 @@ import {
     getSetCounts,
     getValidMainStats, statDisplayOrder, statIconMap
 } from "../utils/echoHelper.js";
+import {preloadImages} from "../pages/calculator.jsx";
 
 export default function EchoesPane({
                                        charId,
                                         setCharacterRuntimeStates,
                                         characterRuntimeStates,
                                    }) {
-    useEffect(() => {
-        preloadEchoIcons(echoes, setIconMap);
-    }, []);
     const echoSlots = [0, 1, 2, 3, 4];
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeSlot, setActiveSlot] = useState(null);
@@ -173,18 +171,16 @@ export default function EchoesPane({
         setMenuOpen(false);
     };
 
+    useEffect(() => {
+        const echoIconPaths = echoes.map(e => e.icon).filter(Boolean);
+        const setIconPaths = Object.values(setIconMap).filter(Boolean);
+        preloadImages([...echoIconPaths, ...setIconPaths]);
+    }, []);
+
     const setCounts = getSetCounts(echoData);
     const hasSetEffects = Object.entries(setCounts).some(([setId, count]) => count >= 2);
 
     const echoStatTotals = getEchoStatsFromEquippedEchoes(echoData);
-
-    useEffect(() => {
-        const preloadSampleImage = () => {
-            const img = new Image();
-            img.src = '/assets/sample-import-image.png';
-        };
-        preloadSampleImage();
-    }, []);
 
     return (
         <div className="echoes-pane">
@@ -219,6 +215,7 @@ export default function EchoesPane({
                                                     src={echo.icon}
                                                     alt={echo.name}
                                                     className="header-icon"
+                                                    loading="lazy"
                                                     onClick={() => handleEchoIconClick(slotIndex)}
                                                     onLoad={(e) => {
                                                         if (e.currentTarget.classList.contains('fallback-icon')) {
@@ -260,6 +257,7 @@ export default function EchoesPane({
                                                             src={setIconMap[echo.selectedSet]}
                                                             alt={`Set ${echo.selectedSet}`}
                                                             className="echo-set-icon"
+                                                            loading="lazy"
                                                         />
                                                     )}
                                                     {echo && (
@@ -465,7 +463,7 @@ export default function EchoesPane({
                                         ) : (
                                             <div className="echo-buff">
                                                 <div className="echo-buff-header">
-                                                    <img className="echo-buff-icon" src={setIconMap[setInfo.id]} alt={setInfo.name} />
+                                                    <img className="echo-buff-icon" src={setIconMap[setInfo.id]} alt={setInfo.name} loading="lazy" />
                                                     <div className="echo-buff-name">{setInfo.name} (2-piece)</div>
                                                 </div>
                                                 <div className="echo-buff-effect">
@@ -619,26 +617,6 @@ export default function EchoesPane({
             )}
         </div>
     );
-}
-
-function preloadEchoIcons(echoes, setIconMap = {}) {
-    const loaded = new Set();
-
-    echoes.forEach((echo) => {
-        if (echo?.icon && !loaded.has(echo.icon)) {
-            const img = new Image();
-            img.src = echo.icon;
-            loaded.add(echo.icon);
-        }
-
-        const selectedSet = echo?.selectedSet ?? echo?.sets?.[0];
-        const setIcon = setIconMap[selectedSet];
-        if (setIcon && !loaded.has(setIcon)) {
-            const img = new Image();
-            img.src = setIcon;
-            loaded.add(setIcon);
-        }
-    });
 }
 
 export function highlightKeywordsInText(text, extraKeywords = []) {

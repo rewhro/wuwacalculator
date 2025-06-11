@@ -73,6 +73,9 @@ const weaponBuffs = [
     }
 ];
 
+export const weaponBuffList = weaponBuffs;
+
+
 export default function WeaponBuffs({ activeStates, toggleState, setCharacterRuntimeStates, charId }) {
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({

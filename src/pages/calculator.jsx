@@ -5,7 +5,7 @@ import { fetchCharacters } from '../json-data-scripts/wutheringFetch';
 import characterStatesRaw from '../data/characterStates.json';
 import '../styles';
 import SkillsModal from '../components/SkillsModal';
-import CharacterSelector from '../components/CharacterSelector';
+import CharacterSelector, {traceIcons} from '../components/CharacterSelector';
 import CharacterStats from '../components/CharacterStats';
 import DamageSection from '../components/DamageSection';
 import WeaponPane from '../components/WeaponPane';
@@ -14,7 +14,6 @@ import BuffsPane from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
 import ToolbarIconButton, {ToolbarSidebarButton} from '../components/ToolbarIconButton';
 import ResetButton from '../components/ResetButton.jsx';
-import { getStatsForLevel } from '../utils/getStatsForLevel';
 import { attributeColors, attributeIcons, elementToAttribute } from '../utils/attributeHelpers';
 import { getFinalStats } from '../utils/getStatsForLevel';
 import { getUnifiedStatPool } from '../utils/getUnifiedStatPool';
@@ -32,10 +31,10 @@ import RotationsPane from "../components/RotationsPane.jsx";
 import EchoesPane from '../components/EchoesPane';
 import {echoes} from "../json-data-scripts/getEchoes.js";
 import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../data/buffs/setEffect.js";
-import {setIconMap} from "../constants/echoSetData";
-import {getEchoStatsFromEquippedEchoes} from "../utils/echoHelper.js";
+import {getEchoStatsFromEquippedEchoes, statIconMap} from "../utils/echoHelper.js";
 
 export default function Calculator() {
+    loadBase();
     const navigate = useNavigate();
     const LATEST_CHANGELOG_VERSION = '2025-06-06 19:34';
     const [showChangelog, setShowChangelog] = useState(false);
@@ -78,6 +77,7 @@ export default function Calculator() {
     const [team, setTeam] = usePersistentState('team', [activeCharacterId ?? null, null, null]);
     const [teamCache, setTeamCache] = usePersistentState('teamCache', {});
     const [moveToolbarToSidebar, setMoveToolbarToSidebar] = useState(false);
+    const [weapons, setWeapons] = useState({});
 
     useEffect(() => {
         fetchCharacters().then(data => {
@@ -87,6 +87,7 @@ export default function Calculator() {
             );
 
             setCharacters(sorted);
+
 
             if (activeCharacterId) {
                 const foundChar = data.find(c => String(c.Id ?? c.id ?? c.link) === String(activeCharacterId));
@@ -137,8 +138,6 @@ export default function Calculator() {
             }
         });
     }, []);
-
-    const [weapons, setWeapons] = useState({});
 
     useEffect(() => {
         fetchWeapons().then(data => {
@@ -513,26 +512,6 @@ export default function Calculator() {
 
     let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
 
-    useEffect(() => {
-        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-        if (!charId) return;
-
-        // ✅ Preload weapon icon
-        const weaponId = combatState?.weaponId;
-        if (weaponId) {
-            const weaponIconPath = `/assets/weapon-icons/${weaponId}.webp`;
-            new Image().src = weaponIconPath;
-        }
-
-        // ✅ Preload echo icons
-        const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
-        equippedEchoes.forEach(echo => {
-            if (echo?.icon) {
-                new Image().src = echo.icon;
-            }
-        });
-    }, [activeCharacter, characterRuntimeStates, combatState?.weaponId]);
-
     return (
         <>
             <SkillsModal
@@ -764,6 +743,8 @@ export default function Calculator() {
                                                 setCharacterRuntimeStates={setCharacterRuntimeStates}
                                                 effectiveTheme={effectiveTheme}
                                                 triggerRef={triggerRef}
+                                                attributeMap={attributeMap}
+                                                weaponMap={weaponMap}
                                             />
                                         ) : (
                                             <div className="loading">Loading characters...</div>
@@ -869,14 +850,6 @@ export default function Calculator() {
     );
 }
 
-export function preloadImagesFromCharacters(characters) {
-    characters.forEach(char => {
-        new Image().src = char.icon;
-        new Image().src = `/assets/weapons/${getWeaponName(char.weaponType)}.webp`;
-        new Image().src = `/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`;
-    });
-}
-
 // Include helpers if needed:
 const attributeMap = {
     glacio: 1,
@@ -895,10 +868,55 @@ const weaponMap = {
     rectifier: 5,
 };
 
-function getAttributeName(value) {
-    return Object.entries(attributeMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
-}
+const toolbarIconNames = [
+    'character',
+    'rotations',
+    'buffs',
+    'echoes',
+    'enemy',
+    'weapon',
+    'teams',
+    // etc.
+];
 
-function getWeaponName(value) {
-    return Object.entries(weaponMap).find(([, val]) => val === value)?.[0] ?? 'unknown';
+
+const darkIcons = toolbarIconNames.map(name => `/assets/icons/dark/${name}.png`);
+const lightIcons = toolbarIconNames.map(name => `/assets/icons/light/${name}.png`);
+
+const skillIconPaths = traceIcons.flatMap(name => [
+    `/assets/skill-icons/light/${name}.webp?v=light`,
+    `/assets/skill-icons/dark/${name}.webp?v=dark`
+]);
+
+const preloadedImages = new Set();
+
+const baseImages = [
+    '/assets/sample-import-image.png',
+    '/assets/weapon-icons/default.webp',
+    '/assets/echoes/default.webp'
+];
+
+const attributeIconPaths = Object.keys(attributeMap).map(attr =>
+    `/assets/attributes/attributes alt/${attr}.webp`
+);
+
+const weaponIconPaths = Object.keys(weaponMap).map(weapon =>
+    `/assets/weapons/${weapon}.webp`
+);
+
+
+export const preloadImages = (srcList = []) => {
+    srcList.forEach(src => {
+        if (preloadedImages.has(src)) return;
+
+        const img = new Image();
+        img.src = src;
+        preloadedImages.add(src);
+    });
+};
+
+export function loadBase() {
+    useEffect(() => {
+        preloadImages([...darkIcons, ...lightIcons, ...skillIconPaths, ...baseImages, ...attributeIconPaths, ...weaponIconPaths]);
+    }, []);
 }

@@ -2,11 +2,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import CharacterMenu from './CharacterMenu';
 import ExpandableSection from "./Expandable.jsx";
-import EchoBuffs from "./EchoBuffs.jsx";
-import WeaponBuffs from "./WeaponBuffs.jsx";
+import EchoBuffs, {echoBuffList} from "./EchoBuffs.jsx";
+import WeaponBuffs, {weaponBuffList} from "./WeaponBuffs.jsx";
 import {loadCharacterBuffUI} from "../data/character-ui/index.js";
 import { attributeColors } from '../utils/attributeHelpers';
 import { X } from 'lucide-react';
+import {preloadImages} from "../pages/calculator.jsx";
+import {runInContext as echoBuffs, runInContext as weaponBuffs} from "lodash";
 
 export default function BuffsPane({
                                       characters,
@@ -18,6 +20,7 @@ export default function BuffsPane({
     setCharacterRuntimeStates,
     activeCharacter
                                   }) {
+    loadBase();
     const menuRef = useRef(null);
     const [characterMenuOpen, setCharacterMenuOpen] = useState(false);
     const [activeCharacterSlot, setActiveCharacterSlot] = useState(null);
@@ -117,6 +120,7 @@ export default function BuffsPane({
                                         src={character.icon}
                                         alt={`Character ${index + 1}`}
                                         className="header-icon"
+                                        loading="lazy"
                                     />
                                 ) : (
                                     <div className="team-icon empty-slot" />
@@ -212,4 +216,12 @@ export default function BuffsPane({
             )}
         </div>
     );
+}
+
+function loadBase() {
+    useEffect(() => {
+        const echoBuffIcons = echoBuffList.map(buff => buff.icon);
+        const weaponBuffIcons = weaponBuffList.map(buff => buff.icon);
+        preloadImages([...echoBuffIcons, ...weaponBuffIcons]);
+    }, []);
 }

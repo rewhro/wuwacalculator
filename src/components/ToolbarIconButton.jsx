@@ -11,7 +11,7 @@ export default function ToolbarIconButton({ iconName, onClick, altText, effectiv
 
     return (
         <button onClick={onClick} className="toolbar-icon-button">
-            <img src={iconPath} alt={altText} style={{ maxWidth: 30, maxHeight: 30, minWidth: 30, minHeight: 30 }} />
+            <img src={iconPath} alt={altText} style={{ maxWidth: 30, maxHeight: 30, minWidth: 30, minHeight: 30 }} loading='lazy' />
         </button>
     );
 }
@@ -25,7 +25,7 @@ export function ToolbarSidebarButton({ iconName, label, onClick, selected, effec
             onClick={onClick}
         >
             <div className="icon-slot">
-                <img src={iconPath} alt={label} style={{ maxWidth: 24, maxHeight: 24, minWidth: 24, minHeight: 24 }} />
+                <img src={iconPath} alt={label} style={{ maxWidth: 24, maxHeight: 24, minWidth: 24, minHeight: 24 }} loading='lazy' />
             </div>
             <div className="label-slot">
                 <span className="label-text">{label}</span>

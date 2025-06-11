@@ -1,10 +1,37 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
 import { getStatsForLevel } from '../utils/getStatsForLevel';
+import {preloadImages} from "../pages/calculator.jsx";
+
+export const statIconMap = {
+    'ATK': '/assets/stat-icons/atk.png',
+    'HP': '/assets/stat-icons/hp.png',
+    'DEF': '/assets/stat-icons/def.png',
+    'Energy Regen': '/assets/stat-icons/energyregen.png',
+    'Crit Rate': '/assets/stat-icons/critrate.png',
+    'Crit DMG': '/assets/stat-icons/critdmg.png',
+    'Healing Bonus': '/assets/stat-icons/healing.png',
+    'Basic Attack DMG Bonus': '/assets/stat-icons/basic.png',
+    'Heavy Attack DMG Bonus': '/assets/stat-icons/heavy.png',
+    'Resonance Skill DMG Bonus': '/assets/stat-icons/skill.png',
+    'Resonance Liberation DMG Bonus': '/assets/stat-icons/liberation.png',
+    'Aero DMG Bonus': '/assets/stat-icons/aero.png',
+    'Glacio DMG Bonus': '/assets/stat-icons/glacio.png',
+    'Spectro DMG Bonus': '/assets/stat-icons/spectro.png',
+    'Fusion DMG Bonus': '/assets/stat-icons/fusion.png',
+    'Electro DMG Bonus': '/assets/stat-icons/electro.png',
+    'Havoc DMG Bonus': '/assets/stat-icons/havoc.png'
+};
+
+const statIconPaths = Object.values(statIconMap);
+
+
 
 export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, mergedBuffs, customBuffs, finalStats, combatState }) {
+    useEffect(() => {
+        preloadImages(statIconPaths);
+    }, []);
     if (!activeCharacter) return null;
-
 
     // MAIN STATS
     const characterBaseAtk = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0;
@@ -17,26 +44,6 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
 
     const baseDef = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Def"] ?? 0;
     const defBonus = (finalStats.def ?? 0) - baseDef;
-
-    const statIconMap = {
-        'ATK': '/assets/stat-icons/atk.png',
-        'HP': '/assets/stat-icons/hp.png',
-        'DEF': '/assets/stat-icons/def.png',
-        'Energy Regen': '/assets/stat-icons/energyregen.png',
-        'Crit Rate': '/assets/stat-icons/critrate.png',
-        'Crit DMG': '/assets/stat-icons/critdmg.png',
-        'Healing Bonus': '/assets/stat-icons/healing.png',
-        'Basic Attack DMG Bonus': '/assets/stat-icons/basic.png',
-        'Heavy Attack DMG Bonus': '/assets/stat-icons/heavy.png',
-        'Resonance Skill DMG Bonus': '/assets/stat-icons/skill.png',
-        'Resonance Liberation DMG Bonus': '/assets/stat-icons/liberation.png',
-        'Aero DMG Bonus': '/assets/stat-icons/aero.png',
-        'Glacio DMG Bonus': '/assets/stat-icons/glacio.png',
-        'Spectro DMG Bonus': '/assets/stat-icons/spectro.png',
-        'Fusion DMG Bonus': '/assets/stat-icons/fusion.png',
-        'Electro DMG Bonus': '/assets/stat-icons/electro.png',
-        'Havoc DMG Bonus': '/assets/stat-icons/havoc.png'
-    };
 
     const mainStats = [
         { label: 'ATK', base: baseAtk, bonus: atkBonus, total: finalStats.atk ?? 0 },
@@ -119,7 +126,7 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
                             }}
                         >
                             {statIconMap[stat.label] && (
-                                <div
+                                <img
                                     style={{
                                         width: 18,
                                         height: 18,
@@ -131,6 +138,8 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
                                         WebkitMaskSize: 'contain',
                                         maskSize: 'contain'
                                     }}
+                                    loading="lazy"
+                                    alt={stat.label}
                                 />
                             )}
                             {stat.label}

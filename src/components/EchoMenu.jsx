@@ -49,6 +49,7 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                                 key={setId}
                                 src={iconPath}
                                 alt={`Set ${setId}`}
+                                loading="lazy"
                                 className={`set-icon-filter ${selectedSet === Number(setId) ? 'selected' : ''}`}
                                 onClick={() =>
                                     setSelectedSet(prev => prev === Number(setId) ? null : Number(setId))
@@ -72,6 +73,7 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                         <div key={i} className="dropdown-item" onClick={() => handleEchoSelect(echo)}>
                             <div className="dropdown-main">
                                 <img src={echo.icon} alt={echo.name} className="icon-menu-img"
+                                     loading="lazy"
                                      onError={(e) => {
                                          e.currentTarget.onerror = null;
                                          e.currentTarget.src = '/assets/echoes/default.webp';
@@ -87,6 +89,7 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                                         <img
                                             key={setId}
                                             src={setIconMap[setId]}
+                                            loading='lazy'
                                             alt={`Set ${setId}`}
                                             className="set-icon menu"
                                         />

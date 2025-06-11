@@ -7,36 +7,39 @@ import { applyParsedEchoesToEquipped } from "../utils/buildEchoObjectsFromParsed
 const echoImageCache = {};
 const setIconImageCache = {};
 
-const preloadReferenceImages = async (imageMap, size) => {
-    const cache = {};
+const preloadReferenceImages = async (imageMap, size, targetCache) => {
     const entries = Object.entries(imageMap);
     for (let i = 0; i < entries.length; i++) {
         const [label, src] = entries[i];
+        if (targetCache[label]) continue;
         try {
-            const img = await new Promise((resolve, reject) => {
-                const image = new Image();
-                image.crossOrigin = 'anonymous';
-                image.onload = () => resolve(image);
-                image.onerror = reject;
-                image.src = src;
-            });
-            const canvas = document.createElement('canvas');
-            canvas.width = size.width;
-            canvas.height = size.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, size.width, size.height);
-            cache[label] = ctx;
+            const img = await loadImage(src);
+            const ctx = imageToCanvasContext(img, size.width, size.height);
+            targetCache[label] = ctx;
         } catch (err) {
-            //console.warn(`Failed to preload ${label}:`, err);
+            // handle error
         }
     }
-    return cache;
 };
 
-(async () => {
-    await preloadReferenceImages(echoImageMap, { width: 192, height: 182 }, echoImageCache);
-    await preloadReferenceImages(setNameImageMap, { width: 56, height: 56 }, setIconImageCache);
-})();
+const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.crossOrigin = 'anonymous';
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = src;
+    });
+};
+
+const imageToCanvasContext = (image, width, height) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0, width, height);
+    return ctx;
+};
 
 const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
     const [imageSrc, setImageSrc] = useState(null);
@@ -71,6 +74,10 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
     }, []);
 
     const handleImageFile = (file) => {
+        (async () => {
+            await preloadReferenceImages(echoImageMap, { width: 192, height: 182 }, echoImageCache);
+            await preloadReferenceImages(setNameImageMap, { width: 56, height: 56 }, setIconImageCache);
+        })();
         setErrorImageSize(false);
         const img = new Image();
 
@@ -169,19 +176,6 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
         return ctx;
     };
 
-    const loadImage = async (src) => {
-        const response = await fetch(src, { cache: 'force-cache' });
-        const blob = await response.blob();
-        return await createImageBitmap(blob);
-    };
-
-    const imageToCanvasContext = (image, width, height) => {
-        const canvas = new OffscreenCanvas(width, height);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(image, 0, 0, width, height);
-        return ctx;
-    };
-
     const compareImageData = (ctx1, ctx2, width, height) => {
         const d1 = ctx1.getImageData(0, 0, width, height).data;
         const d2 = ctx2.getImageData(0, 0, width, height).data;
@@ -249,18 +243,6 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
             setIsClosing(false);
         }, 300);
     };
-    const [echoImageCache, setEchoImageCache] = useState(null);
-    const [setIconImageCache, setSetIconImageCache] = useState(null);
-
-    useEffect(() => {
-        const preload = async () => {
-            const echoCache = await preloadReferenceImages(echoImageMap, { width: 192, height: 182 });
-            const setCache = await preloadReferenceImages(setNameImageMap, { width: 56, height: 56 });
-            setEchoImageCache(echoCache);
-            setSetIconImageCache(setCache);
-        };
-        preload();
-    }, []);
 
     return (
         <div className="echo-parser">

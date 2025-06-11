@@ -1,7 +1,6 @@
 // src/components/EchoBuffs.jsx
 import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
-
 const echoBuffs = [
     {
         key: 'rejuvenatingGlow',
@@ -77,6 +76,9 @@ const echoBuffs = [
         effect: <>Increases ATK of all team characters by <span className="highlight">10%</span>, lasting <span className="highlight">20s</span>.</>
     }
 ];
+
+export const echoBuffList = echoBuffs;
+
 
 export default function EchoBuffs({ activeStates, toggleState }) {
     return (

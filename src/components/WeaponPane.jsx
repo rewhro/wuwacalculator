@@ -1,14 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WeaponMenu from './WeaponMenu';
 import { getWeaponUIComponent } from '../data/weapon-behaviour/index';
+import {preloadImages} from "../pages/calculator.jsx";
 
 export default function WeaponPane({ activeCharacter, combatState, setCombatState, weapons,
                                        characterRuntimeStates, setCharacterRuntimeStates }) {
+    const filteredWeapons = Object.values(weapons)
+        .filter(
+            (weapon) =>
+                typeof weapon.Id === 'number' &&
+                String(weapon.Id).length >= 8 &&
+                (activeCharacter?.weaponType == null || weapon.Type === activeCharacter.weaponType)
+        )
+        .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0));
+
+    const weaponId = combatState.weaponId;
+    const activeWeaponIconPath = weaponId
+        ? `/assets/weapon-icons/${weaponId}.webp`
+        : '/assets/weapon-icons/default.webp';
+
     const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
     const weaponMenuRef = useRef(null);
     const weaponTriggerRef = useRef(null);
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
+
+
 
     const toggleState = (stateKey) => {
         setCharacterRuntimeStates(prev => ({
@@ -32,12 +49,9 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         'energy regen': '/assets/stat-icons/energyregen.png'
     };
 
-    const weaponId = combatState.weaponId;
     const selectedWeapon = weapons?.[weaponId] ?? null;
     const weaponLevel = combatState.weaponLevel ?? 1;
-    const activeWeaponIconPath = weaponId
-        ? `/assets/weapon-icons/${weaponId}.webp`
-        : '/assets/weapon-icons/default.webp';
+
 
     const WeaponUI = getWeaponUIComponent(weaponId);
 
@@ -125,15 +139,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         return `${name}: ${formattedValue}`;
     };
 
-    const filteredWeapons = Object.values(weapons)
-        .filter(
-            (weapon) =>
-                typeof weapon.Id === 'number' &&
-                String(weapon.Id).length >= 8 &&
-                (activeCharacter?.weaponType == null || weapon.Type === activeCharacter.weaponType)
-        )
-        .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0));
-
     function mapExtraStatToCombat(stat) {
         if (!stat || !stat.Name) return {};
 
@@ -161,9 +166,11 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
     }, [activeCharacter, filteredWeapons]);
 
     useEffect(() => {
-        if (filteredWeapons.length) {
-            preloadWeaponIcons(filteredWeapons);
-        }
+        const weaponIconPaths = filteredWeapons
+            .map(w => `/assets/weapon-icons/${w.Id}.webp`)
+            .filter(Boolean);
+
+        preloadImages(weaponIconPaths);
     }, [filteredWeapons]);
 
     return (
@@ -177,6 +184,8 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                     <img
                         src={activeWeaponIconPath}
                         alt="Weapon"
+                        loading="lazy"
+                        decoding="async"
                         className="header-icon"
                         onError={(e) => {
                             e.target.onerror = null; // prevent infinite loop
@@ -359,17 +368,4 @@ function formatEffectWithParams(effect = '', param = [], rank = 1) {
 export function getCurrentParamValues(param = [], rank = 1) {
     const index = Math.max(0, Math.min((rank ?? 1) - 1, 4));
     return param.map(group => group?.[index] ?? null);
-}
-
-export function preloadWeaponIcons(weapons = []) {
-    const loaded = new Set();
-
-    weapons.forEach(weapon => {
-        const iconPath = `/assets/weapon-icons/${weapon.Id}.webp`;
-        if (!loaded.has(iconPath)) {
-            const img = new Image();
-            img.src = iconPath;
-            loaded.add(iconPath);
-        }
-    });
 }
