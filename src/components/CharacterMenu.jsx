@@ -41,7 +41,45 @@ export default function CharacterMenu({
         return weaponMatch && attributeMatch;
     });
 
-    if (!isVisible) return null;
+    const [preloaded, setPreloaded] = useState(false);
+
+    useEffect(() => {
+        if (!menuOpen) return;
+
+        const preloadCharacterImages = async () => {
+            const imageSrcs = [];
+
+            characters.forEach(char => {
+                imageSrcs.push(char.icon);
+                imageSrcs.push(`/assets/weapons/${getWeaponName(char.weaponType)}.webp`);
+                imageSrcs.push(`/assets/attributes/attributes alt/${getAttributeName(char.attribute)}.webp`);
+            });
+
+            Object.keys(weaponMap ?? {}).forEach(weapon => {
+                imageSrcs.push(`/assets/weapons/${weapon}.webp`);
+            });
+
+            Object.keys(attributeMap ?? {}).forEach(attr => {
+                imageSrcs.push(`/assets/attributes/attributes alt/${attr}.webp`);
+            });
+
+            await Promise.all(
+                imageSrcs.map(src => new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    img.src = src;
+                }))
+            );
+
+            setPreloaded(true);
+        };
+
+        setPreloaded(false);
+        preloadCharacterImages();
+    }, [menuOpen]);
+
+    if (!isVisible || !preloaded) return null;
 
     return (
         <div

@@ -30,7 +30,30 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
         return matchesCost && matchesName && matchesSet;
     });
 
-    if (!isVisible) return null;
+    const [preloaded, setPreloaded] = useState(false);
+
+    useEffect(() => {
+        if (!menuOpen) return;
+
+        const preloadAll = async () => {
+            await Promise.all(
+                echoes.map(echo => {
+                    return new Promise(resolve => {
+                        const img = new Image();
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                        img.src = echo.icon;
+                    });
+                })
+            );
+            setPreloaded(true);
+        };
+
+        setPreloaded(false);
+        preloadAll();
+    }, [menuOpen]);
+
+    if (!isVisible || !preloaded) return null;
 
     return (
         <div

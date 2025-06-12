@@ -67,7 +67,36 @@ export default function EchoBagMenu({ onClose, onEquip }) {
         })
         .sort((a, b) => a.name.localeCompare(b.name));
 
-    if (!isVisible) return null;
+    const [preloaded, setPreloaded] = useState(false);
+
+    useEffect(() => {
+        if (!isVisible) return;
+
+        const preloadImages = async () => {
+            const srcList = [];
+
+            for (const echo of echoBag) {
+                if (echo.icon) srcList.push(echo.icon);
+                if (echo.selectedSet) srcList.push(setIconMap[echo.selectedSet]);
+            }
+
+            await Promise.all(
+                srcList.map(src => new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    img.src = src;
+                }))
+            );
+
+            setPreloaded(true);
+        };
+
+        setPreloaded(false);
+        preloadImages();
+    }, [isVisible, echoBag]);
+
+    if (!isVisible || !preloaded) return null;
 
     return (
         <div

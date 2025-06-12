@@ -90,16 +90,13 @@ export function CustomInherentSkills({
             {skills.map((node, index) => {
                 const name = node.Skill?.Name ?? '';
                 const lowerName = name.toLowerCase();
-                const rememberMyName = lowerName.includes("remember my name");
-                const victory = lowerName.includes("applause of victory");
 
-                const unlockLevel = unlockLevels[index] ?? 1;
+                const victory = lowerName.includes("applause of victory");
+                const unlockLevel = victory ? 70 : 50;
                 const locked = charLevel < unlockLevel;
 
-                // Clear toggle/value if locked
                 if (locked) {
-                    if (rememberMyName && activeStates.inherent1) updateState('inherent1', false);
-                    if (victory && (activeStates.inherent2?? 0) > 0) updateState('inherent2', 0);
+                    if (victory && activeStates.inherent2) updateState('inherent2', false);
                 }
 
                 return (
@@ -114,24 +111,6 @@ export function CustomInherentSkills({
                                 )
                             }}
                         />
-
-                        {rememberMyName && (
-                            <label className="modern-checkbox">
-                                <input
-                                    type="checkbox"
-                                    checked={activeStates.inherent1 ?? false}
-                                    onChange={() => !locked && toggleState('inherent1')}
-                                    disabled={locked}
-                                />
-                                Enable
-                                {locked && (
-                                    <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
-                                        (Unlocks at Lv. {unlockLevel})
-                                    </span>
-                                )}
-                            </label>
-                        )}
-
                         {victory && (
                             <div
                                 className="slider-label-with-input"
@@ -151,6 +130,11 @@ export function CustomInherentSkills({
                                     </span>
                                 )}
                             </div>
+                        )}
+                        {!victory && locked && (
+                            <span style={{ fontSize: '12px', color: 'gray' }}>
+                                (Unlocks at Lv. {unlockLevel})
+                            </span>
                         )}
                     </div>
                 );

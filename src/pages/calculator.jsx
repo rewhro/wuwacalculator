@@ -749,7 +749,25 @@ export default function Calculator() {
                         </div>
                         {/* Footer */}
                         <div className="sidebar-footer">
-                            <ResetButton/>
+                            <ResetButton
+                                activeId={charId}
+                                setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                setSliderValues={setSliderValues}
+                                setCustomBuffs={setCustomBuffs}
+                                setTraceNodeBuffs={setTraceNodeBuffs}
+                                setCombatState={setCombatState}
+                                setCharacterLevel={setCharacterLevel}
+                                setRotationEntries={setRotationEntries}
+                                setRotationEntriesRaw={setRotationEntriesRaw}
+                                defaultSliderValues={defaultSliderValues}
+                                defaultCustomBuffs={defaultCustomBuffs}
+                                defaultTraceBuffs={defaultTraceBuffs}
+                                defaultCombatState={defaultCombatState}
+                                characterStates={characterStates}
+                                characterRuntimeStates={characterRuntimeStates}
+                                weapons={weapons}
+                                combatState={combatState}
+                            />
                         </div>
                     </div>
 
