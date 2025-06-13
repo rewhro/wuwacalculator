@@ -110,6 +110,7 @@ export default function Calculator() {
                 .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0))[0];
 
             if (defaultWeapon) {
+                const hasWeapon = profile.CombatState?.weaponId != null;
                 const levelData = defaultWeapon.Stats?.["0"]?.["1"] ?? defaultWeapon.Stats?.["0"]?.["0"];
                 const baseAtk = levelData?.[0]?.Value ?? 0;
                 const stat = levelData?.[1] ?? null;
@@ -120,22 +121,24 @@ export default function Calculator() {
                     ...(profile.CombatState ?? {}),
                     enemyLevel: prev.enemyLevel,
                     enemyRes: prev.enemyRes,
-                    weaponId: defaultWeapon.Id,
-                    weaponLevel: 1,
-                    weaponBaseAtk: baseAtk,
-                    weaponStat: stat,
-                    weaponRarity: defaultWeapon.Rarity ?? 1,
-                    weaponEffect: defaultWeapon.Effect ?? null,
-                    weaponEffectName: defaultWeapon.EffectName ?? null,
-                    weaponParam: defaultWeapon.Param ?? [],
-                    weaponRank: 1,
-                    atkPercent: 0,
-                    defPercent: 0,
-                    hpPercent: 0,
-                    critRate: 0,
-                    critDmg: 0,
-                    energyRegen: 0,
-                    ...mappedStat
+                    ...(hasWeapon ? {} : {
+                        weaponId: defaultWeapon.Id,
+                        weaponLevel: 1,
+                        weaponBaseAtk: baseAtk,
+                        weaponStat: stat,
+                        weaponRarity: defaultWeapon.Rarity ?? 1,
+                        weaponEffect: defaultWeapon.Effect ?? null,
+                        weaponEffectName: defaultWeapon.EffectName ?? null,
+                        weaponParam: defaultWeapon.Param ?? [],
+                        weaponRank: 1,
+                        atkPercent: 0,
+                        defPercent: 0,
+                        hpPercent: 0,
+                        critRate: 0,
+                        critDmg: 0,
+                        energyRegen: 0,
+                        ...mappedStat
+                    })
                 }));
             }
         });
