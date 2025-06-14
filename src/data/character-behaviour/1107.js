@@ -28,10 +28,9 @@ export function applyCarlottaLogic({
 
     if (
         tab === 'outroSkill' &&
-        name === 'kaleidoscope sparks' &&
-        !(isActiveSequence(3) || isToggleActive(3))
+        name === 'kaleidoscope sparks'
     ) {
-        skillMeta.visible = false;
+        skillMeta.visible = isActiveSequence(3);
     }
 
     // === Deconstruction: DEF Ignore ===

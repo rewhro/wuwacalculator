@@ -71,14 +71,13 @@ export function applyYinlinLogic({
     if (name === 'pursuit of justice: furious thunder damage'
         && isToggleActive(6) && isActiveSequence(6)) {
         skillMeta.multiplier = 419.59/100;
-        skillMeta.visible = true;
         skillMeta.skillType = ['skill'];
     }
 
-    //console.log(skillMeta.name, skillMeta.skillDmgBonus);
+    if (name === 'pursuit of justice: furious thunder damage') {
+        skillMeta.visible = isActiveSequence(6);
+    }
 
-
-    //console.log('yinlin', skillMeta);
     return {mergedBuffs, combatState, skillMeta};
 }
 

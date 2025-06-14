@@ -78,9 +78,10 @@ export function applyRocciaLogic({
         if (tab === 'forteCircuit') {
             skillMeta.skillDefIgnore = (skillMeta.skillDefIgnore ?? 0) + 60;
         }
-        if (name.includes('reality recreation')) {
-            skillMeta.visible = true;
-        }
+    }
+
+    if (name.includes('reality recreation')) {
+        skillMeta.visible = isActiveSequence(6);
     }
 
     return {mergedBuffs, combatState, skillMeta};

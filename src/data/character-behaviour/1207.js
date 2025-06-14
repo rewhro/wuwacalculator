@@ -35,17 +35,6 @@ export function applyLupaLogic({
         skillMeta.skillType = 'skill';
     }
 
-    // ✅ Inherent 1 toggle
-    if (isToggleActiveLocal('inherent1')) {
-        if (!mergedBuffs.__lupaInherent1) {
-            mergedBuffs.atkPercent += 12;
-            mergedBuffs.__lupaInherent1 = true;
-        }
-    } else {
-        mergedBuffs.__lupaInherent1 = false;
-    }
-
-
     // ✅ Inherent 2 (enemyResShred), applied once
     const inherent2Stacks = characterState?.activeStates?.inherent2 ?? 0;
     const inherent2 = Math.min(inherent2Stacks * 5, 15);
