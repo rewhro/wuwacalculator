@@ -403,13 +403,14 @@ export default function Calculator() {
         if (!buffsLogic) return;
 
         const characterState = {
-            activeStates: characterRuntimeStates?.[id]?.activeStates ?? {}
+            activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {}
         };
 
         const result = buffsLogic({
             mergedBuffs,
             characterState,
-            activeCharacter, combatState
+            activeCharacter,
+            combatState
         });
 
         if (result?.mergedBuffs) {
@@ -522,7 +523,6 @@ export default function Calculator() {
         }
     }
 
-
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
@@ -546,12 +546,17 @@ export default function Calculator() {
                 TemporaryBuffs: traceNodeBuffs,
                 CustomBuffs: customBuffs,
                 CombatState: combatState,
-                CharacterState: characterState
             }
         }));
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
 
     let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
+/*
+    console.log(team);
+    team.forEach((id) => {
+        if (!id) return;
+        console.log(id, characterRuntimeStates[id].rotationEntries);
+    });*/
 
     return (
         <>
@@ -862,6 +867,7 @@ export default function Calculator() {
                                             rotationEntries={rotationEntries}
                                             setRotationEntries={setRotationEntries}
                                             currentSliderColor={currentSliderColor}
+                                            setLeftPaneView={setLeftPaneView}
                                         />
                                     )}
                                     {leftPaneView === 'echoes' && (

@@ -182,6 +182,14 @@ export default function EchoesPane({
 
     const echoStatTotals = getEchoStatsFromEquippedEchoes(echoData);
 
+    const critRate = echoStatTotals.critRate ?? 0;
+    const critDmg = echoStatTotals.critDmg ?? 0;
+    const critValue = critRate * 2 + critDmg;
+    const extendedTotals = {
+        ...echoStatTotals,
+        critValue
+    };
+
     return (
         <div className="echoes-pane">
             <EchoParser
@@ -501,9 +509,9 @@ export default function EchoesPane({
             )}
 
             <ExpandableSection title="Totals">
-                {Object.keys(echoStatTotals).length > 0 && (
+                {Object.keys(extendedTotals).length > 0 && (
                     <div className="stats-grid">
-                        {Object.entries(echoStatTotals)
+                        {Object.entries(extendedTotals)
                             .sort(([a], [b]) => {
                                 const indexA = statDisplayOrder.indexOf(a);
                                 const indexB = statDisplayOrder.indexOf(b);
@@ -536,12 +544,23 @@ export default function EchoesPane({
                                                       }}
                                                   />
                                               )}
-                                              {label}
+                                              {key === 'critValue' ? (
+                                                  <span className="highlight">{label}</span>
+                                              ) : (
+                                                  `${label}`
+
+                                              )}
                                           </span>
                                         <div className="stat-value"></div>
                                         <div className="stat-bonus"></div>
                                         <div className="stat-total">
-                                            {key.endsWith('Flat') ? val : `${val.toFixed(1)}%`}
+                                            {key === 'critValue' ? (
+                                                <span className="highlight">{val.toFixed(1)}</span>
+                                            ) : key.endsWith('Flat') ? (
+                                                val
+                                            ) : (
+                                                `${val.toFixed(1)}%`
+                                            )}
                                         </div>
                                     </div>
                                 );

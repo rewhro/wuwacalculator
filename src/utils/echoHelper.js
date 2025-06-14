@@ -9,7 +9,8 @@ export const formatStatKey = (key) => {
         heavyAtk: 'Heavy Attack DMG Bonus', resonanceSkill: 'Resonance Skill DMG Bonus',
         resonanceLiberation: 'Resonance Liberation DMG Bonus',
         aero: 'Aero DMG Bonus', spectro: 'Spectro DMG Bonus', fusion: 'Fusion DMG Bonus',
-        glacio: 'Glacio DMG Bonus', havoc: 'Havoc DMG Bonus', electro: 'Electro DMG Bonus'
+        glacio: 'Glacio DMG Bonus', havoc: 'Havoc DMG Bonus', electro: 'Electro DMG Bonus',
+        critValue: 'Crit Value',
     };
     return labelMap[key] ?? key;
 };

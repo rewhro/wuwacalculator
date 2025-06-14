@@ -13,7 +13,7 @@ import {
     verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
-import {RotationItem} from "./RotationItem.jsx";
+import RotationItem from "./RotationItem.jsx";
 import { getSkillDamageCache } from '../utils/skillDamageCache';
 import {usePersistentState} from "../hooks/usePersistentState.js";
 
@@ -250,7 +250,9 @@ export default function RotationsPane({
 
             {viewMode === 'new' && (
                 <>
-                    <h2 className="panel-title">Rotation</h2>
+                    <h2 className="panel-title">
+                        Rotation
+                    </h2>
 
                     <div className="rotation-controls">
                         <div className="rotation-buttons-left">

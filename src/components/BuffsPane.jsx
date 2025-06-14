@@ -172,28 +172,14 @@ export default function BuffsPane({
 
             {team.slice(1).map((id, idx) => {
                 if (!id || !characterBuffUIs[id]) return null;
-
                 const TeammateBuffUI = characterBuffUIs[id];
-                const states = characterRuntimeStates?.[id]?.activeStates ?? {};
-                const toggle = (key) => {
-                    setCharacterRuntimeStates(prev => ({
-                        ...prev,
-                        [id]: {
-                            ...(prev[id] ?? {}),
-                            activeStates: {
-                                ...(prev[id]?.activeStates ?? {}),
-                                [key]: !(prev[id]?.activeStates?.[key] ?? false)
-                            }
-                        }
-                    }));
-                };
 
                 return (
                     <ExpandableSection key={id} title={`${getCharacterName(id)} Buffs`}>
                         <TeammateBuffUI
-                            activeStates={states}
-                            toggleState={toggle}
-                            charId={id}
+                            activeStates={activeStates}
+                            toggleState={toggleState}
+                            charId={charId}
                             setCharacterRuntimeStates={setCharacterRuntimeStates}
                             attributeColors={attributeColors}
                         />

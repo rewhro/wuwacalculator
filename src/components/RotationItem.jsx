@@ -4,7 +4,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { getSkillDamageCache } from '../utils/skillDamageCache';
 
-export function RotationItem({
+export default function RotationItem({
                                  id,
                                  index,
                                  entry,

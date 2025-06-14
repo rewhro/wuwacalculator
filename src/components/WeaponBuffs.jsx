@@ -89,6 +89,7 @@ export default function WeaponBuffs({ activeStates, toggleState, setCharacterRun
             }
         }));
     };
+
     return (
         <div className="echo-buffs">
             {weaponBuffs.map(({ key, name, icon, effect, param }) => {
