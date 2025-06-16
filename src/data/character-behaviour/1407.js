@@ -101,7 +101,7 @@ export function ciacconaBuffsLogic({
 
     // 2️⃣ Solo Concert
     if (state.concert) {
-        mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 25;
+        mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 24;
     }
 
     // 3️⃣ Song of the Four Seasons

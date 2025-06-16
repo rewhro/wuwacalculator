@@ -33,40 +33,33 @@ export function applyCartethyiaLogic({
         }
     } else if (tab === 'forteCircuit' || tab === 'resonanceSkill') {
         skillMeta.skillType = ['basic'];
-        if (name === 'sword to answer waves\' call dmg') {
+        if (name === 'sword to answer waves\' call dmg' || name === 'may tempest break the tides dmg') {
             skillMeta.skillType = ['skill'];
         } else if (name.includes('heavy attack')) {
             skillMeta.skillType = ['heavy'];
         }
     }
 
-    if (!characterState?.activeStates?.manifestActive) {
-        if (tab === 'resonanceLiberation' && !mergedBuffs.__ultBuff1) {
-            skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 60;
-            mergedBuffs.__ultBuff1 = true;
+    if (characterLevel >= 70 && tab.includes('o')) {
+        const stacks = combatState.aeroErosion ?? 0;
+        let bonus = 0;
+
+        if (stacks >= 1 && stacks <= 3) {
+            bonus = 30;
+        } else if (stacks >= 4) {
+            bonus = Math.min(10 * stacks, 60);
         }
-    } else {
-        if (!mergedBuffs.__manifestActive) {
-            mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 60;
-            mergedBuffs.__manifestActive = true;
-        }
+
+        skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + bonus;
     }
 
-    if (!mergedBuffs.__ultBuff2 && tab === 'resonanceLiberation') {
+    if (tab === 'resonanceLiberation') {
         skillMeta.amplify = (skillMeta.amplify ?? 0) + Math.min(combatState.aeroErosion * 20, 100);
-        mergedBuffs.__ultBuff2 = true;
     }
-
 
     if (characterState?.activeStates?.divinity && characterState?.activeStates?.manifestActive && !mergedBuffs.__divinity) {
         mergedBuffs.damageTypeAmplify.aeroErosion = (mergedBuffs.damageTypeAmplify.aeroErosion ?? 0) + 50;
         mergedBuffs.__divinity = true;
-    }
-
-    // inherent 1
-    if (!mergedBuffs.__cartethyiaInherent1 && characterLevel >= 70) {
-        mergedBuffs.elementDmgAmplify.aero = (mergedBuffs.elementDmgAmplify.aero ?? 0) + Math.min(combatState.aeroErosion * 10, 60);
-        mergedBuffs.__cartethyiaInherent1 = true;
     }
 
     // Sequence 2
@@ -124,16 +117,16 @@ export const cartethyiaMultipliers = {
             scaling: { hp: 1 },
             Param: [
                 [
-                    "6.92%*7",
-                    "7.49%*7",
-                    "8.06%*7",
-                    "8.85%*7",
-                    "9.42%*7",
-                    "10.07%*7",
-                    "10.98%*7",
-                    "11.89%*7",
-                    "12.80%*7",
-                    "13.76%*7",
+                    "6.60%*7",
+                    "7.14%*7",
+                    "7.68%*7",
+                    "8.44%*7",
+                    "8.98%*7",
+                    "9.61%*7",
+                    "10.47%*7",
+                    "11.34%*7",
+                    "12.20%*7",
+                    "13.12%*7",
                     "14.90%*7",
                     "16.03%*7",
                     "17.16%*7",
@@ -154,16 +147,16 @@ export const cartethyiaMultipliers = {
             scaling: { hp: 1 },
             Param: [
                 [
-                    "0.81%*4+7.52%",
-                    "0.88%*4+8.13%",
-                    "0.94%*4+8.75%",
-                    "1.03%*4+9.61%",
-                    "1.10%*4+10.23%",
-                    "1.18%*4+10.93%",
-                    "1.28%*4+11.92%",
-                    "1.39%*4+12.90%",
-                    "1.49%*4+13.89%",
-                    "1.60%*4+14.94%",
+                    "0.94%*4+8.73%",
+                    "1.02%*4 + 9.45%",
+                    "1.09%*4 + 10.17%",
+                    "1.20%*4 + 11.17%",
+                    "1.28%*4 + 11.88%",
+                    "1.37%*4 + 12.71%",
+                    "1.49%*4 + 13.85%",
+                    "1.61%*4 + 15.00%",
+                    "1.73%*4 + 16.14%",
+                    "1.86%*4 + 17.36%",
                     "1.74%*4+16.17%",
                     "1.87%*4+17.40%",
                     "2.00%*4+18.63%",
@@ -182,16 +175,16 @@ export const cartethyiaMultipliers = {
             scaling: { hp: 1 },
             Param: [
                 [
-                    "0.81%*2+3.04%*3",
-                    "0.88%*2+3.29%*3",
-                    "0.94%*2+3.54%*3",
-                    "1.03%*2+3.89%*3",
-                    "1.10%*2+4.14%*3",
-                    "1.18%*2+4.43%*3",
-                    "1.28%*2+4.83%*3",
-                    "1.39%*2+5.23%*3",
-                    "1.49%*2+5.62%*3",
-                    "1.60%*2+6.05%*3",
+                    "0.94%*2 + 3.54%*3",
+                    "1.02%*2 + 3.83%*3",
+                    "1.09%*2 + 4.12%*3",
+                    "1.20%*2 + 4.52%*3",
+                    "1.28%*2 + 4.81%*3",
+                    "1.37%*2 + 5.15%*3",
+                    "1.49%*2 + 5.61%*3",
+                    "1.61%*2 + 6.07%*3",
+                    "1.73%*2 + 6.54%*3",
+                    "1.86%*2 + 7.03%*3",
                     "1.74%*2+6.55%*3",
                     "1.87%*2+7.05%*3",
                     "2.00%*2+7.54%*3",

@@ -53,8 +53,8 @@ export function calculateDamage({
     const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
 
     // 6️⃣ Reduction multipliers
-    const dmgReductionTotal = 1 + ((mergedBuffs.dmgReduction ?? 0) + 0)/100;
-    const elementReductionTotal = 1 + ((mergedBuffs.elementDmgReduction ?? 0) + 0)/100;
+    const dmgReductionTotal = 1 + (mergedBuffs.dmgReduction ?? 0)/100;
+    const elementReductionTotal = 1 + (mergedBuffs.elementDmgReduction ?? 0)/100;
 
     // 7️⃣ Bonuses
     let skillTypeBonus = skillDmgBonus;

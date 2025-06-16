@@ -99,7 +99,7 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                     <div className="echo-buff-name">Solo Concert</div>
                 </div>
                 <div className="echo-buff-effect">
-                    When <span className="highlight">Ciaccona</span> or <span className="highlight">Ensemble Sylph</span> performs <span className="highlight">Solo Concert</span>, they give <span className="highlight">25%</span> <span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero DMG Bonus</span> to all nearby Resonators in the team. This effect is not stackable.
+                    When <span className="highlight">Ciaccona</span> or <span className="highlight">Ensemble Sylph</span> performs <span className="highlight">Solo Concert</span>, they give <span className="highlight">24%</span> <span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero DMG Bonus</span> to all nearby Resonators in the team. This effect is not stackable.
                 </div>
                 <label className="modern-checkbox">
                     <input
