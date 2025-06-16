@@ -405,18 +405,8 @@ export default function RotationsPane({
             )}
 
             {viewMode === 'saved' && (
-                <div className="saved-rotation-list">
-                    <div className="saved-rotation-header">
-                        <h2 className="panel-title">Saved Rotations</h2>
-                        {/*
-                        <button
-                            className="rotation-button"
-                            style={{ marginLeft: 'auto', marginBottom: '8px' }}
-                        >
-                            Import
-                        </button>
-                        */}
-                    </div>
+                <>
+                    <h2 className="panel-title">Saved Rotations</h2>
                     <div className="sort-controls">
                         <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
                         <select value={sortKey} onChange={(e) => setSortKey(e.target.value)}>
@@ -429,57 +419,67 @@ export default function RotationsPane({
                             <option value="asc">Ascending</option>
                         </select>
                     </div>
-
-                    {savedRotations.length === 0 ? (
-                        <p style={{ color: '#5c5c5c' }}>hmm...</p>
-                    ) : (
-                        [...savedRotations]
-                            .sort((a, b) => {
-                                let valA, valB;
-                                switch (sortKey) {
-                                    case 'name':
-                                        valA = a.characterName?.toLowerCase() ?? '';
-                                        valB = b.characterName?.toLowerCase() ?? '';
-                                        break;
-                                    case 'dmg':
-                                        valA = a.total?.avg ?? 0;
-                                        valB = b.total?.avg ?? 0;
-                                        break;
-                                    case 'date':
-                                    default:
-                                        valA = a.id;
-                                        valB = b.id;
-                                }
-                                if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-                                if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
-                                return 0;
-                            })
-                            .map((saved) => (
-                                <div key={saved.id} className="rotation-item-wrapper">
-                                    <div className="rotation-item">
-                                        <div className="rotation-header">
-                                            {editingId === saved.id ? (
-                                                <input
-                                                    type="text"
-                                                    value={editedName}
-                                                    onChange={(e) => setEditedName(e.target.value)}
-                                                    onBlur={() => {
-                                                        setSavedRotations(prev =>
-                                                            prev.map(r =>
-                                                                r.id === saved.id
-                                                                    ? { ...r, characterName: editedName }
-                                                                    : r
-                                                            )
-                                                        );
-                                                        setEditingId(null);
-                                                    }}
-                                                    autoFocus
-                                                    className="entry-name-edit"
-                                                />
-                                            ) : (
-                                                <span className="highlight">{saved.characterName}</span>
-                                            )}
-                                            <span className="entry-type-detail">
+                    <div className="saved-rotation-list">
+                        {/*
+                    <div className="saved-rotation-header">
+                        <button
+                            className="rotation-button"
+                            style={{ marginLeft: 'auto', marginBottom: '8px' }}
+                        >
+                            Import
+                        </button>
+                    </div>
+                                            */}
+                        {savedRotations.length === 0 ? (
+                            <p style={{ color: '#5c5c5c' }}>hmm...</p>
+                        ) : (
+                            [...savedRotations]
+                                .sort((a, b) => {
+                                    let valA, valB;
+                                    switch (sortKey) {
+                                        case 'name':
+                                            valA = a.characterName?.toLowerCase() ?? '';
+                                            valB = b.characterName?.toLowerCase() ?? '';
+                                            break;
+                                        case 'dmg':
+                                            valA = a.total?.avg ?? 0;
+                                            valB = b.total?.avg ?? 0;
+                                            break;
+                                        case 'date':
+                                        default:
+                                            valA = a.id;
+                                            valB = b.id;
+                                    }
+                                    if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+                                    if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+                                    return 0;
+                                })
+                                .map((saved) => (
+                                    <div key={saved.id} className="rotation-item-wrapper">
+                                        <div className="rotation-item">
+                                            <div className="rotation-header">
+                                                {editingId === saved.id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editedName}
+                                                        onChange={(e) => setEditedName(e.target.value)}
+                                                        onBlur={() => {
+                                                            setSavedRotations(prev =>
+                                                                prev.map(r =>
+                                                                    r.id === saved.id
+                                                                        ? { ...r, characterName: editedName }
+                                                                        : r
+                                                                )
+                                                            );
+                                                            setEditingId(null);
+                                                        }}
+                                                        autoFocus
+                                                        className="entry-name-edit"
+                                                    />
+                                                ) : (
+                                                    <span className="highlight">{saved.characterName}</span>
+                                                )}
+                                                <span className="entry-type-detail">
                                     <span className="entry-detail-text">
                                         {new Date(saved.id).toLocaleDateString(undefined, {
                                             day: 'numeric',
@@ -488,27 +488,27 @@ export default function RotationsPane({
                                         })}
                                     </span>
                                 </span>
-                                        </div>
+                                            </div>
 
-                                        <div className="rotation-values">
-                                            <span className="value-label">Normal</span>
-                                            <span className="value">{Math.round(saved.total.normal).toLocaleString()}</span>
-                                            <span className="value-label">Crit</span>
-                                            <span className="value">{Math.round(saved.total.crit).toLocaleString()}</span>
-                                            <span className="value-label">Avg</span>
-                                            <span className="value avg" style={{ fontWeight: 'bold' }}>
+                                            <div className="rotation-values">
+                                                <span className="value-label">Normal</span>
+                                                <span className="value">{Math.round(saved.total.normal).toLocaleString()}</span>
+                                                <span className="value-label">Crit</span>
+                                                <span className="value">{Math.round(saved.total.crit).toLocaleString()}</span>
+                                                <span className="value-label">Avg</span>
+                                                <span className="value avg" style={{ fontWeight: 'bold' }}>
                                                 {Math.round(saved.total.avg).toLocaleString()}
                                             </span>
 
-                                            <button
-                                                className="rotation-button load-button"
-                                                title="Load Rotation"
-                                                onClick={() => loadSavedRotation(saved)}
-                                                style={{ marginLeft: 'auto' }}
-                                            >
-                                                Load
-                                            </button>
-                                            {/*
+                                                <button
+                                                    className="rotation-button load-button"
+                                                    title="Load Rotation"
+                                                    onClick={() => loadSavedRotation(saved)}
+                                                    style={{ marginLeft: 'auto' }}
+                                                >
+                                                    Load
+                                                </button>
+                                                {/*
                                             <button
                                                 className="rotation-button"
                                                 title="Export Rotation"
@@ -516,36 +516,38 @@ export default function RotationsPane({
                                                 Export
                                             </button>
 */}
+                                            </div>
+                                        </div>
+
+                                        <div className="rotation-actions external-actions">
+                                            <button
+                                                className="rotation-button"
+                                                title="Edit Name"
+                                                onClick={() => {
+                                                    setEditingId(saved.id);
+                                                    setEditedName(saved.characterName);
+                                                }}
+                                            >
+                                                <Pencil size={18} />
+                                            </button>
+                                            <button
+                                                className="rotation-button"
+                                                title="Delete"
+                                                onClick={() => {
+                                                    setSavedRotations(prev =>
+                                                        prev.filter((r) => r.id !== saved.id)
+                                                    );
+                                                }}
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
                                         </div>
                                     </div>
+                                ))
+                        )}
+                    </div>
+                </>
 
-                                    <div className="rotation-actions external-actions">
-                                        <button
-                                            className="rotation-button"
-                                            title="Edit Name"
-                                            onClick={() => {
-                                                setEditingId(saved.id);
-                                                setEditedName(saved.characterName);
-                                            }}
-                                        >
-                                            <Pencil size={18} />
-                                        </button>
-                                        <button
-                                            className="rotation-button"
-                                            title="Delete"
-                                            onClick={() => {
-                                                setSavedRotations(prev =>
-                                                    prev.filter((r) => r.id !== saved.id)
-                                                );
-                                            }}
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))
-                    )}
-                </div>
             )}
         </div>
     );

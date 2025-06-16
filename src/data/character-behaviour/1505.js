@@ -20,7 +20,7 @@ export function applySkLogic({
     const tab = skillMeta.tab ?? '';
 
     if (tab === 'forteCircuit') {
-        if (name.includes('deduction')) {
+        if (name.includes('illation')) {
             skillMeta.skillType = 'heavy';
         } else {
             skillMeta.skillType = 'basic';
@@ -28,6 +28,7 @@ export function applySkLogic({
     }
 
     if (name.includes('discernment')) {
+        skillMeta.scaling = { atk: 0, hp: 1, def: 1, energyRegen: 1 };
         skillMeta.skillType = 'ultimate';
         skillMeta.critRateBonus = 9999999;
     }
@@ -104,10 +105,6 @@ export const skMultipliers = {
             name: "Discernment Healing",
             scaling: { hp: 1 },
             healing: true
-        },
-        {
-            name: "Discernment DMG",
-            scaling: { hp: 1 }
         }
     ],
     resonanceSkill: [
