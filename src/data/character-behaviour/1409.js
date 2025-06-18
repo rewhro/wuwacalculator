@@ -51,9 +51,6 @@ export function applyCartethyiaLogic({
         }
 
         skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + bonus;
-        if (isActiveSequence(6)) {
-            skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 40;
-        }
     }
 
     if (tab === 'resonanceLiberation') {
@@ -69,7 +66,7 @@ export function applyCartethyiaLogic({
     const seq1Value = (characterState?.toggles?.['1_value'] ?? 0) / 30;
     if (isActiveSequence(1) && seq1Value > 0) {
         if (!mergedBuffs.__cartethyiaSeq1) {
-            mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + (seq1Value * 20);
+            mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + (seq1Value * 25);
             mergedBuffs.__cartethyiaSeq1 = true;
         }
     } else {
@@ -98,18 +95,16 @@ export function applyCartethyiaLogic({
     } else {
         mergedBuffs.__cartethyiaSeq4 = false;
     }
-/*
+
     if (isActiveSequence(6)) {
         if (!mergedBuffs.__cartethyiaSeq6) {
-            mergedBuffs.elementDmgReduction = (mergedBuffs.elementDmgReduction ?? 0) + 40;
+            mergedBuffs.dmgReduction = (mergedBuffs.dmgReduction ?? 0) + 40;
             mergedBuffs.__cartethyiaSeq6 = true;
         }
     } else {
         mergedBuffs.__cartethyiaSeq6 = false;
     }
 
-
- */
     return { mergedBuffs, combatState, skillMeta };
 }
 
