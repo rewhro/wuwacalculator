@@ -28,7 +28,7 @@ export function applySkLogic({
     }
 
     if (name.includes('discernment')) {
-        skillMeta.scaling = { atk: 0, hp: 1, def: 1, energyRegen: 1 };
+        skillMeta.scaling = { atk: 0, hp: 1, def: 0, energyRegen: 0 };
         skillMeta.skillType = 'ultimate';
         skillMeta.critRateBonus = 9999999;
     }

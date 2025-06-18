@@ -122,7 +122,7 @@ export default function EnemyPane({
                             id="aero-erosion"
                             type="number"
                             min="0"
-                            max="60"
+                            max="6"
                             className="character-level-input"
                             value={combatState.aeroErosion ?? 0}
                             onChange={(e) => handleDebuffChange('aeroErosion', e.target.value)}
@@ -131,12 +131,12 @@ export default function EnemyPane({
                     <input
                         type="range"
                         min="0"
-                        max="60"
+                        max="6"
                         value={combatState.aeroErosion ?? 0}
                         onChange={(e) => handleDebuffChange('aeroErosion', e.target.value)}
                         style={{
                             '--slider-color': 'rgb(15,205,160)',
-                            '--slider-fill': `${((combatState.aeroErosion ?? 0) / 60) * 100}%`
+                            '--slider-fill': `${((combatState.aeroErosion ?? 0) / 6) * 100}%`
                         }}
                     />
                 </div>

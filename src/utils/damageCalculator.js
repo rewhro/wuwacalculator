@@ -105,3 +105,82 @@ export function calculateDamage({
         avg: Math.max(1, Math.floor(avg))
     };
 }
+
+export function calculateSpectroFrazzleDamage(combatState, mergedBuffs, characterLevel) {
+    const stacks = combatState?.spectroFrazzle ?? 0;
+    if (stacks === 0) return 0;
+
+    const perStack = (209.9 + 895.8 * stacks)
+    const total = (447.9 * Math.pow(stacks, 2)) + (657.8 * stacks);
+    const bonus = mergedBuffs?.damageTypeAmplify.spectroFrazzle ?? 0;
+
+    // === Enemy resistance multiplier
+    const enemyLevel = combatState.enemyLevel ?? 1;
+    const charLevel = characterLevel;
+
+    const resShred = mergedBuffs?.enemyResShred ?? 0;
+    const enemyRes = (combatState.enemyRes ?? 0) - resShred;
+
+    let resMult = 1;
+    if (enemyRes < 0) {
+        resMult = 1 - enemyRes / 200;
+    } else if (enemyRes < 75) {
+        resMult = 1 - enemyRes / 100;
+    } else {
+        resMult = 1 / (1 + 5 * (enemyRes / 100));
+    }
+
+    // === Defense multiplier
+    const defIgnore = (mergedBuffs?.enemyDefIgnore ?? 0);
+    const defShred = (mergedBuffs?.enemyDefShred ?? 0);
+    const enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
+    const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
+
+    const perStackDmg = perStack * (1 + bonus / 100) * (resMult * defMult);
+    const totalDmg = total * (1 + bonus / 100) * (resMult * defMult);
+
+    return {frazzleTotal: totalDmg, frazzle: perStackDmg };
+}
+
+export function calculateAeroErosionDamage(combatState, mergedBuffs, characterLevel) {
+    const stacks = combatState?.aeroErosion ?? 0;
+    if (stacks === 0) return 0;
+
+    let perStack = 0;
+
+    if (stacks === 1) {
+        perStack = 1655.1;
+    } else if (stacks >= 1) {
+        perStack = 4133.45 * stacks - 4132.37
+    }
+
+    const total = 0;
+    const bonus = mergedBuffs?.damageTypeAmplify.aeroErosion ?? 0;
+
+    // === Enemy resistance multiplier
+    const enemyLevel = combatState.enemyLevel ?? 1;
+    const charLevel = characterLevel;
+
+    const resShred = mergedBuffs?.enemyResShred ?? 0;
+    const enemyRes = (combatState.enemyRes ?? 0) - resShred;
+
+    let resMult = 1;
+    if (enemyRes < 0) {
+        resMult = 1 - enemyRes / 200;
+    } else if (enemyRes < 75) {
+        resMult = 1 - enemyRes / 100;
+    } else {
+        resMult = 1 / (1 + 5 * (enemyRes / 100));
+    }
+
+    // === Defense multiplier
+    const defIgnore = (mergedBuffs?.enemyDefIgnore ?? 0);
+    const defShred = (mergedBuffs?.enemyDefShred ?? 0);
+    const enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
+    const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
+
+    const perStackDmg = perStack * (1 + bonus / 100) * (resMult * defMult);
+    const totalDmg = total * (1 + bonus / 100) * (resMult * defMult);
+
+    return { erosionTotal: totalDmg, erosion: perStackDmg };
+}

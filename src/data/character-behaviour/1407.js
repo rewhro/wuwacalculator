@@ -28,6 +28,11 @@ export function applyCiacconaLogic({
         mergedBuffs.__concert = true;
     }
 
+    if (characterState?.activeStates?.windcalling && !mergedBuffs.__windcalling) {
+        mergedBuffs.damageTypeAmplify.aeroErosion = (mergedBuffs.damageTypeAmplify.aeroErosion ?? 0) + 100;
+        mergedBuffs.__windcalling = true;
+    }
+
     if (name.includes('interlude tune')) {
         skillMeta.visible = characterLevel >= 50;
         skillMeta.multiplier = 1;

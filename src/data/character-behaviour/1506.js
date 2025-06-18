@@ -93,6 +93,11 @@ export function applyPheobeLogic({
         }
     }
 
+    if (characterState?.activeStates?.attentive && !mergedBuffs.__attentive) {
+        mergedBuffs.damageTypeAmplify.spectroFrazzle = (mergedBuffs.damageTypeAmplify.spectroFrazzle ?? 0) + 100;
+        mergedBuffs.__attentive = true;
+    }
+
     // === Passive Buffs ===
     if ((state === 'Absolution' || state === 'Confession') && !mergedBuffs.__pheobeSpectro1 && characterLevel >= 70) {
         mergedBuffs.spectro += 12;

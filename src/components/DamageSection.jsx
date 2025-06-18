@@ -5,8 +5,8 @@ import React, {useState} from 'react';
 import { getHardcodedMultipliers } from '../data/character-behaviour';
 import { computeSkillDamage, getSkillData } from "../utils/computeSkillDamage.js";
 import { setSkillDamageCache } from "../utils/skillDamageCache";
-import {elementToAttribute} from "../utils/attributeHelpers.js";
-import {calculateDamage} from "../utils/damageCalculator.js";
+import {elementToAttribute, attributeColors} from "../utils/attributeHelpers.js";
+import {calculateAeroErosionDamage, calculateSpectroFrazzleDamage} from "../utils/damageCalculator.js";
 
 export default function DamageSection({
                                           activeCharacter,
@@ -25,6 +25,39 @@ export default function DamageSection({
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const allSkillResults = [];
     const [showSubHits, setShowSubHits] = useState(true);
+    const negativeEffect = combatState?.spectroFrazzle > 0 || combatState?.aeroErosion > 0;
+    const {frazzleTotal, frazzle} = calculateSpectroFrazzleDamage(combatState, mergedBuffs, characterLevel);
+    const {erosionTotal, erosion} = calculateAeroErosionDamage(combatState, mergedBuffs, characterLevel);
+
+    if (frazzle > 0) {
+        allSkillResults.push({
+            name: 'Spectro Frazzle',
+            tab: 'negativeEffect',
+            skillType: 'spectroFrazzle',
+            normal: Math.floor(frazzle),
+            crit: Math.floor(frazzle),
+            avg: Math.floor(frazzle),
+            isSupportSkill: false,
+            visible: true,
+            supportLabel: null,
+            supportColor: null
+        });
+    }
+
+    if (erosion > 0) {
+        allSkillResults.push({
+            name: 'Aero Erosion',
+            tab: 'negativeEffect',
+            skillType: 'aeroErosion',
+            normal: Math.floor(erosion),
+            crit: Math.floor(erosion),
+            avg: Math.floor(erosion),
+            isSupportSkill: false,
+            visible: true,
+            supportLabel: null,
+            supportColor: null
+        });
+    }
 
     const skillUI = skillTabs.map((tab) => {
         const skill = getSkillData(activeCharacter, tab);
@@ -183,7 +216,6 @@ export default function DamageSection({
         window.lastSkillCacheUpdate = Date.now();
     }
 
-
     return (
         <div className="damage-box">
             <h2 className="panel-title">
@@ -199,7 +231,52 @@ export default function DamageSection({
             </h2>
             <div className="damage-section">
                 {skillUI}
+                {(negativeEffect) && (
+                    <div className="box-wrapper">
+                        <div className="damage-inner-box">
+                            <h3 className="damage-box-title">Negative Effects</h3>
+                            <div className="damage-grid">
+                                <div></div>
+                                <div>Normal</div>
+                                <div>CRIT</div>
+                                <div>AVG</div>
 
+                                {(combatState?.spectroFrazzle > 0) && (
+                                    <>
+                                        <div style={{ color: attributeColors.spectro, fontWeight: 'bold' }}>
+                                            Spectro Frazzle
+                                        </div>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold' }}>
+                                            {Math.floor(frazzle).toLocaleString()}
+                                        </div>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold' }}>
+                                            {Math.floor(frazzle).toLocaleString()}
+                                        </div>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold' }}>
+                                            {Math.floor(frazzle).toLocaleString()}
+                                        </div>
+                                    </>
+                                )}
+                                {(combatState?.aeroErosion > 0) && (
+                                    <>
+                                        <div style={{ color: attributeColors.aero, fontWeight: 'bold' }}>
+                                            Aero Erosion
+                                        </div>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero, fontWeight: 'bold' }}>
+                                            {Math.floor(erosion).toLocaleString()}
+                                        </div>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero, fontWeight: 'bold' }}>
+                                            {Math.floor(erosion).toLocaleString()}
+                                        </div>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero, fontWeight: 'bold' }}>
+                                            {Math.floor(erosion).toLocaleString()}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {rotationEntries.length > 0 && (
                     <div className="box-wrapper">
                         <div className="damage-inner-box">

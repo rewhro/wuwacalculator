@@ -19,6 +19,20 @@ export default function CiacconaUI({ activeStates, toggleState }) {
                     Enable
                 </label>
             </div>
+            <div className="status-toggle-box">
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Windcalling Tune</h4>
+                <p>Aero Erosion DMG dealt to targets near the active Resonator is Amplified by 100% for 30s.</p>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.windcalling || false}
+                        onChange={() => {
+                            toggleState('windcalling');
+                        }}
+                    />
+                    Enable
+                </label>
+            </div>
         </div>
     );
 }

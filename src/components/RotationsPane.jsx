@@ -17,14 +17,24 @@ import RotationItem from "./RotationItem.jsx";
 import { getSkillDamageCache } from '../utils/skillDamageCache';
 import {usePersistentState} from "../hooks/usePersistentState.js";
 
-const tabDisplayOrder = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
+const tabDisplayOrder = [
+    'normalAttack',
+    'resonanceSkill',
+    'forteCircuit',
+    'resonanceLiberation',
+    'introSkill',
+    'outroSkill',
+    'negativeEffect'
+];
+
 const tabDisplayNames = {
     normalAttack: 'Normal Attack',
     resonanceSkill: 'Resonance Skill',
     forteCircuit: 'Forte Circuit',
     resonanceLiberation: 'Resonance Liberation',
     introSkill: 'Intro Skill',
-    outroSkill: 'Outro Skill'
+    outroSkill: 'Outro Skill',
+    negativeEffect: 'Negative Effects'
 };
 
 const skillTypeIconMap = {
@@ -35,7 +45,9 @@ const skillTypeIconMap = {
     intro: '/assets/stat-icons/intro.png',
     outro: '/assets/stat-icons/outro.png',
     healing: '/assets/stat-icons/healing.png',
-    shielding: '/assets/stat-icons/shield.png'
+    shielding: '/assets/stat-icons/shield.png',
+    spectroFrazzle: '/assets/stat-icons/flat-attribute/spectro.webp',
+    aeroErosion: '/assets/stat-icons/flat-attribute/aero.webp'
 };
 
 const skillTypeLabelMap = {
@@ -44,7 +56,9 @@ const skillTypeLabelMap = {
     heavy: 'Heavy Attack',
     ultimate: 'Resonance Liberation',
     intro: 'Intro Skill',
-    outro: 'Outro Skill'
+    outro: 'Outro Skill',
+    spectroFrazzle: 'Spectro Frazzle',
+    aeroErosion: 'Aero Erosion'
 };
 
 export default function RotationsPane({

@@ -34,10 +34,25 @@ export default function PheobeUI({ activeStates, toggleState }) {
                         checked={activeStates.confession || false}
                         onChange={() => {
                             toggleState('confession');
-                            if (activeStates.absolution) toggleState('absolution'); // turn off other
+                            if (activeStates.absolution) toggleState('absolution');
                         }}
                     />
                     Confession?
+                </label>
+            </div>
+
+            <div className="status-toggle-box">
+                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Attentive Heart</h4>
+                <p>Confession Enhancement: Grant Silent Prayer to the Resonator on the field, reducing the Spectro RES of nearby targets by 10% and granting 100% Spectro Frazzle DMG Amplification. When Spectro Frazzle inflicts DMG, extend Spectro Frazzle's damage interval by 50%. This effect lasts 30s or until Phoebe switches to Absolution status.</p>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.attentive || false}
+                        onChange={() => {
+                            toggleState('attentive');
+                        }}
+                    />
+                    Enable
                 </label>
             </div>
         </div>

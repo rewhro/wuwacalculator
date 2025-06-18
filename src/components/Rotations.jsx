@@ -110,5 +110,7 @@ function getSkillType(entry) {
     if (detail.includes('liberation')) return 'Resonance Liberation';
     if (detail.includes('intro')) return 'Intro Skill';
     if (detail.includes('outro')) return 'Outro Skill';
+    if (detail.includes('frazzle')) return 'Spectro Frazzle';
+    if (detail.includes('erosion')) return 'Aero Erosion';
     return 'Other';
 }
