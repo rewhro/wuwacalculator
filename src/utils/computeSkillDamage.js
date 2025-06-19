@@ -155,8 +155,7 @@ export function computeSkillDamage({
             charId
         }) ?? skillMeta;
     }
-
-    scaling = skillMeta?.scaling ?? scaling;
+    scaling = scaling ?? skillMeta?.scaling;
 
     // === Handle healing/shielding skills ===
     const tag = skillMeta.tags?.[0];
