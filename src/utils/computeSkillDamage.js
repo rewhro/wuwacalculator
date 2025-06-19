@@ -3,6 +3,9 @@ import {getWeaponOverride} from "../data/weapon-behaviour/index.js";
 import {calculateSupportEffect} from "./supportCalculator.js";
 import {calculateDamage} from "./damageCalculator.js";
 import { elementToAttribute } from './attributeHelpers';
+import {echoScalingRatios} from "../data/echoes/echoMultipliers.js";
+import {mainEchoBuffs} from "../data/buffs/setEffect.js";
+import {applyWeaponLogic} from "../data/weapon-behaviour/21040036.jsx";
 
 export function computeSkillDamage({
                                        entry,                // { label, detail, tab }
@@ -14,6 +17,7 @@ export function computeSkillDamage({
                                        mergedBuffs,
                                        sliderValues,
                                        characterLevel,
+    echoElement,
                                        getSkillData = () => null // Optional override for character logic
                                    }) {
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
@@ -30,10 +34,12 @@ export function computeSkillDamage({
     const label = entry.label;
     let skillType = entry.detail?.toLowerCase?.() || '';
 
-    if (!['basic', 'heavy', 'skill', 'ultimate', 'intro', 'outro'].includes(skillType)) {
-        // Fallback inference based on tab or label
+    if (!['basic', 'heavy', 'skill', 'ultimate', 'intro', 'outro', 'echoSkill'].includes(skillType)) {
         const label = entry.label?.toLowerCase?.() ?? '';
-        if (label.includes('heavy attack')) {
+
+        if (entry.tab === 'echoAttacks' || label.includes('echo attacks')) {
+            skillType = 'echoSkill';
+        } else if (label.includes('heavy attack')) {
             skillType = 'heavy';
         } else if (entry.tab === 'resonanceSkill') {
             skillType = 'skill';
@@ -46,7 +52,7 @@ export function computeSkillDamage({
         } else if (entry.tab === 'outroSkill') {
             skillType = 'outro';
         } else {
-            skillType = 'basic'; // Safe fallback
+            skillType = 'basic';
         }
     }
     const tab = entry.tab;
@@ -101,12 +107,13 @@ export function computeSkillDamage({
 
     // === Weapon override ===
     const weaponLogic = getWeaponOverride(combatState?.weaponId);
-    if (typeof weaponLogic?.applyWeaponBuffLogic === 'function') {
+
+    if (typeof weaponLogic?.updateSkillMeta === 'function') {
         const currentParamValues = combatState.weaponParam?.map(
             p => p?.[Math.min(Math.max((combatState.weaponRank ?? 1) - 1, 0), 4)]
         ) ?? [];
 
-        const result = weaponLogic.applyWeaponBuffLogic({
+        const result = weaponLogic.updateSkillMeta ({
             mergedBuffs: localMergedBuffs,
             combatState,
             skillMeta,
@@ -122,12 +129,34 @@ export function computeSkillDamage({
         localMergedBuffs = result?.mergedBuffs ?? localMergedBuffs;
     }
 
-    // === Scaling source ===
-    const scaling = skillMeta.scaling ?? (
-        characterRuntimeStates?.[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
-            atk: 1, hp: 0, def: 0, energyRegen: 0
-        }
-    );
+    let scaling;
+
+    if (entry.echoId && echoScalingRatios[entry.echoId]) {
+        scaling = echoScalingRatios[entry.echoId];
+    } else if (entry.echoId) {
+        scaling = { atk: 1, hp: 0, def: 0, energyRegen: 0 };
+    } else {
+        scaling = skillMeta.scaling ?? (
+            characterRuntimeStates?.[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
+                atk: 1, hp: 0, def: 0, energyRegen: 0
+            }
+        );
+    }
+    const mainEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[0];
+    const echoBuffEntry = mainEcho && mainEchoBuffs?.[mainEcho.id];
+    const echoModifier = echoBuffEntry?.skillMetaModifier;
+
+
+    if (typeof echoModifier === 'function') {
+        skillMeta = echoModifier(skillMeta, {
+            characterState: characterRuntimeStates?.[charId]?.activeStates,
+            activeCharacter,
+            combatState,
+            charId
+        }) ?? skillMeta;
+    }
+
+    scaling = skillMeta?.scaling ?? scaling;
 
     // === Handle healing/shielding skills ===
     const tag = skillMeta.tags?.[0];
@@ -154,7 +183,7 @@ export function computeSkillDamage({
         multiplier: skillMeta.multiplier,
         amplify: skillMeta.amplify,
         scaling,
-        element,
+        element: echoElement ?? element,
         skillType: skillMeta.skillType,
         characterLevel,
         mergedBuffs: localMergedBuffs,
@@ -181,42 +210,73 @@ export function computeSkillDamage({
     const multiplierRatio = rawTotalMultiplier > 0 ? (overrideMultiplier / rawTotalMultiplier) : 1;
 
     if (parts.length > 1 || (parts.length === 1 && parts[0].count > 1)) {
-        subHits = parts.map((part) => {
-            const baseMultiplier = parseFloat(part.value) / 100;
-            const adjustedMultiplier = baseMultiplier * multiplierRatio;
+        subHits = [];
 
-            const oneHitMeta = structuredClone(skillMeta);
-            oneHitMeta.multiplier = adjustedMultiplier;
+        for (const part of parts) {
+            if (part.isFlat) {
+                const flatValue = parseFloat(part.value);
 
-            const { normal, crit, avg } = calculateDamage({
-                finalStats,
-                combatState,
-                multiplier: oneHitMeta.multiplier,
-                amplify: oneHitMeta.amplify,
-                scaling,
-                element,
-                skillType: oneHitMeta.skillType,
-                characterLevel,
-                mergedBuffs: localMergedBuffs,
-                skillDmgBonus: oneHitMeta.skillDmgBonus ?? 0,
-                critDmgBonus: oneHitMeta.critDmgBonus ?? 0,
-                critRateBonus: oneHitMeta.critRateBonus ?? 0,
-                skillDefIgnore: oneHitMeta.skillDefIgnore ?? 0
-            });
+                const { normal, crit, avg } = calculateDamage({
+                    finalStats,
+                    combatState,
+                    flat: flatValue,
+                    scaling,
+                    element: echoElement ?? element,
+                    skillType: skillMeta.skillType,
+                    characterLevel,
+                    mergedBuffs: localMergedBuffs,
+                    amplify: skillMeta.amplify,
+                    skillDmgBonus: skillMeta.skillDmgBonus ?? 0,
+                    critDmgBonus: skillMeta.critDmgBonus ?? 0,
+                    critRateBonus: skillMeta.critRateBonus ?? 0,
+                    skillDefIgnore: skillMeta.skillDefIgnore ?? 0
+                });
 
-            return {
-                label: part.count > 1 ? `${part.count} Hits` : '',
-                count: part.count,
-                normal,
-                crit,
-                avg
-            };
-        });
+                subHits.push({
+                    label: part.count > 1 ? `${part.count} Hits` : '',
+                    count: part.count,
+                    normal,
+                    crit,
+                    avg
+                });
 
-        // Main skill = total of all sub-hits (factoring in their count)
-        normal = subHits.reduce((sum, hit, i) => sum + hit.normal * parts[i].count, 0);
-        crit = subHits.reduce((sum, hit, i) => sum + hit.crit * parts[i].count, 0);
-        avg = subHits.reduce((sum, hit, i) => sum + hit.avg * parts[i].count, 0);
+            } else {
+                const baseMultiplier = parseFloat(part.value) / 100;
+                const adjustedMultiplier = baseMultiplier * multiplierRatio;
+
+                const oneHitMeta = structuredClone(skillMeta);
+                oneHitMeta.multiplier = adjustedMultiplier;
+
+                const { normal, crit, avg } = calculateDamage({
+                    finalStats,
+                    combatState,
+                    multiplier: oneHitMeta.multiplier,
+                    amplify: oneHitMeta.amplify,
+                    scaling,
+                    element: echoElement ?? element,
+                    skillType: oneHitMeta.skillType,
+                    characterLevel,
+                    mergedBuffs: localMergedBuffs,
+                    skillDmgBonus: oneHitMeta.skillDmgBonus ?? 0,
+                    critDmgBonus: oneHitMeta.critDmgBonus ?? 0,
+                    critRateBonus: oneHitMeta.critRateBonus ?? 0,
+                    skillDefIgnore: oneHitMeta.skillDefIgnore ?? 0
+                });
+
+                subHits.push({
+                    label: part.count > 1 ? `${part.count} Hits` : '',
+                    count: part.count,
+                    normal,
+                    crit,
+                    avg
+                });
+            }
+        }
+
+        // Combine total damage from sub-hits
+        normal = subHits.reduce((sum, hit) => sum + hit.normal * hit.count, 0);
+        crit = subHits.reduce((sum, hit) => sum + hit.crit * hit.count, 0);
+        avg = subHits.reduce((sum, hit) => sum + hit.avg * hit.count, 0);
     }
 
     return { normal, crit, avg, skillMeta, subHits };
@@ -271,18 +331,19 @@ export function extractFlatAndPercent(str) {
     };
 }
 
-function parseMultiplierParts(multiplierString) {
+export function parseMultiplierParts(multiplierString) {
     if (typeof multiplierString !== 'string') return [];
 
-    const parts = multiplierString.match(/[\d.]+%\s*(\*\s*\d+)?/g);
+    const parts = multiplierString.match(/[\d.]+(%|\b)(\s*\*\s*\d+)?/g);
     if (!parts) return [];
 
     return parts.map(part => {
-        const match = part.trim().match(/^([\d.]+%)\s*(?:\*\s*(\d+))?$/);
+        const match = part.trim().match(/^([\d.]+)(%?)(\s*\*\s*(\d+))?$/);
         if (!match) return null;
-        const [, value, repeat] = match;
+        const [, value, percentSymbol, , repeat] = match;
         return {
             value,
+            isFlat: percentSymbol !== '%',
             count: repeat ? parseInt(repeat, 10) : 1
         };
     }).filter(Boolean);

@@ -3,6 +3,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { getSkillDamageCache } from '../utils/skillDamageCache';
+import {attributeColors} from "../utils/attributeHelpers.js";
 
 export default function RotationItem({
                                  id,
@@ -67,7 +68,8 @@ export default function RotationItem({
                         tab: item.tab,
                         label: item.label,
                         isSupportSkill: match.isSupportSkill,
-                        supportColor: match.supportColor
+                        supportColor: match.supportColor,
+                        element: match.element
                     }
                     : undefined
             };
@@ -87,8 +89,14 @@ export default function RotationItem({
         >
             <div className={`rotation-item ${entry.locked ? 'locked' : ''}`}>
                 <div className="rotation-header">
-                    <span className="entry-name" style={{ color: currentSliderColor }}>
-                        {entry.label}
+
+                    <span
+                        className="entry-name"
+                        style={{
+                            color: attributeColors[entry.element] ?? currentSliderColor
+                        }}
+                    >
+                      {entry.label}
                         {multiplier > 1 ? ` (x${multiplier})` : ''}
                     </span>
                     <span className="entry-type-detail">

@@ -112,5 +112,6 @@ function getSkillType(entry) {
     if (detail.includes('outro')) return 'Outro Skill';
     if (detail.includes('frazzle')) return 'Spectro Frazzle';
     if (detail.includes('erosion')) return 'Aero Erosion';
+    if (detail.includes('echo')) return 'Echo Skill';
     return 'Other';
 }

@@ -270,7 +270,7 @@ export default function ChangelogModal({ open, onClose }) {
             entries: [
                 {
                     type: 'paragraph',
-                    content: `Added ECHOES (WIP >.<).`
+                    content: `Added ECHOES (WIP >.< (not anymore!)).`
                 }
             ]
         }

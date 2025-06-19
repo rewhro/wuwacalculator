@@ -205,12 +205,7 @@ export const mainEchoBuffs = {
             buffs: { fusion: 12, basicAtk: 12 }
         }
     },
-    '390080005': {
-        toggleable: {
-            label: "Enable",
-            buffs: { element: 10 }
-        }
-    },
+
 
     '6000082': {
         always: { havoc: 12, basicAtk: 12 }
@@ -237,7 +232,13 @@ export const mainEchoBuffs = {
         always: { electro: 12, resonanceSkill: 12 }
     },
     '6000090': {
-        always: { havoc: 12, basicAtk: 12 }
+        always: { havoc: 12, basicAtk: 12 },
+        skillMetaModifier: (skillMeta, { characterState }) => {
+            if (skillMeta.name.includes('Nightmare: Crownless')) {
+                skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 20;
+            }
+            return skillMeta;
+        }
     },
     '6000087': {
         always: { havoc: 12, heavyAtk: 12 }
@@ -246,7 +247,13 @@ export const mainEchoBuffs = {
         always: { fusion: 12, resonanceSkill: 12 }
     },
     '6000092': {
-        always: { spectro: 12 }
+        always: { spectro: 12 },
+        skillMetaModifier: (skillMeta, {combatState}) => {
+            if (skillMeta.name.includes('Nightmare: Mourning Aix') && combatState.spectroFrazzle > 0) {
+                skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 100;
+            }
+            return skillMeta;
+        }
     },
     '6000105': {
         always: { glacio: 12, coordAtk: 30 }
@@ -277,7 +284,111 @@ export const mainEchoBuffs = {
             max: 3,
             buffsPerStack: { resonanceSkill: 4, glacio: 4 }
         }
-    }
+    },
+
+    '6000056': {
+        toggleable: {
+            label: "Mid-Air?",
+        },
+        skillMetaModifier: (skillMeta, { characterState }) => {
+            const isMidAir = characterState?.mainEchoToggle;
+
+            if (isMidAir && skillMeta.name.includes('Glacio Dreadmane')) {
+                skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 20;
+            }
+            return skillMeta;
+        }
+    },
+    '6000053': {
+        toggleable: {
+            label: "Enable?",
+        },
+        skillMetaModifier: (skillMeta, { characterState }) => {
+            const deadening = characterState?.mainEchoToggle;
+
+            if (deadening && skillMeta.name.includes('Dreamless')) {
+                skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 50;
+            }
+            return skillMeta;
+        }
+    },
+    '390070052': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Fission Junrock')) {
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
+    '390070074': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Cruisewing')) {
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
+    '390077024': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Rocksteady Guardian Skill 3')) {
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
+    '390077025': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Chasm Guardian Skill 2')) {
+                skillMeta.scaling = { atk: 0, hp: 1, def: 0, energyRegen: 0 };
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
+    '390080005': {
+        toggleable: {
+            label: "Enable?",
+        },
+        skillMetaModifier: (skillMeta, { characterState }) => {
+            const geochelone = characterState?.mainEchoToggle;
+            if (geochelone) {
+                skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 10;
+            }
+            return skillMeta;
+        }
+    },
+    '6000061': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Galescourge Stalker')) {
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
+    '6000074': {
+        skillMetaModifier: (skillMeta, {combatState}) => {
+            if (skillMeta.name.includes('Diurnus Knight') && combatState.spectroFrazzle > 0) {
+                skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 100;
+            }
+            return skillMeta;
+        }
+    },
+    '6000068': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Nimbus Wraith')) {
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
+    '6000094': {
+        skillMetaModifier: (skillMeta) => {
+            if (skillMeta.name.includes('Calcified Junrock')) {
+                skillMeta.tags = ['healing'];
+            }
+            return skillMeta;
+        }
+    },
 
     // Add more Echo IDs here...
 };
@@ -309,10 +420,12 @@ export function applyMainEchoBuffLogic({ equippedEchoes, mergedBuffs, characterS
     }
 
     // Conditionally apply toggleable buffs
-    if (toggleable && activeStates?.mainEchoToggle) {
+    if (toggleable && activeStates?.mainEchoToggle && toggleable.buffs) {
         for (const [stat, val] of Object.entries(toggleable.buffs)) {
             if (stat === 'element') {
-                mergedBuffs[element] = (mergedBuffs[element] ?? 0) + val;
+                for (const elem of Object.values(elementMap)) {
+                    mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + val;
+                }
             } else {
                 mergedBuffs[stat] = (mergedBuffs[stat] ?? 0) + val;
             }

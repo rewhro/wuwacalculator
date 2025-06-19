@@ -1,4 +1,6 @@
 // src/data/weapon-ui/index.js
+import {updateSkillMeta} from "./21040036.jsx";
+
 const modules = import.meta.glob('./*.jsx', { eager: true });
 
 const weaponUIMap = {};
@@ -23,6 +25,11 @@ export function getWeaponUIComponent(weaponId) {
 }
 
 export function getWeaponOverride(weaponId) {
-    const applyLogic = weaponLogicMap[String(weaponId)];
-    return applyLogic ? { applyWeaponLogic: applyLogic } : null;
+    const logicModule = modules[`./${weaponId}.jsx`];
+    if (!logicModule) return null;
+
+    return {
+        applyWeaponLogic: logicModule.applyWeaponLogic,
+        updateSkillMeta: logicModule.updateSkillMeta
+    };
 }

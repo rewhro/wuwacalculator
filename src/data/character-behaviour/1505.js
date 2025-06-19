@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applySkLogic({
                                mergedBuffs,
                                combatState,
@@ -58,7 +60,9 @@ export function applySkLogic({
     }
 
     if (characterState?.activeStates?.butterfly && !mergedBuffs.__butterfly) {
-        mergedBuffs.elementDmgAmplify.spectro = (mergedBuffs.elementDmgAmplify.spectro ?? 0) + 15;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs.elementDmgAmplify[elem] = (mergedBuffs.elementDmgAmplify[elem] ?? 0) + 15;
+        }
         mergedBuffs.__butterfly = true;
     }
 
@@ -130,18 +134,10 @@ export function SKBuffsLogic({
         mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + critRate * 2;
     }
 
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
-
     if (state.butterfly) {
-        mergedBuffs.elementDmgAmplify[element] = (mergedBuffs.elementDmgAmplify[element] ?? 0) + 15;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs.elementDmgAmplify[elem] = (mergedBuffs.elementDmgAmplify[elem] ?? 0) + 15;
+        }
     }
 
     if (state.nightsGift) {

@@ -35,7 +35,7 @@ import {getEchoStatsFromEquippedEchoes, statIconMap} from "../utils/echoHelper.j
 export default function Calculator() {
     loadBase();
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-06-06 19:34';
+    const LATEST_CHANGELOG_VERSION = '2025-06-19 12:46';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();

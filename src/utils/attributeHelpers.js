@@ -23,5 +23,6 @@ export const elementToAttribute = {
     3: 'electro',
     4: 'aero',
     5: 'spectro',
-    6: 'havoc'
+    6: 'havoc',
+    7: 'physical'
 };

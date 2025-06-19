@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applyVerinaLogic({
                                mergedBuffs,
                                combatState,
@@ -46,7 +48,9 @@ export function applyVerinaLogic({
     }
 
     if (characterState?.activeStates?.blossom && !mergedBuffs.__blossom) {
-        mergedBuffs.elementDmgAmplify.spectro = (mergedBuffs.elementDmgAmplify.spectro ?? 0) + 15;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs.elementDmgAmplify[elem] = (mergedBuffs.elementDmgAmplify[elem] ?? 0) + 15;
+        }
         mergedBuffs.__blossom = true;
     }
 
@@ -117,22 +121,15 @@ export function verinauffsLogic({
                                  }) {
     const state = characterState?.activeStates ?? {};
 
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
-
     if (state.graceOfLife) {
         mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 20;
     }
 
     if (state.blossom) {
-        mergedBuffs.elementDmgAmplify[element] = (mergedBuffs.elementDmgAmplify[element] ?? 0) + 15;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs.elementDmgAmplify[elem] = (mergedBuffs.elementDmgAmplify[elem] ?? 0) + 15;
+        }
+        console.log(mergedBuffs);
     }
 
     if (state.blossoming) {

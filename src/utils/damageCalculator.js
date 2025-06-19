@@ -1,5 +1,6 @@
 export function calculateDamage({
                                     finalStats,
+    flat,
                                     combatState,
                                     scaling,
                                     multiplier,
@@ -28,8 +29,15 @@ export function calculateDamage({
         (def * (scaling.def ?? 0)) +
         (energyRegen * (scaling.energyRegen ?? 0));
 
+
     // 3️⃣ Flat damage additions
-    const baseDmg = (baseAbility * multiplier) + (combatState.flatDmg ?? 0);
+    let baseDmg = 0;
+    if (flat != null) {
+        baseDmg = flat;
+    } else {
+        baseDmg = baseAbility * multiplier;
+    }
+    baseDmg += (combatState.flatDmg ?? 0);
 
     // 4️⃣ Resistance multiplier
     const enemyResShred = mergedBuffs?.enemyResShred ?? 0;

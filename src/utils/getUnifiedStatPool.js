@@ -35,10 +35,11 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         spectroFrazzleDmg: 0,
         aeroErosionDmg: 0,
         introAtk: 0,
-        coordAtk: 0
+        coordAtk: 0,
+        physical: 0,
     };
 
-    const ELEMENT_KEYS = ['aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc'];
+    const ELEMENT_KEYS = ['aero', 'glacio', 'spectro', 'fusion', 'electro', 'havoc', 'physical'];
 
     for (const source of buffSources) {
         for (const [key, rawVal] of Object.entries(source ?? {})) {

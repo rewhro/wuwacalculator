@@ -2,37 +2,42 @@ import React from "react";
 
 export default function CarlottaUI({ activeStates, toggleState }) {
     return (
-        <div className="status-toggles">
-            <div className="status-toggle-box">
-                <div className="status-toggle-box-inner">
-                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Deconstruction</h4>
-                    <ul style={{ paddingLeft: '20px' }}>
-                        <li>Dealing DMG to targets inflicted with Deconstruction ignores 18% of their DEF.</li>
-                    </ul>
-                    <label className="modern-checkbox">
-                        <input
-                            type="checkbox"
-                            checked={activeStates.deconstruction || false}
-                            onChange={() => toggleState('deconstruction')}
-                        />
-                        Enable
-                    </label>
-                </div>
+        <div className="status-toggle-box">
+            <div
+                className="status-toggle-box-inner"
+            >
+                <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Deconstruction</h4>
+                <ul style={{ paddingLeft: '20px' }}>
+                    <li>Dealing DMG to targets inflicted with Deconstruction ignores 18% of their DEF.</li>
+                </ul>
+                <label className="modern-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={activeStates.deconstruction || false}
+                        onChange={() => toggleState('deconstruction')}
+                    />
+                    Enable
+                </label>
+            </div>
 
-                <div className="status-toggle-box-inner">
-                    <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Final Blow</h4>
-                    <ul style={{ paddingLeft: '20px' }}>
-                        <li>Increase the DMG Multiplier of Resonance Liberation Era of New Wave, Resonance Liberation Death Knell, and Resonance Liberation Fatal Finale by 80%.</li>
-                    </ul>
-                    <label className="modern-checkbox">
-                        <input
-                            type="checkbox"
-                            checked={activeStates.finalBlow || false}
-                            onChange={() => toggleState('finalBlow')}
-                        />
-                        Enable
-                    </label>
-                </div>
+            <div
+                className="status-toggle-box-inner"
+            >
+                <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Final Blow</h4>
+                <ul style={{ paddingLeft: '20px' }}>
+                    <li>
+                        Increase the DMG Multiplier of Resonance Liberation Era of New Wave,
+                        Resonance Liberation Death Knell, and Resonance Liberation Fatal Finale by 80%.
+                    </li>
+                </ul>
+                <label className="modern-checkbox" onClick={(e) => e.stopPropagation()}>
+                    <input
+                        type="checkbox"
+                        checked={activeStates.finalBlow || false}
+                        onChange={() => toggleState('finalBlow')}
+                    />
+                    Enable
+                </label>
             </div>
         </div>
     );
@@ -60,20 +65,7 @@ export function CarolottaSequenceToggles({ nodeKey, sequenceToggles, toggleSeque
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState}) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

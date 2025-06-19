@@ -24,6 +24,7 @@ const tabDisplayOrder = [
     'resonanceLiberation',
     'introSkill',
     'outroSkill',
+    'echoAttacks',
     'negativeEffect'
 ];
 
@@ -34,6 +35,7 @@ const tabDisplayNames = {
     resonanceLiberation: 'Resonance Liberation',
     introSkill: 'Intro Skill',
     outroSkill: 'Outro Skill',
+    echoAttacks: 'Echo Attacks',
     negativeEffect: 'Negative Effects'
 };
 
@@ -47,7 +49,8 @@ const skillTypeIconMap = {
     healing: '/assets/stat-icons/healing.png',
     shielding: '/assets/stat-icons/shield.png',
     spectroFrazzle: '/assets/stat-icons/flat-attribute/spectro.webp',
-    aeroErosion: '/assets/stat-icons/flat-attribute/aero.webp'
+    aeroErosion: '/assets/stat-icons/flat-attribute/aero.webp',
+    echoSkill: '/assets/stat-icons/echo.png'
 };
 
 const skillTypeLabelMap = {
@@ -58,7 +61,8 @@ const skillTypeLabelMap = {
     intro: 'Intro Skill',
     outro: 'Outro Skill',
     spectroFrazzle: 'Spectro Frazzle',
-    aeroErosion: 'Aero Erosion'
+    aeroErosion: 'Aero Erosion',
+    echoSkill: 'Echo Skill'
 };
 
 export default function RotationsPane({
@@ -98,7 +102,8 @@ export default function RotationsPane({
             groups[tab].push({
                 name: skill.name,
                 type: skill.skillType,
-                tab: tab
+                tab: tab,
+                element: skill.element ?? null
             });
         }
         return groups;
@@ -138,7 +143,8 @@ export default function RotationsPane({
             multiplier: 1,
             locked: false,
             snapshot: undefined,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            element: skill.element ?? null
         };
 
         setRotationEntries(prev => {

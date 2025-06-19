@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applyJinhsiLogic({
                                mergedBuffs,
                                combatState,
@@ -68,7 +70,9 @@ export function applyJinhsiLogic({
     }
 
     if (isActiveSequence(4) && isToggleActive(4) && !mergedBuffs.__jinhsiS4) {
-        mergedBuffs.spectro = (mergedBuffs.spectro ?? 0) + 20;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+        }
         mergedBuffs.__jinhsiS4 = true;
     }
 
@@ -88,18 +92,11 @@ export function jinhsiBuffsLogic({
                                    mergedBuffs, characterState, activeCharacter
                                }) {
     const state = characterState?.activeStates ?? {};
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.benevolent) {
-        mergedBuffs[element] = (mergedBuffs[element] ?? 0) + 20;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+        }
     }
 
     return { mergedBuffs };
