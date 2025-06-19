@@ -57,7 +57,8 @@ export function calculateDamage({
     const charLevel = characterLevel ?? 1;
     const enemyDefIgnore = (skillDefIgnore ?? 0) + (mergedBuffs?.enemyDefIgnore ?? 0);
     const enemyDefShred = mergedBuffs?.enemyDefShred ?? 0;
-    const enemyDef = ((8 * enemyLevel) + 792) * (1 - (enemyDefIgnore + enemyDefShred) / 100);
+    const rawEnemyDef = ((8 * enemyLevel) + 792) * (1 - (enemyDefIgnore + enemyDefShred) / 100);
+    const enemyDef = Math.max(0, rawEnemyDef);
     const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
 
     // 6️⃣ Reduction multipliers
