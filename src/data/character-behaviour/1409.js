@@ -105,11 +105,23 @@ export function applyCartethyiaLogic({
         mergedBuffs.__cartethyiaSeq6 = false;
     }
 
+    if (name.includes('hope reshaped')) {
+        skillMeta.multiplier = 0.2;
+        skillMeta.visible = isActiveSequence(4);
+    }
+
     return { mergedBuffs, combatState, skillMeta };
 }
 
 // Manual healing skill declarations only
 export const cartethyiaMultipliers = {
+    normalAttack: [
+        {
+            name: 'Hope Reshaped in Storms Shield',
+            scaling: { hp: 1 },
+            shielding: true
+        }
+    ],
     resonanceLiberation: [
         {
             name: 'Blade of Howling Squall DMG',
