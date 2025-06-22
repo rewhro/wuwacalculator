@@ -93,7 +93,7 @@ export const echoSetBuffs = {
     10: { twoPiece: { resonanceSkill: 12 } },          // Frosty Resolve
     11: { twoPiece: { spectro: 10 } },                  // Eternal Radiance
     12: { twoPiece: { havoc: 10 } },                    // Midnight Veil
-    13: { twoPiece: { energyRegen: 10 } },              // Empyrean Anthem
+    13: { twoPiece: { energyRegen: 10 }, fivePiece: { coordAtk: 80 } },              // Empyrean Anthem
     14: { twoPiece: { energyRegen: 10 }, fivePiece: { atkPercent: 10 } },              // Tidebreaking Courage
     16: { twoPiece: { aero: 10 } },                     // Gusts of Welkin
     17: { twoPiece: { aero: 10 } },                     // Windward Pilgrimage
