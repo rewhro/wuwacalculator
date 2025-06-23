@@ -22,31 +22,23 @@ function isEchoModified(oldEcho, updatedEcho) {
     );
 }
 
-export default function EchoBagMenu({ onClose, onEquip }) {
+export default function EchoBagMenu({
+                                        onClose,
+                                        onEquip,
+                                        selectedSet,
+                                        setSelectedSet,
+                                        selectedCost,
+                                        setSelectedCost,
+                                        searchTerm,
+                                        setSearchTerm
+}) {
     const [echoBag, setEchoBag] = useState(getEchoBag());
-
-    useEffect(() => {
-        const unsubscribe = subscribeEchoBag(setEchoBag);
-        return unsubscribe;
-    }, []);
-
     const [version, setVersion] = useState(0); // unused, for forcing rerender
     const [editingEcho, setEditingEcho] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-    const [selectedCost, setSelectedCost] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedSet, setSelectedSet] = useState(null);
-
-    useEffect(() => {
-        setIsVisible(true);
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                setIsAnimatingOut(false);
-            });
-        });
-    }, []);
-
+    const [preloaded, setPreloaded] = useState(false);
+    const [didOpenOnce, setDidOpenOnce] = useState(false);
     const handleOverlayClick = () => {
         if (!editingEcho) {
             setIsAnimatingOut(true);
@@ -57,7 +49,6 @@ export default function EchoBagMenu({ onClose, onEquip }) {
             }, 300);
         }
     };
-
     const filteredEchoes = [...echoBag]
         .filter(echo => {
             const matchesCost = selectedCost === null || echo.cost === selectedCost;
@@ -67,10 +58,20 @@ export default function EchoBagMenu({ onClose, onEquip }) {
         })
         .sort((a, b) => a.name.localeCompare(b.name));
 
-    const [preloaded, setPreloaded] = useState(false);
-
     useEffect(() => {
-        if (!isVisible) return;
+        const unsubscribe = subscribeEchoBag(setEchoBag);
+        return unsubscribe;
+    }, []);
+    useEffect(() => {
+        setIsVisible(true);
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                setIsAnimatingOut(false);
+            });
+        });
+    }, []);
+    useEffect(() => {
+        if (!isVisible || didOpenOnce) return;
 
         const preloadImages = async () => {
             const srcList = [];
@@ -90,13 +91,14 @@ export default function EchoBagMenu({ onClose, onEquip }) {
             );
 
             setPreloaded(true);
+            setDidOpenOnce(true);
         };
 
         setPreloaded(false);
         preloadImages();
-    }, [isVisible, echoBag]);
+    }, [isVisible, echoBag, didOpenOnce]);
 
-    if (!isVisible || !preloaded) return null;
+    if (!isVisible || (!preloaded && !didOpenOnce)) return null;
 
     return (
         <div
@@ -141,18 +143,12 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                             filteredEchoes.map(echo => (
                                 <div key={echo.uid}
                                      className="echo-tile"
-                                     onClick={() => {
-                                         const freshEcho = echoBag.find(e => e.uid === echo.uid);
-                                         setEditingEcho(freshEcho);
-                                     }}
                                 >
                                     <div className="remove-button-container">
                                         <button
                                             className="remove-substat-button"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
+                                            onClick={() => {
                                                 removeEchoFromBag(echo.uid);
-                                                setVersion(v => v + 1); // force re-render
                                             }}
                                         >
                                             <X size={20} />
@@ -182,7 +178,13 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                                     />
                                     <div className="echo-name">{echo.name}</div>
 
-                                    <div className="echo-stats-preview">
+                                    <div
+                                        className="echo-stats-preview"
+                                        onClick={() => {
+                                            const freshEcho = echoBag.find(e => e.uid === echo.uid);
+                                            setEditingEcho(freshEcho);
+                                        }}
+                                    >
                                         <div className="echo-bag-info-main">
                                             {Object.entries(echo.mainStats ?? {}).map(([key, val]) => (
                                                 <div key={key} className="stat-row">
@@ -212,8 +214,7 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                                             <button
                                                 key={slotIndex}
                                                 className="edit-substat-button slot"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
+                                                onClick={() => {
                                                     const freshEcho = echoBag.find(e => e.uid === echo.uid);
                                                     if (freshEcho) {
                                                         onEquip(freshEcho, slotIndex - 1);
@@ -257,7 +258,7 @@ export default function EchoBagMenu({ onClose, onEquip }) {
                                 uid: newUid,
                                 oldUid: originalEcho.uid,
                             });
-                            setVersion(v => v + 1); // force re-render
+                            setVersion(v => v + 1);
 
                             setEditingEcho(null);
                         }}

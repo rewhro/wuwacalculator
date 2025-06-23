@@ -31,13 +31,14 @@ import EchoesPane from '../components/EchoesPane';
 import {echoes} from "../json-data-scripts/getEchoes.js";
 import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../data/buffs/setEffect.js";
 import {getEchoStatsFromEquippedEchoes, statIconMap} from "../utils/echoHelper.js";
+import { useLayoutEffect } from 'react';
 
 export default function Calculator() {
     loadBase();
     const navigate = useNavigate();
     const LATEST_CHANGELOG_VERSION = '2025-06-19 12:46';
     const [showChangelog, setShowChangelog] = useState(false);
-    const [characterLevel, setCharacterLevel] = usePersistentState('characterLevel', 1); // <- ✅ default is 1
+    const [characterLevel, setCharacterLevel] = useState(1);
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
     const toggleTheme = () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -69,14 +70,16 @@ export default function Calculator() {
     const defaultSliderValues = { normalAttack: 1, resonanceSkill: 1, forteCircuit: 1, resonanceLiberation: 1, introSkill: 1, sequence: 0 };
     const defaultTraceBuffs = { atkPercent: 0, hpPercent: 0, defPercent: 0, healingBonus: 0, critRate: 0, critDmg: 0, elementalBonuses: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, activeNodes: {} };
     const defaultCustomBuffs = { atkFlat: 0, hpFlat: 0, defFlat: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0, basicAtk: 0, heavyAtk: 0, resonanceSkill: 0, resonanceLiberation: 0, aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 };
-    const defaultCombatState = { characterLevel: 1, enemyLevel: 90, enemyRes: 10, enemyResShred: 0, enemyDefShred: 0, enemyDefIgnore: 0, elementBonus: 0, elementDmgAmplify: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, flatDmg: 0, damageTypeAmplify: { basic: 0, heavy: 0, skill: 0, ultimate: 0 }, dmgReduction: 0, elementDmgReduction: 0, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0 };
+    const defaultCombatState = { enemyLevel: 90, enemyRes: 10, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, energyRegen: 0 };
     const [characterState, setCharacterState] = useState({ activeStates: {} });
     const [showDropdown, setShowDropdown] = useState(false);
-    const [echoStates, setEchoStates] = usePersistentState('echoStates', {});
-    const [team, setTeam] = usePersistentState('team', [activeCharacterId ?? null, null, null]);
-    const [teamCache, setTeamCache] = usePersistentState('teamCache', {});
+    const [team, setTeam] = useState([activeCharacterId ?? null, null, null]);
     const [moveToolbarToSidebar, setMoveToolbarToSidebar] = useState(false);
     const [weapons, setWeapons] = useState({});
+    const charId = activeCharacterId ?? activeCharacter?.id ?? activeCharacter?.link;
+    const [rotationEntries, setRotationEntries] = useState([]);
+    const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
+    const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
 
     useEffect(() => {
         Promise.all([fetchCharacters(), fetchWeapons()]).then(([charData, weaponData]) => {
@@ -98,10 +101,17 @@ export default function Calculator() {
 
             const profile = characterRuntimeStates[resolvedCharId] ?? {};
             const state = characterStates.find(c => String(c.Id) === String(foundChar.link));
+            if (profile.Team && !profile.Team[0]) {
+                profile.Team[0] = resolvedCharId;
+            }
+            setTeam(profile.Team ?? [resolvedCharId, null, null]);
             setBaseCharacterState(state ?? null);
             setCharacterLevel(profile.CharacterLevel ?? 1);
             setSliderValues(profile.SkillLevels ?? defaultSliderValues);
-            setTraceNodeBuffs(profile.TemporaryBuffs ?? defaultTraceBuffs);
+            setTraceNodeBuffs(profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs);
+            profile.TraceNodeBuffs = profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs;
+            delete profile.TemporaryBuffs;
+            delete profile.CharacterState;
             setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
 
             // ✅ Set default weapon only after weapons are loaded
@@ -115,7 +125,18 @@ export default function Calculator() {
                 const baseAtk = levelData?.[0]?.Value ?? 0;
                 const stat = levelData?.[1] ?? null;
                 const mappedStat = mapExtraStatToCombat(stat);
-
+                const extraCombatKeys = [
+                    'weaponId', 'weaponLevel', 'weaponBaseAtk', 'weaponStat',
+                    'weaponRarity', 'weaponEffect', 'weaponEffectName', 'weaponParam', 'weaponRank',
+                    'atkPercent', 'defPercent', 'hpPercent', 'energyRegen'
+                ];
+                const cleaned = [
+                    ...Object.keys(defaultCombatState),
+                    ...extraCombatKeys
+                ];
+                profile.CombatState = Object.fromEntries(
+                    Object.entries(profile.CombatState ?? {}).filter(([key]) => cleaned.includes(key))
+                );
                 setCombatState(prev => ({
                     ...defaultCombatState,
                     ...(profile.CombatState ?? {}),
@@ -141,6 +162,12 @@ export default function Calculator() {
                     })
                 }));
             }
+            const rawEntries = profile.rotationEntries ?? [];
+            const normalizedEntries = rawEntries.map(entry => ({
+                ...entry,
+                createdAt: entry.createdAt ?? Date.now() + Math.random()
+            }));
+            setRotationEntries(normalizedEntries);
         });
     }, []);
 
@@ -192,9 +219,9 @@ export default function Calculator() {
         Split(['#left-pane', '#right-pane'], { sizes: [50, 50], gutterSize: 1 });
     }, []);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const handleResize = () => {
-            const desktopThreshold = 1010;
+            const desktopThreshold = 1060;
             if (window.innerWidth >= desktopThreshold) {
                 setIsCollapsedMode(false);
                 return;
@@ -205,7 +232,8 @@ export default function Calculator() {
             if (leftPane && rightPane) {
                 const leftWidth = leftPane.offsetWidth;
                 const rightWidth = rightPane.offsetWidth;
-                const totalPaneWidth = 1010; //leftWidth + rightWidth + sidebar;
+                const sidebarWidth = sidebar.offsetWidth;
+                const totalPaneWidth = leftWidth + rightWidth + sidebarWidth;
                 setIsCollapsedMode(window.innerWidth < totalPaneWidth);
             }
         };
@@ -214,40 +242,6 @@ export default function Calculator() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setMoveToolbarToSidebar(window.innerWidth < 900);
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // check on mount
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    const [rotationEntriesRaw, setRotationEntriesRaw] = usePersistentState('rotationEntriesStore', {});
-    const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-    const [rotationEntries, setRotationEntries] = useState([]);
-    const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
-    const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
-
-    // Load rotationEntries from persistent state on character switch
-    useEffect(() => {
-        if (!charId) return;
-        const saved = Array.isArray(rotationEntriesRaw?.[charId]) ? rotationEntriesRaw[charId] : [];
-        setRotationEntries(saved);
-    }, [charId]);
-
-    // Save rotationEntries to persistent state on change
-    useEffect(() => {
-        if (!charId) return;
-        setRotationEntriesRaw(prev => ({
-            ...prev,
-            [charId]: rotationEntries
-        }));
-    }, [rotationEntries, charId]);
-
-    // Sync to characterRuntimeStates when rotationEntries change
     useEffect(() => {
         if (!charId) return;
         const existing = characterRuntimeStates?.[charId]?.rotationEntries ?? [];
@@ -264,13 +258,9 @@ export default function Calculator() {
     }, [rotationEntries, charId]);
 
     const handleCharacterSelect = (char) => {
-        if (activeCharacter) {
+        // ✅ Save the current active character's state BEFORE switching
+        if (activeCharacter && charId) {
             const currentCharId = charId;
-            setTeamCache(prev => ({
-                ...prev,
-                [currentCharId]: team
-            }));
-
             setCharacterRuntimeStates(prev => ({
                 ...prev,
                 [currentCharId]: {
@@ -282,37 +272,40 @@ export default function Calculator() {
                     Stats: baseCharacterState?.Stats ?? {},
                     CharacterLevel: characterLevel,
                     SkillLevels: sliderValues,
-                    TemporaryBuffs: traceNodeBuffs,
+                    TraceNodeBuffs: traceNodeBuffs,
                     CustomBuffs: customBuffs,
                     CombatState: combatState,
-                    CharacterState: characterState,
-                    Team: team
+                    Team: team,
+                    rotationEntries: rotationEntries
                 }
             }));
         }
 
-        // ✅ Load new character state
+        // ✅ Start switching to the new character
         const newMainId = char.Id ?? char.id ?? char.link;
-        const cached = characterRuntimeStates[newMainId];
-        const restoredTeam = cached?.Team ?? [newMainId, null, null];
-        setTeam(restoredTeam);
+        const cached = characterRuntimeStates[newMainId] ?? {};
 
-        const rawEntries = rotationEntriesRaw?.[newMainId] ?? [];
-        const normalizedEntries = rawEntries.map(entry => ({
+        if (!cached.Team || !cached.Team[0]) {
+            cached.Team = [newMainId, null, null];
+        }
+
+        setTeam(cached.Team);
+        setRotationEntries((cached.rotationEntries ?? []).map(entry => ({
             ...entry,
-            multiplier: typeof entry.multiplier === 'number' ? entry.multiplier : 1
-        }));
-        setRotationEntries(normalizedEntries);
+            multiplier: typeof entry.multiplier === 'number' ? entry.multiplier : 1,
+            createdAt: entry.createdAt ?? Date.now() + Math.random()
+        })));
 
         setActiveCharacter(char);
         setActiveCharacterId(newMainId);
         setBaseCharacterState(
-            cached ? { Stats: cached.Stats } : characterStates.find(c => String(c.Id) === String(newMainId)) ?? null
+            cached?.Stats ? { Stats: cached.Stats } : characterStates.find(c => String(c.Id) === String(newMainId)) ?? null
         );
         setCharacterLevel(cached?.CharacterLevel ?? 1);
         setSliderValues(cached?.SkillLevels ?? defaultSliderValues);
-        setTraceNodeBuffs(cached?.TemporaryBuffs ?? defaultTraceBuffs);
+        setTraceNodeBuffs(cached?.TraceNodeBuffs ?? cached?.TemporaryBuffs ?? defaultTraceBuffs);
         setCustomBuffs(cached?.CustomBuffs ?? defaultCustomBuffs);
+
         const cachedCombatState = {
             ...defaultCombatState,
             ...(cached?.CombatState ?? {}),
@@ -356,7 +349,6 @@ export default function Calculator() {
         }
 
         setCombatState(cachedCombatState);
-        setCharacterState(cached?.CharacterState ?? {});
         setMenuOpen(false);
     };
 
@@ -365,6 +357,7 @@ export default function Calculator() {
             localStorage.setItem('activeCharacterId', JSON.stringify(team[0]));
             setActiveCharacterId(team[0]);
         }
+
     }, [team[0]]);
 
 
@@ -543,7 +536,7 @@ export default function Calculator() {
                 Stats: baseCharacterState?.Stats ?? {},
                 CharacterLevel: characterLevel,
                 SkillLevels: sliderValues,
-                TemporaryBuffs: traceNodeBuffs,
+                TraceNodeBuffs: traceNodeBuffs,
                 CustomBuffs: customBuffs,
                 CombatState: combatState,
             }
@@ -556,7 +549,70 @@ export default function Calculator() {
     team.forEach((id) => {
         if (!id) return;
         console.log(id, characterRuntimeStates[id].rotationEntries);
-    });*/
+    });
+    */
+
+    useEffect(() => {
+        const cleaned = {};
+        for (const [id, data] of Object.entries(characterRuntimeStates)) {
+            if ('CharacterState' in data) {
+                const { CharacterState, ...rest } = data;
+                cleaned[id] = rest;
+            } else {
+                cleaned[id] = data;
+            }
+        }
+        setCharacterRuntimeStates(cleaned);
+    }, []);
+
+    useEffect(() => {
+        localStorage.removeItem('characterLevel');
+        localStorage.removeItem('rotationEntriesStore');
+        localStorage.removeItem('teamCache');
+        localStorage.removeItem('team');
+        localStorage.removeItem('sliderValues');
+        setCharacterRuntimeStates(prev => {
+            const updated = {};
+
+            for (const [charId, runtime] of Object.entries(prev)) {
+                const { TemporaryBuffs, ...rest } = runtime;
+                updated[charId] = rest;
+            }
+
+            return updated;
+        });
+        const raw = JSON.parse(localStorage.getItem('characterRuntimeStates') || '{}');
+        const cleaned = {};
+
+        for (const [charId, runtime] of Object.entries(raw)) {
+            const { TemporaryBuffs, ...rest } = runtime;
+            cleaned[charId] = rest;
+        }
+        localStorage.setItem('characterRuntimeStates', JSON.stringify(cleaned));
+    }, []);
+
+
+    /*
+    useEffect(() => {
+        Object.entries(characterRuntimeStates).forEach(([charId, state]) => {
+            const entries = state.rotationEntries;
+            if (Array.isArray(entries) && entries.length > 0) {
+                console.log(`Character ID: ${charId}`);
+                console.log("Rotation Entries:", entries);
+            }
+        });
+    },[]);
+*/
+    useLayoutEffect(() => {
+        const handleResize = () => {
+            setMoveToolbarToSidebar(window.innerWidth < 900);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return (
         <>
@@ -766,7 +822,6 @@ export default function Calculator() {
                                 setCombatState={setCombatState}
                                 setCharacterLevel={setCharacterLevel}
                                 setRotationEntries={setRotationEntries}
-                                setRotationEntriesRaw={setRotationEntriesRaw}
                                 defaultSliderValues={defaultSliderValues}
                                 defaultCustomBuffs={defaultCustomBuffs}
                                 defaultTraceBuffs={defaultTraceBuffs}
@@ -801,8 +856,8 @@ export default function Calculator() {
                                                 characterLevel={characterLevel}
                                                 setCharacterLevel={setCharacterLevel}
                                                 setSkillsModalOpen={setSkillsModalOpen}
-                                                temporaryBuffs={traceNodeBuffs}
-                                                setTemporaryBuffs={setTraceNodeBuffs}
+                                                traceNodeBuffs={traceNodeBuffs}
+                                                setTraceNodeBuffs={setTraceNodeBuffs}
                                                 characterRuntimeStates={characterRuntimeStates}
                                                 setCharacterRuntimeStates={setCharacterRuntimeStates}
                                                 effectiveTheme={effectiveTheme}
@@ -888,7 +943,7 @@ export default function Calculator() {
                                         activeCharacter={activeCharacter}
                                         baseCharacterState={baseCharacterState}
                                         characterLevel={characterLevel}
-                                        temporaryBuffs={traceNodeBuffs}
+                                        traceNodeBuffs={traceNodeBuffs}
                                         finalStats={finalStats}
                                         combatState={combatState}
                                         mergedBuffs={mergedBuffs}

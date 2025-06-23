@@ -90,11 +90,6 @@
     font-size: 12px;
 }
 
-.echo-bag-modal .echo-tile:hover {
-    background: rgba(131, 131, 131, 0.1);
-    cursor: pointer;
-}
-
 .dark .echo-bag-modal .echo-tile {
     background: rgba(255, 255, 255, 0.05);
 }
@@ -114,6 +109,10 @@
     flex-direction: column;
     gap: 2px;
     color: var(--text-primary);
+}
+
+.echo-stats-preview:hover {
+    cursor: pointer;
 }
 
 .echo-stats-preview .stat-row {

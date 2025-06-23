@@ -251,21 +251,21 @@ export default function DamageSection({
                                                 <div
                                                     className="damage-tooltip-wrapper"
                                                     data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'normal')}` : `${normal.toLocaleString()}`}
-                                                    style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]] }}
+                                                    style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]], fontWeight: 'bold' }}
                                                 >
                                                     {normal.toLocaleString()}
                                                 </div>
                                                 <div
                                                     className="damage-tooltip-wrapper"
                                                     data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'crit')}` : `${crit.toLocaleString()}`}
-                                                    style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]] }}
+                                                    style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]], fontWeight: 'bold' }}
                                                 >
                                                     {crit.toLocaleString()}
                                                 </div>
                                                 <div
                                                     className="damage-tooltip-wrapper"
                                                     data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'avg')}` : `${avg.toLocaleString()}`}
-                                                    style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]] }}
+                                                    style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]], fontWeight: 'bold' }}
                                                 >
                                                     {avg.toLocaleString()}
                                                 </div>
@@ -349,21 +349,21 @@ export default function DamageSection({
                                                     <div
                                                         className="damage-tooltip-wrapper"
                                                         data-tooltip={skill.subHits?.length > 0 ? getSubHitFormula(skill.subHits, 'normal') : skill.normal.toLocaleString()}
-                                                        style={{ color: attributeColors[echoElement] }}
+                                                        style={{ color: attributeColors[echoElement], fontWeight: 'bold' }}
                                                     >
                                                         {skill.normal.toLocaleString()}
                                                     </div>
                                                     <div
                                                         className="damage-tooltip-wrapper"
                                                         data-tooltip={skill.subHits?.length > 0 ? getSubHitFormula(skill.subHits, 'crit') : skill.crit.toLocaleString()}
-                                                        style={{ color: attributeColors[echoElement] }}
+                                                        style={{ color: attributeColors[echoElement], fontWeight: 'bold' }}
                                                     >
                                                         {skill.crit.toLocaleString()}
                                                     </div>
                                                     <div
                                                         className="damage-tooltip-wrapper"
                                                         data-tooltip={skill.subHits?.length > 0 ? getSubHitFormula(skill.subHits, 'avg') : skill.avg.toLocaleString()}
-                                                        style={{ color: attributeColors[echoElement] }}
+                                                        style={{ color: attributeColors[echoElement], fontWeight: 'bold' }}
                                                     >
                                                         {skill.avg.toLocaleString()}
                                                     </div>
@@ -402,13 +402,13 @@ export default function DamageSection({
                                         <div style={{ color: attributeColors.spectro, fontWeight: 'bold' }}>
                                             Spectro Frazzle
                                         </div>
-                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro}}>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold'}}>
                                             {Math.floor(frazzle).toLocaleString()}
                                         </div>
-                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro}}>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold'}}>
                                             {Math.floor(frazzle).toLocaleString()}
                                         </div>
-                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro}}>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold'}}>
                                             {Math.floor(frazzle).toLocaleString()}
                                         </div>
                                     </>
@@ -418,13 +418,13 @@ export default function DamageSection({
                                         <div style={{ color: attributeColors.aero, fontWeight: 'bold' }}>
                                             Aero Erosion
                                         </div>
-                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero}}>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero, fontWeight: 'bold'}}>
                                             {Math.floor(erosion).toLocaleString()}
                                         </div>
-                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero}}>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero, fontWeight: 'bold'}}>
                                             {Math.floor(erosion).toLocaleString()}
                                         </div>
-                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero}}>
+                                        <div className="damage-tooltip-wrapper" style={{color: attributeColors.aero, fontWeight: 'bold'}}>
                                             {Math.floor(erosion).toLocaleString()}
                                         </div>
                                     </>

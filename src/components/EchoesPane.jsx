@@ -60,7 +60,9 @@ export default function EchoesPane({
             }
         }));
     };
-
+    const [selectedSet, setSelectedSet] = useState(null);
+    const [selectedCost, setSelectedCost] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
     const [echoBag, setEchoBag] = useState(getEchoBag());
 
     useEffect(() => {
@@ -296,7 +298,7 @@ export default function EchoesPane({
                                             <button
                                                 className="toggle-effect-button"
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // prevent opening substat modal
+                                                    e.stopPropagation();
                                                     setShowEffect(prev => !prev);
                                                 }}
                                             >
@@ -596,6 +598,12 @@ export default function EchoesPane({
                 <EchoBagMenu
                     editingEcho={editingEcho}
                     setEditingEcho={setEditingEcho}
+                    selectedSet={selectedSet}
+                    setSelectedSet={setSelectedSet}
+                    selectedCost={selectedCost}
+                    setSelectedCost={setSelectedCost}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
                     onClose={() => {
                         setEditingEcho(null);
                         setBagOpen(false);
@@ -625,7 +633,7 @@ export default function EchoesPane({
                             }
                         }));
 
-                        setBagOpen(false);
+                        //setBagOpen(false);
                     }}
                 />
             )}

@@ -107,7 +107,7 @@
 
 .damage-grid {
     display: grid;
-    grid-template-columns: 1fr 80px 80px 80px;
+    grid-template-columns: 1fr 90px 90px 90px;
     row-gap: 6px;
     margin-bottom: 6px;
     font-size: 16px;

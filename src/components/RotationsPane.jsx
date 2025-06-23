@@ -209,7 +209,7 @@ export default function RotationsPane({
         setTeam(saved.fullCharacterState.Team ?? [id, null, null]);
         setSliderValues(saved.fullCharacterState.SkillLevels ?? {});
         setCharacterLevel(saved.fullCharacterState.CharacterLevel ?? 1);
-        setTraceNodeBuffs(saved.fullCharacterState.TemporaryBuffs ?? {});
+        setTraceNodeBuffs(saved.fullCharacterState.TraceNodeBuffs ?? {});
         setCustomBuffs(saved.fullCharacterState.CustomBuffs ?? {});
         setCombatState(saved.fullCharacterState.CombatState ?? {});
         setBaseCharacterState({ Stats: saved.fullCharacterState.Stats ?? {} });
@@ -233,13 +233,6 @@ export default function RotationsPane({
             saved.fullCharacterState.Team?.[1] ?? null,
             saved.fullCharacterState.Team?.[2] ?? null
         ]));
-
-        // Store rotation entries persistently if needed
-        const prevRotations = JSON.parse(localStorage.getItem("rotationEntriesStore") || "{}");
-        localStorage.setItem("rotationEntriesStore", JSON.stringify({
-            ...prevRotations,
-            [id]: saved.entries ?? []
-        }));
     };
 
     const normalizedEntries = rotationEntries.map((entry, idx) => ({

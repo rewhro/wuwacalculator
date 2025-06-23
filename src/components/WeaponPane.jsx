@@ -212,6 +212,10 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                                 step="1"
                                 value={weaponLevel}
                                 onChange={(e) => handleLevelChange(Number(e.target.value))}
+                                style={{
+                                    '--slider-color': '#777777',
+                                    '--slider-fill': `${((weaponLevel - 1) / 89) * 100}%`
+                                }}
                             />
                         </div>
 
@@ -239,6 +243,10 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                                 value={combatState.weaponRank ?? 1}
                                 onChange={(e) => {
                                     setCombatState(prev => ({ ...prev, weaponRank: Number(e.target.value) }));
+                                }}
+                                style={{
+                                    '--slider-color': '#777777',
+                                    '--slider-fill': `${(((combatState.weaponRank ?? 1) - 1) / 4) * 100}%`
                                 }}
                             />
                         </div>

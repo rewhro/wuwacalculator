@@ -36,7 +36,7 @@ export default function CharacterSelector({
                                               characters, activeCharacter, handleCharacterSelect, menuRef, menuOpen,
                                               attributeIconPath, currentSliderColor, sliderValues, setSliderValues,
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
-                                              temporaryBuffs, setTemporaryBuffs,
+                                              traceNodeBuffs, setTraceNodeBuffs,
                                               characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef,
                                           }) {
     useEffect(() => {
@@ -135,7 +135,7 @@ export default function CharacterSelector({
                                 });
 
                                 // Toggle all buff icons on
-                                setTemporaryBuffs(prev => {
+                                setTraceNodeBuffs(prev => {
                                     const allActiveNodes = {};
                                     const buffs = {};
 
@@ -267,7 +267,7 @@ export default function CharacterSelector({
                                 const iconFile = traceNodeIconMap[node.Skill.Name];
                                 const themeSuffix = effectiveTheme === 'dark' ? 'dark' : 'light';
                                 const iconPath = `/assets/skill-icons/${themeSuffix}/${iconFile}.webp?v=${themeSuffix}`;
-                                const isActive = temporaryBuffs?.activeNodes?.[nodeId] ?? false;
+                                const isActive = traceNodeBuffs?.activeNodes?.[nodeId] ?? false;
                                 const tooltipText = cleanTooltipText(
                                     formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor)
                                 );
@@ -292,7 +292,7 @@ export default function CharacterSelector({
                                                 const buffKey = skillToBuffMap[skillName];
                                                 const percent = parseFloat((node.Skill?.Param?.[0] ?? "0").replace('%', ''));
 
-                                                setTemporaryBuffs(prev => {
+                                                setTraceNodeBuffs(prev => {
                                                     // Toggle the node
                                                     const wasActive = prev.activeNodes?.[nodeIdNum] ?? false;
                                                     const newActiveNodes = {

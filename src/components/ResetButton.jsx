@@ -15,10 +15,8 @@ export default function ResetButton({
                                         defaultCustomBuffs,
                                         defaultTraceBuffs,
                                         defaultCombatState,
-                                        characterStates,
                                         characterRuntimeStates,
                                         weapons,
-                                        setRotationEntriesRaw,
                                     }) {
     const [resetModalOpen, setResetModalOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
@@ -46,13 +44,8 @@ export default function ResetButton({
         setTraceNodeBuffs(defaultTraceBuffs);
         setCharacterLevel(1);
         setRotationEntries([]);
-        setRotationEntriesRaw(prev => {
-            const updated = { ...prev };
-            delete updated[activeId];
-            return updated;
-        });
 
-        // 4. Reset weapon level & stats (preserve currently equipped weapon)
+        // 4. Reset weapon level and stats (preserve a currently equipped weapon)
         setCombatState(prev => {
             const weaponId = prev.weaponId;
             const weapon = weapons?.[weaponId];

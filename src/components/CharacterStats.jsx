@@ -27,7 +27,7 @@ const statIconPaths = Object.values(statIconMap);
 
 
 
-export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, mergedBuffs, customBuffs, finalStats, combatState }) {
+export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, mergedBuffs, finalStats, combatState }) {
     useEffect(() => {
         preloadImages(statIconPaths);
     }, []);

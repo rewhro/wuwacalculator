@@ -59,7 +59,7 @@
 #right-pane {
     width: 70%;
     padding: 10px;
-    min-width: 600px;
+    min-width: 500px;
     min-height: 100%;
     overflow-y: auto;
     display: flex;

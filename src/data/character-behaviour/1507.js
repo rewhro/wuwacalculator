@@ -58,7 +58,7 @@ export function applyZaniLogic({
     if (name === 'heavy slash - nightfall dmg') {
         const stacks = characterState?.activeStates?.blaze ?? 0;
         const perStack = characterState?.activeStates?.__blazeValue ?? 0;
-        const bonusMultiplier = Math.min(stacks * perStack, 58);
+        const bonusMultiplier = Math.min(stacks * perStack, perStack * 40);
         skillMeta.multiplier += bonusMultiplier;
     }
 
@@ -113,18 +113,9 @@ export const zaniMultipliers = {
 };
 
 export function zaniBuffsLogic({
-                                   mergedBuffs, characterState, activeCharacter
+                                   mergedBuffs, characterState
                                }) {
     const state = characterState?.activeStates ?? {};
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.beacon) {
         mergedBuffs.elementDmgAmplify.spectro = (mergedBuffs.elementDmgAmplify.spectro ?? 0) + 20;
