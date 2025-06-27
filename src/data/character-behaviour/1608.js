@@ -80,14 +80,15 @@ export function applyPhrolovaLogic({
             skillMeta.multiplier *= bonusMultiplier;
         }
 
-        if (name.includes('apparition of beyond - hecate')) {
-            skillMeta.multiplier = 304.8/100;
-            skillMeta.skillType = 'echoSkill';
-        }
-
         if (isToggleActive(6) && name.includes('basic attack - hecate')) {
             skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 300;
         }
+    }
+
+    if (name.includes('apparition of beyond - hecate')) {
+        skillMeta.multiplier = 304.8/100;
+        skillMeta.skillType = 'echoSkill';
+        skillMeta.visible = isActiveSequence(6);
     }
 
     return {mergedBuffs, combatState, skillMeta};
