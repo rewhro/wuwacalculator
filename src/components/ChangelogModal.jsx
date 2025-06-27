@@ -273,6 +273,15 @@ export default function ChangelogModal({ open, onClose }) {
                     content: `Added ECHOES (WIP >.< (not anymore!)).`
                 }
             ]
+        },
+        {
+            date: '27/06/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `Added <strong>Phrolova</strong>.`
+                }
+            ]
         }
         // Add more changelogs as needed
     ];

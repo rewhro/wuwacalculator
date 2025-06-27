@@ -37,7 +37,7 @@ import {getSkillDamageCache} from "../utils/skillDamageCache.js";
 export default function Calculator() {
     loadBase();
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-06-19 12:46';
+    const LATEST_CHANGELOG_VERSION = '2025-06-27 15:19';
     const [showChangelog, setShowChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = useState(1);
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
@@ -520,7 +520,6 @@ export default function Calculator() {
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
-    //mergedBuffs.coordAtk = mergedBuffs.coordinated ?? 0;
 
     useEffect(() => {
         if (!activeCharacter) return;

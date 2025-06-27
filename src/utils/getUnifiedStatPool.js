@@ -14,14 +14,16 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         heavyAtk: 0,
         resonanceSkill: 0,
         resonanceLiberation: 0,
+        introAtk: 0,
+        coord: 0,
+        echoSkill: 0,
+        outroAtk: 0,
         aero: 0,
         glacio: 0,
         spectro: 0,
         fusion: 0,
         electro: 0,
         havoc: 0,
-        coordinated: 0,
-        outroAtk: 0,
         outroAmplify: 0,
         elementBonus: 0,
         enemyResShred: 0,
@@ -34,8 +36,6 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         elementDmgAmplify: {},
         spectroFrazzleDmg: 0,
         aeroErosionDmg: 0,
-        introAtk: 0,
-        coordAtk: 0,
         physical: 0,
     };
 
@@ -53,9 +53,8 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
                     merged.elementDmgAmplify[elKey] = (merged.elementDmgAmplify[elKey] ?? 0) + Number(elVal ?? 0);
                 }
             } else if (key === 'coordAmplify') {
-                // ✅ Explicitly support coordAmplify passed as top-level key
                 merged.damageTypeAmplify.coord = (merged.damageTypeAmplify.coord ?? 0) + val;
-            } else if (['spectroFrazzleDmg', 'aeroErosionDmg', 'coordAtk'].includes(key)) {
+            } else if (['spectroFrazzleDmg', 'aeroErosionDmg', 'coord'].includes(key)) {
                 merged[key] += val;
             } else if (ELEMENT_KEYS.includes(key)) {
                 merged[key] += val;
@@ -65,7 +64,6 @@ export function getUnifiedStatPool(buffSources, overrideLogic = null) {
         }
     }
 
-    // ✅ Apply character-specific override logic (if provided)
     if (overrideLogic?.modifyUnifiedStats) {
         const result = overrideLogic.modifyUnifiedStats({
             mergedBuffs: merged,

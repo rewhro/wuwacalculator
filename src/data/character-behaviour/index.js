@@ -34,6 +34,7 @@ import {applyHavocWLogic, havocWBuffsLogic, havocWMultipliers} from "./1604.js";
 import {applyRocciaLogic, rocciaBuffsLogic, rocciaMultipliers} from "./1606.js";
 import {applyCantLogic, cantBuffsLogic, cantMultipliers} from "./1607.js";
 import {applyAaltoLogic, aaltoMultipliers, aaltoBuffsLogic} from "./1403.js";
+import {applyPhrolovaLogic, phrolovaBuffsLogic, phrolovaMultipliers} from "./1608.js";
 
 const overrides = {
     '1506': {
@@ -222,6 +223,11 @@ const overrides = {
         logic: applyCantLogic,
         multipliers: cantMultipliers,
         buffsLogic: cantBuffsLogic
+    },
+    "1608": {
+        logic: applyPhrolovaLogic,
+        multipliers: phrolovaMultipliers,
+        buffsLogic: phrolovaBuffsLogic
     }
 };
 

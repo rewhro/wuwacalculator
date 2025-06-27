@@ -68,9 +68,8 @@ export function calculateDamage({
     // 7️⃣ Bonuses
     let skillTypeBonus = skillDmgBonus;
     for (const type of skillTypes) {
-        skillTypeBonus += mergedBuffs?.[`${type}Atk`] ?? 0;
+        skillTypeBonus += mergedBuffs?.[`${type}Atk`] ?? mergedBuffs?.[`${type}`] ?? 0;
     }
-
 
     let elementBonus = (finalStats[`${element}DmgBonus`] ?? 0) + skillTypeBonus;
 

@@ -15,7 +15,6 @@ export default function ChixiaUI({ activeStates, toggleState }) {
 }
 
 
-// If you also want to support inherent skill rendering:
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
