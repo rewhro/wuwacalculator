@@ -15,13 +15,6 @@ export const formatDescription = (desc, param = [], currentSliderColor = '#888')
         return value === 1 ? singular : plural;
     });
 
-    // Highlight standard elemental damage types with the current slider color
-    const sliderKeywords = ['Glacio DMG', 'Fusion DMG', 'Electro DMG', 'Aero DMG', 'Spectro DMG', 'Havoc DMG'];
-    sliderKeywords.forEach(word => {
-        const regex = new RegExp(`\\b${word}\\b`, 'gi');
-        desc = desc.replace(regex, `<span style="color: ${currentSliderColor}; font-weight: bold;">${word}</span>`);
-    });
-
     // Highlight fixed keywords with fixed colors
     const fixedHighlights = {
         'Spectro Frazzle': 'rgb(202,179,63)',

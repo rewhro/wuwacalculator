@@ -1,5 +1,6 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function AaltoUI({ activeStates, toggleState }) {
     return (
@@ -7,7 +8,7 @@ export default function AaltoUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Gate of Quandary</h4>
-                    <p>When bullets pass through the "Gate of Quandary", ATK is increased by 10%. "Gate of Quandary" lasts for 10s.</p>
+                    <p>When bullets pass through the "<span className='highlight'>Gate of Quandary</span>", ATK is increased by <span className='highlight'>10%</span>. "<span className='highlight'>Gate of Quandary</span>" lasts for 10s.</p>
                     <label className="modern-checkbox">
                         <input
                             type="checkbox"
@@ -26,7 +27,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -81,15 +83,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {performance && (
                             <label className="modern-checkbox">

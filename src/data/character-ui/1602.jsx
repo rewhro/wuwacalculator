@@ -1,6 +1,7 @@
 import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function DanjinUI({ activeStates, toggleState }) {
     return (
@@ -9,7 +10,7 @@ export default function DanjinUI({ activeStates, toggleState }) {
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Incinerating Will</h4>
                     <ul style={{ paddingLeft: '20px' }}>
-                        <p>Danjin's damage dealt to targets marked with Incinerating Will is increased by 20%.</p>
+                        <p><span className='highlight'>Danjin</span>'s damage dealt to targets marked with <span className='highlight'>Incinerating Will</span> is increased by <span className='highlight'>20%</span>.</p>
                     </ul>
                     <label className="modern-checkbox">
                         <input
@@ -31,7 +32,8 @@ export function CustomInherentSkills({
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
                                          unlockLevels = [],
-                                         charLevel = 1
+                                         charLevel = 1,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -79,15 +81,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {crimson && (
                             <label className="modern-checkbox">

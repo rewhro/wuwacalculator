@@ -1,9 +1,8 @@
 import { attributeColors } from '../utils/attributeHelpers';
-import React from "react";
 
 export const skillKeywords = [
-    'Resonance Liberation', 'Outro Skill', 'Intro Skill',
-    'Resonance Skill', 'Basic Attack', 'Heavy Attack'
+    'resonance liberation', 'outro skill', 'intro Skill',
+    'resonance skill', 'basic attack', 'heavy attack'
 ];
 
 export const statKeywords = [
@@ -12,44 +11,56 @@ export const statKeywords = [
     'Resonance Skill', 'Resonance Liberation'
 ];
 
-export function highlightKeywordsInText(text) {
+const elementKeywords = Object.keys(attributeColors);
+const elementPhrases = elementKeywords.flatMap(el => [
+    `${el} dmg bonus`,
+    `${el} damage bonus`,
+    `${el} dmg`,
+    `${el} damage`,
+    el
+]);
+
+export function highlightKeywordsInText(text, extraKeywords = []) {
     if (typeof text !== 'string') return text;
 
     const elementKeywords = Object.keys(attributeColors);
-    const staticKeywords = [...skillKeywords, ...statKeywords, ...elementKeywords];
+    const skillWords = [...skillKeywords];
+    const statWords = [...statKeywords];
+    const additionalWords = Array.isArray(extraKeywords) ? extraKeywords : [];
 
-    const escapedKeywords = staticKeywords.map(k =>
-        k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
-    );
+    const escapeRegex = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 
-    const percentPattern = '\\d+(\\.\\d+)?%'; // removed \b to allow decimal values like 20.61%
-    const allPatterns = [...escapedKeywords, percentPattern];
-    const pattern = new RegExp(`(${allPatterns.join('|')})`, 'gi');
+    const resPhrases = elementKeywords.map(el => `${el.charAt(0).toUpperCase() + el.slice(1)} RES`);
+    const escapedResPhrases = resPhrases.map(escapeRegex);
+    const resRegex = new RegExp(`(${escapedResPhrases.join('|')})`, 'g'); // No 'i'
 
-    const highlightedHTML = text.replace(pattern, (match) => {
+    const staticKeywords = [...additionalWords];
+    const escapedKeywords = [...elementPhrases, ...staticKeywords].map(escapeRegex);
+    const percentPattern = '\\d+(\\.\\d+)?%';
+    const ciRegex = new RegExp(`(${[...escapedKeywords, percentPattern].join('|')})`, 'gi');
+
+    let processed = text.replace(resRegex, (match) => {
+        const color = attributeColors[match.split(' ')[0].toLowerCase()];
+        return `<strong style="color: ${color}; font-weight: bold;">${match}</strong>`;
+    });
+
+    processed = processed.replace(ciRegex, (match) => {
         const lower = match.toLowerCase();
 
         if (/^\d+(\.\d+)?%$/.test(match)) {
             return `<strong class="highlight">${match}</strong>`;
         }
 
-        if (skillKeywords.includes(match)) {
-            return `<strong class="highlight">${match}</strong>`;
-        }
-
-        if (statKeywords.includes(match)) {
-            return `<strong class="highlight">${match}</strong>`;
-        }
-
-        if (elementKeywords.includes(lower)) {
-            const color = attributeColors[lower];
+        const elementPrefix = elementKeywords.find(el => lower.startsWith(el));
+        if (elementPrefix) {
+            const color = attributeColors[elementPrefix];
             return `<strong style="color: ${color}; font-weight: bold;">${match}</strong>`;
         }
 
-        return match;
+        return `<strong class="highlight">${match}</strong>`;
     });
 
-    return <span dangerouslySetInnerHTML={{ __html: highlightedHTML }} />;
+    return <span dangerouslySetInnerHTML={{ __html: processed }} />;
 }
 
 const echoSets = [
@@ -178,19 +189,19 @@ export const setIconMap = {
 };
 
 export const validSubstatRanges = {
-    atkPercent:   { min: 6.4,  max: 11.6, divisions: 7 },
-    atkFlat:      { min: 30,   max: 60,   divisions: 3 },
-    hpPercent:    { min: 6.4,  max: 11.6, divisions: 7 },
-    hpFlat:       { min: 320,  max: 580,  divisions: 7 },
-    defPercent:   { min: 8.1,  max: 14.7, divisions: 7 },
-    defFlat:      { min: 40,   max: 70,   divisions: 3 },
-    critRate:     { min: 6.3,  max: 10.5, divisions: 7 },
-    critDmg:      { min: 12.6, max: 21.0, divisions: 7 },
-    energyRegen:  { min: 6.8,  max: 12.4, divisions: 7 },
-    basicAtk:     { min: 6.4,  max: 11.6, divisions: 7 },
-    heavyAtk:     { min: 6.4,  max: 11.6, divisions: 7 },
-    skill:        { min: 6.4,  max: 11.6, divisions: 7 },
-    ultimate:     { min: 6.4,  max: 11.6, divisions: 7 }
+    atkPercent:              { min: 6.4,  max: 11.6, divisions: 7 },
+    atkFlat:                 { min: 30,   max: 60,   divisions: 3 },
+    hpPercent:               { min: 6.4,  max: 11.6, divisions: 7 },
+    hpFlat:                  { min: 320,  max: 580,  divisions: 7 },
+    defPercent:              { min: 8.1,  max: 14.7, divisions: 7 },
+    defFlat:                 { min: 40,   max: 70,   divisions: 3 },
+    critRate:                { min: 6.3,  max: 10.5, divisions: 7 },
+    critDmg:                 { min: 12.6, max: 21.0, divisions: 7 },
+    energyRegen:             { min: 6.8,  max: 12.4, divisions: 7 },
+    basicAtk:                { min: 6.4,  max: 11.6, divisions: 7 },
+    heavyAtk:                { min: 6.4,  max: 11.6, divisions: 7 },
+    resonanceSkill:          { min: 6.4,  max: 11.6, divisions: 7 },
+    resonanceLiberation:     { min: 6.4,  max: 11.6, divisions: 7 }
 };
 
 export default echoSets;

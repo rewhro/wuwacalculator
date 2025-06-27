@@ -8,8 +8,8 @@ import {mainEchoBuffs} from "../data/buffs/setEffect.js";
 import {applyWeaponLogic} from "../data/weapon-behaviour/21040036.jsx";
 
 export function computeSkillDamage({
-                                       entry,                // { label, detail, tab }
-                                       levelData,            // Optional full level object from skill tree
+                                       entry,
+                                       levelData,
                                        activeCharacter,
                                        characterRuntimeStates,
                                        finalStats,
@@ -18,14 +18,14 @@ export function computeSkillDamage({
                                        sliderValues,
                                        characterLevel,
     echoElement,
-                                       getSkillData = () => null // Optional override for character logic
+                                       getSkillData = () => null
                                    }) {
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const element = elementToAttribute[activeCharacter?.attribute] ?? '';
 
     const characterState = {
         activeStates: characterRuntimeStates?.[charId]?.activeStates ?? {},
-        toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {}
+        toggles: characterRuntimeStates?.[charId]?.sequenceToggles ?? {},
     };
 
     const isActiveSequence = (n) => sliderValues?.sequence >= n;
@@ -39,7 +39,7 @@ export function computeSkillDamage({
 
         if (entry.tab === 'echoAttacks' || label.includes('echo attacks')) {
             skillType = 'echoSkill';
-        } else if (label.includes('heavy attack')) {
+        } else if (label.includes('heavy attack') || label.includes('aimed shot')) {
             skillType = 'heavy';
         } else if (entry.tab === 'resonanceSkill') {
             skillType = 'skill';
@@ -80,6 +80,7 @@ export function computeSkillDamage({
             ...(levelData?.shielding ? ['shielding'] : [])
         ]
     };
+
 
     let localMergedBuffs = structuredClone(mergedBuffs);
 
@@ -130,11 +131,12 @@ export function computeSkillDamage({
     }
 
     let scaling;
-
     if (entry.echoId && echoScalingRatios[entry.echoId]) {
         scaling = echoScalingRatios[entry.echoId];
     } else if (entry.echoId) {
         scaling = { atk: 1, hp: 0, def: 0, energyRegen: 0 };
+    } else if (levelData.scaling) {
+        skillMeta.scaling = levelData.scaling;
     } else {
         scaling = skillMeta.scaling ?? (
             characterRuntimeStates?.[charId]?.CalculationData?.skillScalingRatios?.[tab] ?? {
@@ -142,6 +144,7 @@ export function computeSkillDamage({
             }
         );
     }
+
     const mainEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[0];
     const echoBuffEntry = mainEcho && mainEchoBuffs?.[mainEcho.id];
     const echoModifier = echoBuffEntry?.skillMetaModifier;

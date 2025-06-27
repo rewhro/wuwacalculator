@@ -24,9 +24,9 @@ export default function CamellyaUI({ characterRuntimeStates, setCharacterRuntime
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Sweet Dream</h4>
                     <p>
-                        Increase the DMG Multiplier of Normal Attack, Basic Attack Vining Waltz,
-                        Basic Attack Blazing Waltz, Basic Attack Vining Ronde, Dodge Counter Atonement,
-                        Resonance Skill Crimson Blossom, and Resonance Skill Floral Ravage by 50%.
+                        Increase the DMG Multiplier of Normal Attack, Basic Attack <span className='highlight'>Vining Waltz</span>,
+                        Basic Attack <span className='highlight'>Blazing Waltz</span>, Basic Attack <span className='highlight'>Vining Ronde</span>, Dodge Counter <span className='highlight'>Atonement</span>,
+                        Resonance Skill <span className='highlight'>Crimson Blossom</span>, and Resonance Skill <span className='highlight'>Floral Ravage</span> by <span className='highlight'>50%</span>.
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -54,8 +54,8 @@ export default function CamellyaUI({ characterRuntimeStates, setCharacterRuntime
                 {/* Crimson Bud Dropdown */}
                 <div className="status-toggle-box-inner">
                     <p>
-                        Casting Ephemeral consumes all Crimson Buds. Each Crimson Bud consumed
-                        additionally increases the DMG Multiplier of Sweet Dream by 5%, up to 50%.
+                        Casting <span className='highlight'>Ephemeral</span> consumes all <span className='highlight'>Crimson Buds</span>. Each <span className='highlight'>Crimson Bud</span> consumed
+                        additionally increases the DMG Multiplier of <span className='highlight'>Sweet Dream</span> by <span className='highlight'>5%</span>, up to <span className='highlight'>50%</span>.
                     </p>
                     <DropdownSelect
                         label=""

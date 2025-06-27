@@ -1,14 +1,15 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function JiyanUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Qingloong at War</h4>
-                <p>When casting Resonance Skill Windqueller, if Jiyan has 30 or more "Resolve", he consumes 30 "Resolve" to increase the DMG of this Resonance Skill Windqueller by 20%.
-                    When Jiyan is in Qingloong Mode, DMG of Resonance Skill Windqueller is increased by 20% and no longer consumes "Resolve"</p>
+                <p>When casting Resonance Skill <span className='highlight'>Windqueller</span>, if <span className='highlight'>Jiyan</span> has <span className='highlight'>30</span> or more "<span className='highlight'>Resolve</span>", he consumes <span className='highlight'>30</span> "<span className='highlight'>Resolve</span>" to increase the DMG of this Resonance Skill <span className='highlight'>Windqueller</span> by <span className='highlight'>20%</span>.
+                    When <span className='highlight'>Jiyan</span> is in <span className='highlight'>Qingloong</span> Mode, DMG of Resonance Skill <span className='highlight'>Windqueller</span> is increased by <span className='highlight'>20%</span> and no longer consumes "<span className='highlight'>Resolve</span>"</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
@@ -30,7 +31,8 @@ export function CustomInherentSkills({
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
                                          unlockLevels = [],
-                                         charLevel = 1
+                                         charLevel = 1,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -78,15 +80,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {balance && (
                             <label className="modern-checkbox">

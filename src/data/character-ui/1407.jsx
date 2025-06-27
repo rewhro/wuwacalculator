@@ -7,7 +7,7 @@ export default function CiacconaUI({ activeStates, toggleState }) {
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <h4 style={{ fontSize: '18px', fontWeight: 'bold' }}>Solo Concert</h4>
-                <p>When Ciaccona or Ensemble Sylph performs Solo Concert, they give 24% Aero DMG Bonus to all nearby Resonators in the team.</p>
+                <p>When <span className='highlight'>Ciaccona</span> or <span className='highlight'>Ensemble Sylph</span> performs <span className='highlight'>Solo Concert</span>, they give <span className='highlight'>24%</span> <span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero DMG Bonus</span> to all nearby Resonators in the team.</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
@@ -21,7 +21,7 @@ export default function CiacconaUI({ activeStates, toggleState }) {
             </div>
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Windcalling Tune</h4>
-                <p>Aero Erosion DMG dealt to targets near the active Resonator is Amplified by 100% for 30s.</p>
+                <p><span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero Erosion</span> DMG dealt to targets near the active Resonator is Amplified by <span className='highlight'>100%</span> for 30s.</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"

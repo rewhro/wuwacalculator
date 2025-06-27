@@ -73,8 +73,8 @@ export default function DamageSection({
 
         if (rawMultipliers) {
             const skillArrays = Array.isArray(rawMultipliers[0])
-                ? rawMultipliers // already multiple skill arrays
-                : [rawMultipliers]; // wrap single skill
+                ? rawMultipliers
+                : [rawMultipliers];
 
             skillArrays.forEach((skillArray, skillIndex) => {
                 if (!Array.isArray(skillArray) || skillArray.length < 5) return;
@@ -195,6 +195,18 @@ export default function DamageSection({
                             <div>AVG</div>
 
                             {levels.map((level, index) => {
+                                let label = level.Name;
+                                if (label === 'Skill DMG' || label === 'Skill Dmg' || label === 'Skill Damage') {
+                                    if (label.includes('Damage')) {
+                                        label = `${skill.Name} Damage`;
+                                    } else if (label.includes('Dmg')) {
+                                        label = `${skill.Name} Dmg`;
+                                    } else {
+                                        label = `${skill.Name} DMG`;
+                                    }
+                                } else if (label === 'Healing' || label === 'Shielding' || label === 'Shield') {
+                                    label = `${skill.Name} ${level.Name}`;
+                                }
                                 const result = computeSkillDamage({
                                     entry: {
                                         label: level.Name,
@@ -217,7 +229,7 @@ export default function DamageSection({
                                 const supportColor = skillMeta.tags?.includes('healing') ? 'limegreen' : '#838383';
 
                                 allSkillResults.push({
-                                    name: level.Name,
+                                    name: label ?? level.Name,
                                     tab,
                                     skillType: result?.skillMeta?.skillType ?? 'basic',
                                     normal: result.normal,
@@ -236,7 +248,7 @@ export default function DamageSection({
                                     <React.Fragment key={index}>
                                         {/* Main Skill Row */}
                                         <div style={isSupportSkill ? { color: supportColor, fontWeight: 'bold' } : {}}>
-                                            {level.Name}
+                                            {label ?? level.Name}
                                         </div>
                                         {isSupportSkill ? (
                                             <>
@@ -295,7 +307,6 @@ export default function DamageSection({
         );
     });
 
-    // ✅ Set cache once after processing all skillTabs
     setSkillDamageCache(allSkillResults);
     if (typeof window !== 'undefined') {
         window.lastSkillCacheUpdate = Date.now();

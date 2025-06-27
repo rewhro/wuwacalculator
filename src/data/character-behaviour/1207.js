@@ -13,18 +13,37 @@ export function applyLupaLogic({
         amplify: skillMeta?.amplify ?? 0,
         ...skillMeta
     };
-    const isToggleActiveLocal = (key) => characterState?.activeStates?.[key] === true;
+
+    const state = characterState?.activeStates;
+    const local = (value) => {
+        return state?.[value];
+    };
 
     const name = skillMeta.name?.toLowerCase();
 
-    // ✅ Pack Hunt (fusion), applied once
     const stacks = characterState?.activeStates?.packHunt ?? 0;
     const packHunt = Math.min(stacks * 6, 18);
 
     if (!mergedBuffs.__lupaPackHuntApplied) {
-        mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + packHunt;
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + packHunt;
         mergedBuffs.__lupaPackHuntApplied = true;
     }
+
+    if (local('packHunt1') && !mergedBuffs.__packHunt1) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 6;
+        mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + 10;
+        mergedBuffs.__packHunt1 = true;
+    }
+
+    const team = state?.teamBase;
+    const isTeamValid = (team?.length === 3 &&
+        team?.every(char => Number(char.Attribute) === 2)) ?? false;
+
+    if (local('packHunt2') && isTeamValid && !mergedBuffs.__packHunt2) {
+        mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + 10;
+        mergedBuffs.__packHunt2 = true;
+    }
+
 
     // ✅ Skill type fixes
     if (name.includes('mid-air attack - firestrike dmg')) {
@@ -37,7 +56,8 @@ export function applyLupaLogic({
 
     // ✅ Inherent 2 (enemyResShred), applied once
     const inherent2Stacks = characterState?.activeStates?.inherent2 ?? 0;
-    const inherent2 = Math.min(inherent2Stacks * 5, 15);
+    const baseStacks = Math.min(inherent2Stacks * 3, 9);
+    const inherent2 = baseStacks + (isTeamValid && baseStacks >= 3 ? 6 : 0);
 
     if (!mergedBuffs.__lupaInherent2Applied) {
         mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + inherent2;
@@ -105,9 +125,36 @@ export function applyLupaLogic({
 export function lupaBuffsLogic({
                                      mergedBuffs, characterState, activeCharacter
                                  }) {
+    const local = (value) => {
+        return state?.[value];
+    };
+
     const state = characterState?.activeStates ?? {};
-    const stacks = state.glory * 3;
-    const stacks2 = state.huntingField * 20;
+    const stacks = (state.glory ?? 0) * 3;
+    const stacks2 = (state.huntingField ?? 0) * 20;
+
+    const stacksPack = state.packHunt ?? 0;
+    const packHunt = Math.min(stacksPack * 6, 18);
+
+    if (!mergedBuffs.__lupaPackHuntApplied) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + packHunt;
+        mergedBuffs.__lupaPackHuntApplied = true;
+    }
+
+    if (local('packHunt1') && !mergedBuffs.__packHunt1) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 6;
+        mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + 10;
+        mergedBuffs.__packHunt1 = true;
+    }
+
+    const team = state?.teamBase;
+    const isTeamValid = (team?.length === 3 &&
+        team?.every(char => Number(char.Attribute) === 2)) ?? false;
+
+    if (local('packHunt2') && isTeamValid && !mergedBuffs.__packHunt2) {
+        mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + 10;
+        mergedBuffs.__packHunt2 = true;
+    }
 
     const elementMap = {
         1: 'glacio',
@@ -121,7 +168,7 @@ export function lupaBuffsLogic({
 
     if (element === 'fusion') {
         mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + stacks;
-        if (state.glory >= 3) {
+        if (state.glory >= 3 && isTeamValid) {
             mergedBuffs.enemyResShred = (mergedBuffs.enemyResShred ?? 0) + 6;
         }
     }

@@ -17,7 +17,7 @@ export default function Rotations({ rotationEntries }) {
             s => s.name === entry.label && s.tab === entry.tab
         );
 
-        if (!source) continue;
+        if (!source || source.visible === false) continue;
 
         const isSupport = source.isSupportSkill;
         const avg = (source.avg ?? 0) * multiplier;

@@ -1,14 +1,16 @@
 // src/data/character-ui/1103.jsx
 import React from 'react';
 import { formatDescription } from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
-                                         charLevel = 1,                     // 👈 passed from CharacterSelector
-                                         unlockLevels = [50, 70]           // 👈 optional override array
+                                         charLevel = 1,
+                                         unlockLevels = [50, 70],
+                                         keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -48,15 +50,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {toggleKey && (
                             <label className="modern-checkbox">

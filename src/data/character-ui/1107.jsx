@@ -8,7 +8,7 @@ export default function CarlottaUI({ activeStates, toggleState }) {
             >
                 <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Deconstruction</h4>
                 <ul style={{ paddingLeft: '20px' }}>
-                    <li>Dealing DMG to targets inflicted with Deconstruction ignores 18% of their DEF.</li>
+                    <li>Dealing DMG to targets inflicted with <span className='highlight'>Deconstruction</span> ignores <span className='highlight'>18%</span> of their DEF.</li>
                 </ul>
                 <label className="modern-checkbox">
                     <input
@@ -26,8 +26,8 @@ export default function CarlottaUI({ activeStates, toggleState }) {
                 <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Final Blow</h4>
                 <ul style={{ paddingLeft: '20px' }}>
                     <li>
-                        Increase the DMG Multiplier of Resonance Liberation Era of New Wave,
-                        Resonance Liberation Death Knell, and Resonance Liberation Fatal Finale by 80%.
+                        Increase the DMG Multiplier of Resonance Liberation <span className='highlight'>Era of New Wave</span>,
+                        Resonance Liberation <span className='highlight'>Death Knell</span>, and Resonance Liberation <span className='highlight'>Fatal Finale</span> by <span className='highlight'>80%</span>.
                     </li>
                 </ul>
                 <label className="modern-checkbox" onClick={(e) => e.stopPropagation()}>

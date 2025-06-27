@@ -1,12 +1,13 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function VerinaUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Blossom</h4>
-                <p>All Resonators on nearby teams have their DMG Amplified by 15%.</p>
+                <p>All Resonators on nearby teams have their DMG Amplified by <span className='highlight'>15%</span>.</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
@@ -26,7 +27,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -81,15 +83,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {nature && (
                             <label className="modern-checkbox">

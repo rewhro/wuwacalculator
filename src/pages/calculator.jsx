@@ -32,6 +32,7 @@ import {echoes} from "../json-data-scripts/getEchoes.js";
 import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../data/buffs/setEffect.js";
 import {getEchoStatsFromEquippedEchoes, statIconMap} from "../utils/echoHelper.js";
 import { useLayoutEffect } from 'react';
+import {getSkillDamageCache} from "../utils/skillDamageCache.js";
 
 export default function Calculator() {
     loadBase();
@@ -614,6 +615,33 @@ export default function Calculator() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    useEffect(() => {
+        const cache = getSkillDamageCache();
+        const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+
+        setRotationEntries(prev => {
+            const updated = prev.map(entry => {
+                const skill = cache.find(s => s.name === entry.label && s.tab === entry.tab);
+                const isVisible = skill?.visible !== false;
+                return { ...entry, visible: isVisible };
+            });
+
+            if (charId && characterRuntimeStates?.[charId]) {
+                setCharacterRuntimeStates(prevStates => ({
+                    ...prevStates,
+                    [charId]: {
+                        ...prevStates[charId],
+                        rotationEntries: updated
+                    }
+                }));
+            }
+
+            return updated;
+        });
+    }, [sliderValues]);
+
+    const keywords = getHighlightKeywords(activeCharacter);
+
     return (
         <>
             <SkillsModal
@@ -624,6 +652,7 @@ export default function Calculator() {
                 setActiveSkillTab={setActiveSkillTab}
                 sliderValues={sliderValues}
                 currentSliderColor={currentSliderColor}
+                keywords={keywords}
             />
 
             {/* Root layout */}
@@ -862,8 +891,10 @@ export default function Calculator() {
                                                 setCharacterRuntimeStates={setCharacterRuntimeStates}
                                                 effectiveTheme={effectiveTheme}
                                                 triggerRef={triggerRef}
+                                                characterStates={characterStates}
                                                 attributeMap={attributeMap}
                                                 weaponMap={weaponMap}
+                                                keywords={keywords}
                                             />
                                         ) : (
                                             <div className="loading">Loading characters...</div>
@@ -896,6 +927,7 @@ export default function Calculator() {
                                             characterRuntimeStates={characterRuntimeStates}
                                             activeCharacter={activeCharacter}
                                             setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                            characterStates={characterStates}
                                         />
                                     )}
                                     {leftPaneView === 'rotation' && (
@@ -1053,4 +1085,55 @@ export function loadBase() {
     useEffect(() => {
         preloadImages([...darkIcons, ...lightIcons, ...skillIconPaths, ...baseImages, ...attributeIconPaths, ...weaponIconPaths]);
     }, []);
+}
+
+function getHighlightKeywords(character) {
+    const result = [];
+    const skillTrees = character?.raw?.SkillTrees;
+    if (skillTrees && typeof skillTrees === 'object') {
+        if (character?.displayName) {
+            result.push(character.displayName);
+        }
+
+        const skillNames = [];
+        const levelNames = [];
+
+        Object.values(skillTrees).forEach(tree => {
+            const skills = tree?.Skill;
+
+            if (skills?.Name) {
+                skillNames.push(skills.Name);
+            }
+
+            const levelObj = skills?.Level;
+            if (levelObj && typeof levelObj === 'object') {
+                Object.values(levelObj).forEach(level => {
+                    if (level?.Name) {
+                        levelNames.push(level.Name);
+                    }
+                });
+            }
+        });
+
+        let combined = [...skillNames.slice(0, -8), ...levelNames];
+        const cleaned = combined
+            .filter(name => {
+                return !(
+                    name.includes("Concerto Regen") ||
+                    name.includes("Cost") ||
+                    name.includes("Cooldown") ||
+                    name.includes("CD") ||
+                    name.includes("HA") ||
+                    name.includes('Skill')
+
+                );
+            })
+            .map(name => {
+                return name.replace(/( DMG| Damage)$/i, '');
+            });
+
+        result.push(...cleaned);
+    }
+
+    return result;
 }

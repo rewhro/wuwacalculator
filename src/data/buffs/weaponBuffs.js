@@ -43,7 +43,7 @@ export function applyWeaponBuffLogic({ mergedBuffs, characterState, activeCharac
         wildfireMark: () => {
             const rank = state['wildfireMark_rank'] ?? 0;
             const values = [0, 24, 30, 36, 42, 48];
-            mergedBuffs[element] = (mergedBuffs[element] ?? 0) + values[rank];
+            mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + values[rank];
         }
     };
 

@@ -83,9 +83,10 @@ export function applyPheobeLogic({
             skillMeta.multiplier *= (1 + 0.90);
         }
 
-        if (!mergedBuffs.__pheobeConfessionResShred) {
+        if (!mergedBuffs.__attentive && characterState?.activeStates?.attentive) {
             mergedBuffs.enemyResShred += 10;
-            mergedBuffs.__pheobeConfessionResShred = true;
+            mergedBuffs.damageTypeAmplify.spectroFrazzle = (mergedBuffs.damageTypeAmplify.spectroFrazzle ?? 0) +  100;
+            mergedBuffs.__attentive = true;
         }
 
         if (isActiveSequence(3) && skillMeta.name?.includes('Starflash')) {

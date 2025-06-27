@@ -9,7 +9,7 @@ export default function JinhsiUI({ characterRuntimeStates, setCharacterRuntimeSt
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Incandescence</h4>
                 <div>
-                    <p>Consume up to 50 Incandescence, with each point of Incandescence granting bonus DMG Multiplier percentage to Stella Glamor</p>
+                    <p>Consume up to 50 <span className='highlight'>Incandescence</span>, with each point of <span className='highlight'>Incandescence</span> granting bonus DMG Multiplier percentage to <span className='highlight'>Stella Glamor</span></p>
                 </div>
                 <input
                     type="number"

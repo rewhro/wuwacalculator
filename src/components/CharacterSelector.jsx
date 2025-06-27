@@ -8,11 +8,12 @@ import { formatDescription } from '../utils/formatDescription';
 import { getCharacterUIComponent } from '../data/character-ui';
 import { getCustomInherentSkillsComponent } from '../data/character-ui';
 import {preloadImages} from "../pages/calculator.jsx";
+import {highlightKeywordsInText} from "../constants/echoSetData.jsx";
 
 const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
 
 const traceNodeIconMap = {
-    'ATK+': 'atk', 'HP+': 'hp', 'DEF+': 'def',
+    'ATK+': 'atk', 'HP+': 'hp', 'HP Up': 'hp','DEF+': 'def',
     'Healing Bonus+': 'healing-bonus', 'Crit. Rate+': 'crit-rate', 'Crit. DMG+': 'crit-dmg',
     'Aero DMG Bonus+': 'aero-bonus', 'Glacio DMG Bonus+': 'glacio-bonus',
     'Spectro DMG Bonus+': 'spectro-bonus', 'Fusion DMG Bonus+': 'fusion-bonus',
@@ -38,6 +39,7 @@ export default function CharacterSelector({
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
                                               traceNodeBuffs, setTraceNodeBuffs,
                                               characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef,
+                                              characterStates, keywords
                                           }) {
     useEffect(() => {
         const characterIconPaths = characters.map(char =>
@@ -205,7 +207,6 @@ export default function CharacterSelector({
                 handleCharacterSelect={handleCharacterSelect}
                 menuRef={menuRef}
                 menuOpen={menuOpen}
-
             />
 
             <SkillSettings
@@ -213,6 +214,7 @@ export default function CharacterSelector({
                 setSliderValues={setSliderValues}
                 currentSliderColor={currentSliderColor}
                 setSkillsModalOpen={setSkillsModalOpen}
+                keywords={keywords}
             />
 
             {activeCharacter && (
@@ -227,6 +229,7 @@ export default function CharacterSelector({
                             toggleState={toggleState}
                             unlockLevels={inherentSkillUnlockLevels}
                             charLevel={safeLevel}
+                            keywords={keywords}
                         />
                     ) : (
                         <div className="inherent-skills">
@@ -239,11 +242,9 @@ export default function CharacterSelector({
                                     return (
                                         <div key={index} className="inherent-skill">
                                             <h4 className={'highlight'}>{node.Skill?.Name}</h4>
-                                            <p
-                                                dangerouslySetInnerHTML={{
-                                                    __html: formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor)
-                                                }}
-                                            />
+                                            <p>
+                                                {highlightKeywordsInText(formatDescription(node.Skill.Desc, node.Skill.Param, currentSliderColor), keywords)}
+                                            </p>
                                             {isLocked && (
                                                 <span style={{ fontSize: '12px', color: 'gray' }}>
                                                     Unlocks at Lv. {unlockLevel}
@@ -336,6 +337,7 @@ export default function CharacterSelector({
                         <div className="echo-buff">
                             <CustomCharacterUI
                                 activeStates={activeStates}
+                                characterStates={characterStates}
                                 toggleState={toggleState}
                                 characterRuntimeStates={characterRuntimeStates}
                                 setCharacterRuntimeStates={setCharacterRuntimeStates}
@@ -355,6 +357,7 @@ export default function CharacterSelector({
                 sequenceToggles={sequenceToggles}
                 toggleSequence={toggleSequence}
                 activeStates={activeStates}
+                keywords={keywords}
             />
         </>
     );

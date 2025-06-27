@@ -129,7 +129,6 @@ export function verinauffsLogic({
         for (const elem of Object.values(elementToAttribute)) {
             mergedBuffs.elementDmgAmplify[elem] = (mergedBuffs.elementDmgAmplify[elem] ?? 0) + 15;
         }
-        console.log(mergedBuffs);
     }
 
     if (state.blossoming) {

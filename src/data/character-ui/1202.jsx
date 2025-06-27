@@ -1,5 +1,6 @@
 import {formatDescription} from "../../utils/formatDescription.js";
 import React from 'react';
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function ChixiaUI({ activeStates, toggleState }) {
     const hasToggles = false; // set to `false` if no actual toggles for this character yet
@@ -19,7 +20,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -59,15 +61,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isThermobaric && (
                             <div className="slider-label-with-input" style={{ marginTop: '8px' }}>

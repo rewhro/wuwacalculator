@@ -2,6 +2,8 @@
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import React from "react";
+import {attributeColors} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function ZhezhiUI({ activeStates, toggleState }) {
     return (
@@ -9,10 +11,10 @@ export default function ZhezhiUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Creation's Zenith</h4>
                 <div>
-                    <p>When a Phantasmic Imprint is nearby and there are 2 stacks of Painter's Delight, Stroke of Genius is replaced with Creation's Zenith, which can be cast while in mid-air. When it is cast, Zhezhi will:</p>
+                    <p>When a <span className='highlight'>Phantasmic Imprint</span> is nearby and there are 2 stacks of Painter's Delight, Stroke of Genius is replaced with Creation's Zenith, which can be cast while in mid-air. When it is cast, Zhezhi will:</p>
                     <ul style={{paddingLeft: '20px'}} >
-                        <li>Lose all stacks of Painter's Delight</li>
-                        <li>Move to the location of the Phantasmic Imprint, remove it, and then summon an Ivory Herald to attack the target, dealing greater Glacio DMG, considered as Basic Attack DMG, additionally increasing the Basic Attack DMG Bonus by 18% for 27s. Refresh the mid-air Dodge attempts if the target Phatasmic Imprint is in mid-air.</li>
+                        <li>Lose all stacks of <span className='highlight'>Painter's Delight</span></li>
+                        <li>Move to the location of the <span className='highlight'>Phantasmic Imprint</span>, remove it, and then summon an <span className='highlight'>Ivory Herald</span> to attack the target, dealing greater <span style={{ color: attributeColors['glacio'], fontWeight: 'bold' }}>Glacio DMG</span>, considered as <span className='highlight'>Basic Attack DMG</span>, additionally increasing the <span className='highlight'>Basic Attack DMG Bonus</span> by <span className='highlight'>18%</span> for 27s. Refresh the mid-air Dodge attempts if the target <span className='highlight'>Phatasmic Imprint</span> is in mid-air.</li>
                     </ul>
                 </div>
                 <label className="modern-checkbox">
@@ -36,7 +38,8 @@ export function CustomInherentSkills({
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
                                          unlockLevels = [],
-                                         charLevel = 1 // <== passed in from CharacterSelector
+                                         charLevel = 1,
+    keywords = [],
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -78,15 +81,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isCalligrapher && (
                             <DropdownSelect

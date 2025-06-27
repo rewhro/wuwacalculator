@@ -1,13 +1,14 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function RocciaUI({ activeStates, toggleState }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Commedia Improvviso!</h4>
-                <p>For every 0.1% of Roccia's Crit. Rate over 50%, this skill increases the ATK of all Resonators in the team by 1 point for 30s, up to 200 points.</p>
+                <p>For every <span className='highlight'>0.1%</span> of <span className='highlight'>Roccia</span>'s Crit. Rate over <span className='highlight'>50%</span>, this skill increases the ATK of all Resonators in the team by <span className='highlight'>1</span> point for 30s, up to <span className='highlight'>200</span> points.</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
@@ -27,7 +28,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -82,15 +84,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {immersive && (
                             <label className="modern-checkbox">
@@ -198,12 +198,12 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                 Crit. Rate:
                 <input
                     type="number"
-                    value={activeStates.commediaCr ?? 0}
-                    min={0}
+                    value={activeStates.commediaCr ?? 5}
+                    min={5}
                     max={999}
-                    step={0.1}
+                    step={1}
                     onChange={(e) => {
-                        const value = parseFloat(e.target.value) || 0;
+                        const value = parseFloat(e.target.value) || 5;
                         updateState('commediaCr', value);
                     }}
                     className="character-level-input"

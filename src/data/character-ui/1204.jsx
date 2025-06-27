@@ -1,5 +1,6 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function MortefiUI({ activeStates, toggleState }) {
     const hasToggles = false; // set to `false` if no actual toggles for this character yet
@@ -18,7 +19,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -84,15 +86,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isHarmonic && (
                             <label className="modern-checkbox">
@@ -159,7 +159,7 @@ export function CustomInherentSkills({
 }
 
 export function mortefiSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
-    if (!['3', '5', '6'].includes(String(nodeKey))) return null;
+    if (!['3', '6'].includes(String(nodeKey))) return null;
 
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;

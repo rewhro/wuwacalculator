@@ -2,6 +2,7 @@
 import React from 'react';
 import { formatDescription } from "../../utils/formatDescription.js";
 import DropdownSelect from '../../components/DropdownSelect';
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 
 // ✅ Main Sanhua toggle UI component
@@ -24,7 +25,8 @@ export function CustomInherentSkills({
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
                                          unlockLevels = [],
-                                         charLevel = 1
+                                         charLevel = 1,
+                                         keywords = [],
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -59,7 +61,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Turn off toggle if locked and still active
                 if (locked) {
                     if (isCondensation && activeStates.inherent1) {
                         toggleState('inherent1');
@@ -72,15 +73,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isCondensation && (
                             <label className="modern-checkbox">

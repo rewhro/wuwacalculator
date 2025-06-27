@@ -1,5 +1,6 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 
 export default function CalcharoUI({ activeStates, toggleState }) {
@@ -18,7 +19,8 @@ export function CustomInherentSkills({
                                           character,
                                           currentSliderColor,
                                           characterRuntimeStates,
-                                          setCharacterRuntimeStates
+                                          setCharacterRuntimeStates,
+    keywords
                                       }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -73,15 +75,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {bloodshed && (
                             <label className="modern-checkbox">

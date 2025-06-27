@@ -1,6 +1,8 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {attributeColors} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates, toggleState }) {
 
@@ -10,7 +12,7 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Inferno Mode</h4>
                     <div>
-                        <p>When in Inferno Mode, the DMG Multiplier of Basic Attack is increased.</p>
+                        <p>When in <span className='highlight'>Inferno</span> Mode, the DMG Multiplier of Basic Attack is increased.</p>
                     </div>
                     <label className="modern-checkbox">
                         <input
@@ -24,7 +26,7 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Sunburst</h4>
                     <div>
-                        <p>The Spectro Frazzle DMG dealt by Zani to the target is Amplified by 20%.</p>
+                        <p>The <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> DMG dealt by <span className='highlight'>Zani</span> to the target is Amplified by <span className='highlight'>20%</span>.</p>
                     </div>
                     <label className="modern-checkbox">
                         <input
@@ -38,8 +40,8 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Heliacal Ember</h4>
                     <div>
-                        <p>When Zani is in the team and a nearby Resonator inflicts Spectro Frazzle upon a target, immediately consume all Spectro Frazzle stacks and trigger the corresponding DMG, then convert Spectro Frazzle into an equal number of Heliacal Embers. Heliacal Ember is capped at 60 stacks.</p>
-                        <p>Beacon For the Future: Each stack increases the DMG dealt by 10%.</p>
+                        <p>When <span className='highlight'>Zani</span> is in the team and a nearby Resonator inflicts <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> upon a target, immediately consume all <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> stacks and trigger the corresponding DMG, then convert <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> into an equal number of <span className='highlight'>Heliacal Embers</span>. <span className='highlight'>Heliacal Ember</span> is capped at 60 stacks.</p>
+                        <p><span className='highlight'>Beacon For the Future</span>: Each stack increases the DMG dealt by <span className='highlight'>10%</span>.</p>
                     </div>
                     <div className="slider-label-with-input" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <label style={{ fontWeight: 'bold' }}>
@@ -70,7 +72,7 @@ export default function ZaniUI({ setCharacterRuntimeStates, charId, activeStates
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Heavy Slash - Nightfall: Blaze</h4>
                     <div>
-                        <p>Consume up to 40 Blazes on hit, with each Blaze increasing the DMG Multiplier of Heavy Slash - Nightfall</p>
+                        <p>Consume up to 40 <span className='highlight'>Blazes</span> on hit, with each <span className='highlight'>Blaze</span> increasing the DMG Multiplier of <span className='highlight'>Heavy Slash - Nightfall</span></p>
                     </div>
                     <div className="slider-label-with-input" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <label htmlFor="blaze-consumed" style={{ fontWeight: 'bold' }}>
@@ -107,7 +109,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -162,15 +165,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {response && (
                             <label className="modern-checkbox">

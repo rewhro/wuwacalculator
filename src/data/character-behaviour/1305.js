@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applyYaoLogic({
                                mergedBuffs,
                                combatState,
@@ -33,33 +35,31 @@ export function applyYaoLogic({
     const inherent1Stacks = characterState?.activeStates?.inherent1 ?? 0;
     const inherent1 = Math.min(inherent1Stacks * 5, 20);
 
-    if (!mergedBuffs.__changliInherent1) {
+    if (!mergedBuffs.__yaoInherent1) {
         mergedBuffs.electro = (mergedBuffs.electro ?? 0) + inherent1;
-        mergedBuffs.__changliInherent1 = true;
+        mergedBuffs.__yaoInherent1 = true;
     }
 
-    if (name.includes('law of reigns')) {
-        characterState.activeStates.__incandescenceValue = skillMeta.multiplier;
-    }
     if (name === 'prodigy of protégés: convolution matrices dmg') {
-        const base = characterState?.activeStates?.incandescence ?? 0;
-        skillMeta.multiplier = base * 0.08;
+        skillMeta.multiplier *= 0.08;
         skillMeta.visible = isActiveSequence(1);
     }
 
     if (isActiveSequence(2) && isToggleActive(2) && !mergedBuffs.__yaoS2) {
-        mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 30;
+        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + 30;
         mergedBuffs.__yaoS2 = true;
     }
 
-    if (['divergence dmg', 'decipher dmg', 'law of reigns dmg']
-        .some(n => name.includes(n)) || (tab === 'resonanceSkill' && name.includes('skill dmg'))
-    && isToggleActive(3) && isActiveSequence(3)) {
-        skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 63;
+    if (isToggleActive(3) && isActiveSequence(3)) {
+        if ( tab === 'forteCircuit' ) {
+            skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 63;
+        }
     }
 
     if (isActiveSequence(4) && isToggleActive(4) && !mergedBuffs.__yaoS4) {
-        mergedBuffs.electro = (mergedBuffs.electro ?? 0) + 25;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 25;
+        }
         mergedBuffs.__yaoS4 = true;
     }
 
@@ -71,7 +71,8 @@ export function applyYaoLogic({
         }
     }
 
-    if (isActiveSequence(6) && name.includes('law of reigns')) {
+    if (isActiveSequence(6) && (['law of reigns dmg', 'convolution matrices dmg']
+        .some(n => name.includes(n)))) {
         skillMeta.multiplier *= 1.76;
     }
 
@@ -85,30 +86,47 @@ export const yaoMultipliers = {
             scaling: { atk: 1 }
         }
     ],
-    resonanceSkill: [
+    forteCircuit: [
         {
             name: "Prodigy of Protégés: Convolution Matrices DMG",
-            scaling: { atk: 1 }
+            scaling: { atk: 1 },
+            Param: [
+                [
+                    "321%*6",
+                    "357.66%*6",
+                    "373.30%*6",
+                    "410.52%*6",
+                    "434.92%*6",
+                    "467.12%*6",
+                    "509.25%*6",
+                    "551.38%*6",
+                    "593.51%*6",
+                    "636.20%*6",
+                    "690.81%*6",
+                    "745.43%*6",
+                    "800.04%*6",
+                    "854.65%*6",
+                    "909.26%*6",
+                    "963.87%*6",
+                    "1018.48%*6",
+                    "1073.09%*6",
+                    "1127.70%*6",
+                    "1182.31%*6"
+                ]
+            ]
         }
     ]
 };
 
 export function yaoBuffsLogic({
-                                     mergedBuffs, characterState, activeCharacter
+                                     mergedBuffs, characterState
                                  }) {
     const state = characterState?.activeStates ?? {};
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.rebirth) {
-        mergedBuffs.resonanceLiberation = (mergedBuffs.resonanceLiberation ?? 0) + 25;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+        }
     }
 
     return { mergedBuffs };

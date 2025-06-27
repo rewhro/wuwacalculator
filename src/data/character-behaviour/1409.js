@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applyCartethyiaLogic({
                                      mergedBuffs,
                                      combatState,
@@ -89,7 +91,9 @@ export function applyCartethyiaLogic({
 
     if (isToggleActive(4) && isActiveSequence(4)) {
         if (!mergedBuffs.__cartethyiaSeq4) {
-            mergedBuffs.aero = (mergedBuffs.aero ?? 0) + 20;
+            for (const elem of Object.values(elementToAttribute)) {
+                mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+            }
             mergedBuffs.__cartethyiaSeq4 = true;
         }
     } else {
@@ -231,7 +235,9 @@ export function cartBuffsLogic({
     }
 
     if (state.sacrifice) {
-        mergedBuffs[element] = (mergedBuffs[element] ?? 0) + 20;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+        }
     }
 
     if (state.blessing && (combatState.aeroErosion > 0 || combatState.spectroFrazzle > 0)) {

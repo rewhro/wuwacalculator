@@ -1,5 +1,6 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, toggleState }) {
 
@@ -9,7 +10,10 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Inner Stellarealm</h4>
                     <div>
-                        <p>When a party member uses Intro Skill within the Outer Stellarealm, it evolves into the Inner Stellarealm. Within the effective range of the Inner Stellarealm, for every 0.2% of Shorekeeper's Energy Regen, all party members gain a 0.01% increase of Crit. Rate, up to 12.5%.</p>
+                        <p>
+                            When a party member uses <span className="highlight">Intro Skill</span> within the <span className="highlight">Outer Stellarealm</span>, it evolves into the <span className="highlight">Inner Stellarealm</span>. Within the effective range of the <span className="highlight">Inner Stellarealm</span>, for every <span className="highlight">0.2%</span> of Shorekeeper's Energy Regen, all party members gain a <span className="highlight">0.01%</span> increase of Crit. Rate, up to <span className="highlight">12.5%%</span>.
+                            <span className="highlight">Inner Stellarealm</span> has all the effects of the <span className="highlight">Outer Stellarealm</span>.
+                        </p>
                     </div>
                     <label className="modern-checkbox">
                         <input
@@ -18,8 +22,6 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                             onChange={() => {
                                 const newState = !activeStates.innerS;
                                 toggleState('innerS');
-
-                                // Auto-disable supernal if inner gets turned off
                                 if (!newState && activeStates.supernal) {
                                     toggleState('supernal');
                                 }
@@ -32,10 +34,17 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Supernal Stellarealm</h4>
                     <div>
-                        <p>When a party member uses Intro Skill within the Inner Stellarealm, it evolves into the Supernal Stellarealm. Within the effective range of the Supernal Stellarealm, for every 0.1% of Shorekeeper's Energy Regen, all party members gain a 0.01% increase of Crit. DMG, up to 25%.<br/>
-                            Supernal Stellarealm has all the effects of the Inner Stellarealm.</p>
+                        <p>
+                            When a party member uses <span className="highlight">Intro Skill</span> within the <span className="highlight">Inner Stellarealm</span>, it evolves into the <span className="highlight">Supernal Stellarealm</span>. Within the effective range of the <span className="highlight">Supernal Stellarealm</span>, for every <span className="highlight">0.1%</span> of <span className="highlight">Shorekeeper</span>'s Energy Regen, all party members gain a <span className="highlight">0.01%</span> increase of Crit. DMG, up to <span className="highlight">25%</span>.
+                            <span className="highlight">Supernal Stellarealm</span> has all the effects of the <span className="highlight">Inner Stellarealm</span>.
+                        </p>
                     </div>
-                    <label className="modern-checkbox">
+                    <label className="modern-checkbox"
+                           style={{
+                               opacity: !activeStates.innerS ? 0.5 : 1,
+                               pointerEvents: activeStates.innerS ? 'auto' : 'none'
+                           }}
+                    >
                         <input
                             type="checkbox"
                             checked={activeStates.supernal || false}
@@ -45,15 +54,17 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                         Enable
                         {!activeStates.innerS && (
                             <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
-                (Requires Inner Stellarealm)
-            </span>
+                                (Requires Inner Stellarealm)
+                            </span>
                         )}
                     </label>
                 </div>
                 <div className="status-toggles">
                     <div className="status-toggle-box">
                         <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Binary Butterfly</h4>
-                        <p>All nearby party members' DMG is Amplified by 15%.</p>
+                        <p>
+                            All nearby party members' DMG is Amplified by <span className="highlight">15%</span>.
+                        </p>
                         <label className="modern-checkbox">
                             <input
                                 type="checkbox"
@@ -75,7 +86,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -130,15 +142,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {gravitation && (
                             <label className="modern-checkbox">
@@ -187,7 +197,7 @@ export function skSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, cu
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors, characterRuntimeStates }) {
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -201,23 +211,56 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
         }));
     };
 
+    const character = characterRuntimeStates?.[charId];
+    const name = character?.Name.toLowerCase();
+    const isRover = name.includes("rover");
+
     return (
         <div className="echo-buffs">
             <label className="slider-label-with-input">
                 Energy Regen:
                 <input
                     type="number"
-                    value={activeStates.innerEnergy ?? 0}
-                    min={0}
-                    max={100}
-                    step={0.1}
+                    value={activeStates.innerEnergy ?? 100}
+                    min={100}
+                    max={250}
+                    step={1}
                     onChange={(e) => {
-                        const value = parseFloat(e.target.value) || 0;
+                        const value = parseFloat(e.target.value) || 100;
                         updateState('innerEnergy', value);
                     }}
                     className="character-level-input"
                 /> %
             </label>
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Self Gravitation</div>
+                </div>
+                <div className="echo-buff-effect">
+                    When the on-field Resonator is within range of a <span className="highlight">Stellarealm</span>, <span className="highlight">Shorekeeper</span>'s Energy Regen is increased by <span className="highlight">10%</span>, and <span className="highlight">Rover</span>'s Energy Regen is also increased by <span className="highlight">10%</span> if <span className="highlight">Rover</span> is on the team.
+                </div>
+                <label className="modern-checkbox"
+                       style={{
+                           opacity: !isRover ? 0.5 : 1,
+                           pointerEvents: isRover ? 'auto' : 'none'
+                       }}
+                >
+                    <input
+                        type="checkbox"
+                        checked={(activeStates.gravitation && isRover) || false}
+                        disabled={!isRover}
+                        onChange={() => {
+                            toggleState('gravitation');
+                        }}
+                    />
+                    Enable
+                    {!isRover && (
+                        <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            ({character?.Name} is not Rover)
+                        </span>
+                    )}
+                </label>
+            </div>
             <div className="echo-buff">
                 <div className="echo-buff-header">
                     <div className="echo-buff-name">Inner Stellarealm</div>
@@ -232,7 +275,7 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                         checked={activeStates.innerS || false}
                         onChange={() => {
                             toggleState('innerS');
-                            if (activeStates.supernal) toggleState('supernal'); // turn off other
+                            if (activeStates.supernal) toggleState('supernal');
                         }}
                     />
                     Enable
@@ -247,7 +290,12 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                     When a party member uses <span className="highlight">Intro Skill</span> within the <span className="highlight">Inner Stellarealm</span>, it evolves into the <span className="highlight">Supernal Stellarealm</span>. Within the effective range of the <span className="highlight">Supernal Stellarealm</span>, for every <span className="highlight">0.1%</span> of <span className="highlight">Shorekeeper</span>'s Energy Regen, all party members gain a <span className="highlight">0.01%</span> increase of Crit. DMG, up to <span className="highlight">25%</span>.
                     <span className="highlight">Supernal Stellarealm</span> has all the effects of the <span className="highlight">Inner Stellarealm</span>.
                 </div>
-                <label className="modern-checkbox" style={{ opacity: !activeStates.innerS ? 0.5 : 1 }}>
+                <label className="modern-checkbox"
+                       style={{
+                           opacity: !activeStates.innerS ? 0.5 : 1,
+                           pointerEvents: activeStates.innerS ? 'auto' : 'none'
+                       }}
+                >
                     <input
                         type="checkbox"
                         checked={activeStates.supernal || false}
@@ -255,6 +303,11 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                         disabled={!activeStates.innerS}
                     />
                     Enable
+                    {!activeStates.innerS && (
+                        <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                (Requires Inner Stellarealm)
+            </span>
+                    )}
                 </label>
             </div>
 

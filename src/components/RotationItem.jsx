@@ -28,7 +28,6 @@ export default function RotationItem({
         transition
     };
 
-
     const multiplier = entry.multiplier ?? 1;
     const cache = getSkillDamageCache();
     const match = cache.find(s => s.name === entry.label && s.tab === entry.tab);

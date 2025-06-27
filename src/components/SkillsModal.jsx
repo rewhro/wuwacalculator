@@ -2,9 +2,10 @@
 import React, {useState} from 'react';
 import { formatDescription } from '../utils/formatDescription';
 import skillTabs from '../constants/skillTabs';
+import {highlightKeywordsInText} from "../constants/echoSetData.jsx";
 
 
-export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activeCharacter, activeSkillTab, setActiveSkillTab, sliderValues, currentSliderColor }) {
+export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activeCharacter, activeSkillTab, setActiveSkillTab, sliderValues, currentSliderColor, keywords }) {
     if (!skillsModalOpen) return null;
 
     const getSkillData = (tab) => {
@@ -44,7 +45,9 @@ export default function SkillsModal({ skillsModalOpen, setSkillsModalOpen, activ
                         return (
                             <>
                                 <h3>{skill.Name ?? activeSkillTab}</h3>
-                                <p dangerouslySetInnerHTML={{ __html: formatDescription(skill.Desc, skill.Param, currentSliderColor) }} />
+                                <p>
+                                    {highlightKeywordsInText(formatDescription(skill.Desc, skill.Param, currentSliderColor), keywords)}
+                                </p>
                                 {skill.Level && (
                                     <table className="multipliers-table">
                                         <tbody>

@@ -1,10 +1,15 @@
 import {formatDescription} from "../../utils/formatDescription.js";
-import React from 'react';
+import React, {useEffect} from 'react';
 import DropdownSelect from '../../components/DropdownSelect';
+import {attributeColors} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function LupaUI({ characterRuntimeStates, setCharacterRuntimeStates, charId }) {
+export default function LupaUI({ characterRuntimeStates, setCharacterRuntimeStates, charId, activeStates, toggleState }) {
     const packHuntValue = characterRuntimeStates?.[charId]?.activeStates?.packHunt ?? 0;
-
+    const state = characterRuntimeStates?.[charId]?.activeStates;
+    const team = state?.teamBase;
+    const isTeamValid = (team?.length === 3 &&
+        team?.every(char => Number(char.Attribute) === 2)) ?? false;
     const handleChange = (newValue) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -21,19 +26,55 @@ export default function LupaUI({ characterRuntimeStates, setCharacterRuntimeStat
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Pack Hunt</h4>
+                <h4 className={'highlight'} style={{ fontSize: '18px'}}>Pack Hunt</h4>
                 <div>
-                    <p>The DMG Bonus of Resonators with Pack Hunt increases by 6%, non-stackable. When the active Resonator performs Intro Skill, Pack Hunt is enhanced, further increasing the DMG Bonus of other Resonators in the team by 6%, up to a maximum of 18%.</p>
-                    <p>If Lupa's Pack Hunt reaches its cap and remains active, she enters Wild Hunt state to perform Intro Skill - Nowhere to Run!. Wild Hunt can trigger once per Pack Hunt.</p>
+                    <p>
+                        Resonators with <span className='highlight'>Pack Hunt</span> gain a  <span className='highlight'>6%</span> ATK increase, and  <span className='highlight'>10%</span> <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG
+                        Bonus</span> when they attack  <span className='highlight'>Overlord</span> Class or  <span className='highlight'>Calamity</span> Class targets (Both are non-stackable).
+                    </p>
+                    <label className="modern-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={activeStates.packHunt1 || false}
+                            onChange={() => toggleState('packHunt1')}
+                        />
+                        Enable
+                    </label>
+                    <p>
+                        If there are 3 <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion</span> Resonators in the team, the <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG Bonus</span> against <span className='highlight'>Overlord</span> Class or
+                        <span className='highlight'> Calamity</span> Class targets additionally increases by <span className='highlight'>10%</span>.
+                    </p>
+                    <label className="modern-checkbox"
+                           style={{
+                               opacity: !isTeamValid ? 0.5 : 1,
+                               pointerEvents: isTeamValid ? 'auto' : 'none'
+                           }}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={(activeStates.packHunt2 && isTeamValid) || false}
+                            onChange={() => toggleState('packHunt2')}
+                            disabled={!isTeamValid}
+                        />
+                        Enable
+                        {!isTeamValid && (
+                            <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                (Needs 3 <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion</span> Resonators in the team)
+                            </span>
+                        )}
+                    </label>
+                    <p>
+                        When the active Resonator casts <span className='highlight'>Intro Skill</span>,
+                        <span className='highlight'>Pack Hunt</span> is enhanced, granting an additional <span className='highlight'>6%</span> ATK increase to all Resonators in the team, up to a maximum of <span className='highlight'>18%</span>.
+                    </p>
+                    <DropdownSelect
+                        label=""
+                        options={[0, 1, 2, 3]}
+                        value={packHuntValue}
+                        onChange={handleChange}
+                        width="80px"
+                    />
                 </div>
-
-                <DropdownSelect
-                    label=""
-                    options={[0, 1, 2, 3]}
-                    value={packHuntValue}
-                    onChange={handleChange}
-                    width="80px"
-                />
             </div>
         </div>
     );
@@ -45,7 +86,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
@@ -102,15 +144,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
                         {victory && (
                             <div
                                 className="slider-label-with-input"
@@ -203,7 +243,7 @@ export function LupaSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColor, characterRuntimeStates }) {
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -217,8 +257,66 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
         }));
     };
 
+    const state = characterRuntimeStates?.[charId]?.activeStates;
+    const team = state?.teamBase;
+    const isTeamValid = (team?.length === 3 &&
+        team?.every(char => Number(char.Attribute) === 2)) ?? false;
+
     return (
         <div className="echo-buffs">
+            <div className="echo-buff">
+                <div className="echo-buff-header">
+                    <div className="echo-buff-name">Pack Hunt</div>
+                </div>
+                <div className="echo-buff-effect">
+                    <p>
+                        Resonators with <span className='highlight'>Pack Hunt</span> gain a  <span className='highlight'>6%</span> ATK increase, and  <span className='highlight'>10%</span> <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG
+                        Bonus</span> when they attack  <span className='highlight'>Overlord</span> Class or  <span className='highlight'>Calamity</span> Class targets (Both are non-stackable).
+                    </p>
+                    <label className="modern-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={activeStates.packHunt1 || false}
+                            onChange={() => toggleState('packHunt1')}
+                        />
+                        Enable
+                    </label>
+                    <p>
+                        If there are 3 <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion</span> Resonators in the team, the <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG Bonus</span> against <span className='highlight'>Overlord</span> Class or
+                        <span className='highlight'> Calamity</span> Class targets additionally increases by <span className='highlight'>10%</span>.
+                    </p>
+                    <label className="modern-checkbox"
+                           style={{
+                               opacity: !isTeamValid ? 0.5 : 1,
+                               pointerEvents: isTeamValid ? 'auto' : 'none'
+                           }}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={(activeStates.packHunt2 && isTeamValid) || false}
+                            onChange={() => toggleState('packHunt2')}
+                            disabled={!isTeamValid}
+                        />
+                        Enable
+                        {!isTeamValid && (
+                            <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                                (Needs 3 <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion</span> Resonators in the team)
+                            </span>
+                        )}
+                    </label>
+                    <p>
+                        When the active Resonator casts <span className='highlight'>Intro Skill</span>,
+                        <span className='highlight'>Pack Hunt</span> is enhanced, granting an additional <span className='highlight'>6%</span> ATK increase to all Resonators in the team, up to a maximum of <span className='highlight'>18%</span>.
+                    </p>
+                    <DropdownSelect
+                        label="Stacks"
+                        options={[0, 1, 2]}
+                        value={activeStates.packHunt ?? 0}
+                        onChange={(value) => updateState('packHunt', value)}
+                        width="80px"
+                    />
+                </div>
+            </div>
             <div className="echo-buff">
                 <div className="echo-buff-header">
                     <div className="echo-buff-name">Resonance Liberation - Glory</div>

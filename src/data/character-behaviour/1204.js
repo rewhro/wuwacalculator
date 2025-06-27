@@ -25,6 +25,7 @@ export function applyMortefiLogic({
     const isToggleActiveLocal = (key) => characterState?.activeStates?.[key] === true;
     const name = skillMeta.name?.toLowerCase();
     const tab = skillMeta.tab ?? '';
+    console.log(name);
 
     if (tab === 'forteCircuit') {
         skillMeta.skillType = 'skill';

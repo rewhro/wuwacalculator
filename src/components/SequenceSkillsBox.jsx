@@ -2,13 +2,15 @@
 import React from 'react';
 import { formatDescription } from '../utils/formatDescription';
 import { getSequenceToggleComponent } from '../data/character-ui';
+import {highlightKeywordsInText} from "../constants/echoSetData.jsx";
 
 export default function SequenceSkillsBox({
                                               activeCharacter,
                                               currentSliderColor,
                                               sliderValues,
                                               characterRuntimeStates,
-                                              setCharacterRuntimeStates
+                                              setCharacterRuntimeStates,
+                                              keywords
                                           }) {
     if (!activeCharacter || !activeCharacter.raw?.Chains || sliderValues.sequence === 0) return null;
 
@@ -43,29 +45,26 @@ export default function SequenceSkillsBox({
     return (
         <div className="inherent-skills-box">
             <h2>Resonance Chain</h2>
+            {unlockedChains.map(([key, chain]) => (
+                <div key={key} className="echo-buff" style={{ marginTop: '15px'}}>
+                    <h3 className={'highlight'}>Sequence Node {key}: {chain.Name}</h3>
+                    <p>
+                        {highlightKeywordsInText(formatDescription(chain.Desc, chain.Param, currentSliderColor), keywords)}
+                    </p>
 
-            <div className="echo-buff">
-                {unlockedChains.map(([key, chain]) => (
-                    <div key={key} className="inherent-skill">
-                        <h3 className={'highlight'}>Sequence Node {key}: {chain.Name}</h3>
-                        <p dangerouslySetInnerHTML={{
-                            __html: formatDescription(chain.Desc, chain.Param, currentSliderColor)
-                        }} />
-
-                        {/* 💡 Inline toggle for this specific sequence node */}
-                        {ToggleComponent && (
-                            <ToggleComponent
-                                nodeKey={key}
-                                sequenceToggles={sequenceToggles}
-                                toggleSequence={toggleSequence}
-                                currentSequenceLevel={sliderValues.sequence}
-                                setCharacterRuntimeStates={setCharacterRuntimeStates}
-                                charId={charId}
-                            />
-                        )}
-                    </div>
-                ))}
-            </div>
+                    {/* 💡 Inline toggle for this specific sequence node */}
+                    {ToggleComponent && (
+                        <ToggleComponent
+                            nodeKey={key}
+                            sequenceToggles={sequenceToggles}
+                            toggleSequence={toggleSequence}
+                            currentSequenceLevel={sliderValues.sequence}
+                            setCharacterRuntimeStates={setCharacterRuntimeStates}
+                            charId={charId}
+                        />
+                    )}
+                </div>
+            ))}
         </div>
     );
 }

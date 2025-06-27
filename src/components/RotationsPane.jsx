@@ -103,6 +103,7 @@ export default function RotationsPane({
                 name: skill.name,
                 type: skill.skillType,
                 tab: tab,
+                visible: skill.visible,
                 element: skill.element ?? null
             });
         }
@@ -140,6 +141,7 @@ export default function RotationsPane({
             detail: skillTypeLabelMap[type] ?? type,
             tab: skill.tab,
             iconPath,
+            visible: skill.visible,
             multiplier: 1,
             locked: false,
             snapshot: undefined,
@@ -287,7 +289,7 @@ export default function RotationsPane({
                                 for (const entry of rotationEntries) {
                                     const multiplier = entry.multiplier ?? 1;
                                     const source = entry.locked ? entry.snapshot : cache.find(s => s.name === entry.label && s.tab === entry.tab);
-                                    if (!source || source.isSupportSkill) continue;
+                                    if (!source || source.visible === false || source.isSupportSkill) continue;
 
                                     total.normal += (source.normal ?? 0) * multiplier;
                                     total.crit += (source.crit ?? 0) * multiplier;
@@ -327,7 +329,9 @@ export default function RotationsPane({
                                 items={normalizedEntries.map(e => e.createdAt.toString())}
                                 strategy={verticalListSortingStrategy}
                             >
-                                {normalizedEntries.map((entry, idx) => (
+                                {normalizedEntries
+                                    .filter(entry => entry.visible !== false)
+                                    .map((entry, idx) => (
                                     <RotationItem
                                         key={entry.createdAt.toString()}
                                         id={entry.createdAt.toString()}
@@ -493,14 +497,14 @@ export default function RotationsPane({
                                                     <span className="highlight">{saved.characterName}</span>
                                                 )}
                                                 <span className="entry-type-detail">
-                                    <span className="entry-detail-text">
-                                        {new Date(saved.id).toLocaleDateString(undefined, {
-                                            day: 'numeric',
-                                            month: 'short',
-                                            year: 'numeric'
-                                        })}
-                                    </span>
-                                </span>
+                                                    <span className="entry-detail-text">
+                                                        {new Date(saved.id).toLocaleDateString(undefined, {
+                                                            day: 'numeric',
+                                                            month: 'short',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                                </span>
                                             </div>
 
                                             <div className="rotation-values">

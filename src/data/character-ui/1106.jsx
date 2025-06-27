@@ -1,6 +1,7 @@
 import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function YouhuUI({ activeStates, toggleState }) {
     return (
@@ -11,7 +12,7 @@ export default function YouhuUI({ activeStates, toggleState }) {
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Antithesis</h4>
                     <ul style={{ paddingLeft: '20px' }}>
-                        <li>A pair of Auspices. Increase Poetic Essence's DMG by 70%.</li>
+                        <li>A pair of <span className='highlight'>Auspices</span>. Increase <span className='highlight'>Poetic Essence</span>'s DMG by <span className='highlight'>70%</span>.</li>
                     </ul>
                     <label className="modern-checkbox">
                         <input
@@ -26,7 +27,7 @@ export default function YouhuUI({ activeStates, toggleState }) {
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Triplet</h4>
                     <ul style={{ paddingLeft: '20px' }}>
-                        <li>Three identical Auspices. Increase Poetic Essence's DMG by 175%.</li>
+                        <li>Three identical <span className='highlight'>Auspices</span>. Increase <span className='highlight'>Poetic Essence</span>'s DMG by <span className='highlight'>175%</span>.</li>
                     </ul>
                     <label className="modern-checkbox">
                         <input
@@ -48,8 +49,9 @@ export function CustomInherentSkills({
                                          currentSliderColor,
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
-                                         charLevel = 1, // ✅ Accept level
-                                         unlockLevels = [50, 70] // ✅ Default unlock thresholds
+                                         charLevel = 1,
+                                         unlockLevels = [50, 70],
+    keywords = [],
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -94,15 +96,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isInherent1 && (
                             <label className="modern-checkbox">

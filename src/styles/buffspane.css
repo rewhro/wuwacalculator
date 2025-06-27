@@ -62,12 +62,6 @@
     overflow: visible;
 }
 
-/* Hover effect for changeable slots */
-.team-slot:not(.locked):hover {
-    transform: scale(1.05);
-}
-
-
 /* Locked (main character) slot */
 .team-slot.locked {
     pointer-events: none;
@@ -119,6 +113,7 @@
     cursor: pointer;
     z-index: 2;
     padding: 0;
+    transition: all 0.3s ease;
 }
 
 .remove-teammate-button svg {

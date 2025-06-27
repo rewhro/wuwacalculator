@@ -1,5 +1,6 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function BrantUI({ activeStates, toggleState }) {
     return (
@@ -7,12 +8,12 @@ export default function BrantUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Theatrical Moment</h4>
                 <div>
-                    <p>Brant gains additional ATK based on his Energy Regen: For every 1% of his Energy Regen over 150%, Brant gains additional 12 points of ATK, up to 1560.</p>
+                    <p><span className='highlight'>Brant</span> gains additional ATK based on his Energy Regen: For every <span className='highlight'>1%</span> of his Energy Regen over <span className='highlight'>150%</span>, Brant gains additional <span className='highlight'>12</span> points of ATK, up to <span className='highlight'>1560</span>.</p>
                 </div>
             </div>
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>"My" Moment</h4>
-                <p>Brant gains additional ATK based on his Energy Regen: For every 1% of his Energy Regen over 150%, Brant gains additional 20 points of ATK, up to 2600.</p>
+                <p><span className='highlight'>Brant</span> gains additional ATK based on his Energy Regen: For every <span className='highlight'>1%</span> of his Energy Regen over <span className='highlight'>150%</span>, Brant gains additional <span className='highlight'>20</span> points of ATK, up to <span className='highlight'>2600</span>.</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
@@ -32,7 +33,8 @@ export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
                                          characterRuntimeStates,
-                                         setCharacterRuntimeStates
+                                         setCharacterRuntimeStates,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -87,15 +89,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isTrial && (
                             <label className="modern-checkbox">

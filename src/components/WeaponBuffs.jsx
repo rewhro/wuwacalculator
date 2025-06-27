@@ -34,7 +34,7 @@ const weaponBuffs = [
         param: [[30, 37.5, 45, 52.5, 60]],
         effect: (param = []) => (
             <>
-                Casting Outro Skill Amplifies the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle DMG</span> on targets around the active Resonator by <span className="highlight">{param[0] ?? '—'}%</span> for <span className="highlight">30s</span>. Effects of the same name cannot be stacked.
+                Casting Outro Skill Amplifies the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> DMG on targets around the active Resonator by <span className="highlight">{param[0] ?? '—'}%</span> for <span className="highlight">30s</span>. Effects of the same name cannot be stacked.
             </>
         )
     },
@@ -67,7 +67,7 @@ const weaponBuffs = [
         param: [[24, 30, 36, 42, 48]],
         effect: (param = []) => (
             <>
-                Dealing Heavy Attack DMG extends this effect by <span className="highlight">4s</span>, up to 1 times. Each successful extension gives <span className="highlight">{param[0] ?? '—'}%</span> DMG Bonus to all Resonators in the team for <span className="highlight">30s</span>. Effects of the same name cannot be stacked.
+                Dealing Heavy Attack DMG extends this effect by <span className="highlight">4s</span>, up to 1 time. Each successful extension gives <span className="highlight">{param[0] ?? '—'}%</span> <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG Bonus</span> to all Resonators in the team for <span className="highlight">30s</span>. Effects of the same name cannot be stacked.
             </>
         )
     }

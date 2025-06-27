@@ -58,7 +58,7 @@ function generateStates() {
     });
 
     fs.writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf-8');
-    console.log(`✅ characterStates.json generated at ${outputPath}`);
+    //console.log(`✅ characterStates.json generated at ${outputPath}`);
 }
 
 generateStates();

@@ -18,7 +18,8 @@ export default function BuffsPane({
                                       setTeam,
     characterRuntimeStates,
     setCharacterRuntimeStates,
-    activeCharacter
+    activeCharacter,
+    characterStates
                                   }) {
     loadBase();
     const menuRef = useRef(null);
@@ -93,6 +94,20 @@ export default function BuffsPane({
 
         loadAllBuffUIs();
     }, [team]);
+
+    const teamBase = characterStates.filter(char => team.map(Number).includes(char.Id));
+    useEffect(() => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [charId]: {
+                ...(prev[charId] ?? {}),
+                activeStates: {
+                    ...(prev[charId]?.activeStates ?? {}),
+                    teamBase: teamBase
+                }
+            }
+        }));
+    }, [team, charId, setCharacterRuntimeStates]);
 
     return (
         <div className="team-pane">
@@ -182,24 +197,22 @@ export default function BuffsPane({
                             charId={charId}
                             setCharacterRuntimeStates={setCharacterRuntimeStates}
                             attributeColors={attributeColors}
+                            characterRuntimeStates={characterRuntimeStates}
                         />
                     </ExpandableSection>
                 );
             })}
 
-            {characterMenuOpen && (
-                <CharacterMenu
-                    characters={characters.filter(
-                        (char) =>
-                            !team.includes(char.link) ||
-                            char.link === team[activeCharacterSlot]
-                    )}
-                    handleCharacterSelect={handleCharacterSelect}
-                    menuRef={menuRef}
-                    menuOpen={characterMenuOpen}
-                    setMenuOpen={setCharacterMenuOpen}
-                />
-            )}
+            <CharacterMenu
+                characters={characters.filter(
+                    (char) =>
+                        !team.includes(char.link) || char.link === team[activeCharacterSlot]
+                )}
+                handleCharacterSelect={handleCharacterSelect}
+                menuRef={menuRef}
+                menuOpen={characterMenuOpen}
+                setMenuOpen={setCharacterMenuOpen}
+            />
         </div>
     );
 }

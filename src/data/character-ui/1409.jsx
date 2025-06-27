@@ -1,6 +1,7 @@
 import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {attributeColors} from "../../utils/attributeHelpers.js";
 
 export default function CartethyiaUI({ activeStates, toggleState }) {
     return (
@@ -8,7 +9,7 @@ export default function CartethyiaUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Mandate of Divinity</h4>
                 <ul style={{ paddingLeft: '20px' }}>
-                    <li>When Fleurdelys has Mandate of Divinity, Aero Erosion's DMG is Amplified by 50%</li>
+                    <li>When <span className='highlight'>Fleurdelys</span> has <span className='highlight'>Mandate of Divinity</span>, <span style={{ color: attributeColors['aero'], fontWeight: 'bold' }}>Aero Erosion</span>'s DMG is Amplified by <span className='highlight'>50%</span></li>
                 </ul>
                 <label className="modern-checkbox">
                     <input

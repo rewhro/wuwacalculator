@@ -1,6 +1,7 @@
 import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function AeroMUI({ activeStates, toggleState }) {
     const hasToggles = false; // set to `false` if no actual toggles for this character yet
@@ -20,7 +21,8 @@ export function CustomInherentSkills({
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
                                          unlockLevels = [],
-                                         charLevel = 1
+                                         charLevel = 1,
+    keywords
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -68,15 +70,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {storm && (
                             <label className="modern-checkbox">

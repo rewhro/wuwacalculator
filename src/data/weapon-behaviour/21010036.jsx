@@ -43,7 +43,7 @@ export function WeaponUI({
                         Enable
                     </label>
                     <p>
-                        Dealing Heavy Attack DMG extends this effect by 4s, up to 1 times. Each successful extension gives {currentParamValues[5]} DMG Bonus to all Resonators in the team. Effects of the same name cannot be stacked.
+                        Dealing Heavy Attack DMG extends this effect by 4s, up to 1 time. Each successful extension gives {currentParamValues[5]} Fusion DMG Bonus to all Resonators in the team for 30s. Effects of the same name cannot be stacked.
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -68,19 +68,9 @@ export function applyWeaponLogic({
                                      currentParamValues = [],
                                      activeCharacter
                                  }) {
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
-
     const atk = parseFloat(currentParamValues[0]);
     const ult = parseFloat(currentParamValues[1]);
-    const attr = parseFloat(currentParamValues[5]);
+    const fusion = parseFloat(currentParamValues[5]);
 
     mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + atk;
 
@@ -89,7 +79,7 @@ export function applyWeaponLogic({
     }
 
     if (characterState?.activeStates?.secondP) {
-        mergedBuffs[element] = (mergedBuffs[element] ?? 0) + attr;
+        mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + fusion;
     }
 
     return { mergedBuffs, combatState, skillMeta };

@@ -1,6 +1,7 @@
 // src/data/character-ui/1506.jsx
 import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
+import {attributeColors} from "../../utils/attributeHelpers.js";
 
 export default function PheobeUI({ activeStates, toggleState }) {
     return (
@@ -8,9 +9,9 @@ export default function PheobeUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Absolution</h4>
                 <div>
-                    <p>Increase DMG Multiplier by 255% for Dawn of Enlightenment.</p>
-                    <p>Increase DMG Multiplier by 255% for Attentive Heart.</p>
-                    <p>When the targets hit have Spectro Frazzle, the skill Heavy Attack: Starflash gains 256% DMG Amplification.</p>
+                    <p>Increase DMG Multiplier by <span className='highlight'>255%</span> for <span className='highlight'>Dawn of Enlightenment</span>.</p>
+                    <p>Increase DMG Multiplier by <span className='highlight'>255%</span> for <span className='highlight'>Attentive Heart</span>.</p>
+                    <p>When the targets hit have <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span>, the skill <span className='highlight'>Heavy Attack: Starflash</span> gains <span className='highlight'>256%</span> DMG Amplification.</p>
 
                 </div>
                 <label className="modern-checkbox">
@@ -19,15 +20,16 @@ export default function PheobeUI({ activeStates, toggleState }) {
                         checked={activeStates.absolution || false}
                         onChange={() => {
                             toggleState('absolution');
-                            if (activeStates.confession) toggleState('confession'); // turn off other
+                            if (activeStates.confession) toggleState('confession');
+                            if (activeStates.attentive) toggleState('attentive');
                         }}
                     />
                     Absolution?
                 </label>
             </div>
             <div className="status-toggle-box">
-                <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Confession</h4>
-                <p>Grant Silent Prayer - reducing the Spectro RES of nearby targets by 10% and granting 100% Spectro Frazzle DMG Amplification.</p>
+                <h4 className={'highlight'} style={{ fontSize: '18px'}}>Confession</h4>
+                <p>Grant <span className='highlight'>Silent Prayer</span> - reducing the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro RES</span> of nearby targets by <span className='highlight'>10%</span> and granting <span className='highlight'>100%</span> <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> DMG Amplification.</p>
                 <label className="modern-checkbox">
                     <input
                         type="checkbox"
@@ -35,6 +37,7 @@ export default function PheobeUI({ activeStates, toggleState }) {
                         onChange={() => {
                             toggleState('confession');
                             if (activeStates.absolution) toggleState('absolution');
+                            if (activeStates.attentive) toggleState('attentive');
                         }}
                     />
                     Confession?
@@ -43,16 +46,22 @@ export default function PheobeUI({ activeStates, toggleState }) {
 
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Attentive Heart</h4>
-                <p>Confession Enhancement: Grant Silent Prayer to the Resonator on the field, reducing the Spectro RES of nearby targets by 10% and granting 100% Spectro Frazzle DMG Amplification. When Spectro Frazzle inflicts DMG, extend Spectro Frazzle's damage interval by 50%. This effect lasts 30s or until Phoebe switches to Absolution status.</p>
-                <label className="modern-checkbox">
+                <p><span className='highlight'>Confession</span> Enhancement: Grant <span className='highlight'>Silent Prayer</span> to the Resonator on the field, reducing the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro RES</span> of nearby targets by <span className='highlight'>10%</span> and granting <span className='highlight'>100%</span> <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> DMG Amplification. When <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> inflicts DMG, extend <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span>'s damage interval by 50%. This effect lasts 30s or until Phoebe switches to Absolution status.</p>
+                <label className="modern-checkbox" style={{ opacity: !activeStates.confession ? 0.5 : 1 }}>
                     <input
                         type="checkbox"
                         checked={activeStates.attentive || false}
                         onChange={() => {
                             toggleState('attentive');
                         }}
+                        disabled={!activeStates.confession}
                     />
                     Enable
+                    {!activeStates.confession && (
+                        <span style={{ marginLeft: '8px', fontSize: '12px', color: 'gray' }}>
+                            (Requires Pheobe to be in Confession state)
+                            </span>
+                    )}
                 </label>
             </div>
         </div>

@@ -126,6 +126,13 @@ export function SKBuffsLogic({
     const state = characterState?.activeStates ?? {};
     const critRate = state.innerEnergy * 0.05;
 
+    const name = activeCharacter?.displayName?.toLowerCase();
+    const isRover = name.includes("rover");
+
+    if (isRover && state.gravitation) {
+        mergedBuffs.energyRegen = (mergedBuffs.energyRegen ?? 0) + 10;
+    }
+
     if (state.innerS && critRate > 0) {
         mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + critRate;
     }

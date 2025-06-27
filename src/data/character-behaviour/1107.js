@@ -27,8 +27,7 @@ export function applyCarlottaLogic({
     }
 
     if (
-        tab === 'outroSkill' &&
-        name === 'kaleidoscope sparks'
+        name.includes('kaleidoscope')
     ) {
         skillMeta.visible = isActiveSequence(3);
     }
@@ -84,11 +83,11 @@ export function applyCarlottaLogic({
 export const carlottaMultipliers = {
     outroSkill: [
         {
-            name: "Closing Remark",
+            name: "Closing Remark DMG",
             scaling: { atk: 1 }
         },
         {
-            name: "Kaleidoscope Sparks",
+            name: "Kaleidoscope Sparks DMG",
             scaling: { atk: 1 }
         }
     ]

@@ -1,5 +1,7 @@
 import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
+import {attributeColors} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export default function LingYangUI({ activeStates, toggleState }) {
     return (
@@ -7,7 +9,7 @@ export default function LingYangUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Lion's Vigor</h4>
                 <div>
-                    <p>Lingyang gains 50% Glacio DMG Bonus.</p>
+                    <p> <span className='highlight'>Lingyang</span> gains <span className='highlight'>50%</span> <span style={{ color: attributeColors['glacio'], fontWeight: 'bold' }}>Glacio DMG Bonus</span>.</p>
                 </div>
                 <label className="modern-checkbox">
                     <input
@@ -32,7 +34,8 @@ export function CustomInherentSkills({
                                          characterRuntimeStates,
                                          setCharacterRuntimeStates,
                                          charLevel,
-                                         unlockLevels = [50, 70]
+                                         unlockLevels = [50, 70],
+    keywords,
                                      }) {
     const charId = character?.Id ?? character?.id ?? character?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
@@ -80,15 +83,13 @@ export function CustomInherentSkills({
                 return (
                     <div key={index} className="inherent-skill">
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold' }}>{name}</h4>
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: formatDescription(
-                                    node.Skill.Desc,
-                                    node.Skill.Param,
-                                    currentSliderColor
-                                )
-                            }}
-                        />
+                        <p>
+                            {highlightKeywordsInText(formatDescription(
+                                node.Skill.Desc,
+                                node.Skill.Param,
+                                currentSliderColor
+                            ), keywords)}
+                        </p>
 
                         {isPride && (
                             <label className="modern-checkbox">
