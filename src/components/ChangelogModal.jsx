@@ -1,7 +1,7 @@
 // src/components/ChangelogModal.jsx
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-export default function ChangelogModal({ open, onClose }) {
+export default function ChangelogModal({ open, onClose, shouldScroll }) {
     if (!open) return null;
 
     const changelogData = [
@@ -280,12 +280,21 @@ export default function ChangelogModal({ open, onClose }) {
                 {
                     type: 'paragraph',
                     content: `Added <strong>Phrolova</strong>.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `Added <strong>Lethean Elegy</strong> rectifier.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `Added <strong>Dream of the Lost</strong> set echoes.`
                 }
             ]
         }
         // Add more changelogs as needed
     ];
 
+    const changelogRef = useRef(null);
     const [isClosing, setIsClosing] = useState(false);
 
     const handleClose = () => {
@@ -295,6 +304,13 @@ export default function ChangelogModal({ open, onClose }) {
             setIsClosing(false);
         }, 300);
     };
+
+
+    useEffect(() => {
+        if (open && shouldScroll && changelogRef.current) {
+            changelogRef.current.scrollTop = changelogRef.current.scrollHeight;
+        }
+    }, [open, shouldScroll]);
 
     return (
         <div
@@ -306,7 +322,7 @@ export default function ChangelogModal({ open, onClose }) {
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2>Changelog</h2>
-                <div className="changelog-entries">
+                <div className="changelog-entries" ref={changelogRef}>
                     {changelogData.map((log, index) => (
                         <div key={index} className="changelog-block">
                             <h3 className="changelog-date">{log.date}</h3>

@@ -2749,7 +2749,7 @@
     "IntensityCode": 0,
     "MonsterInfo": 310000430,
     "Phantom": {
-      "Name": "Phantom - Fae Ignis",
+      "Name": "Phantom: Fae Ignis",
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_31043_UI.T_IconMonsterGoods_SG_31043_UI"
     }
   },
@@ -4231,7 +4231,7 @@
     "IntensityCode": 1,
     "MonsterInfo": 320000300,
     "Phantom": {
-      "Name": "Phantom - Cuddle Wuddle",
+      "Name": "Phantom: Cuddle Wuddle",
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_32030_UI.T_IconMonsterGoods_SG_32030_UI"
     }
   },
@@ -5083,7 +5083,11 @@
       5
     ],
     "IntensityCode": 2,
-    "MonsterInfo": 330000190
+    "MonsterInfo": 330000190,
+    "Phantom": {
+      "Name": "Stay tuned",
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_33019_UI.T_IconMonsterGoods_SG_33019_UI"
+    }
   },
   {
     "id": "6000092",
@@ -7229,8 +7233,8 @@
   {
     "id": "6000113",
     "Id": 6000113,
-    "Code": "W85-",
-    "Name": "Nightmares - Kelpie",
+    "Code": "W86-",
+    "Name": "Nightmare: Kelpie",
     "Type": "",
     "Intensity": "",
     "Place": "",
@@ -7335,7 +7339,7 @@
   {
     "id": "6000114",
     "Id": 6000114,
-    "Code": "W86-",
+    "Code": "W85-",
     "Name": "Lioness of Glory",
     "Type": "",
     "Intensity": "",
@@ -7415,6 +7419,351 @@
     ],
     "IntensityCode": 2,
     "MonsterInfo": 340000140
+  },
+  {
+    "id": "6000115",
+    "Id": 6000115,
+    "Code": "W93-",
+    "Name": "Nightmare: Hecate",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34016_UI.T_IconMonsterHead_34016_UI",
+    "Skill": {
+      "Desc": "Transform into Nightmare: Hecate. Leap up and smash down, dealing 2 stages of Havoc DMG equal to {0} of ATK.\nThe Resonator with the Echo equipped in the main slot gains {1} Havoc DMG Bonus and {2} Echo Skill DMG Bonus.\nCD: {3}s",
+      "SimpleDesc": "Transform into Nightmare: Hecate. Leap up and smash down to deliver 2 stages of Havoc DMG.\nThe Resonator with the Echo equipped in the main slot gains Havoc DMG Bonus and Echo Skill DMG Bonus.",
+      "Param": [
+        [
+          "124.50%",
+          "12.00%",
+          "20.00%",
+          "25"
+        ],
+        [
+          "149.40%",
+          "12.00%",
+          "20.00%",
+          "25"
+        ],
+        [
+          "174.30%",
+          "12.00%",
+          "20.00%",
+          "25"
+        ],
+        [
+          "199.20%",
+          "12.00%",
+          "20.00%",
+          "25"
+        ],
+        [
+          "224.10%",
+          "12.00%",
+          "20.00%",
+          "25"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/MstSkil_34010_UI.MstSkil_34010_UI"
+    },
+    "Group": {
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Param": [
+              "3%",
+              "4",
+              "8%",
+              "15%"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 3,
+    "MonsterInfo": 340000160
+  },
+  {
+    "id": "6000116",
+    "Id": 6000116,
+    "Code": "X79-",
+    "Name": "Stay tuned",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34015_2_UI.T_IconMonsterHead_34015_2_UI",
+    "Skill": {
+      "Desc": "Summon the Sanctum of the Deep that lasts for {0}s to bind any enemy within. The status is removed when the enemy is hit or when the Sanctum of the Deep ends.\nThe Resonator with the Echo equipped in the main slot gains {1} Aero DMG Bonus and {2} Echo Skill DMG Bonus.\nCD: {3}s",
+      "SimpleDesc": "Summon the Sanctum of the Deep to bind any enemy within. The status is removed when the enemy is hit or when the Sanctum of the Deep ends.\nThe Resonator with the Echo equipped in the main slot gains Aero DMG Bonus and Echo Skill DMG Bonus.",
+      "Param": [
+        [
+          "5",
+          "20"
+        ],
+        [
+          "5",
+          "20"
+        ],
+        [
+          "5",
+          "20"
+        ],
+        [
+          "5",
+          "20"
+        ],
+        [
+          "5",
+          "20"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_Mstskil_34015_UI.T_Mstskil_34015_UI"
+    },
+    "Group": {
+      "17": {
+        "Id": 17,
+        "Name": "Windward Pilgrimage",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriWindErrorA.T_IconElementAttriWindErrorA",
+        "Color": "FFFFFF00",
+        "Set": {
+          "2": {
+            "Desc": "Aero DMG + {0}",
+            "Param": [
+              "10%"
+            ]
+          },
+          "5": {
+            "Desc": "Hitting a target with Aero Erosion increases Crit. Rate by {0} and grants {1} Aero DMG Bonus, lasting for {2}s.",
+            "Param": [
+              "10%",
+              "30%",
+              "10"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 2,
+    "MonsterInfo": 340000151
+  },
+  {
+    "id": "6000117",
+    "Id": 6000117,
+    "Code": "W31-",
+    "Name": "Stay tuned",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31063_UI.T_IconMonsterHead_31063_UI",
+    "Skill": {
+      "Desc": "Transform into Havoc Warrior to attack up to 3 times, dealing {0} Havoc DMG each time.\n \nCD: {1}s",
+      "SimpleDesc": "Transform into Havoc Warrior to continuously deal Havoc DMG.",
+      "Param": [
+        [
+          "107.33%",
+          "15"
+        ],
+        [
+          "123.43%",
+          "15"
+        ],
+        [
+          "139.53%",
+          "15"
+        ],
+        [
+          "155.63%",
+          "15"
+        ],
+        [
+          "171.73%",
+          "15"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_Z_Z8_UI.T_MstSkil_Z_Z8_UI"
+    },
+    "Group": {
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Param": [
+              "3%",
+              "4",
+              "8%",
+              "15%"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 0,
+    "MonsterInfo": 310000630
+  },
+  {
+    "id": "6000118",
+    "Id": 6000118,
+    "Code": "W26-",
+    "Name": "Stay tuned",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31064_UI.T_IconMonsterHead_31064_UI",
+    "Skill": {
+      "Desc": "Summon a Glacio Predator that throws an ice spear, dealing {0} Glacio DMG on hit. Deal {1} Glacio DMG up to 10 times during the charging time, and {2} Glacio DMG when the spear explodes.\n\nCD: {3}s",
+      "SimpleDesc": "Summon a Glacio Predator to throw ice spears and deal Glacio DMG.",
+      "Param": [
+        [
+          "28.80%",
+          "2.88%",
+          "14.40%",
+          "8"
+        ],
+        [
+          "33.12%",
+          "3.31%",
+          "16.56%",
+          "8"
+        ],
+        [
+          "37.44%",
+          "3.74%",
+          "18.72%",
+          "8"
+        ],
+        [
+          "41.76%",
+          "4.18%",
+          "20.88%",
+          "8"
+        ],
+        [
+          "46.08%",
+          "4.61%",
+          "23.04%",
+          "8"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_Z_Z9_UI.T_MstSkil_Z_Z9_UI"
+    },
+    "Group": {
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Param": [
+              "3%",
+              "4",
+              "8%",
+              "15%"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 0,
+    "MonsterInfo": 310000640
+  },
+  {
+    "id": "6000119",
+    "Id": 6000119,
+    "Code": "W60-",
+    "Name": "Stay tuned",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_32043_UI.T_IconMonsterHead_32043_UI",
+    "Skill": {
+      "Desc": "Summon a Tambourinist that plays out Melodies of Annihilation. Any Resonator on the team gains the following effect for 10s upon obtaining a Melody of Annihilation: When the Resonator hits a target, the Tambourinist deals {0} Havoc DMG to the target, up to 10 times.\n\nCD: {1}s",
+      "SimpleDesc": "Summon a Tambourinist to aid the Resonators on the team in combat with Havoc DMG attacks.",
+      "Param": [
+        [
+          "9.00%",
+          "15"
+        ],
+        [
+          "10.35%",
+          "15"
+        ],
+        [
+          "11.70%",
+          "15"
+        ],
+        [
+          "13.05%",
+          "15"
+        ],
+        [
+          "14.40%",
+          "15"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_205_UI.T_MstSkil_205_UI"
+    },
+    "Group": {
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Param": [
+              "3%",
+              "4",
+              "8%",
+              "15%"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 1,
+    "MonsterInfo": 320000430
   },
   {
     "id": "390070051",

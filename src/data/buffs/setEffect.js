@@ -77,6 +77,14 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
     const voidElectro = Math.min(voidStack * 15, 30);
     mergedBuffs.electro = (mergedBuffs.electro ?? 0) + voidElectro;
 
+    const dreamOfTheLostStacks = effect.dreamOfTheLost3pc ?? 0;
+    let dreamOfTheLostCritRate = Math.min(dreamOfTheLostStacks * 3, 12);
+    if (dreamOfTheLostCritRate >= 12) {
+        dreamOfTheLostCritRate = 20;
+        mergedBuffs.havoc = (mergedBuffs.havoc ?? 0) + 15;
+    }
+    mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + dreamOfTheLostCritRate;
+
     return mergedBuffs;
 }
 
@@ -276,6 +284,13 @@ export const mainEchoBuffs = {
     '6000112': {
         always: { aero: 12, resonanceLiberation: 12 }
     },
+    '6000115': {
+        always: { havoc: 12, echoSkill: 20 }
+    },
+    '6000116': {
+        always: { aero: 20}
+    },
+
 
     '6000044': {
         stackable: {

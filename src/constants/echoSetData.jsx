@@ -165,6 +165,11 @@ const echoSets = [
         name: 'Flaming Clawprint',
         twoPiece: 'Fusion DMG + 10%.',
         fivePiece: 'Casting Resonance Liberation grants all Resonators in the team 15% Fusion DMG Bonus and the caster 20% Resonance Liberation DMG Bonus, lasting for 35s.'
+    },
+    {
+        id: 19,
+        name: 'Dream of the Lost',
+        threePiece: 'Gain 3% Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to 4 stacks. At max stacks, gain additional 8% Crit. Rate increase and 15% Havoc DMG Bonus increase.'
     }
 ];
 
@@ -185,7 +190,8 @@ export const setIconMap = {
     14: '/assets/echo-icons/tidebreakingCourage.webp',
     16: '/assets/echo-icons/gustsOfWelkin.webp',
     17: '/assets/echo-icons/windwardPilgrimage.webp',
-    18: '/assets/echo-icons/flamingClawprint.webp'
+    18: '/assets/echo-icons/flamingClawprint.webp',
+    19: '/assets/echo-icons/dreamOfTheLost.webp'
 };
 
 export const validSubstatRanges = {

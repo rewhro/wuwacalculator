@@ -712,6 +712,14 @@
     "type": 5
   },
   {
+    "id": "21050066",
+    "name": "Lethean Elegy",
+    "description": "I am not there. I do not die.\nI shall be death's companion—with euphoric delights I drown my fear, with the coming days I trade for the past.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21050066_UI.T_IconWeapon21050066_UI.webp",
+    "rank": 5,
+    "type": 5
+  },
+  {
     "id": "21050074",
     "name": "Augment",
     "description": "This Rectifier is a ceremonial weapon used in Huanglong's Magistrate Inauguration Ceremonies. The golden ginkgo leaf pattern symbolizes Huanglong's resilience, thriving in a world that has left it behind.",
@@ -732,70 +740,6 @@
     "name": "Waltz in Masquerade",
     "description": "This weapon draws its design inspiration from the play—Waltz in Masquerade.\nA waltz is a dance of spectacle and masquerade, where the grand symphony drowns whispered secrets and swirling dresses conceal the exchange of letters and promises. The dancers speak a silent language, as smooth and precise as the perfect resonance of a rectifier.",
     "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21050094_UI.T_IconWeapon21050094_UI.webp",
-    "rank": 4,
-    "type": 5
-  },
-  {
-    "id": "80080001",
-    "name": "Projection: Somnoire Anchor",
-    "description": "A projection that reshapes the sword into a cute table knife. \nIt was once an anchor used by Ivory Gatekeeper to stabilize the Somnoire.\nHowever, it now looks different ever since Ivory Gatekeeper transformed into a white cat...",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21020019_UI.T_IconWeapon21020019_UI.webp",
-    "rank": 4,
-    "type": 2
-  },
-  {
-    "id": "80080002",
-    "name": "Projection: Formless Broadblade",
-    "description": "A conceptual projection, a transparent broadblade as if it were made of nothing.\nIn Somnoire, a weapon's form is but a mirage, while its purpose—a tool of war—holds true as ever.",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21010027_UI.T_IconWeapon21010027_UI.webp",
-    "rank": 3,
-    "type": 1
-  },
-  {
-    "id": "80080003",
-    "name": "Projection: Formless Sword",
-    "description": "A conceptual projection, a transparent sword as if it were made of nothing.\nIn Somnoire, a weapon's form is but a mirage, while its purpose—a tool of war—holds true as ever.",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21020018_UI.T_IconWeapon21020018_UI.webp",
-    "rank": 3,
-    "type": 2
-  },
-  {
-    "id": "80080004",
-    "name": "Projection: Formless Pistol",
-    "description": "A conceptual projection, a transparent pistol as if it were made of nothing.\nIn Somnoire, a weapon's form is but a mirage, while its purpose—a tool of war—holds true as ever.",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21030016_UI.T_IconWeapon21030016_UI.webp",
-    "rank": 3,
-    "type": 3
-  },
-  {
-    "id": "80080005",
-    "name": "Projection: Formless Gauntlets",
-    "description": "A conceptual projection, transparent gauntlets as if they were made of nothing.\nIn Somnoire, a weapon's form is but a mirage, while its purpose—a tool of war—holds true as ever.",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21040017_UI.T_IconWeapon21040017_UI.webp",
-    "rank": 3,
-    "type": 4
-  },
-  {
-    "id": "80080006",
-    "name": "Projection: Formless Rectifier",
-    "description": "A conceptual projection, a transparent rectifier as if it were made of nothing.\nIn Somnoire, a weapon's form is but a mirage, while its purpose—a tool of war—holds true as ever.",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21050028_UI.T_IconWeapon21050028_UI.webp",
-    "rank": 3,
-    "type": 5
-  },
-  {
-    "id": "80080007",
-    "name": "Projection - Peach Blossom",
-    "description": "",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21010017_UI.T_IconWeapon21010017_UI.webp",
-    "rank": 5,
-    "type": 1
-  },
-  {
-    "id": "80080008",
-    "name": "Projection: Ocean's Gift",
-    "description": "To fishers, the sea is their field of harvest. Harvest means hope.",
-    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21050036_UI.T_IconWeapon21050036_UI.webp",
     "rank": 4,
     "type": 5
   }

@@ -180,8 +180,10 @@ export default function EchoesPane({
     }, []);
 
     const setCounts = getSetCounts(echoData);
-    const hasSetEffects = Object.entries(setCounts).some(([setId, count]) => count >= 2);
-
+    const hasSetEffects = Object.entries(setCounts).some(([setId, count]) => {
+        const numericId = Number(setId);
+        return (numericId === 19 && count >= 3) || (numericId !== 19 && count >= 2);
+    });
     const echoStatTotals = getEchoStatsFromEquippedEchoes(echoData);
 
     const critRate = echoStatTotals.critRate ?? 0;
@@ -463,11 +465,15 @@ export default function EchoesPane({
                             const setInfo = echoSets.find(set => set.id === numericId);
                             if (!setInfo || count < 2) return null;
 
-                            const { twoPiece: TwoPieceUI, fivePiece: FivePieceUI } = getEchoSetUIOverrides(numericId);
+                            const {
+                                twoPiece: TwoPieceUI,
+                                threePiece: ThreePieceUI,
+                                fivePiece: FivePieceUI
+                            } = getEchoSetUIOverrides(numericId);
 
                             return (
                                 <div key={setId} className="echo-set-content">
-                                    {count >= 2 && (
+                                    {count >= 2 && setInfo.twoPiece && (
                                         TwoPieceUI ? (
                                             <TwoPieceUI setInfo={setInfo} />
                                         ) : (
@@ -482,7 +488,30 @@ export default function EchoesPane({
                                             </div>
                                         )
                                     )}
-                                    {count === 5 && (
+
+                                    {count >= 3 && setInfo.threePiece && (
+                                        ThreePieceUI ? (
+                                            <ThreePieceUI
+                                                setInfo={setInfo}
+                                                activeStates={activeStates}
+                                                toggleState={toggleState}
+                                                charId={charId}
+                                                setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                            />
+                                        ) : (
+                                            <div className="echo-buff">
+                                                <div className="echo-buff-header">
+                                                    <img className="echo-buff-icon" src={setIconMap[setInfo.id]} alt={setInfo.name} loading="lazy" />
+                                                    <div className="echo-buff-name">{setInfo.name} (3-piece)</div>
+                                                </div>
+                                                <div className="echo-buff-effect">
+                                                    {highlightKeywordsInText(setInfo.threePiece)}
+                                                </div>
+                                            </div>
+                                        )
+                                    )}
+
+                                    {count >= 5 && setInfo.fivePiece && (
                                         FivePieceUI ? (
                                             <FivePieceUI
                                                 setInfo={setInfo}

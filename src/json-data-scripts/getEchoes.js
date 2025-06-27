@@ -34,21 +34,17 @@ export const echoes = rawEchoes.map(echo => {
     if (intensity === 1) cost = 3;
     else if (intensity === 0) cost = 1;
 
-    // Local icon (based on formatted name)
     const iconFileName = formatEchoIconName(name);
-    const localIcon = `/assets/echoes/${iconFileName}`;
+    const localIcon = (!iconFileName.includes('StayTuned')) ? `/assets/echoes/${iconFileName}` : `/assets/echoes/${id}.png`;
 
-    // Inject param values into description
     const descRaw = echo.Skill?.Desc ?? '';
     const paramValues = echo.Skill?.Param ?? [];
     const description = formatDescription(descRaw, paramValues);
 
-    // Extract set IDs from Group keys
     let sets = echo.Group ? Object.keys(echo.Group).map(Number) : [];
 
-    // Optional: Hardcode extra set IDs for specific echoes
     if (id === "6000085") {
-        sets.push(1, 2, 3, 4, 5, 6); // Add additional sets
+        sets.push(1, 2, 3, 4, 5, 6);
     }
 
     return {

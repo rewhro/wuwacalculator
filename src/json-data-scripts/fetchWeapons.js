@@ -2,7 +2,6 @@
 import weapons from '../data/weaponDetails.json';
 
 export async function fetchWeapons() {
-    // This assumes weaponDetails.json is preprocessed and saved
     const mapped = weapons.reduce((acc, weapon) => {
         const id = weapon.Id ?? weapon.id ?? weapon.weaponId;
         if (!id) return acc;

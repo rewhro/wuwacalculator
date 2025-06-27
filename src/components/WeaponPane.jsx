@@ -161,13 +161,14 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                     ref={weaponTriggerRef}
                 >
                     <img
+                        style={{backgroundColor: 'unset', filter: 'unset', opacity: 'unset'}}
                         src={activeWeaponIconPath}
                         alt="Weapon"
                         loading="lazy"
                         decoding="async"
                         className="header-icon"
                         onError={(e) => {
-                            e.target.onerror = null; // prevent infinite loop
+                            e.target.onerror = null;
                             e.target.src = '/assets/weapon-icons/default.webp';
                             e.currentTarget.classList.add('fallback-icon');
                         }}
@@ -181,9 +182,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                             </div>
                         )}
                     </h2>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-
-                    </div>
                 </div>
 
             </div>

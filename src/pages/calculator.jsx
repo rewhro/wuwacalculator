@@ -37,8 +37,9 @@ import {getSkillDamageCache} from "../utils/skillDamageCache.js";
 export default function Calculator() {
     loadBase();
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-06-27 15:19';
+    const LATEST_CHANGELOG_VERSION = '2025-06-27 18:03';
     const [showChangelog, setShowChangelog] = useState(false);
+    const [shouldScrollChangelog, setShouldScrollChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = useState(1);
     const { isDark, theme, setTheme, effectiveTheme } = useDarkMode();
     const toggleTheme = () => {
@@ -190,10 +191,18 @@ export default function Calculator() {
     useEffect(() => {
         const seenVersion = localStorage.getItem('seenChangelogVersion');
         if (seenVersion !== LATEST_CHANGELOG_VERSION) {
-            setShowChangelog(true); // show modal
-            localStorage.setItem('seenChangelogVersion', LATEST_CHANGELOG_VERSION); // mark as seen
+            setShowChangelog(true);
+            setShouldScrollChangelog(true);
+            localStorage.setItem('seenChangelogVersion', LATEST_CHANGELOG_VERSION);
         }
     }, []);
+
+    useEffect(() => {
+        if (showChangelog && shouldScrollChangelog) {
+            const timeout = setTimeout(() => setShouldScrollChangelog(false), 100);
+            return () => clearTimeout(timeout);
+        }
+    }, [showChangelog, shouldScrollChangelog]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -997,7 +1006,11 @@ export default function Calculator() {
 
                 </div>
             </div>
-            <ChangelogModal open={showChangelog} onClose={() => setShowChangelog(false)} />
+            <ChangelogModal
+                open={showChangelog}
+                onClose={() => setShowChangelog(false)}
+                shouldScroll={shouldScrollChangelog}
+            />
         </>
     );
 }
