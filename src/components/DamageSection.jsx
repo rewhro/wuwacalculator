@@ -190,9 +190,9 @@ export default function DamageSection({
                     {levels.length > 0 ? (
                         <div className="damage-grid">
                             <div></div>
-                            <div>Normal</div>
-                            <div>CRIT</div>
-                            <div>AVG</div>
+                            <div className='subhit'>Normal</div>
+                            <div className='subhit'>CRIT</div>
+                            <div className='subhit'>AVG</div>
 
                             {levels.map((level, index) => {
                                 let label = level.Name;
@@ -290,9 +290,12 @@ export default function DamageSection({
                                                 <div style={{ paddingLeft: '0.5rem', fontStyle: 'italic', fontSize: '0.9rem', opacity: 0.8 }}>
                                                     ↳ {level.Name}-{i + 1}{hit.label && ` (${hit.label})`}
                                                 </div>
-                                                <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
-                                                <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
-                                                <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
+                                                <div className='subhit'
+                                                    style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
+                                                <div className='subhit'
+                                                    style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
+                                                <div className='subhit'
+                                                    style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
                                             </React.Fragment>
                                         ))}
                                     </React.Fragment>
@@ -333,9 +336,9 @@ export default function DamageSection({
                             <h3 className="damage-box-title">Echo Attacks</h3>
                             <div className="damage-grid">
                                 <div></div>
-                                <div>Normal</div>
-                                <div>CRIT</div>
-                                <div>AVG</div>
+                                <div className='subhit'>Normal</div>
+                                <div className='subhit'>CRIT</div>
+                                <div className='subhit'>AVG</div>
 
                                 {echoSkillResults.map((skill, i) => {
                                     const echoId = mainEcho.id ?? mainEcho.name?.toLowerCase();
@@ -386,9 +389,12 @@ export default function DamageSection({
                                                     <div style={{ paddingLeft: '0.5rem', fontStyle: 'italic', fontSize: '0.9rem', opacity: 0.8 }}>
                                                         ↳ {skill.name}-{j + 1}{hit.label && ` (${hit.label})`}
                                                     </div>
-                                                    <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
-                                                    <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
-                                                    <div style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
+                                                    <div className='subhit'
+                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
+                                                    <div className='subhit'
+                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
+                                                    <div className='subhit'
+                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
                                                 </React.Fragment>
                                             ))}
                                         </React.Fragment>
@@ -404,9 +410,9 @@ export default function DamageSection({
                             <h3 className="damage-box-title">Negative Effects</h3>
                             <div className="damage-grid">
                                 <div></div>
-                                <div>Normal</div>
-                                <div>CRIT</div>
-                                <div>AVG</div>
+                                <div className='subhit'>Normal</div>
+                                <div className='subhit'>CRIT</div>
+                                <div className='subhit'>AVG</div>
 
                                 {(combatState?.spectroFrazzle > 0) && (
                                     <>

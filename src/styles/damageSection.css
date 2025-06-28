@@ -166,6 +166,18 @@
     display: inline-block;
 }
 
+@media (max-width: 500px) {
+    .damage-tooltip-wrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .subhit {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
 .damage-tooltip-wrapper::after {
     content: attr(data-tooltip);
     position: absolute;
