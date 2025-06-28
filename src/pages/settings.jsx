@@ -192,7 +192,7 @@ export default function Setting() {
                     <div className="sidebar-footer"></div>
                 </div>
 
-                {isOverlayVisible && (
+                {isOverlayVisible && isMobile && (
                     <div
                         className={`mobile-overlay ${hamburgerOpen ? 'visible' : ''} ${isOverlayClosing ? 'closing' : ''}`}
                         onClick={() => setHamburgerOpen(false)}

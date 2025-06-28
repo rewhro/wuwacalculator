@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { Sun, Moon, History, Sparkle } from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
@@ -14,12 +14,40 @@ export default function NotFound() {
         setTheme(newTheme);
     };
 
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
+    const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+    const [isOverlayClosing, setIsOverlayClosing] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 500);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        if (isMobile) {
+            setHamburgerOpen(false);
+        }
+    }, [isMobile]);
+
+    useEffect(() => {
+        if (hamburgerOpen) {
+            setIsOverlayVisible(true);
+        } else {
+            setIsOverlayClosing(true);
+            setTimeout(() => {
+                setIsOverlayVisible(false);
+                setIsOverlayClosing(false);
+            }, 400);
+        }
+    }, [hamburgerOpen]);
+
     return (
         <div className="layout">
             <div className="toolbar">
                 <div className="toolbar-group">
-                    <h4>Wuthering Waves Damage Calculator (& Optimizer soon... maybe)</h4>
-
                     <button
                         className={`hamburger-button ${hamburgerOpen ? 'open' : ''}`}
                         onClick={() => setHamburgerOpen(prev => !prev)}
@@ -28,11 +56,20 @@ export default function NotFound() {
                         <span></span>
                         <span></span>
                     </button>
+                    <h4 className="toolbar-title">
+                        Wuthering Waves Damage Calculator (& Optimizer soon... maybe)
+                    </h4>
                 </div>
             </div>
 
             <div className="horizontal-layout">
-                <div className={`sidebar ${hamburgerOpen ? 'expanded' : 'collapsed'}`}>
+                <div
+                    className={`sidebar ${
+                        isMobile
+                            ? hamburgerOpen ? 'open' : ''
+                            : hamburgerOpen ? 'expanded' : 'collapsed'
+                    }`}
+                >
                     <div className="sidebar-content">
                         <button className="sidebar-button" onClick={() => navigate('/')}>
                             <div className="icon-slot">
@@ -59,6 +96,13 @@ export default function NotFound() {
                     <div className="sidebar-footer">
                     </div>
                 </div>
+
+                {isOverlayVisible && isMobile && (
+                    <div
+                        className={`mobile-overlay ${hamburgerOpen ? 'visible' : ''} ${isOverlayClosing ? 'closing' : ''}`}
+                        onClick={() => setHamburgerOpen(false)}
+                    />
+                )}
 
                 <div style={{ padding: '2rem' }}>
                     <h1>404 - Page Not Found</h1>
