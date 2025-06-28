@@ -12,7 +12,7 @@ import EnemyPane from '../components/EnemyPane';
 import BuffsPane from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
 import ToolbarIconButton, {ToolbarSidebarButton} from '../components/ToolbarIconButton';
-import ResetButton from '../components/ResetButton.jsx';
+import ResetButton, {ResetCharacter} from '../components/ResetButton.jsx';
 import { attributeColors, attributeIcons, elementToAttribute } from '../utils/attributeHelpers';
 import { getFinalStats } from '../utils/getStatsForLevel';
 import { getUnifiedStatPool } from '../utils/getUnifiedStatPool';
@@ -46,7 +46,7 @@ export default function Calculator() {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
     };
-    const [leftPaneView, setLeftPaneView] = useState('characters');
+    const [leftPaneView, setLeftPaneView] = usePersistentState('leftPaneView','characters');
     const [isCollapsedMode, setIsCollapsedMode] = useState(false);
     const [activeCharacterId, setActiveCharacterId] = usePersistentState('activeCharacterId', null);
     const [characterRuntimeStates, setCharacterRuntimeStates] = usePersistentState('characterRuntimeStates', {});
@@ -664,6 +664,47 @@ export default function Calculator() {
             .map(([key, val]) => [val.Id, val.Rarity])
     );
 
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
+    const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+    const [isOverlayClosing, setIsOverlayClosing] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 500);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        if (isMobile) {
+            setHamburgerOpen(false);
+        }
+    }, [isMobile, leftPaneView]);
+
+    useEffect(() => {
+        if (hamburgerOpen) {
+            setIsOverlayVisible(true);
+        } else {
+            setIsOverlayClosing(true);
+            setTimeout(() => {
+                setIsOverlayVisible(false);
+                setIsOverlayClosing(false);
+            }, 400);
+        }
+    }, [hamburgerOpen]);
+
+    const [resetModalOpen, setResetModalOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setResetModalOpen(false);
+            setIsClosing(false);
+        }, 300);
+    };
+
     return (
         <>
             <SkillsModal
@@ -742,7 +783,13 @@ export default function Calculator() {
                 <div className="horizontal-layout">
 
                     {/* Sidebar */}
-                    <div className={`sidebar ${hamburgerOpen ? 'expanded' : 'collapsed'}`}>
+                    <div
+                        className={`sidebar ${
+                            isMobile
+                                ? hamburgerOpen ? 'open' : ''
+                                : hamburgerOpen ? 'expanded' : 'collapsed'
+                        }`}
+                    >
                         <div className="sidebar-content">
                             <button
                                 className={`sidebar-button ${showDropdown ? 'active' : ''}`}
@@ -849,11 +896,9 @@ export default function Calculator() {
                             )}
 
                             <button className="sidebar-button" onClick={toggleTheme}>
-                                <div className="icon-slot">
-                                    <div className="icon-slot theme-toggle-icon">
-                                        <Sun className="icon-sun" size={24} />
-                                        <Moon className="icon-moon" size={24} />
-                                    </div>
+                                <div className="icon-slot theme-toggle-icon">
+                                    <Sun className="icon-sun" size={24} />
+                                    <Moon className="icon-moon" size={24} />
                                 </div>
                                 <div className="label-slot">
                                     <span className="label-text">
@@ -864,26 +909,16 @@ export default function Calculator() {
                         </div>
                         {/* Footer */}
                         <div className="sidebar-footer">
-                            <ResetButton
-                                activeId={charId}
-                                setCharacterRuntimeStates={setCharacterRuntimeStates}
-                                setSliderValues={setSliderValues}
-                                setCustomBuffs={setCustomBuffs}
-                                setTraceNodeBuffs={setTraceNodeBuffs}
-                                setCombatState={setCombatState}
-                                setCharacterLevel={setCharacterLevel}
-                                setRotationEntries={setRotationEntries}
-                                defaultSliderValues={defaultSliderValues}
-                                defaultCustomBuffs={defaultCustomBuffs}
-                                defaultTraceBuffs={defaultTraceBuffs}
-                                defaultCombatState={defaultCombatState}
-                                characterStates={characterStates}
-                                characterRuntimeStates={characterRuntimeStates}
-                                weapons={weapons}
-                                combatState={combatState}
-                            />
+                            <ResetButton onClick={() => setResetModalOpen(true)} />
                         </div>
                     </div>
+
+                    {isOverlayVisible && (
+                        <div
+                            className={`mobile-overlay ${hamburgerOpen ? 'visible' : ''} ${isOverlayClosing ? 'closing' : ''}`}
+                            onClick={() => setHamburgerOpen(false)}
+                        />
+                    )}
 
                     {/* Main Content */}
                     <div className="main-content">
@@ -1024,6 +1059,28 @@ export default function Calculator() {
 
                 </div>
             </div>
+            {resetModalOpen && (
+                <ResetCharacter
+                    activeId={charId}
+                    setCharacterRuntimeStates={setCharacterRuntimeStates}
+                    setSliderValues={setSliderValues}
+                    setCustomBuffs={setCustomBuffs}
+                    setTraceNodeBuffs={setTraceNodeBuffs}
+                    setCombatState={setCombatState}
+                    setCharacterLevel={setCharacterLevel}
+                    setRotationEntries={setRotationEntries}
+                    defaultSliderValues={defaultSliderValues}
+                    defaultCustomBuffs={defaultCustomBuffs}
+                    defaultTraceBuffs={defaultTraceBuffs}
+                    defaultCombatState={defaultCombatState}
+                    characterStates={characterStates}
+                    characterRuntimeStates={characterRuntimeStates}
+                    weapons={weapons}
+                    combatState={combatState}
+                    handleClose={handleClose}
+                    isClosing={isClosing}
+                />
+            )}
             <ChangelogModal
                 open={showChangelog}
                 onClose={() => setShowChangelog(false)}

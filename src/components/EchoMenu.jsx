@@ -66,7 +66,7 @@ export default function EchoMenu({ echoes, handleEchoSelect, menuRef, menuOpen, 
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="menu-header-with-buttons echo">
-                    <div className="menu-header">Select Echo</div>
+                    <div className="menu-header echo">Select Echo</div>
                     <div className="button-group-container echo">
                         {Object.entries(setIconMap).map(([setId, iconPath]) => (
                             <img

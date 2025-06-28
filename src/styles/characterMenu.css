@@ -23,6 +23,30 @@
     flex-wrap: wrap;
 }
 
+@media (max-width: 740px) {
+    .menu-header-with-buttons {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: unset;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem !important;
+    }
+
+    .menu-header {
+        padding: unset;
+    }
+
+    .button-group-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
 .button-group-container {
     display: flex;
     flex-direction: row;

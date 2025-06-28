@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 .layout {
-    --sidebar-width: 200px;
-    --sidebar-collapsed-width: 60px;
+    --sidebar-width: 12.5rem;           /* 200px */
+    --sidebar-collapsed-width: 3.75rem; /* 60px */
 }
 
 /* ===================== */
@@ -18,7 +18,6 @@ html, body, #root {
     width: 100%;
     overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
-    /*@apply transition-colors duration-300;*/
 }
 
 .layout {
@@ -28,7 +27,6 @@ html, body, #root {
     width: 100%;
     overflow: hidden;
     background: #f9f9f9;
-    /*@apply transition-colors duration-300;*/
 }
 
 .dark .layout {
@@ -40,7 +38,6 @@ html, body, #root {
     min-width: 0;
     overflow: auto;
     transition: all 0.3s ease;
-
 }
 
 .horizontal-layout {
@@ -60,14 +57,14 @@ html, body, #root {
 #left-pane.characters-mode,
 #left-pane.weapon-mode,
 #left-pane.enemy-mode {
-    min-width: 350px;
+    min-width: 21.875rem; /* 350px */
 }
 
 #left-pane.buffs-mode,
 #left-pane.rotation-mode,
 #left-pane.teams-mode,
 #left-pane.echoes-mode {
-    min-width: 500px;
+    min-width: 31.25rem; /* 500px */
 }
 
 .dark #left-pane,
@@ -77,12 +74,7 @@ html, body, #root {
 
 @media (max-width: 500px) {
     html {
-        zoom: 0.55;
-    }
-
-    .layout {
-        overflow-y: auto;
-        height: 100%;
+        font-size: clamp(0.75rem, 2vw, 1rem); /* 12px–16px */
     }
 }
 
@@ -98,10 +90,8 @@ html, body, #root {
 .layout,
 .main-content,
 .toolbar,
-.sidebar
-{
+.sidebar {
     color: #222;
-    /*@apply transition-colors duration-300;*/
 }
 
 .dark .slider-group,
@@ -112,10 +102,8 @@ html, body, #root {
 .dark .layout,
 .dark .main-content,
 .dark .toolbar,
-.sidebar
-{
+.sidebar {
     color: #ddd;
-    /*@apply transition-colors duration-300;*/
 }
 
 button,
@@ -141,4 +129,3 @@ input[type="file"] {
     opacity: 0.5;
     pointer-events: none;
 }
-

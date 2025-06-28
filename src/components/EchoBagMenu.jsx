@@ -109,8 +109,8 @@ export default function EchoBagMenu({
                 className={`edit-substats-modal echo-bag-modal ${isAnimatingOut ? 'hiding' : 'show'}`}
                 onClick={(e) => e.stopPropagation()}
             >
-                    <div className="menu-header-with-buttons">
-                        <div className="menu-header">Saved Echoes</div>
+                    <div className="menu-header-with-buttons echo">
+                        <div className="menu-header echo">Saved Echoes</div>
                         <div className="button-group-container echo">
                             {Object.entries(setIconMap).map(([setId, iconPath]) => (
                                 <img

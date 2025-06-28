@@ -109,8 +109,11 @@
 }
 
 .star.active {
+    color: #e39000;
+}
+
+.dark .star.active {
     color: #ffc400;
-    text-shadow: 0 0 3px rgba(48, 48, 32, 0.62);
 }
 
 .slider-label-inline {

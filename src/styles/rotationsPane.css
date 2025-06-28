@@ -273,17 +273,16 @@
 .rotation-actions.external-actions {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     gap: 8px;
     margin-left: 12px;
-    padding-right: 4px; /* optional */
 }
 
 .skill-menu-panel {
     background: rgba(255, 255, 255, 0.77);
     border-radius: 10px;
     padding: 0;
-    width: 700px;
+    width: 43.75rem;
     max-height: 500px;
     display: flex;
     flex-direction: column;

@@ -70,6 +70,12 @@
     flex-shrink: 0; /* prevents icon+label from shrinking */
 }
 
+@media (max-width: 500px) {
+    .echo-slot-left {
+        justify-content: space-around;
+    }
+}
+
 .echo-details {
     transition: ease all 0.3s;
     flex-grow: 1;
@@ -167,17 +173,18 @@
 }
 
 .echo-slot-cost-badge {
+    cursor: default;
     background-color: rgba(32, 191, 185, 0.72);
     color: white;
-    height: 24px;        /* Fixed height */
-    line-height: 24px;   /* Vertically center text */
-    text-align: center;  /* Horizontally center text */
+    height: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
     font-size: 0.75rem;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 1rem;
     margin-top: 4px;
-    width: 50px;
+    width: 3.1rem;
 }
 
 .echo-slot-cost-badge.mini {
@@ -238,14 +245,19 @@
 
 .menu-header-with-buttons.echo {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: unset;   /* horizontal centering */
-    align-items: center;       /* vertical centering */
+    justify-content: unset;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+}
+
+.menu-header.echo {
+    padding: unset;
 }
 
 .button-group-container.echo {
-    padding: 16px 20px 12px 20px;
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
@@ -447,4 +459,10 @@
     background-color: rgba(34, 34, 34, 0.25);
     border-radius: 50%;
     object-fit: contain;
+}
+
+@media (max-width: 500px) {
+    .echo-slot-content {
+        grid-template-columns: unset;
+    }
 }

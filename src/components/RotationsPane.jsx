@@ -393,6 +393,7 @@ export default function RotationsPane({
                                                                             return (
                                                                                 <img
                                                                                     src={skillTypeIconMap[type.toLowerCase()]}
+                                                                                    style={{width: '1.5rem', height: '1.5rem'}}
                                                                                     alt={type}
                                                                                     className="skill-type-icon"
                                                                                     onError={(e) => { e.target.style.display = 'none'; }}
@@ -401,7 +402,7 @@ export default function RotationsPane({
                                                                         }
                                                                         return null;
                                                                     })()}
-                                                                    <span style={{ opacity: 0.75, fontSize: '13px' }}>
+                                                                    <span style={{ opacity: 0.75, fontSize: '0.8rem' }}>
                                                                         {(() => {
                                                                             const type = Array.isArray(skill.type) ? skill.type[0] : skill.type;
                                                                             return typeof type === 'string' ? (skillTypeLabelMap[type] ?? type) : 'Unknown';

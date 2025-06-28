@@ -41,10 +41,14 @@ export function WeaponUI({
                         />
                         Enable
                     </label>
-                    <p style={{ opacity: !(charId === '1406' || charId === '1408') ? 0.5 : 1 }}>
+                    <p>
                         {highlightKeywordsInText(`When Rover: Aero casts Resonance Skill Unbound Flow, Aero DMG dealt by nearby Resonators on the field is Amplified by ${currentParamValues[2]}.`, keywords)}
                     </p>
-                    <label className="modern-checkbox">
+                    <label className="modern-checkbox"
+                           style={{
+                               opacity: !(charId === '1406' || charId === '1408') ? 0.5 : 1,
+                               cursor: (charId === '1406' || charId === '1408') ? 'pointer' : 'not-allowed'
+                           }}>
 
                         <input
                             type="checkbox"
@@ -53,12 +57,12 @@ export function WeaponUI({
                             disabled={!(charId === '1406' || charId === '1408')}
                         />
                         Enable
+                        {!(charId === '1406' || charId === '1408') && (
+                            <p style={{ fontSize: '12px', color: 'gray' }}>
+                                This effect only applies to Rover: Aero.
+                            </p>
+                        )}
                     </label>
-                    {!(charId === '1406' || charId === '1408') && (
-                        <p style={{ fontSize: '12px', color: 'gray' }}>
-                            This effect only applies to Rover: Aero.
-                        </p>
-                    )}
                 </div>
             </div>
         </div>
