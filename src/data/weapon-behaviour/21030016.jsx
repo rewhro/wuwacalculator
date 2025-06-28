@@ -1,22 +1,22 @@
 import React from 'react';
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function lastDanceUI({
-                                     combatState,
-                                     setCombatState,
                                      activeStates,
                                      toggleState,
-                                     currentParamValues = []
+                                     currentParamValues = [],
+    keywords
                                  }) {
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases ATK by {currentParamValues[0]}</p>
+                    <p>{highlightKeywordsInText(`Increases ATK by ${currentParamValues[0]}`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Every time Intro Skill or Resonance Liberation is cast, Resonance Skill DMG Bonus increases by {currentParamValues[1]}.
+                        {highlightKeywordsInText(`Every time Intro Skill or Resonance Liberation is cast, Resonance Skill DMG Bonus increases by ${currentParamValues[1]}.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -39,7 +39,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const atkBonus = parseFloat(currentParamValues[0]);

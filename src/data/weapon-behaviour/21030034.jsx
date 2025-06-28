@@ -1,13 +1,10 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
-                             activeStates,
-                             toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -28,7 +25,10 @@ export function WeaponUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>When the Resonator takes no damage, increases ATK by {currentParamValues[1]} every 5s, stacking up to 2 time(s). This effect lasts for 8s. When the Resonator takes damage, loses 1 stacks and heals {currentParamValues[5]} of their Max HP.</p>
+                    <p>
+                        {highlightKeywordsInText(`When the Resonator takes no damage, increases ATK by ${currentParamValues[1]} every 5s, stacking up to 2 time(s).
+                            This effect lasts for 8s. When the Resonator takes damage, loses 1 stacks and heals ${currentParamValues[5]} of their Max HP.`, keywords)}
+                    </p>
                 </div>
                 <label className="modern-checkbox">
                     <DropdownSelect
@@ -51,7 +51,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const stacks = characterState?.activeStates?.stacks ?? 0;

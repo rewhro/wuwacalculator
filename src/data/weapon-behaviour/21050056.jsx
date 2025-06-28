@@ -1,13 +1,10 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
-                             activeStates,
-                             toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -28,18 +25,23 @@ export function WeaponUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases ATK by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases ATK by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Casting Echo Skill within 10s after casting Intro Skill or Basic Attacks grants 1 stack of Gentle Dream. Echoes with the same name can only trigger this effect once, stacking up to 2 times, lasting for 10s. When reaching 2 stacks, casting Echo Skill no longer resets the duration of this effect. This effect activates up to once per 10s. Switching to another Resonator ends this effect early.</p>
+                        {highlightKeywordsInText(`Casting Echo Skill within 10s after casting Intro Skill or Basic Attacks grants 1
+                            stack of Gentle Dream. Echoes with the same name can only trigger this effect once,
+                            stacking up to 2 times, lasting for 10s. When reaching 2 stacks, casting Echo Skill no
+                            longer resets the duration of this effect. This effect activates up to once per 10s.
+                            Switching to another Resonator ends this effect early.`, keywords)}
+                    </p>
                     <p>
                         <p>
-                            With 1 stack: Grants {currentParamValues[6]} Basic Attack DMG Bonus.
+                            {highlightKeywordsInText(`With 1 stack: Grants ${currentParamValues[6]} Basic Attack DMG Bonus.`, keywords)}
                         </p>
                         <p>
-                            With 2 stacks: Ignores {currentParamValues[8]} of the target's Havoc RES.
+                            {highlightKeywordsInText(`With 2 stacks: Ignores ${currentParamValues[8]} of the target's Havoc RES.`, keywords)}
                         </p>
                     </p>
                     <label className="modern-checkbox">
@@ -64,7 +66,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
                                      activeCharacter
                                  }) {

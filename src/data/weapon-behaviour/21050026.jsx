@@ -1,13 +1,13 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId,
+    keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -28,12 +28,13 @@ export function WeaponUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increase ATK by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increase ATK by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        While the wielder is on the field, using Resonance Skill grants {currentParamValues[1]} Basic Attack DMG Bonus, stacking up to 3 times for 6s.
+                        {highlightKeywordsInText(`While the wielder is on the field, using Resonance Skill grants ${currentParamValues[1]} Basic Attack DMG Bonus,
+                            stacking up to 3 times for 6s.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect
@@ -42,13 +43,14 @@ export function WeaponUI({
                             value={stacks}
                             onChange={handleChange}
                             width="80px"
-                            disabled={activeStates.secondP === true} // 🔒 Disable dropdown if checkbox is active
+                            disabled={activeStates.secondP === true}
                         />
                         Stacks
                     </label>
 
                     <p>
-                        At 3 stacks or above, casting Outro Skill consumes all stacks of this effect and grants the wielder {currentParamValues[5]} Basic Attack DMG Bonus for 27s, effective when the wielder is off the field.
+                        {highlightKeywordsInText(`At 3 stacks or above, casting Outro Skill consumes all stacks of this effect and grants the wielder
+                        ${currentParamValues[5]} Basic Attack DMG Bonus for 27s, effective when the wielder is off the field.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -57,7 +59,6 @@ export function WeaponUI({
                             onChange={() => {
                                 toggleState('secondP');
 
-                                // Optional: reset stacks when enabling checkbox
                                 if (!activeStates.secondP) {
                                     setCharacterRuntimeStates(prev => ({
                                         ...prev,
@@ -86,9 +87,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
 
     const atk = parseFloat(currentParamValues[0]);

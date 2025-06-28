@@ -1,13 +1,9 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export function razorDanceUI({
-                                combatState,
-                                setCombatState,
-                                activeStates,
-                                toggleState,
-                                currentParamValues = [],
-                                 characterRuntimeStates, setCharacterRuntimeStates, charId
+export function razorDanceUI({currentParamValues = [],
+                                 characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                             }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -28,12 +24,17 @@ export function razorDanceUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases Energy Regen by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases Energy Regen by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        When Resonance Skill is cast, Resonance Liberation DMG Bonus is increased by {currentParamValues[1]}, stacking up to 3 times.
+                        {
+                            highlightKeywordsInText(
+                                `When Resonance Skill is cast, Resonance Liberation DMG Bonus is increased by ${currentParamValues[1]}, stacking up to 3 times.`,
+                                keywords
+                            )
+                        }
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect

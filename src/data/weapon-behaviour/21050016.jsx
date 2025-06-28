@@ -1,14 +1,13 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {elementToAttribute} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -29,12 +28,12 @@ export function WeaponUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Grants {currentParamValues[0]} Attribute DMG Bonus.</p>
+                    <p>{highlightKeywordsInText(`Grants ${currentParamValues[0]} Attribute DMG Bonus.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        When dealing Resonance Skill DMG, increases ATK by {currentParamValues[1]}, stacking up to 2 times.
+                        {highlightKeywordsInText(`When dealing Resonance Skill DMG, increases ATK by ${currentParamValues[1]}, stacking up to 2 times.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect
@@ -47,7 +46,7 @@ export function WeaponUI({
                         Stacks
                     </label>
                     <p>
-                        When the wielder is not on the field, increases their ATK by an additional {currentParamValues[4]}.
+                        {highlightKeywordsInText(`When the wielder is not on the field, increases their ATK by an additional ${currentParamValues[4]}.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -69,9 +68,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
     const attr = parseFloat(currentParamValues[0]);
     const stacks = characterState?.activeStates?.stacks ?? 0;

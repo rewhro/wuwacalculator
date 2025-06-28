@@ -1,13 +1,10 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
-                             activeStates,
-                             toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -29,7 +26,8 @@ export function WeaponUI({
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <p>
-                        When dealing Basic Attack DMG or Heavy Attack DMG, increases Healing Bonus by {currentParamValues}, stacking up to 3 time(s). This effect lasts for 8s and can be triggered 1 time(s) every 0.6s.
+                        {highlightKeywordsInText(`When dealing Basic Attack DMG or Heavy Attack DMG, increases Healing Bonus by ${currentParamValues},
+                            stacking up to 3 time(s). This effect lasts for 8s and can be triggered 1 time(s) every 0.6s.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect
@@ -52,7 +50,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const stacks = characterState?.activeStates?.stacks ?? 0;

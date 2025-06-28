@@ -1,40 +1,30 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {elementToAttribute} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export function WeaponUI({
-                              combatState,
-                              setCombatState,
-                              activeStates,
+export function WeaponUI({activeStates,
                               toggleState,
                               currentParamValues = [],
-                              characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords,
                           }) {
-    const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
-
-    const handleChange = (newValue) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    stacks: newValue
-                }
-            }
-        }));
-    };
-
+    keywords.push(
+        'Ageless Marking',
+        'Ethereal Endowment'
+    )
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases Attribute DMG Bonus by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases Attribute DMG Bonus by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Casting Intro Skill gives the equipper Ageless Marking, which grants {currentParamValues[1]} Resonance Skill DMG Bonus.
+                        {highlightKeywordsInText(
+                            `Casting Intro Skill gives the equipper Ageless Marking, which grants ${currentParamValues[1]} Resonance Skill DMG Bonus.`,
+                            keywords
+                        )}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -45,7 +35,10 @@ export function WeaponUI({
                         Enable
                     </label>
                     <p>
-                        Casting Resonance Skill gives the equipper Ethereal Endowment, which grants {currentParamValues[1]} Resonance Skill DMG Bonus.
+                        {highlightKeywordsInText(
+                            `Casting Resonance Skill gives the equipper Ethereal Endowment, which grants ${currentParamValues[1]} Resonance Skill DMG Bonus.`,
+                            keywords
+                        )}
                     </p>
                     <label className="modern-checkbox">
                         <input

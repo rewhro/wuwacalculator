@@ -1,35 +1,19 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords,
                          }) {
-    const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
-
-    const handleChange = (newValue) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    stacks: newValue
-                }
-            }
-        }));
-    };
-
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <p>
-                        Casting Resonance Liberation increases the Resonator's Healing Bonus by {currentParamValues[0]} for 15s.
+                        {highlightKeywordsInText(`Casting Resonance Liberation increases the Resonator's Healing Bonus by ${currentParamValues[0]} for 15s.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -51,9 +35,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
 
     const heal = parseFloat(currentParamValues[0]);

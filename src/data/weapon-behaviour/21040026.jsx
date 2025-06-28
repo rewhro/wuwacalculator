@@ -1,39 +1,23 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords,
                          }) {
-    const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
-
-    const handleChange = (newValue) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    stacks: newValue
-                }
-            }
-        }));
-    };
-
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases ATK by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases ATK by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Every time Basic Attack or Intro Skill is cast, Heavy Attack DMG Bonus increases by {currentParamValues[1]} for 3s.
+                        {highlightKeywordsInText(`Every time Basic Attack or Intro Skill is cast, Heavy Attack DMG Bonus increases by ${currentParamValues[1]} for 3s.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -55,9 +39,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
 
     const atk = parseFloat(currentParamValues[0]);

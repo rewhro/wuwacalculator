@@ -1,13 +1,10 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
-                             activeStates,
-                             toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -29,7 +26,8 @@ export function WeaponUI({
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <p>
-                        Dealing DMG to enemies with Spectro Frazzle increases the wielder's Spectro DMG by {currentParamValues[0]}, gaining 1 stack per second for 6s, stacking up to 4 times.
+                        {highlightKeywordsInText(`Dealing DMG to enemies with Spectro Frazzle increases the wielder's Spectro DMG by ${currentParamValues[0]}, 
+                            gaining 1 stack per second for 6s, stacking up to 4 times.`, keywords)}
                     </p>
                 </div>
                 <label className="modern-checkbox">
@@ -53,7 +51,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const stacks = characterState?.activeStates?.stacks ?? 0;

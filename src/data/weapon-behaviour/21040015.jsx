@@ -1,39 +1,23 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keyword,
                          }) {
-    const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
-
-    const handleChange = (newValue) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    stacks: newValue
-                }
-            }
-        }));
-    };
-
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases Energy Regen by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases Energy Regen by ${currentParamValues[0]}.`, keyword)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        When hitting a target with Resonance Skill, increases Basic Attack DMG Bonus by {currentParamValues[1]}, lasting for 8s.
+                        {highlightKeywordsInText(`When hitting a target with Resonance Skill, increases Basic Attack DMG Bonus by ${currentParamValues[1]}, lasting for 8s.`, keyword)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -44,7 +28,7 @@ export function WeaponUI({
                         Enable
                     </label>
                     <p>
-                        When hitting a target with Basic Attacks, increases Resonance Skill DMG Bonus by {currentParamValues[3]}, lasting for 8s.
+                        {highlightKeywordsInText(`When hitting a target with Basic Attacks, increases Resonance Skill DMG Bonus by ${currentParamValues[3]}, lasting for 8s.`, keyword)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -66,7 +50,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const energy = parseFloat(currentParamValues[0]);

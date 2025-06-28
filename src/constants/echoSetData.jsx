@@ -6,9 +6,11 @@ export const skillKeywords = [
 ];
 
 export const statKeywords = [
-    'ATK', 'HP', 'DEF', 'Crit. Rate', 'Crit. DMG', 'Energy Regen', 'Healing Bonus',
-    'Basic Attack', 'Heavy Attack',
-    'Resonance Skill', 'Resonance Liberation'
+    'ATK', 'Max HP', 'HP', 'DEF', 'Crit. Rate', 'Crit. DMG', 'Energy Regen', 'Healing Bonus',
+    'Basic Attack', 'Heavy Attack', 'Intro Skill', 'Outro Skill', 'Echo Skill',
+    'Resonance Skills', 'Resonance Liberation', 'Attribute', 'Basic DMG Bonus',
+    'Heavy DMG Bonus', 'Resonance Skill', 'Resonance Skill DMG Bonus', 'Resonance Liberation DMG Bonus',
+    'Basic Attack DMG Bonus', 'Heavy Attack DMG Bonus',
 ];
 
 const elementKeywords = Object.keys(attributeColors);
@@ -17,6 +19,10 @@ const elementPhrases = elementKeywords.flatMap(el => [
     `${el} damage bonus`,
     `${el} dmg`,
     `${el} damage`,
+    `${el} erosion dmg`,
+    `${el} frazzle dmg`,
+    `${el} erosion`,
+    `${el} frazzle`,
     el
 ]);
 
@@ -32,21 +38,27 @@ export function highlightKeywordsInText(text, extraKeywords = []) {
 
     const resPhrases = elementKeywords.map(el => `${el.charAt(0).toUpperCase() + el.slice(1)} RES`);
     const escapedResPhrases = resPhrases.map(escapeRegex);
-    const resRegex = new RegExp(`(${escapedResPhrases.join('|')})`, 'g'); // No 'i'
+    const resRegex = new RegExp(`(${escapedResPhrases.join('|')})`, 'g'); // Case-sensitive for "Cryo RES", etc.
 
-    const staticKeywords = [...additionalWords];
-    const escapedKeywords = [...elementPhrases, ...staticKeywords].map(escapeRegex);
+    const staticKeywords = [...elementPhrases]; // These remain case-insensitive
+    const escapedInsensitiveKeywords = staticKeywords.map(escapeRegex);
     const percentPattern = '\\d+(\\.\\d+)?%';
-    const ciRegex = new RegExp(`(${[...escapedKeywords, percentPattern].join('|')})`, 'gi');
+    const ciRegex = new RegExp(`(${[...escapedInsensitiveKeywords, percentPattern].join('|')})`, 'gi');
 
-    let processed = text.replace(resRegex, (match) => {
+    const escapedSensitiveKeywords = additionalWords.map(escapeRegex);
+    const csRegex = new RegExp(`(${escapedSensitiveKeywords.join('|')})`, 'g'); // Case-sensitive!
+
+    let processed = text.replace(csRegex, (match) => {
+        return `<strong class="highlight">${match}</strong>`;
+    });
+
+    processed = processed.replace(resRegex, (match) => {
         const color = attributeColors[match.split(' ')[0].toLowerCase()];
         return `<strong style="color: ${color}; font-weight: bold;">${match}</strong>`;
     });
 
     processed = processed.replace(ciRegex, (match) => {
         const lower = match.toLowerCase();
-
         if (/^\d+(\.\d+)?%$/.test(match)) {
             return `<strong class="highlight">${match}</strong>`;
         }

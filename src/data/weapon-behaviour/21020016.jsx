@@ -1,38 +1,23 @@
 import React from 'react';
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
-                             toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords,
                          }) {
-    const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
-
-    const handleChange = (newValue) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    stacks: newValue
-                }
-            }
-        }));
-    };
-
+    keywords.push('Searing Feather')
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases ATK by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases ATK by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        The wielder gains 1 stack of Searing Feather upon dealing damage, which can be triggered once every 0.5s, and gains 5 stacks of the same effect upon casting Resonance Skill. Each stack of Searing Feather gives {currentParamValues[1]} additional Resonance Skill DMG Bonus for up to 14 stacks.
+                        {highlightKeywordsInText(`The wielder gains 1 stack of Searing Feather upon dealing damage, which can be triggered once every 0.5s, and gains 5 stacks of the same effect upon casting Resonance Skill.
+                            Each stack of Searing Feather gives ${currentParamValues[1]} additional Resonance Skill DMG Bonus for up to 14 stacks.`, keywords)}
                     </p>
                     <input
                         type="number"
@@ -65,9 +50,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
 
     const atk = parseFloat(currentParamValues[0]);

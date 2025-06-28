@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import WeaponMenu from './WeaponMenu';
 import { getWeaponUIComponent } from '../data/weapon-behaviour/index';
 import {preloadImages} from "../pages/calculator.jsx";
+import {highlightKeywordsInText, statKeywords} from "../constants/echoSetData.jsx";
 
 export function mapExtraStatToCombat(stat) {
     if (!stat || !stat.Name) return {};
@@ -151,6 +152,16 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
 
         preloadImages(weaponIconPaths);
     }, [filteredWeapons]);
+
+    const keywords = statKeywords.flatMap(key => [
+        `${key} DMG Bonus`,
+        `${key} Damage Bonus`,
+        `${key} DMG`,
+        `${key} Damage`,
+        key
+    ]);
+
+    keywords.push('Negative Statuses', 'Negative Status');
 
     return (
         <>
@@ -321,6 +332,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                         setCharacterRuntimeStates={setCharacterRuntimeStates}
                         currentParamValues={getCurrentParamValues(combatState.weaponParam, combatState.weaponRank)}
                         charId={charId}
+                        keywords={keywords}
                     />
                 </div>
             ) : (
@@ -328,11 +340,11 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                     <div className="inherent-skills-box">
                         <h4 className={'highlight'} style={{ marginBottom: '0.5rem' }}>{combatState.weaponEffectName ?? 'Effect'}</h4>
                         <p>
-                            {formatEffectWithParams(
+                            {highlightKeywordsInText(formatEffectWithParams(
                                 combatState.weaponEffect,
                                 combatState.weaponParam,
                                 combatState.weaponRank ?? 1
-                            )}
+                            ), keywords)}
                         </p>
                     </div>
                 )

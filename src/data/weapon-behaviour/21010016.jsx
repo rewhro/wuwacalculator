@@ -1,14 +1,10 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {elementToAttribute} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export function verdantUI({
-                                 combatState,
-                                 setCombatState,
-                                 activeStates,
-                                 toggleState,
-                                 currentParamValues = [],
-                                 characterRuntimeStates, setCharacterRuntimeStates, charId
+export function verdantUI({currentParamValues = [],
+                                 characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                              }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -29,12 +25,15 @@ export function verdantUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases Attribute DMG Bonus by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases Attribute DMG Bonus by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Every time Intro Skill or Resonance Liberation is cast, increases Heavy Attack DMG Bonus by {currentParamValues[1]}, stacking up to 2 time(s).
+                        {highlightKeywordsInText(
+                            `Every time Intro Skill or Resonance Liberation is cast, increases Heavy Attack DMG Bonus by ${currentParamValues[1]}, stacking up to 2 time(s).`,
+                            keywords
+                        )}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect

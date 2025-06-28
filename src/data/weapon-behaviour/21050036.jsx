@@ -1,25 +1,25 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords,
                          }) {
 
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increase HP by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increase HP by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        When casting Resonance Skill that heals, increase nearby party members' ATK by {currentParamValues[4]} for 30s. Effects of the same name cannot be stacked.
+                        {highlightKeywordsInText(`When casting Resonance Skill that heals, increase nearby party members' ATK by ${currentParamValues[4]} 
+                            for 30s. Effects of the same name cannot be stacked.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -41,9 +41,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
 
     const atk = parseFloat(currentParamValues[4]);

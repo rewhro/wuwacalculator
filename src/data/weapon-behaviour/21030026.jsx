@@ -1,25 +1,24 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords,
                          }) {
 
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>ATK is increased by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`ATK is increased by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Inflicting Aero Erosion on the target gives {currentParamValues[1]} Aero DMG Bonus for 10s.
+                        {highlightKeywordsInText(`Inflicting Aero Erosion on the target gives ${currentParamValues[1]} Aero DMG Bonus for 10s.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -30,7 +29,7 @@ export function WeaponUI({
                         Enable
                     </label>
                     <p>
-                        Hitting targets with Aero Erosion reduces their Aero RES by {currentParamValues[3]} for 20s. Effects of the same name cannot be stacked.
+                        {highlightKeywordsInText(`Hitting targets with Aero Erosion reduces their Aero RES by ${currentParamValues[3]} for 20s. Effects of the same name cannot be stacked.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -52,7 +51,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
                                      activeCharacter
                                  }) {

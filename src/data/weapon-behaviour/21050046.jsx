@@ -1,13 +1,12 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -28,12 +27,13 @@ export function WeaponUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increase ATK by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increase ATK by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Dealing DMG to targets with Spectro Frazzle grants the wielder {currentParamValues[1]} Basic Attack DMG Bonus and {currentParamValues[1]} Heavy Attack DMG Bonus, stacking up to 3 times for 6s
+                        {highlightKeywordsInText(`Dealing DMG to targets with Spectro Frazzle grants the wielder ${currentParamValues[1]}
+                            Basic Attack DMG Bonus and ${currentParamValues[1]} Heavy Attack DMG Bonus, stacking up to 3 times for 6s`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect
@@ -46,12 +46,13 @@ export function WeaponUI({
                         Stacks
                     </label>
                     <p>
-                        Casting Outro Skill Amplifies the Spectro Frazzle DMG on targets around the active Resonator by {currentParamValues[4]} for 30s. Effects of the same name cannot be stacked.
+                        {highlightKeywordsInText(`Casting Outro Skill Amplifies the Spectro Frazzle DMG on targets around the active Resonator by
+                         ${currentParamValues[4]} for 30s. Effects of the same name cannot be stacked.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
                             type="checkbox"
-                            checked={!!activeStates?.secondP} // ✅ fix here
+                            checked={!!activeStates?.secondP}
                             onChange={() => toggleState('secondP')}
                         />
                         Enable
@@ -68,7 +69,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const atk = parseFloat(currentParamValues[0]);

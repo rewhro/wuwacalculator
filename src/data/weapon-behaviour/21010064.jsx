@@ -1,5 +1,6 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
                                  combatState,
@@ -7,7 +8,7 @@ export function WeaponUI({
                                  activeStates,
                                  toggleState,
                                  currentParamValues = [],
-                                 characterRuntimeStates, setCharacterRuntimeStates, charId
+                                 characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                              }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -29,7 +30,10 @@ export function WeaponUI({
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <p>
-                        Within 12s after Resonance Skill is cast, increases ATK by {currentParamValues[2]} every 2s, stacking up to 4 time(s). This effect can be triggered 1 time(s) every 12s. When the number of stacks reaches 4, all stacks will be reset within 6s.
+                        {highlightKeywordsInText(
+                            `Within 12s after Resonance Skill is cast, increases ATK by ${currentParamValues[2]} every 2s, stacking up to 4 time(s). This effect can be triggered 1 time(s) every 12s. When the number of stacks reaches 4, all stacks will be reset within 6s.`,
+                            keywords
+                        )}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect

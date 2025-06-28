@@ -1,25 +1,24 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords
                          }) {
 
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Max HP is increased by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Max HP is increased by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        15s after casting Intro Skill or Basic Attacks, ignores {currentParamValues[1]} of the target's DEF when dealing damage.
+                        {highlightKeywordsInText(`15s after casting Intro Skill or Basic Attacks, ignores ${currentParamValues[1]} of the target's DEF when dealing damage.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -30,7 +29,7 @@ export function WeaponUI({
                         Enable
                     </label>
                     <p>
-                        If the target has more than 1 stack of Aero Erosion, the target's DMG taken is Amplified by {currentParamValues[2]}.
+                        {highlightKeywordsInText(`If the target has more than 1 stack of Aero Erosion, the target's DMG taken is Amplified by ${currentParamValues[2]}.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -52,7 +51,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
                                      activeCharacter
                                  }) {

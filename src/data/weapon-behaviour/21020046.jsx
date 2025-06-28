@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             setCharacterRuntimeStates, charId, keywords
                          }) {
+
+    keywords.push('Rover: ', 'Rover', 'Unbound Flow')
 
     useEffect(() => {
         if (!(charId === '1406' || charId === '1408') && activeStates?.secondP) {
@@ -30,7 +31,7 @@ export function WeaponUI({
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <p>
-                        Providing Healing increases Resonance Skill DMG by {currentParamValues[0]}.
+                        {highlightKeywordsInText(`Providing Healing increases Resonance Skill DMG by ${currentParamValues[0]}.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -41,7 +42,7 @@ export function WeaponUI({
                         Enable
                     </label>
                     <p style={{ opacity: !(charId === '1406' || charId === '1408') ? 0.5 : 1 }}>
-                        When Rover: Aero casts Resonance Skill Unbound Flow, Aero DMG dealt by nearby Resonators on the field is Amplified by {currentParamValues[2]}.
+                        {highlightKeywordsInText(`When Rover: Aero casts Resonance Skill Unbound Flow, Aero DMG dealt by nearby Resonators on the field is Amplified by ${currentParamValues[2]}.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
 
@@ -70,7 +71,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const skill = parseFloat(currentParamValues[0]);

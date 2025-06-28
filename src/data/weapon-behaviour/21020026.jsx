@@ -1,13 +1,12 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -33,7 +32,8 @@ export function WeaponUI({
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        When dealing Basic Attack DMG, the wielder gains {currentParamValues[1]} Basic Attack DMG Bonus for 14s. This effect can be triggered once per second, stacking up to 3 times.
+                        {highlightKeywordsInText(`When dealing Basic Attack DMG, the wielder gains ${currentParamValues[1]} Basic Attack DMG Bonus for 14s.
+                            This effect can be triggered once per second, stacking up to 3 times.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <DropdownSelect
@@ -46,7 +46,8 @@ export function WeaponUI({
                         Stacks
                     </label>
                     <p>
-                        When the wielder's Concerto Energy is consumed, gain {currentParamValues[4]} Basic DMG Bonus for 10s. This effect can be triggered once per second and ends when the wielder is switched off the field.
+                        {highlightKeywordsInText(`When the wielder's Concerto Energy is consumed, gain ${currentParamValues[4]} Basic DMG Bonus for 10s.
+                            This effect can be triggered once per second and ends when the wielder is switched off the field.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -68,7 +69,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const stacks = (characterState?.activeStates?.stacks ?? 0) * 10;

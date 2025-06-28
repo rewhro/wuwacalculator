@@ -1,25 +1,22 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                                 combatState,
-                                 setCombatState,
-                                 activeStates,
-                                 toggleState,
-                                 currentParamValues = [],
-                                 characterRuntimeStates, setCharacterRuntimeStates, charId
+                                 currentParamValues = [], keywords
                              }) {
 
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increases Energy Regen by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increases Energy Regen by {currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        Incoming Resonator's ATK is increased by {currentParamValues[1]} for 14s, stackable for up to 1 times after the wielder casts Outro Skill.
+                        {highlightKeywordsInText(`Incoming Resonator's ATK is increased by ${currentParamValues[1]} for 14s, 
+                            stackable for up to 1 times after the wielder casts Outro Skill.`, keywords)}
                     </p>
 
                 </div>
@@ -32,9 +29,7 @@ export function WeaponUI({
 export function applyWeaponLogic({
                                      mergedBuffs,
                                      combatState,
-                                     characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const energy = parseFloat(currentParamValues[0]);

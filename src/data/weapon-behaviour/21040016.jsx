@@ -1,40 +1,25 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {elementToAttribute} from "../../utils/attributeHelpers.js";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
                              activeStates,
                              toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+    keywords
                          }) {
-    const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
-
-    const handleChange = (newValue) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    stacks: newValue
-                }
-            }
-        }));
-    };
-
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Gain {currentParamValues[0]} Attribute DMG Bonus.</p>
+                    <p>{highlightKeywordsInText(`Gain ${currentParamValues[0]} Attribute DMG Bonus.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">
                     <p>
-                        When using Resonance Liberation, the wielder gains {currentParamValues[1]} Resonance Liberation DMG Bonus for 8s. This effect can be extended by 5s each time Resonance Skills are cast, up to 3 times.
+                        {highlightKeywordsInText(`When using Resonance Liberation, the wielder gains ${currentParamValues[1]} Resonance Liberation DMG Bonus for 8s.
+                            This effect can be extended by 5s each time Resonance Skills are cast, up to 3 times.`, keywords)}
                     </p>
                     <label className="modern-checkbox">
                         <input
@@ -56,9 +41,7 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = [],
-                                     activeCharacter
                                  }) {
     const attr = parseFloat(currentParamValues[0]);
     const firstP = parseFloat(currentParamValues[1]);

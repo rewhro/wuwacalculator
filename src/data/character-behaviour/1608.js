@@ -76,12 +76,12 @@ export function applyPhrolovaLogic({
 
     if (isActiveSequence(6)) {
         if (name.includes('enhanced attack - hecate')) {
-            const bonusMultiplier = 1 + Math.min(stacks * 0.3, 24 * 0.3);
+            const bonusMultiplier = 1 + Math.min(stacks * 0.03, 24 * 0.03);
             skillMeta.multiplier *= bonusMultiplier;
         }
 
         if (isToggleActive(6) && name.includes('basic attack - hecate')) {
-            skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 300;
+            skillMeta.multiplier *= 4;
         }
     }
 

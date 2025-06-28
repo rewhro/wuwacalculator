@@ -1,13 +1,10 @@
 import React from 'react';
 import DropdownSelect from "../../components/DropdownSelect.jsx";
+import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 export function WeaponUI({
-                             combatState,
-                             setCombatState,
-                             activeStates,
-                             toggleState,
                              currentParamValues = [],
-                             characterRuntimeStates, setCharacterRuntimeStates, charId
+                             characterRuntimeStates, setCharacterRuntimeStates, charId, keywords
                          }) {
     const stacks = characterRuntimeStates?.[charId]?.activeStates?.stacks ?? 0;
 
@@ -29,7 +26,9 @@ export function WeaponUI({
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
                     <p>
-                        When Resonance Liberation is cast, grants 3 stack(s) of Iron Armor. Each stack increases ATK and DEF by {currentParamValues[1]}, stacking up to 3 time(s). When the Resonator takes damage, reduces the number of stacks by 1.
+                        {highlightKeywordsInText(`When Resonance Liberation is cast, grants 3 stack(s) of Iron Armor.
+                            Each stack increases ATK and DEF by ${currentParamValues[1]}, stacking up to 3 time(s).
+                            When the Resonator takes damage, reduces the number of stacks by 1.`, keywords)}
                     </p>
                 </div>
                 <label className="modern-checkbox">
@@ -53,7 +52,6 @@ export function applyWeaponLogic({
                                      combatState,
                                      characterState,
                                      skillMeta = {},
-                                     isToggleActive = () => false,
                                      currentParamValues = []
                                  }) {
     const stacks = characterState?.activeStates?.stacks ?? 0;
