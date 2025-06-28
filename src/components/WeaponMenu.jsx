@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { FaStar } from 'react-icons/fa'; // Make sure react-icons is installed
+import { FaStar } from 'react-icons/fa';
+import {attributeMap, imageCache, weaponMap} from "../pages/calculator.jsx"; // Make sure react-icons is installed
 
 export default function WeaponMenu({
                                        weapons,
@@ -49,24 +50,26 @@ export default function WeaponMenu({
                 className={`icon-menu-vertical ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="menu-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span>Select Weapon</span>
-                    <div className="rarity-stars">
-                        {[5, 4, 3, 2, 1].map((rarity) => (
-                            <span
-                                key={rarity}
-                                className={`star ${selectedRarities.includes(rarity) ? 'active' : ''}`}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const next = selectedRarities.includes(rarity)
-                                        ? selectedRarities.filter(r => r !== rarity)
-                                        : [...selectedRarities, rarity];
-                                    setSelectedRarities(next);
-                                }}
-                            >
+                <div className="menu-header-with-buttons">
+                    <div className="menu-header">Select Weapon</div>
+                    <div className="button-group-container">
+                        <div className="rarity-stars">
+                            {[5, 4, 3, 2, 1].map((rarity) => (
+                                <span
+                                    key={rarity}
+                                    className={`star ${selectedRarities.includes(rarity) ? 'active' : ''}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        const next = selectedRarities.includes(rarity)
+                                            ? selectedRarities.filter(r => r !== rarity)
+                                            : [...selectedRarities, rarity];
+                                        setSelectedRarities(next);
+                                    }}
+                                >
                                 {rarity}★
                             </span>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
 
