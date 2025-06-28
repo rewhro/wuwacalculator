@@ -99,7 +99,10 @@ export function CustomInherentSkills({
                         {isKnowing && (
                             <div
                                 className="slider-label-with-input"
-                                style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}
+                                style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px',
+                                    opacity: locked ? 0.5 : 1,
+                                    cursor: !locked ? 'pointer' : 'not-allowed'
+                                }}
                             >
                                 <DropdownSelect
                                     label=""

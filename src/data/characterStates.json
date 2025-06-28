@@ -2,6 +2,7 @@
   "0": {
     "Name": "Sanhua",
     "Id": 1102,
+    "Rarity": 4,
     "Attribute": 1,
     "WeaponType": 2,
     "Stats": {
@@ -31,6 +32,7 @@
   "1": {
     "Name": "Baizhi",
     "Id": 1103,
+    "Rarity": 4,
     "Attribute": 1,
     "WeaponType": 5,
     "Stats": {
@@ -60,6 +62,7 @@
   "2": {
     "Name": "Lingyang",
     "Id": 1104,
+    "Rarity": 5,
     "Attribute": 1,
     "WeaponType": 4,
     "Stats": {
@@ -89,6 +92,7 @@
   "3": {
     "Name": "Zhezhi",
     "Id": 1105,
+    "Rarity": 5,
     "Attribute": 1,
     "WeaponType": 5,
     "Stats": {
@@ -118,6 +122,7 @@
   "4": {
     "Name": "Youhu",
     "Id": 1106,
+    "Rarity": 4,
     "Attribute": 1,
     "WeaponType": 4,
     "Stats": {
@@ -147,6 +152,7 @@
   "5": {
     "Name": "Carlotta",
     "Id": 1107,
+    "Rarity": 5,
     "Attribute": 1,
     "WeaponType": 3,
     "Stats": {
@@ -176,6 +182,7 @@
   "6": {
     "Name": "Chixia",
     "Id": 1202,
+    "Rarity": 4,
     "Attribute": 2,
     "WeaponType": 3,
     "Stats": {
@@ -205,6 +212,7 @@
   "7": {
     "Name": "Encore",
     "Id": 1203,
+    "Rarity": 5,
     "Attribute": 2,
     "WeaponType": 5,
     "Stats": {
@@ -234,6 +242,7 @@
   "8": {
     "Name": "Mortefi",
     "Id": 1204,
+    "Rarity": 4,
     "Attribute": 2,
     "WeaponType": 3,
     "Stats": {
@@ -263,6 +272,7 @@
   "9": {
     "Name": "Changli",
     "Id": 1205,
+    "Rarity": 5,
     "Attribute": 2,
     "WeaponType": 2,
     "Stats": {
@@ -292,6 +302,7 @@
   "10": {
     "Name": "Brant",
     "Id": 1206,
+    "Rarity": 5,
     "Attribute": 2,
     "WeaponType": 2,
     "Stats": {
@@ -321,6 +332,7 @@
   "11": {
     "Name": "Lupa",
     "Id": 1207,
+    "Rarity": 5,
     "Attribute": 2,
     "WeaponType": 1,
     "Stats": {
@@ -350,6 +362,7 @@
   "12": {
     "Name": "Calcharo",
     "Id": 1301,
+    "Rarity": 5,
     "Attribute": 3,
     "WeaponType": 1,
     "Stats": {
@@ -379,6 +392,7 @@
   "13": {
     "Name": "Yinlin",
     "Id": 1302,
+    "Rarity": 5,
     "Attribute": 3,
     "WeaponType": 5,
     "Stats": {
@@ -408,6 +422,7 @@
   "14": {
     "Name": "Yuanwu",
     "Id": 1303,
+    "Rarity": 4,
     "Attribute": 3,
     "WeaponType": 4,
     "Stats": {
@@ -437,6 +452,7 @@
   "15": {
     "Name": "Jinhsi",
     "Id": 1304,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 1,
     "Stats": {
@@ -466,6 +482,7 @@
   "16": {
     "Name": "Xiangli Yao",
     "Id": 1305,
+    "Rarity": 5,
     "Attribute": 3,
     "WeaponType": 4,
     "Stats": {
@@ -495,6 +512,7 @@
   "17": {
     "Name": "Yangyang",
     "Id": 1402,
+    "Rarity": 4,
     "Attribute": 4,
     "WeaponType": 2,
     "Stats": {
@@ -524,6 +542,7 @@
   "18": {
     "Name": "Aalto",
     "Id": 1403,
+    "Rarity": 4,
     "Attribute": 4,
     "WeaponType": 3,
     "Stats": {
@@ -553,6 +572,7 @@
   "19": {
     "Name": "Jiyan",
     "Id": 1404,
+    "Rarity": 5,
     "Attribute": 4,
     "WeaponType": 1,
     "Stats": {
@@ -582,6 +602,7 @@
   "20": {
     "Name": "Jianxin",
     "Id": 1405,
+    "Rarity": 5,
     "Attribute": 4,
     "WeaponType": 4,
     "Stats": {
@@ -611,6 +632,7 @@
   "21": {
     "Name": "Rover: Aero",
     "Id": 1406,
+    "Rarity": 5,
     "Attribute": 4,
     "WeaponType": 2,
     "Stats": {
@@ -640,6 +662,7 @@
   "22": {
     "Name": "Ciaccona",
     "Id": 1407,
+    "Rarity": 5,
     "Attribute": 4,
     "WeaponType": 3,
     "Stats": {
@@ -669,6 +692,7 @@
   "23": {
     "Name": "Rover: Aero",
     "Id": 1408,
+    "Rarity": 5,
     "Attribute": 4,
     "WeaponType": 2,
     "Stats": {
@@ -698,6 +722,7 @@
   "24": {
     "Name": "Cartethyia",
     "Id": 1409,
+    "Rarity": 5,
     "Attribute": 4,
     "WeaponType": 2,
     "Stats": {
@@ -727,6 +752,7 @@
   "25": {
     "Name": "Rover: Spectro",
     "Id": 1501,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 2,
     "Stats": {
@@ -756,6 +782,7 @@
   "26": {
     "Name": "Rover: Spectro",
     "Id": 1502,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 2,
     "Stats": {
@@ -785,6 +812,7 @@
   "27": {
     "Name": "Verina",
     "Id": 1503,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 5,
     "Stats": {
@@ -814,6 +842,7 @@
   "28": {
     "Name": "Lumi",
     "Id": 1504,
+    "Rarity": 4,
     "Attribute": 3,
     "WeaponType": 1,
     "Stats": {
@@ -843,6 +872,7 @@
   "29": {
     "Name": "Shorekeeper",
     "Id": 1505,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 5,
     "Stats": {
@@ -872,6 +902,7 @@
   "30": {
     "Name": "Phoebe",
     "Id": 1506,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 5,
     "Stats": {
@@ -901,6 +932,7 @@
   "31": {
     "Name": "Zani",
     "Id": 1507,
+    "Rarity": 5,
     "Attribute": 5,
     "WeaponType": 4,
     "Stats": {
@@ -930,6 +962,7 @@
   "32": {
     "Name": "Taoqi",
     "Id": 1601,
+    "Rarity": 4,
     "Attribute": 6,
     "WeaponType": 1,
     "Stats": {
@@ -959,6 +992,7 @@
   "33": {
     "Name": "Danjin",
     "Id": 1602,
+    "Rarity": 4,
     "Attribute": 6,
     "WeaponType": 2,
     "Stats": {
@@ -988,6 +1022,7 @@
   "34": {
     "Name": "Camellya",
     "Id": 1603,
+    "Rarity": 5,
     "Attribute": 6,
     "WeaponType": 2,
     "Stats": {
@@ -1017,6 +1052,7 @@
   "35": {
     "Name": "Rover: Havoc",
     "Id": 1604,
+    "Rarity": 5,
     "Attribute": 6,
     "WeaponType": 2,
     "Stats": {
@@ -1046,6 +1082,7 @@
   "36": {
     "Name": "Rover: Havoc",
     "Id": 1605,
+    "Rarity": 5,
     "Attribute": 6,
     "WeaponType": 2,
     "Stats": {
@@ -1075,6 +1112,7 @@
   "37": {
     "Name": "Roccia",
     "Id": 1606,
+    "Rarity": 5,
     "Attribute": 6,
     "WeaponType": 4,
     "Stats": {
@@ -1104,6 +1142,7 @@
   "38": {
     "Name": "Cantarella",
     "Id": 1607,
+    "Rarity": 5,
     "Attribute": 6,
     "WeaponType": 5,
     "Stats": {
@@ -1133,6 +1172,7 @@
   "39": {
     "Name": "Phrolova",
     "Id": 1608,
+    "Rarity": 5,
     "Attribute": 6,
     "WeaponType": 5,
     "Stats": {

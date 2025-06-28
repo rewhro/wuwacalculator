@@ -47,7 +47,12 @@ export default function PheobeUI({ activeStates, toggleState }) {
             <div className="status-toggle-box">
                 <h4 className={'highlight'} style={{ fontSize: '18px', fontWeight: 'bold' }}>Outro Skill: Attentive Heart</h4>
                 <p><span className='highlight'>Confession</span> Enhancement: Grant <span className='highlight'>Silent Prayer</span> to the Resonator on the field, reducing the <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro RES</span> of nearby targets by <span className='highlight'>10%</span> and granting <span className='highlight'>100%</span> <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> DMG Amplification. When <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span> inflicts DMG, extend <span style={{ color: attributeColors['spectro'], fontWeight: 'bold' }}>Spectro Frazzle</span>'s damage interval by 50%. This effect lasts 30s or until Phoebe switches to Absolution status.</p>
-                <label className="modern-checkbox" style={{ opacity: !activeStates.confession ? 0.5 : 1 }}>
+                <label className="modern-checkbox"
+                       style={{
+                           opacity: !activeStates.confession ? 0.5 : 1,
+                           cursor: activeStates.confession ? 'pointer' : 'not-allowed'
+                       }}
+                >
                     <input
                         type="checkbox"
                         checked={activeStates.attentive || false}

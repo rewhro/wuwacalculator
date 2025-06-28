@@ -82,7 +82,11 @@ export function CustomInherentSkills({
                         </p>
 
                         {isCondensation && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}>
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}
@@ -99,7 +103,11 @@ export function CustomInherentSkills({
                         )}
 
                         {isAvalanche && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}>
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent2 ?? false}

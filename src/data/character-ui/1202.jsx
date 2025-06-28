@@ -69,13 +69,20 @@ export function CustomInherentSkills({
                         </p>
 
                         {isThermobaric && (
-                            <div className="slider-label-with-input" style={{ marginTop: '8px' }}>
+                            <div className="slider-label-with-input"
+                                 style={{
+                                     marginTop: '8px',
+                                     opacity: locked ? 0.5 : 1,
+                                     cursor: !locked ? 'auto' : 'not-allowed'
+                                 }}
+                            >
                                 Thermobaric Bullets
                                 <input
                                     type="number"
                                     className="character-level-input"
                                     min="0"
                                     max="60"
+                                    style={{cursor: !locked ? 'auto' : 'not-allowed'}}
                                     disabled={locked}
                                     value={activeStates.inherent2 ?? 0}
                                     onChange={(e) => {

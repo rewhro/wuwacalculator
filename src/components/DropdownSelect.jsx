@@ -15,7 +15,11 @@ export default function DropdownSelect({
     return (
         <div
             className={`dropdown-select-wrapper ${className}`}
-            style={{ opacity: disabled ? 0.5 : 1, width }}
+            style={{
+                opacity: disabled ? 0.5 : 1,
+                cursor: !disabled ? 'pointer' : 'not-allowed',
+                width,
+            }}
         >
             {label && <label className="dropdown-label">{label}</label>}
             <div className="select-container">
@@ -26,6 +30,9 @@ export default function DropdownSelect({
                     onFocus={() => setIsOpen(true)}
                     onBlur={() => setIsOpen(false)}
                     disabled={disabled}
+                    style={{
+                        cursor: !disabled ? 'pointer' : 'not-allowed'
+                    }}
                 >
                     {options.map((opt) => (
                         <option key={opt} value={opt}>{opt}</option>

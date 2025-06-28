@@ -3,13 +3,15 @@
 /* ===================== */
 
 .gutter {
+    transition: transform 0.3s ease;
     background-color: #ccc;
-    /*cursor: col-resize;*/
-    max-width: 1px !important;
+    will-change: transform;
+    cursor: col-resize;
+    z-index: 10;
 }
 
 .gutter:hover {
-    background-color: #d3d3d3;
+    transform: scaleX(4);
 }
 
 .dark .gutter {
@@ -17,5 +19,5 @@
 }
 
 .dark .gutter:hover {
-    background-color: #3f857e;
+    background-color: #424242;
 }

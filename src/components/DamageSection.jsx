@@ -19,14 +19,14 @@ export default function DamageSection({
                                           combatState,
                                           mergedBuffs,
                                           rotationEntries,
-    currentSliderColor
+                                          setShowSubHits,
+                                          showSubHits
                                       }) {
     if (!activeCharacter) return null;
 
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const allSkillResults = [];
-    const [showSubHits, setShowSubHits] = useState(true);
     const negativeEffect = combatState?.spectroFrazzle > 0 || combatState?.aeroErosion > 0;
     const {frazzleTotal, frazzle} = calculateSpectroFrazzleDamage(combatState, mergedBuffs, characterLevel);
     const {erosionTotal, erosion} = calculateAeroErosionDamage(combatState, mergedBuffs, characterLevel);

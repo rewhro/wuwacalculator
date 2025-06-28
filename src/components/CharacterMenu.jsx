@@ -7,7 +7,8 @@ export default function CharacterMenu({
                                           handleCharacterSelect,
                                           menuRef,
                                           menuOpen,
-                                          setMenuOpen
+                                          setMenuOpen,
+                                          rarityMap
                                       }) {
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -34,11 +35,15 @@ export default function CharacterMenu({
 
     const [selectedWeapon, setSelectedWeapon] = useState(null);
     const [selectedAttribute, setSelectedAttribute] = useState(null);
+    const [selectedRarities, setSelectedRarities] = useState([4, 5]);
 
     const filteredCharacters = characters.filter((char) => {
         const weaponMatch = selectedWeapon === null || char.weaponType === weaponMap[selectedWeapon];
         const attributeMatch = selectedAttribute === null || char.attribute === attributeMap[selectedAttribute];
-        return weaponMatch && attributeMatch;
+        const rarity = rarityMap[char.link] ?? 0;
+        const rarityMatch = selectedRarities.includes(rarity);
+
+        return weaponMatch && attributeMatch && rarityMatch;
     });
 
     const [preloaded, setPreloaded] = useState(false);
@@ -96,6 +101,23 @@ export default function CharacterMenu({
                     <div className="menu-header">Select Character</div>
 
                     <div className="button-group-container">
+                        <div className="rarity-stars">
+                            {[5, 4].map((rarity) => (
+                                <span
+                                    key={rarity}
+                                    className={`star ${selectedRarities.includes(rarity) ? 'active' : ''}`}
+                                    onClick={() =>
+                                        setSelectedRarities(prev =>
+                                            prev.includes(rarity)
+                                                ? prev.filter(r => r !== rarity)
+                                                : [...prev, rarity]
+                                        )
+                                    }
+                                >
+                                    {rarity}★
+                                </span>
+                            ))}
+                        </div>
                         <div className="weapon-button-group">
                             {Object.keys(weaponMap ?? {}).map((weapon) => (
                                 <button
@@ -141,7 +163,7 @@ export default function CharacterMenu({
                                         <img
                                             src={imageCache[char.icon]?.src || char.icon}
                                             alt={char.displayName}
-                                            className="icon-menu-img"
+                                            className={`icon-menu-img rarity-${rarityMap[char.link]}`}
                                             loading="eager"
                                         />
                                         <span className="dropdown-label">{char.displayName}</span>

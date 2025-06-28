@@ -42,7 +42,7 @@ export default function SkUI({ setCharacterRuntimeStates, charId, activeStates, 
                     <label className="modern-checkbox"
                            style={{
                                opacity: !activeStates.innerS ? 0.5 : 1,
-                               pointerEvents: activeStates.innerS ? 'auto' : 'none'
+                               cursor: activeStates.innerS ? 'pointer' : 'not-allowed'
                            }}
                     >
                         <input
@@ -151,7 +151,11 @@ export function CustomInherentSkills({
                         </p>
 
                         {gravitation && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}>
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent2 ?? false}
@@ -242,7 +246,7 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                 <label className="modern-checkbox"
                        style={{
                            opacity: !isRover ? 0.5 : 1,
-                           pointerEvents: isRover ? 'auto' : 'none'
+                           cursor: isRover ? 'pointer' : 'not-allowed',
                        }}
                 >
                     <input
@@ -293,7 +297,7 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                 <label className="modern-checkbox"
                        style={{
                            opacity: !activeStates.innerS ? 0.5 : 1,
-                           pointerEvents: activeStates.innerS ? 'auto' : 'none'
+                           cursor: activeStates.innerS ? 'pointer' : 'not-allowed'
                        }}
                 >
                     <input

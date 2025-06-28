@@ -79,7 +79,11 @@ export function CustomInherentSkills({
                         </p>
 
                         {storm && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}>
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}
@@ -96,7 +100,11 @@ export function CustomInherentSkills({
                         )}
 
                         {boundless && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}>
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent2 ?? false}

@@ -96,13 +96,18 @@ export function CustomInherentSkills({
                         </p>
 
                         {octet && (
-                            <div className="slider-label-with-input" style={{ marginTop: '8px' }}>
+                            <div className="slider-label-with-input" style={{
+                                marginTop: '8px',
+                                opacity: locked ? 0.5 : 1,
+                                cursor: !locked ? 'auto' : 'not-allowed'
+                            }}>
                                 Aftersound
                                 <input
                                     type="number"
                                     className="character-level-input"
                                     min="0"
                                     max="64"
+                                    style={{cursor: !locked ? 'auto' : 'not-allowed'}}
                                     disabled={locked}
                                     value={activeStates.inherent2 ?? 0}
                                     onChange={(e) => {

@@ -39,7 +39,7 @@ export default function CharacterSelector({
                                               characterLevel, setCharacterLevel, setSkillsModalOpen, setMenuOpen,
                                               traceNodeBuffs, setTraceNodeBuffs,
                                               characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef,
-                                              characterStates, keywords
+                                              characterStates, keywords, rarityMap
                                           }) {
     useEffect(() => {
         const characterIconPaths = characters.map(char =>
@@ -85,10 +85,12 @@ export default function CharacterSelector({
         <>
             <CharacterHeader
                 activeCharacter={activeCharacter}
+                rarityMap={rarityMap}
                 setMenuOpen={setMenuOpen}
                 attributeIconPath={attributeIconPath}
                 menuOpen={menuOpen}
                 triggerRef={triggerRef}
+                charId={charId}
             />
 
             <div className="character-settings">
@@ -207,6 +209,7 @@ export default function CharacterSelector({
                 handleCharacterSelect={handleCharacterSelect}
                 menuRef={menuRef}
                 menuOpen={menuOpen}
+                rarityMap={rarityMap}
             />
 
             <SkillSettings

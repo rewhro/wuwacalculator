@@ -82,6 +82,8 @@ export default function Calculator() {
     const [rotationEntries, setRotationEntries] = useState([]);
     const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
     const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
+    const [showSubHits, setShowSubHits] = usePersistentState('showSubHits', false);
+    const splitInstance = useRef(null);
 
     useEffect(() => {
         Promise.all([fetchCharacters(), fetchWeapons()]).then(([charData, weaponData]) => {
@@ -226,7 +228,14 @@ export default function Calculator() {
     }, [menuOpen]);
 
     useEffect(() => {
-        Split(['#left-pane', '#right-pane'], { sizes: [50, 50], gutterSize: 1 });
+        document.querySelectorAll('.gutter').forEach(gutter => gutter.remove());
+        splitInstance.current = Split(['#left-pane', '#right-pane'], {
+            sizes: [50, 50],
+            gutterSize: 1
+        });
+        return () => {
+            document.querySelectorAll('.gutter').forEach(gutter => gutter.remove());
+        };
     }, []);
 
     useLayoutEffect(() => {
@@ -650,6 +659,11 @@ export default function Calculator() {
 
     const keywords = getHighlightKeywords(activeCharacter);
 
+    const rarityMap = Object.fromEntries(
+        Object.entries(characterStates)
+            .map(([key, val]) => [val.Id, val.Rarity])
+    );
+
     return (
         <>
             <SkillsModal
@@ -903,6 +917,7 @@ export default function Calculator() {
                                                 attributeMap={attributeMap}
                                                 weaponMap={weaponMap}
                                                 keywords={keywords}
+                                                rarityMap={rarityMap}
                                             />
                                         ) : (
                                             <div className="loading">Loading characters...</div>
@@ -936,6 +951,7 @@ export default function Calculator() {
                                             activeCharacter={activeCharacter}
                                             setCharacterRuntimeStates={setCharacterRuntimeStates}
                                             characterStates={characterStates}
+                                            rarityMap={rarityMap}
                                         />
                                     )}
                                     {leftPaneView === 'rotation' && (
@@ -998,6 +1014,8 @@ export default function Calculator() {
                                         mergedBuffs={mergedBuffs}
                                         rotationEntries={rotationEntries}
                                         currentSliderColor={currentSliderColor}
+                                        showSubHits={showSubHits}
+                                        setShowSubHits={setShowSubHits}
                                     />
                                 </div>
                             </div>

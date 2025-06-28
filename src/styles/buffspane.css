@@ -50,7 +50,6 @@
     width: 90px;
     height: 90px;
     border-radius: 50%;
-    /*overflow: hidden;*/
     background: rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
@@ -63,8 +62,9 @@
 }
 
 /* Locked (main character) slot */
-.team-slot.locked {
-    pointer-events: none;
+.header-icon.locked {
+    cursor: not-allowed !important;
+    transform: scale(1);
     opacity: 0.6;
 }
 

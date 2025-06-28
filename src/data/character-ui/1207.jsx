@@ -47,7 +47,7 @@ export default function LupaUI({ characterRuntimeStates, setCharacterRuntimeStat
                     <label className="modern-checkbox"
                            style={{
                                opacity: !isTeamValid ? 0.5 : 1,
-                               pointerEvents: isTeamValid ? 'auto' : 'none'
+                               cursor: isTeamValid ? 'pointer' : 'not-allowed'
                            }}
                     >
                         <input
@@ -288,7 +288,7 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                     <label className="modern-checkbox"
                            style={{
                                opacity: !isTeamValid ? 0.5 : 1,
-                               pointerEvents: isTeamValid ? 'auto' : 'none'
+                               cursor: isTeamValid ? 'pointer' : 'not-allowed'
                            }}
                     >
                         <input

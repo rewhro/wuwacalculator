@@ -95,7 +95,11 @@ export function CustomInherentSkills({
                         </p>
 
                         {isHarmonic && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}>
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}
@@ -119,8 +123,10 @@ export function CustomInherentSkills({
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '10px',
-                                    opacity: locked ? 0.5 : 1
+                                    opacity: locked ? 0.5 : 1,
+                                    cursor: !locked ? 'auto' : 'not-allowed'
                                 }}
+
                             >
                                 Rhythmic Vibrato
                                 <input
@@ -142,6 +148,9 @@ export function CustomInherentSkills({
                                                 }
                                             }
                                         }));
+                                    }}
+                                    style={{
+                                        cursor: !locked ? 'auto' : 'not-allowed'
                                     }}
                                 />
                                 {locked && (

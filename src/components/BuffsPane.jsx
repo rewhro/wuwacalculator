@@ -13,13 +13,13 @@ import {runInContext as echoBuffs, runInContext as weaponBuffs} from "lodash";
 export default function BuffsPane({
                                       characters,
                                       activeCharacterId,
-                                      setActiveCharacterId,
                                       team,
                                       setTeam,
     characterRuntimeStates,
     setCharacterRuntimeStates,
     activeCharacter,
-    characterStates
+    characterStates,
+    rarityMap
                                   }) {
     loadBase();
     const menuRef = useRef(null);
@@ -42,7 +42,7 @@ export default function BuffsPane({
 
 
     const handleCharacterSelect = (char) => {
-        if (activeCharacterSlot === 0) return; // Prevent overwriting main character
+        if (activeCharacterSlot === 0) return;
 
         const newTeam = [...team];
         newTeam[activeCharacterSlot] = char.link;
@@ -114,6 +114,7 @@ export default function BuffsPane({
             <h3 className="panel-title menu-header">Team Setup</h3>
             <div className="icon-body">
                 {team.map((charId, index) => {
+                    const rarity = rarityMap[charId]
                     const isActive = charId === activeCharacterId;
                     const isDisabled = index === 0;
                     const character = characters.find(c => String(c.link) === String(charId));
@@ -128,13 +129,12 @@ export default function BuffsPane({
                                     setActiveCharacterSlot(index);
                                     setCharacterMenuOpen(true);
                                 }}
-                                style={isDisabled && !isEmpty ? { cursor: 'default' } : {}}
                             >
                                 {character?.icon ? (
                                     <img
                                         src={character.icon}
                                         alt={`Character ${index + 1}`}
-                                        className="header-icon"
+                                        className={`header-icon rarity-${rarity} ${isDisabled ? 'locked' : ''}`}
                                         loading="lazy"
                                     />
                                 ) : (
@@ -212,6 +212,7 @@ export default function BuffsPane({
                 menuRef={menuRef}
                 menuOpen={characterMenuOpen}
                 setMenuOpen={setCharacterMenuOpen}
+                rarityMap={rarityMap}
             />
         </div>
     );

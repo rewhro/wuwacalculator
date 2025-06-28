@@ -14,8 +14,9 @@ const getWeaponName = (value) => {
     return entry ? entry[0] : 'unknown';
 };
 
-export default function CharacterHeader({ activeCharacter, setMenuOpen, attributeIconPath, menuOpen, triggerRef }) {
+export default function CharacterHeader({ activeCharacter, setMenuOpen, attributeIconPath, menuOpen, triggerRef, rarityMap, charId }) {
     const weaponName = getWeaponName(activeCharacter?.weaponType);
+    const rarity = rarityMap[charId]
 
     return (
         <div className="header-with-icon">
@@ -24,7 +25,7 @@ export default function CharacterHeader({ activeCharacter, setMenuOpen, attribut
                     ref={triggerRef}
                     src={imageCache[activeCharacter.icon]?.src || activeCharacter.icon}
                     alt={activeCharacter.displayName}
-                    className="header-icon"
+                    className={`header-icon rarity-${rarity}`}
                     loading="eager"
                     onClick={() => setMenuOpen(!menuOpen)}
                 />

@@ -92,7 +92,12 @@ export function CustomInherentSkills({
                         </p>
 
                         {performance && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}
+                            >
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent1 ?? false}

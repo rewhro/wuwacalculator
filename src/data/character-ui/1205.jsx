@@ -91,7 +91,9 @@ export function CustomInherentSkills({
                         {isStrategist && (
                             <div
                                 className="slider-label-with-input"
-                                style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}
+                                style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '10px', opacity: locked ? 0.5 : 1,
+                                    cursor: !locked ? 'pointer' : 'not-allowed' }}
+
                             >
                                 <DropdownSelect
                                     label=""
@@ -110,7 +112,12 @@ export function CustomInherentSkills({
                         )}
 
                         {isSweeping && (
-                            <label className="modern-checkbox">
+                            <label className="modern-checkbox"
+                                   style={{
+                                       opacity: locked ? 0.5 : 1,
+                                       cursor: !locked ? 'pointer' : 'not-allowed'
+                                   }}
+                            >
                                 <input
                                     type="checkbox"
                                     checked={activeStates.inherent2 ?? false}

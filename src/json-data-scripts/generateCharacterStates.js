@@ -39,6 +39,7 @@ function generateStates() {
         output[charId] = {
             Name: charData.Name,
             Id: charData.Id,
+            Rarity: charData.Rarity,
             Attribute: charData.Element ?? 0,
             WeaponType: charData.Weapon ?? 0,
             Stats: {
