@@ -4,11 +4,14 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: true
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html') // 👈 explicitly point to your app
+        main: resolve(__dirname, 'index.html')
       }
     }
   }

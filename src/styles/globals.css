@@ -12,32 +12,37 @@
 /* ===================== */
 
 html, body, #root {
+    height: auto;
+    min-height: 100%;
     margin: 0;
     padding: 0;
     width: 100%;
-    min-height: 100dvh;
-    overflow: unset;
+    overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
-}
-
-body {
-    overscroll-behavior-y: auto;
 }
 
 .layout {
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
-    overflow: visible;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.layout, html, body, #root {
     background: #f9f9f9;
+}
+
+.dark .layout, .dark html, .dark body, .dark #root {
+    background: #131922;
+}
+
+.dark-alt .layout, .dark-alt html, .dark-alt body, .dark-alt #root {
+    background: black;
 }
 
 .layout.collapsed-mode {
     overflow-y: auto;
-}
-
-.dark .layout {
-    background: #131922;
 }
 
 .main-content {
