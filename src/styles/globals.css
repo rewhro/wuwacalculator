@@ -25,6 +25,12 @@ body {
     overscroll-behavior-y: auto;
 }
 
+@media (max-width : 1060px) {
+    html, body, #root {
+        overflow: auto;
+    }
+}
+
 .layout {
     display: flex;
     flex-direction: column;
