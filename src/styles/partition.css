@@ -29,6 +29,7 @@
 
 .layout.collapsed-mode #right-pane {
     padding: 16px !important;
+    padding-bottom: 7.75rem !important;
 }
 
 .layout.collapsed-mode .split {
