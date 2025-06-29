@@ -1,12 +1,16 @@
 .settings-page {
+    display: flex;
+    flex-direction: column;
     overflow-y: hidden;
     padding-top: 0 !important;
 }
 
 .settings-header {
+    display: flex;
+    align-items: center;
     font-size: 18px;
     font-weight: bold;
-    padding: 16px 20px 12px 20px;
+    padding: 12px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     color: #333;
     background: transparent;
@@ -22,6 +26,20 @@
     padding: 0 2rem 2rem 2rem;
     overflow-y: auto;
     height: calc(100vh - 170px - 60px);
+}
+
+@media(max-width: 570px) {
+    .settings-header {
+        height: 6rem;
+    }
+
+    .settings-header h1 {
+        font-size: 3rem;
+    }
+
+    .settings-body {
+        padding-bottom: 7.75rem !important;
+    }
 }
 
 .btn-primary {
