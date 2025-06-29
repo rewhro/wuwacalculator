@@ -137,8 +137,18 @@
 }
 
 .sidebar-button .icon-slot svg {
+    color: #222;
     transition: transform 0.3s ease, color 0.3s ease;
     will-change: transform;
+}
+
+.sidebar-sub-button .icon-slot svg {
+    color: #222;
+}
+
+.dark .sidebar-button .icon-slot svg,
+.dark .sidebar-sub-button .icon-slot svg {
+    color: #ddd;
 }
 
 .sidebar-button:hover .icon-slot svg,

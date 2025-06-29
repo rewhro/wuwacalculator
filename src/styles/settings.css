@@ -25,8 +25,8 @@
 }
 
 .btn-primary {
-    background-color: #555353;
-    color: white;
+    background-color: #555353 !important;
+    color: white !important;
     padding: 10px 20px;
     border-radius: 8px;
     font-weight: 600;
@@ -45,6 +45,6 @@
 }
 
 .dark .btn-primary {
-    background-color: #555353;
-    color: #f9fafb;
+    background-color: #555353 !important;
+    color: #f9fafb !important;
 }

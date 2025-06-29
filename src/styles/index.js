@@ -29,3 +29,4 @@ import './substatModal.css';
 import './echoBag.css'
 import './parser.css';
 import './advancedRotation.css';
+import './dark-alt.css';

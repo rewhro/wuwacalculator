@@ -3,7 +3,7 @@ import React from 'react';
 export default function ToolbarIconButton({ iconName, onClick, altText, effectiveTheme }) {
     let iconPath;
 
-    if (effectiveTheme === 'dark') {
+    if (effectiveTheme.includes('dark')) {
         iconPath = `/assets/icons/dark/${iconName}.png`;
     } else {
         iconPath = `/assets/icons/light/${iconName}.png`;
@@ -17,7 +17,7 @@ export default function ToolbarIconButton({ iconName, onClick, altText, effectiv
 }
 
 export function ToolbarSidebarButton({ iconName, label, onClick, selected, effectiveTheme }) {
-    const iconPath = `/assets/icons/${effectiveTheme === 'dark' ? 'dark' : 'light'}/${iconName}.png`;
+    const iconPath = `/assets/icons/${['dark', 'dark-alt'].includes(effectiveTheme) ? 'dark' : 'light'}/${iconName}.png`;
 
     return (
         <button

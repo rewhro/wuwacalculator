@@ -269,7 +269,7 @@ export default function CharacterSelector({
                             )
                             .map(([nodeId, node]) => {
                                 const iconFile = traceNodeIconMap[node.Skill.Name];
-                                const themeSuffix = effectiveTheme === 'dark' ? 'dark' : 'light';
+                                const themeSuffix = ['dark', 'dark-alt'].includes(effectiveTheme) ? 'dark' : 'light';
                                 const iconPath = `/assets/skill-icons/${themeSuffix}/${iconFile}.webp?v=${themeSuffix}`;
                                 const isActive = traceNodeBuffs?.activeNodes?.[nodeId] ?? false;
                                 const tooltipText = cleanTooltipText(

@@ -6,7 +6,7 @@ import ResetSettingsButton from '../components/ResetSettingsButton.jsx';
 
 export default function Setting() {
     const navigate = useNavigate();
-    const { theme, setTheme, effectiveTheme } = useDarkMode();
+    const { theme, setTheme, darkVariant, setDarkVariant, effectiveTheme } = useDarkMode();
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
     const [importPreview, setImportPreview] = useState(null);
     const [showImportModal, setShowImportModal] = useState(false);
@@ -237,6 +237,25 @@ export default function Setting() {
                             Reset all saved characters, weapons, and buffs. This action is irreversible.
                         </p>
                         <ResetSettingsButton />
+                        <h2>Dark Mode Theme</h2>
+                        <p style={{ marginBottom: '1rem' }}>
+                            Choose your preferred dark mode theme. This only affects how the interface looks when dark mode is enabled.
+                        </p>
+                        <div>
+                            <label htmlFor="main-stat-select" className="main-stat-label" style={{ marginRight: '1rem' }}>Default Dark theme:</label>
+                            <select
+                                id="dark-variant"
+                                className="main-stat-select"
+                                value={darkVariant}
+                                onChange={(e) => {
+                                    const newVariant = e.target.value;
+                                    setDarkVariant(newVariant);
+                                }}
+                            >
+                                <option value="dark">Midnight</option>
+                                <option value="dark-alt">Blackest</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
