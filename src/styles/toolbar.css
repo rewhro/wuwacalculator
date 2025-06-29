@@ -302,7 +302,7 @@
     padding: 0;
     background: none;
     border: none;
-    color: inherit;
+    color: #222;
     cursor: pointer;
     border-radius: 0.5rem;
     outline: none;
@@ -311,6 +311,12 @@
     transition: background-color 0.2s ease, grid-template-columns 0.3s ease;
 }
 
+.dark .sidebar-button,
+.dark-alt .sidebar-sub-button,
+.dark-alt .sidebar-button,
+.dark .sidebar-sub-button {
+    color: #ddd;
+}
 .sidebar.collapsed .sidebar-button,
 .sidebar.collapsed .sidebar-sub-button {
     grid-template-columns: 3.75rem 0;
