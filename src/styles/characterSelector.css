@@ -47,6 +47,7 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
     overflow: hidden;
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .icon-menu-vertical.show {

@@ -194,8 +194,27 @@ export default function EchoesPane({
         critValue
     };
 
+    const echoesPaneRef = useRef(null);
+
+    const [isNarrow, setIsNarrow] = useState(false);
+
+    useEffect(() => {
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const width = entry.contentRect.width;
+                setIsNarrow(width < 500);
+            }
+        });
+
+        if (echoesPaneRef.current) {
+            observer.observe(echoesPaneRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <div className="echoes-pane">
+        <div className="echoes-pane" ref={echoesPaneRef}>
             <EchoParser
                 charId={charId}
                 setCharacterRuntimeStates={setCharacterRuntimeStates}
@@ -218,7 +237,10 @@ export default function EchoesPane({
                 return (
                     <React.Fragment key={slotIndex}>
                         <div key={slotIndex} className="inherent-skills-box echo">
-                            <div className="echo-slot-content">
+                            <div
+                                className="echo-slot-content"
+                                style={{ gridTemplateColumns: isNarrow ? 'unset' : '1fr 1fr' }}
+                            >
                                 <div className="echo-slot-left">
                                     <div className="echo-slot-icon-wrapper">
                                         {echo ? (
