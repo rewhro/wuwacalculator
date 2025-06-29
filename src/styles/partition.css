@@ -35,10 +35,6 @@
     flex-direction: column;
 }
 
-.layout.collapsed-mode {
-    overflow-y: auto;
-}
-
 #left-pane {
     width: 30%;
     min-width: 350px;

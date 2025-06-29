@@ -664,13 +664,13 @@ export default function Calculator() {
             .map(([key, val]) => [val.Id, val.Rarity])
     );
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
     const [isOverlayClosing, setIsOverlayClosing] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 500);
+            setIsMobile(window.innerWidth < 700);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -705,6 +705,13 @@ export default function Calculator() {
         }, 300);
     };
 
+    const layoutRef = useRef(null);
+    useLayoutEffect(() => {
+        if (layoutRef.current) {
+            layoutRef.current.scrollTop = 0;
+        }
+    }, [leftPaneView]);
+
     return (
         <>
             <SkillsModal
@@ -718,10 +725,7 @@ export default function Calculator() {
                 keywords={keywords}
             />
 
-            {/* Root layout */}
             <div className="layout">
-
-                {/* Toolbar at top */}
                 <div className="toolbar">
                     {!moveToolbarToSidebar && (
                         <div className="toolbar-group">
@@ -779,10 +783,7 @@ export default function Calculator() {
                     </button>
                 </div>
 
-                {/* Horizontal layout: sidebar + main content */}
                 <div className="horizontal-layout">
-
-                    {/* Sidebar */}
                     <div
                         className={`sidebar ${
                             isMobile
@@ -907,7 +908,6 @@ export default function Calculator() {
                                 </div>
                             </button>
                         </div>
-                        {/* Footer */}
                         <div className="sidebar-footer">
                             <ResetButton onClick={() => setResetModalOpen(true)} />
                         </div>
@@ -920,9 +920,8 @@ export default function Calculator() {
                         />
                     )}
 
-                    {/* Main Content */}
                     <div className="main-content">
-                        <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`}>
+                        <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`} ref={layoutRef}>
                             <div className="split">
                                 {/* Left Pane */}
                                 <div id="left-pane" className={`partition ${leftPaneView}-mode`}>

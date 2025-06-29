@@ -68,8 +68,8 @@ export default function Setting() {
 
                 if (!charId || !data?.Id) throw new Error("Invalid format.");
 
-                setImportPreview(data);            // ✅ Save preview
-                setShowImportModal(true);          // ✅ Open modal
+                setImportPreview(data);
+                setShowImportModal(true);
             } catch (err) {
                 alert("Failed to import: " + err.message);
             }
@@ -77,13 +77,13 @@ export default function Setting() {
         reader.readAsText(file);
     };
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
     const [isOverlayClosing, setIsOverlayClosing] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 500);
+            setIsMobile(window.innerWidth < 700);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -126,7 +126,6 @@ export default function Setting() {
             </div>
 
             <div className="horizontal-layout">
-                {/* Sidebar */}
                 <div
                     className={`sidebar ${
                         isMobile

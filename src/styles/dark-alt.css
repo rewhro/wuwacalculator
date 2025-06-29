@@ -28,12 +28,6 @@
     color: #ddd;
 }
 
-.dark-alt .character-level-input {
-    background: rgba(0, 0, 0, 0.34);
-    color: #ddd;
-    border: 1px solid #333;
-}
-
 .dark-alt .dropdown-label {
     color: #ddd !important;
 }
@@ -52,8 +46,10 @@
     background-color: rgba(19, 20, 23, 0.62);
 }
 
-.dark-alt .character-settings input[type="number"] {
-    border-color: #555;
+.dark-alt .character-settings input[type="number"],
+.dark-alt .character-level-input,
+.dark-alt .custom-select.small {
+    border-color: rgba(85, 85, 85, 0.3);
     background: rgba(0, 0, 0, 0.34);
     color: #ddd;
 }
@@ -148,12 +144,6 @@
     color: #ddd;
 }
 
-.dark-alt .custom-select.small {
-    background: rgba(0, 0, 0, 0.34);
-    color: #ddd;
-    border-color: #444;
-}
-
 .dark-alt .dropdown-arrow {
     color: #ccc;
 }
@@ -244,6 +234,15 @@
 .dark-alt .sidebar-button .icon-slot svg,
 .dark-alt .sidebar-sub-button .icon-slot svg {
     color: #ddd;
+}
+
+.dark-alt .sidebar-button:hover .icon-slot svg,
+.dark-alt .sidebar-sub-button:hover .icon-slot svg {
+    color: lightseagreen;
+}
+
+.dark-alt .sidebar-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .dark-alt .inherent-skills-box {
@@ -402,11 +401,11 @@
 }
 
 .dark-alt .btn-primary:hover {
-    background-color: #7c7b7b;
+    background-color: rgba(255, 255, 255, 0.45);
 }
 
 .dark-alt .btn-primary {
-    background-color: #555353 !important;
+    background-color: rgba(161, 156, 156, 0.35);
     color: #f9fafb;
 }
 
@@ -442,8 +441,8 @@
             to right,
             var(--slider-fill-color) 0%,
             var(--slider-fill-color) var(--slider-fill, 0%),
-            #333 var(--slider-fill, 0%),
-            #333 100%
+            rgba(51, 51, 51, 0.3) var(--slider-fill, 0%),
+            rgba(51, 51, 51, 0.3) 100%
     );
     box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05);
 }
@@ -556,7 +555,7 @@
 .dark-alt .echo-card-section {
     color: #a6a6a6;
 }
-
+.dark .echo-slot-icon-wrapper .header-icon,
 .dark-alt .echo-slot-icon-wrapper .header-icon {
     border: 0.01rem solid #444 !important;
 }

@@ -11,10 +11,9 @@
     display: block;
 }
 
-@media (prefers-color-scheme: dark) {
-    .dropdown-label {
-        color: #fff;
-    }
+.dark .dropdown-label,
+.dark-alt .dropdown-label {
+    color: #fff;
 }
 
 .select-container {
@@ -38,11 +37,6 @@
     text-align: center;
 }
 
-.dark .custom-select.small {
-        background: rgba(0, 0, 0, 0.34);
-        color: #ddd;
-        border-color: #444;
-    }
 
 .dropdown-arrow {
     position: absolute;

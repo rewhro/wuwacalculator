@@ -67,7 +67,7 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 700px) {
     .skills-modal-tabs {
         flex-direction: row;
         flex-wrap: wrap;

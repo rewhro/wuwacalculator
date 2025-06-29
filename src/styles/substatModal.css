@@ -12,7 +12,7 @@
     transform: scale(0.9);
     pointer-events: none;
     animation: fadeInScale 0.3s ease;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: all ease 0.3s;
 }
 
 .edit-substats-modal.show {
@@ -73,14 +73,31 @@
     gap: 0.5rem;
 }
 
+@media(max-width: 640px) {
+    .edit-substats-modal .toggle-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr) !important;
+        grid-template-rows: repeat(2, auto);
+        gap: 6px;
+    }
+
+    .edit-substats-modal {
+        max-height: 500px;
+    }
+
+    .edit-substats-modal .modal-body {
+        overflow-y: auto;
+    }
+}
+
 .dark .edit-substats-modal .substat-edit-row {
     background-color: rgba(0, 0, 0, 0.25);
 }
 
 .edit-substats-modal .toggle-group {
     display: grid;
-    grid-template-columns: repeat(8, 1fr); /* 5 columns */
-    grid-template-rows: repeat(2, auto);   /* 2 rows */
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, auto);
     gap: 6px;
 }
 

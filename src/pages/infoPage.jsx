@@ -14,13 +14,13 @@ export default function InfoPage() {
         setTheme(newTheme);
     };
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
     const [isOverlayClosing, setIsOverlayClosing] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 500);
+            setIsMobile(window.innerWidth < 700);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);

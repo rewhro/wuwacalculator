@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 .layout {
-    --sidebar-width: 12.5rem;           /* 200px */
-    --sidebar-collapsed-width: 3.75rem; /* 60px */
+    --sidebar-width: 12.5rem;
+    --sidebar-collapsed-width: 3.75rem;
 }
 
 /* ===================== */
@@ -27,6 +27,10 @@ html, body, #root {
     width: 100%;
     overflow: hidden;
     background: #f9f9f9;
+}
+
+.layout.collapsed-mode {
+    overflow-y: auto;
 }
 
 .dark .layout {
@@ -64,7 +68,7 @@ html, body, #root {
 #left-pane.rotation-mode,
 #left-pane.teams-mode,
 #left-pane.echoes-mode {
-    min-width: 31.25rem; /* 500px */
+    min-width: 31.25rem;
 }
 
 .dark #left-pane,
@@ -74,7 +78,7 @@ html, body, #root {
 
 @media (max-width: 500px) {
     html {
-        font-size: clamp(0.75rem, 2vw, 1rem); /* 12px–16px */
+        font-size: clamp(0.75rem, 2vw, 1rem);
     }
 }
 
@@ -113,8 +117,6 @@ button:focus-visible {
     outline: none !important;
     box-shadow: none !important;
 }
-
-
 
 button img {
     user-select: none !important;

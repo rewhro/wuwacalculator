@@ -205,8 +205,9 @@
 }
 
 /* Dark mode */
+.dark .custom-select.small,
 .dark .character-settings input[type="number"] {
-        border-color: #555;
+        border-color: rgba(85, 85, 85, 0.6);
         background: rgba(0, 0, 0, 0.34);
         color: #ddd;
     }

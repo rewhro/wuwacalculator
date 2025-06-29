@@ -13,7 +13,7 @@
 }
 
 .rotation-button {
-    background: rgba(142, 137, 137, 0.66) !important;
+    background: rgba(142, 137, 137, 0.66);
     color: white;
     padding: 6px 12px;
     border-radius: 10px;
@@ -29,26 +29,26 @@
 }
 
 .dark .rotation-button {
-    background: rgba(161, 156, 156, 0.65) !important;
+    background: rgba(161, 156, 156, 0.65);
     color: #ddd;
 }
 
 .dark .rotation-button:hover {
-    background: rgba(161, 156, 156, 0.85) !important;
+    background: rgba(161, 156, 156, 0.85);
 }
 
 .rotation-button:hover {
-    background: rgba(119, 116, 116, 0.85 !important;);
+    background: rgba(119, 116, 116, 0.85);
     color: white;
     transform: scale(1.05);
 }
 
 .rotation-button.clear {
-    background: rgba(220, 20, 60, 0.75) !important;
+    background: rgba(220, 20, 60, 0.75);
 }
 
 .rotation-button.clear:hover {
-    background: crimson !important;
+    background: crimson;
 }
 
 .rotation-buttons-left {

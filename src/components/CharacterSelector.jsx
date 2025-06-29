@@ -94,7 +94,6 @@ export default function CharacterSelector({
             />
 
             <div className="character-settings">
-                {/* Level input + slider */}
                 <div className="slider-group">
                     <div
                         className='level-group'
@@ -124,10 +123,8 @@ export default function CharacterSelector({
                                 opacity: '0.5'
                             }}
                             onClick={() => {
-                                // Set level to 90
                                 setCharacterLevel(90);
 
-                                // Set all skill levels to 10
                                 setSliderValues(prev => {
                                     const newValues = { ...prev };
                                     for (const key of Object.keys(prev)) {
@@ -138,7 +135,6 @@ export default function CharacterSelector({
                                     return newValues;
                                 });
 
-                                // Toggle all buff icons on
                                 setTraceNodeBuffs(prev => {
                                     const allActiveNodes = {};
                                     const buffs = {};
@@ -259,7 +255,6 @@ export default function CharacterSelector({
                         </div>
                     )}
 
-                    {/* Trace Buff Icons */}
                     <div className="buff-icons">
                         {Object.entries(activeCharacter.raw?.SkillTrees ?? {})
                             .filter(([, node]) =>
@@ -297,14 +292,12 @@ export default function CharacterSelector({
                                                 const percent = parseFloat((node.Skill?.Param?.[0] ?? "0").replace('%', ''));
 
                                                 setTraceNodeBuffs(prev => {
-                                                    // Toggle the node
                                                     const wasActive = prev.activeNodes?.[nodeIdNum] ?? false;
                                                     const newActiveNodes = {
                                                         ...prev.activeNodes,
                                                         [nodeIdNum]: !wasActive
                                                     };
 
-                                                    // If no buffKey, just return updated activeNodes
                                                     if (!buffKey) {
                                                         return {
                                                             ...prev,
@@ -312,7 +305,6 @@ export default function CharacterSelector({
                                                         };
                                                     }
 
-                                                    // Recalculate total buff for this buffKey
                                                     const total = Object.entries(newActiveNodes)
                                                         .filter(([, isActive]) => isActive)
                                                         .map(([id]) => {

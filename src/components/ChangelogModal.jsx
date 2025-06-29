@@ -11,13 +11,7 @@ export default function ChangelogModal({ open, onClose, shouldScroll }) {
                 {
                     type: 'paragraph',
                     content: `<strong>Pheobe</strong> is now fully functional.`
-                },
-                /*
-                {
-                    type: 'bullet',
-                    content: `Mostly just UI support and "un-generalization" (i'm not sure yet what that means) for THE Pheobe. More characters will be updated later.`
-                },
-                */
+                }
             ]
         },
         {

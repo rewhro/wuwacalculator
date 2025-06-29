@@ -166,7 +166,7 @@
     display: inline-block;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 570px) {
     .damage-tooltip-wrapper {
         display: flex;
         justify-content: flex-end;
