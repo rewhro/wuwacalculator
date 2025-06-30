@@ -3,6 +3,14 @@
     width: 68rem;
 }
 
+@media (max-width: 640px) {
+    .edit-substats-modal.echo-bag-modal {
+        max-height: 85dvh;
+        position: fixed;
+        top: 7.5dvh;
+    }
+}
+
 .edit-substats-modal.echo-bag-modal.show {
     opacity: 1 !important;
     transform: scale(1)!important;

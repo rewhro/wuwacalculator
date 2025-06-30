@@ -32,6 +32,9 @@ export const formatDescription = (desc, param = [], currentSliderColor = '#888')
 
     // Replace numbered parameters like {0}, {1}, etc.
     desc = desc.replace(/{(\d+)}/g, (_, index) => param[index] ?? `{${index}}`);
-
+    desc = desc.replace(/\{Cus:Ipt,[^}]*Touch=([^ ]+)\s+PC=([^ ]+)\s+Gamepad=([^ }]+)[^}]*\}/g, (_, touch, pc, gamepad) => {
+        const inputs = new Set([touch, pc, gamepad]);
+        return Array.from(inputs).join('/');
+    });
     return desc;
 };

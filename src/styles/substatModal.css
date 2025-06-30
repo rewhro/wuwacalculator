@@ -2,7 +2,7 @@
     background-color: rgba(218, 218, 218, 0.96);
     padding: 1rem;
     border-radius: 1rem;
-    min-width: 320px;
+    min-width: 20rem;
     max-width: 90vw;
     width: 800px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -82,7 +82,11 @@
     }
 
     .edit-substats-modal {
-        max-height: 500px;
+        display: flex;
+        align-self: center;
+        position: fixed;
+        top: 10dvh;
+        max-height: 80dvh;
     }
 
     .edit-substats-modal .modal-body {

@@ -12,6 +12,7 @@ import {
 } from '../state/echoBagStore';
 import {formatStatKey, getValidMainStats} from "../utils/echoHelper.js";
 import {imageCache} from "../pages/calculator.jsx";
+import {ExpandableEchoSection} from "./Expandable.jsx";
 
 function isEchoModified(oldEcho, updatedEcho) {
     return (
@@ -134,101 +135,24 @@ export default function EchoBagMenu({
                             ))}
                         </div>
                     </div>
-                    <div className="modal-body echo-grid">
-                        {filteredEchoes.length === 0 ? (
-                            <div className="empty-message">
-                                ...
-                            </div>
-                        ) : (
-                            filteredEchoes.map(echo => (
-                                <div key={echo.uid}
-                                     className="echo-tile"
-                                >
-                                    <div className="remove-button-container">
-                                        <button
-                                            className="remove-substat-button"
-                                            onClick={() => {
-                                                removeEchoFromBag(echo.uid);
-                                            }}
-                                        >
-                                            <X size={20} />
-                                        </button>
-                                    </div>
-
-                                    <div className="echo-set-cost-header">
-                                        {echo.selectedSet && (
-                                            <img
-                                                src={setIconMap[echo.selectedSet]}
-                                                alt={`Set ${echo.selectedSet}`}
-                                                className="echo-set-icon-bag"
-                                            />
-                                        )}
-                                        <div className="echo-slot-cost-badge bag">{echo.cost}</div>
-                                    </div>
-
-                                    <img
-                                        src={imageCache[echo.icon]?.src || echo.icon}
-                                        alt={echo.name}
-                                         loading="eager"
-                                         onError={(e) => {
-                                             e.currentTarget.onerror = null;
-                                             e.currentTarget.src = '/assets/echoes/default.webp';
-                                             e.currentTarget.classList.add('fallback-icon');
-                                         }}
-                                    />
-                                    <div className="echo-name">{echo.name}</div>
-
-                                    <div
-                                        className="echo-stats-preview"
-                                        onClick={() => {
-                                            const freshEcho = echoBag.find(e => e.uid === echo.uid);
-                                            setEditingEcho(freshEcho);
-                                        }}
-                                    >
-                                        <div className="echo-bag-info-main">
-                                            {Object.entries(echo.mainStats ?? {}).map(([key, val]) => (
-                                                <div key={key} className="stat-row">
-                                                    <span className="echo-stat-label">{formatStatKey(key)}</span>
-                                                    <span className="echo-stat-value">
-                                                {key.endsWith('Flat')
-                                                    ? val
-                                                    : (typeof val === 'number' ? `${val.toFixed(1)}%` : '—')}
-                                            </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        {Object.entries(echo.subStats ?? {}).map(([key, val]) => (
-                                            <div key={key} className="stat-row">
-                                                <span className="echo-stat-label">{formatStatKey(key)}</span>
-                                                <span className="echo-stat-value">
-                                            {key.endsWith('Flat')
-                                                ? val
-                                                : (typeof val === 'number' ? `${val.toFixed(1)}%` : '—')}
-                                        </span>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="modal-footer">
-                                        {[1, 2, 3, 4, 5].map(slotIndex => (
-                                            <button
-                                                key={slotIndex}
-                                                className="edit-substat-button slot"
-                                                onClick={() => {
-                                                    const freshEcho = echoBag.find(e => e.uid === echo.uid);
-                                                    if (freshEcho) {
-                                                        onEquip(freshEcho, slotIndex - 1);
-                                                    }
-                                                }}
-                                            >
-                                                {slotIndex}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
+                <div className="modal-body echo-grid">
+                    {filteredEchoes.length === 0 ? (
+                        <div className="empty-message">...</div>
+                    ) : (
+                        filteredEchoes.map(echo => (
+                            <EchoTile
+                                key={echo.uid}
+                                echo={echo}
+                                imageCache={imageCache}
+                                echoBag={echoBag}
+                                removeEchoFromBag={removeEchoFromBag}
+                                setEditingEcho={setEditingEcho}
+                                onEquip={onEquip}
+                                setIconMap={setIconMap}
+                            />
+                        ))
+                    )}
+                </div>
                 </div>
 
                 {/* Edit Modal */}
@@ -266,4 +190,119 @@ export default function EchoBagMenu({
                 )}
         </div>
     );
+}
+
+
+function useIsMobileWidth(maxWidth = 379) {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= maxWidth);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= maxWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [maxWidth]);
+
+    return isMobile;
+}
+
+function EchoTile({ echo, imageCache, echoBag, removeEchoFromBag, setEditingEcho, onEquip, setIconMap }) {
+    const isMobile = useIsMobileWidth();
+
+    const tileContent = (
+        <div key={echo.uid} className="echo-tile">
+            <div className="remove-button-container">
+                <button
+                    className="remove-substat-button"
+                    onClick={() => removeEchoFromBag(echo.uid)}
+                >
+                    <X size={20} />
+                </button>
+            </div>
+
+            {!isMobile && (
+                <>
+                    <div className="echo-set-cost-header">
+                        {echo.selectedSet && (
+                            <img
+                                src={setIconMap[echo.selectedSet]}
+                                alt={`Set ${echo.selectedSet}`}
+                                className="echo-set-icon-bag"
+                            />
+                        )}
+                        <div className="echo-slot-cost-badge bag">{echo.cost}</div>
+                    </div>
+
+                    <img
+                        src={imageCache[echo.icon]?.src || echo.icon}
+                        alt={echo.name}
+                        loading="eager"
+                        onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = '/assets/echoes/default.webp';
+                            e.currentTarget.classList.add('fallback-icon');
+                        }}
+                    />
+                    <div className="echo-name">{echo.name}</div>
+                </>
+            )}
+
+            <div
+                className="echo-stats-preview"
+                onClick={() => {
+                    const freshEcho = echoBag.find(e => e.uid === echo.uid);
+                    setEditingEcho(freshEcho);
+                }}
+                style={{
+                    paddingTop: isMobile ? '20px' : undefined,
+                }}
+            >
+                <div className="echo-bag-info-main">
+                    {Object.entries(echo.mainStats ?? {}).map(([key, val]) => (
+                        <div key={key} className="stat-row">
+                            <span className="echo-stat-label">{formatStatKey(key)}</span>
+                            <span className="echo-stat-value">
+                                {key.endsWith('Flat') ? val : `${val?.toFixed(1)}%`}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+                {Object.entries(echo.subStats ?? {}).map(([key, val]) => (
+                    <div key={key} className="stat-row">
+                        <span className="echo-stat-label">{formatStatKey(key)}</span>
+                        <span className="echo-stat-value">
+                            {key.endsWith('Flat') ? val : `${val?.toFixed(1)}%`}
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            <div className="modal-footer">
+                {[1, 2, 3, 4, 5].map(slotIndex => (
+                    <button
+                        key={slotIndex}
+                        className="edit-substat-button slot"
+                        onClick={() => {
+                            const freshEcho = echoBag.find(e => e.uid === echo.uid);
+                            if (freshEcho) {
+                                onEquip(freshEcho, slotIndex - 1);
+                            }
+                        }}
+                    >
+                        {slotIndex}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+
+    return isMobile ? (
+        <ExpandableEchoSection
+            echo={echo}
+            imageCache={imageCache}
+            setIconMap={setIconMap}
+            defaultOpen={false}
+        >
+            {tileContent}
+        </ExpandableEchoSection>
+    ) : tileContent;
 }

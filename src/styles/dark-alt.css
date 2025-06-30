@@ -559,3 +559,8 @@
 .dark-alt .echo-slot-icon-wrapper .header-icon {
     border: 0.01rem solid #444 !important;
 }
+
+.dark-alt .edit-substats-modal.echo-bag-modal {
+    background: rgba(0, 0, 0, 0.73) !important;
+    backdrop-filter: blur(10px);
+}
