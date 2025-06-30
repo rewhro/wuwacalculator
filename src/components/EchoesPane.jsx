@@ -226,7 +226,7 @@ export default function EchoesPane({
                 <button
                     className="open-bag-button"
                     onClick={() => setBagOpen(true)}
-                    style={{ position: 'absolute', top: 8, right: 8 }}
+                    style={{ position: 'absolute', top: '0.35rem', right: '0rem' }}
                 >
                     <Backpack size={26} />
                 </button>
