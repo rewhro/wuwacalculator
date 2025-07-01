@@ -32,7 +32,6 @@ export default function RotationItem({
     const cache = getSkillDamageCache();
     const match = cache.find(s => s.name === entry.label && s.tab === entry.tab);
 
-    // ✅ Use cached if locked, otherwise live
     const source = entry.locked && entry.snapshot
         ? entry.snapshot
         : {
@@ -45,7 +44,6 @@ export default function RotationItem({
     const crit = source.crit * multiplier;
     const avg = source.avg * multiplier;
 
-    // ✅ Toggle lock state
     const toggleLock = () => {
         setRotationEntries(prev => {
             const copy = [...prev];
@@ -88,16 +86,27 @@ export default function RotationItem({
         >
             <div className={`rotation-item ${entry.locked ? 'locked' : ''}`}>
                 <div className="rotation-header">
-
-                    <span
-                        className="entry-name"
-                        style={{
-                            color: attributeColors[entry.element] ?? currentSliderColor
-                        }}
-                    >
-                      {entry.label}
-                        {multiplier > 1 ? ` (x${multiplier})` : ''}
-                    </span>
+                    {match?.isSupportSkill ? (
+                        <span
+                            className="entry-name"
+                            style={{
+                                color: match.supportColor ?? currentSliderColor,
+                            }}
+                        >
+                            {entry.label}
+                            {multiplier > 1 ? ` (x${multiplier})` : ''}
+                        </span>
+                    ) : (
+                        <span
+                            className="entry-name"
+                            style={{
+                                color: attributeColors[entry.element] ?? currentSliderColor,
+                            }}
+                        >
+                            {entry.label}
+                            {multiplier > 1 ? ` (x${multiplier})` : ''}
+                        </span>
+                    )}
                     <span className="entry-type-detail">
                         {entry.iconPath && (
                             <img

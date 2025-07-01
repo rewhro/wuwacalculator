@@ -72,7 +72,7 @@ export default function Calculator() {
     const defaultSliderValues = { normalAttack: 1, resonanceSkill: 1, forteCircuit: 1, resonanceLiberation: 1, introSkill: 1, sequence: 0 };
     const defaultTraceBuffs = { atkPercent: 0, hpPercent: 0, defPercent: 0, healingBonus: 0, critRate: 0, critDmg: 0, elementalBonuses: { aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 }, activeNodes: {} };
     const defaultCustomBuffs = { atkFlat: 0, hpFlat: 0, defFlat: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, critRate: 0, critDmg: 0, energyRegen: 0, healingBonus: 0, basicAtk: 0, heavyAtk: 0, resonanceSkill: 0, resonanceLiberation: 0, aero: 0, glacio: 0, spectro: 0, fusion: 0, electro: 0, havoc: 0 };
-    const defaultCombatState = { enemyLevel: 90, enemyRes: 10, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, energyRegen: 0 };
+    const defaultCombatState = { enemyLevel: enemyLevel ?? 100, enemyRes: enemyRes ?? 20, critRate: 0, critDmg: 0, weaponBaseAtk: 0, spectroFrazzle: 0, aeroErosion: 0, atkPercent: 0, hpPercent: 0, defPercent: 0, energyRegen: 0 };
     const [characterState, setCharacterState] = useState({ activeStates: {} });
     const [showDropdown, setShowDropdown] = useState(false);
     const [team, setTeam] = useState([activeCharacterId ?? null, null, null]);
@@ -118,7 +118,7 @@ export default function Calculator() {
             delete profile.CharacterState;
             setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
 
-            // ✅ Set default weapon only after weapons are loaded
+
             const defaultWeapon = Object.values(weaponData)
                 .filter(w => w.Type === weaponType)
                 .sort((a, b) => (b.Rarity ?? 0) - (a.Rarity ?? 0))[0];
@@ -240,7 +240,7 @@ export default function Calculator() {
 
     useLayoutEffect(() => {
         const handleResize = () => {
-            const desktopThreshold = 1060;
+            const desktopThreshold = 910;
             if (window.innerWidth >= desktopThreshold) {
                 setIsCollapsedMode(false);
                 return;
@@ -277,7 +277,7 @@ export default function Calculator() {
     }, [rotationEntries, charId]);
 
     const handleCharacterSelect = (char) => {
-        // ✅ Save the current active character's state BEFORE switching
+
         if (activeCharacter && charId) {
             const currentCharId = charId;
             setCharacterRuntimeStates(prev => ({
@@ -300,7 +300,7 @@ export default function Calculator() {
             }));
         }
 
-        // ✅ Start switching to the new character
+
         const newMainId = char.Id ?? char.id ?? char.link;
         const cached = characterRuntimeStates[newMainId] ?? {};
 
@@ -503,7 +503,7 @@ export default function Calculator() {
         charId
     })
 
-    // ✅ Extract activeStates + sequenceToggles from characterRuntimeStates
+
     if (overrideLogic && typeof overrideLogic === 'function') {
         const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
 
@@ -711,6 +711,8 @@ export default function Calculator() {
             layoutRef.current.scrollTop = 0;
         }
     }, [leftPaneView]);
+
+    //console.log(characterRuntimeStates);
 
     return (
         <>
@@ -1089,7 +1091,6 @@ export default function Calculator() {
     );
 }
 
-// Include helpers if needed:
 export const attributeMap = {
     glacio: 1,
     fusion: 2,
@@ -1115,7 +1116,6 @@ const toolbarIconNames = [
     'enemy',
     'weapon',
     'teams',
-    // etc.
 ];
 
 
@@ -1143,14 +1143,10 @@ const weaponIconPaths = Object.keys(weaponMap).map(weapon =>
 );
 
 
-// Global cache
-export const imageCache = {}; // { [src]: HTMLImageElement }
+export const imageCache = {};
 const preloadedImages = new Set();
 
-/**
- * Preload a list of image URLs and store them in imageCache.
- * @param {string[]} srcList
- */
+
 export const preloadImages = (srcList = []) => {
     srcList.forEach(src => {
         if (preloadedImages.has(src)) return;

@@ -7,10 +7,6 @@
     --sidebar-collapsed-width: 3.75rem;
 }
 
-/* ===================== */
-/*   GENERAL LAYOUT      */
-/* ===================== */
-
 html, body, #root {
     height: auto;
     min-height: 100%;
@@ -66,17 +62,8 @@ html, body, #root {
     min-width: 0;
 }
 
-#left-pane.characters-mode,
-#left-pane.weapon-mode,
-#left-pane.enemy-mode {
-    min-width: 21.875rem; /* 350px */
-}
-
-#left-pane.buffs-mode,
-#left-pane.rotation-mode,
-#left-pane.teams-mode,
-#left-pane.echoes-mode {
-    min-width: 31.25rem;
+#left-pane {
+    min-width: 24rem;
 }
 
 .dark #left-pane,
@@ -84,7 +71,7 @@ html, body, #root {
     background: #131922;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 570px) {
     html {
         font-size: clamp(0.75rem, 2vw, 1rem);
     }
@@ -124,6 +111,10 @@ button:active,
 button:focus-visible {
     outline: none !important;
     box-shadow: none !important;
+}
+
+button:hover {
+    cursor: pointer;
 }
 
 button img {

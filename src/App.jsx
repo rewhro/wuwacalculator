@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Calculator from './pages/calculator.jsx';
 import InfoPage from './pages/infoPage';
-import NotFound from './pages/NotFound'; // add this
+import NotFound from './pages/NotFound';
 import { Navigate } from 'react-router-dom';
 import Setting from "./pages/settings.jsx";
 

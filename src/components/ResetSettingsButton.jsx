@@ -6,8 +6,8 @@ export default function ResetSettingsButton() {
 
     const handleReset = () => {
         localStorage.clear();
-        localStorage.setItem('enemyLevel', JSON.stringify(1));
-        localStorage.setItem('enemyRes', JSON.stringify(0));
+        localStorage.setItem('enemyLevel', JSON.stringify(100));
+        localStorage.setItem('enemyRes', JSON.stringify(20));
         localStorage.setItem('characterRuntimeStates', JSON.stringify({}));
         localStorage.setItem('sliderValues', JSON.stringify({
             normalAttack: 1,

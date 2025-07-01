@@ -1,8 +1,3 @@
-/* ===================== */
-/*   PANES / PARTITIONS  */
-/* ===================== */
-
-/* Default: desktop → allow Split.js scrolls */
 #left-pane, #right-pane {
     box-sizing: border-box;
     overflow-x: hidden;
@@ -10,7 +5,6 @@
     max-width: 100%;
 }
 
-/* Small screen: override to unified scroll */
 .layout.collapsed-mode #left-pane,
 .layout.collapsed-mode #right-pane {
     overflow: unset !important;
@@ -64,8 +58,7 @@
     background-color: #f5f5f5;
 }
 
-/* Dark Mode */
 .dark .partition {
-        background-color: #1a1a1a;
-        border-right-color: #333;
-    }
+    background-color: #1a1a1a;
+    border-right-color: #333;
+}

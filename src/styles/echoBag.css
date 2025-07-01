@@ -39,7 +39,7 @@
     flex-wrap: nowrap;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: auto; /* pushes it to bottom */
+    margin-top: auto;
 }
 
 .echo-bag-modal .echo-grid {
@@ -49,6 +49,8 @@
     max-height: 37.5rem;
     grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
     gap: 1rem;
+    mask-image: linear-gradient(to bottom, black 97%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 97%, transparent 100%);
 }
 
 .echo-bag-modal .echo-tile {
@@ -201,7 +203,6 @@
 
 .echo-tile {
     position: relative;
-    /* your existing styling */
 }
 
 .remove-button-container {

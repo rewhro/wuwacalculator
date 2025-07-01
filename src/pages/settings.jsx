@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import {Sun, Moon, Sparkle, Info, Settings, History} from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
 import ResetSettingsButton from '../components/ResetSettingsButton.jsx';
+import { jwtDecode } from 'jwt-decode';
+import {googleLogout, useGoogleLogin} from '@react-oauth/google';
+import {getSyncData, restoreFromDrive, uploadToDrive} from "../utils/driveSync.js";
 
 export default function Setting() {
     const navigate = useNavigate();
@@ -12,6 +15,14 @@ export default function Setting() {
     const [showImportModal, setShowImportModal] = useState(false);
     const [importSuccess, setImportSuccess] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('googleAccessToken');
+        const storedUser = localStorage.getItem('googleUser');
+
+        if (storedToken) setAccessToken(storedToken);
+        if (storedUser) setUser(JSON.parse(storedUser));
+    }, []);
 
     const toggleTheme = () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -36,7 +47,6 @@ export default function Setting() {
 
         const dataToSave = { ...runtime[id] };
 
-        // Only save teammates (exclude main character at index 0)
         if (Array.isArray(dataToSave.Team)) {
             dataToSave.Team = [null, dataToSave.Team[1] ?? null, dataToSave.Team[2] ?? null];
         }
@@ -107,6 +117,75 @@ export default function Setting() {
         }
     }, [hamburgerOpen]);
 
+    const [user, setUser] = useState(null);
+    const [accessToken, setAccessToken] = useState(null);
+
+    const login = useGoogleLogin({
+        scope: 'https://www.googleapis.com/auth/drive.appdata',
+        flow: 'implicit',
+        onSuccess: async (tokenResponse) => {
+            const accessToken = tokenResponse.access_token;
+            setAccessToken(accessToken);
+            localStorage.setItem('googleAccessToken', accessToken);
+
+            try {
+                const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                const userInfo = await res.json();
+                setUser(userInfo);
+                localStorage.setItem('googleUser', JSON.stringify(userInfo));
+            } catch (err) {
+                console.error("Failed to fetch user info", err);
+            }
+        },
+        onError: () => alert('Google login failed'),
+    });
+
+    const handleLogout = () => {
+        googleLogout();
+        setUser(null);
+        setAccessToken(null);
+        localStorage.removeItem('googleAccessToken');
+        localStorage.removeItem('googleUser');
+    };
+
+    async function listAllDriveFiles(accessToken) {
+        const res = await fetch(
+            'https://www.googleapis.com/drive/v3/files?spaces=appDataFolder',
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        const data = await res.json();
+        console.log('Files in AppData folder:');
+    }
+
+    useEffect(() => {
+        if (!accessToken) return;
+
+        const listAllDriveFiles = async (accessToken) => {
+            const res = await fetch(
+                'https://www.googleapis.com/drive/v3/files?spaces=appDataFolder',
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            const data = await res.json();
+            console.log('Files in AppData folder:', data.files);
+        };
+
+        //listAllDriveFiles(accessToken);
+    }, [accessToken]);
+
     return (
         <div className="layout">
             <div className="toolbar">
@@ -155,7 +234,6 @@ export default function Setting() {
                                 </div>
                             </button>
                             {/*
-
                                 <button className="sidebar-sub-button">
                                     <div className="icon-slot">
                                         <HelpCircle size={24} className="help-icon" stroke="currentColor" />
@@ -164,7 +242,7 @@ export default function Setting() {
                                         <span className="label-text">Help</span>
                                     </div>
                                 </button>
-                                */}
+                            */}
                             <button className="sidebar-sub-button" onClick={() => navigate('/info')}>
                                 <div className="icon-slot">
                                     <Info size={24} />
@@ -205,55 +283,97 @@ export default function Setting() {
                     </div>
 
                     <div className="settings-body">
-                        <h2>Import/Export Data</h2>
-                        <p style={{ marginBottom: '1rem' }}>
-                            Export or import character build data to or from local storage.
-                        </p>
-
-                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                            <button className="btn-primary" onClick={downloadCharacterState}>
-                                Export Character Data
-                            </button>
-
-                            <label htmlFor="import-character" className="btn-primary" style={{ cursor: 'pointer' }}>
-                                Import Character Data
-                            </label>
-                            <input
-                                type="file"
-                                id="import-character"
-                                accept="application/json"
-                                style={{ display: 'none' }}
-                                onChange={importCharacterState}
-                            />
-                        </div>
-                        {importSuccess && (
-                            <p style={{ color: 'limegreen', fontWeight: 'bold', marginTop: '1rem' }}>
-                                {importSuccess}
+                        <div className="echo-buff">
+                            <h2>Import/Export Data</h2>
+                            <p style={{ marginBottom: '1rem' }}>
+                                Export or import character build data to or from local storage.
                             </p>
-                        )}
-                        <h2>Delete All Data</h2>
-                        <p style={{ marginBottom: '1rem' }}>
-                            Reset all saved characters, weapons, and buffs. This action is irreversible.
-                        </p>
-                        <ResetSettingsButton />
-                        <h2>Dark Mode Theme</h2>
-                        <p style={{ marginBottom: '1rem' }}>
-                            Choose your preferred dark mode theme. This only affects how the interface looks when dark mode is enabled.
-                        </p>
-                        <div>
-                            <label htmlFor="main-stat-select" className="main-stat-label" style={{ marginRight: '1rem' }}>Default Dark theme:</label>
-                            <select
-                                id="dark-variant"
-                                className="main-stat-select"
-                                value={darkVariant}
-                                onChange={(e) => {
-                                    const newVariant = e.target.value;
-                                    setDarkVariant(newVariant);
-                                }}
-                            >
-                                <option value="dark">Midnight</option>
-                                <option value="dark-alt">Blackest</option>
-                            </select>
+
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <button className="btn-primary" onClick={downloadCharacterState}>
+                                    Export Character Data
+                                </button>
+
+                                <label htmlFor="import-character" className="btn-primary" style={{ cursor: 'pointer' }}>
+                                    Import Character Data
+                                </label>
+                                <input
+                                    type="file"
+                                    id="import-character"
+                                    accept="application/json"
+                                    style={{ display: 'none' }}
+                                    onChange={importCharacterState}
+                                />
+                            </div>
+                            {importSuccess && (
+                                <p style={{ color: 'limegreen', fontWeight: 'bold', marginTop: '1rem' }}>
+                                    {importSuccess}
+                                </p>
+                            )}
+                        </div>
+                        <div className="echo-buff">
+                            <h2>Delete All Data</h2>
+                            <p style={{ marginBottom: '1rem' }}>
+                                Reset all saved characters, weapons, and buffs. This action is irreversible.
+                            </p>
+                            <ResetSettingsButton />
+                        </div>
+                        <div className="echo-buff">
+                            <h2>Dark Mode Theme</h2>
+                            <p style={{ marginBottom: '1rem' }}>
+                                Choose your preferred dark mode theme. This only affects how the interface looks when dark mode is enabled.
+                            </p>
+                            <div className="settings-label">
+                                <label htmlFor="main-stat-select" className="main-stat-label" style={{ marginRight: '1rem' }}>Default Dark theme:</label>
+                                <select
+                                    id="dark-variant"
+                                    className="main-stat-select"
+                                    value={darkVariant}
+                                    onChange={(e) => {
+                                        const newVariant = e.target.value;
+                                        setDarkVariant(newVariant);
+                                    }}
+                                >
+                                    <option value="dark">Midnight</option>
+                                    <option value="dark-alt">Blackest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="echo-buff">
+                            <h2>Google Drive Sync</h2>
+                            <p style={{ marginBottom: '1rem' }}>
+                                Your data is automatically synced between your device and a dedicated AppData folder in Google Drive. This website can't access any other files in your Google Drive.
+                            </p>
+                            {!accessToken ? (
+                                <button className="btn-primary" onClick={login}>
+                                    Sign in
+                                </button>
+                            ) : (
+                                <>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5rem' }}>
+                                        <button className="btn-primary" onClick={handleLogout}>
+                                            Sign Out
+                                        </button>
+                                        <button
+                                            className="btn-primary"
+                                            onClick={async () => {
+                                                const data = getSyncData();
+                                                try {
+                                                    await uploadToDrive(accessToken, data);
+                                                    alert("Backup to Google Drive successful!");
+                                                } catch (err) {
+                                                    alert("Drive sync failed");
+                                                }
+                                            }}
+                                        >
+                                            Backup
+                                        </button>
+                                        <button className="btn-primary" onClick={() => restoreFromDrive(accessToken)}>
+                                            Restore
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -310,7 +430,6 @@ export default function Setting() {
                                     setShowImportModal(false);
                                     window.location.href = "/";
                                     //setImportSuccess(`Imported: ${importPreview?.Name} successfully.`);
-                                    // ❌ Remove the reload line below if not desired:
                                 }}
                             >
                                 Confirm Import

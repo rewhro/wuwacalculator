@@ -41,16 +41,16 @@
     color: lightseagreen;
 }
 
-/* Make only the changelog content scrollable */
 .changelog-entries {
-    max-height: calc(100vh - 220px); /* adjust based on your modal padding and button size */
+    max-height: calc(100vh - 220px);
     overflow-y: auto;
     padding-right: 8px;
     margin-top: 1rem;
     scroll-behavior: smooth;
+    mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
 }
 
-/* Optional: Custom scrollbar styling */
 .changelog-entries::-webkit-scrollbar {
     width: 8px;
 }

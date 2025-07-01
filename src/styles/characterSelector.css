@@ -1,7 +1,3 @@
-/* ===================== */
-/*   LEVEL INPUT FIELD   */
-/* ===================== */
-
 .character-level-input {
     width: 60px;
     padding: 6px 8px;
@@ -23,10 +19,6 @@
     outline: none;
     border-color: #555;
 }
-
-/* ===================== */
-/*   ICON MENU VERTICAL  */
-/* ===================== */
 
 .icon-menu-vertical {
     display: flex;
@@ -98,8 +90,8 @@
     display: flex;
     align-items: center;
     gap: 1em;
-    padding: 1em; /* use em instead of fixed px */
-    height: 10%;  /* make height relative to parent */
+    padding: 1em;
+    height: 10%;
     min-height: 3rem;
     max-height: 5rem;
     border-radius: 10px;
@@ -108,7 +100,7 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
     color: #222;
     font-weight: 500;
-    flex-shrink: 0; /* prevent squishing in flex column */
+    flex-shrink: 0;
 }
 
 .dropdown-item:hover {
@@ -164,7 +156,6 @@
     transition-delay: 0.8s;
 }
 
-/* Unified panel heading style */
 .character-settings h3 {
     font-size: 18px;
     font-weight: bold;
@@ -172,7 +163,6 @@
     margin-bottom: 10px;
 }
 
-/* Extra refinement for number input */
 .character-level-input {
     width: 60px;
     text-align: right;
@@ -182,19 +172,16 @@
     font-size: 14px;
 }
 
-/* Keep slider group consistent */
 .slider-group {
     margin-bottom: 12px;
 }
 
-/* Smooth slider controls alignment */
 .slider-controls {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Match Custom Buffs input style */
 .character-settings input[type="number"] {
     width: 80px;
     border: 1px solid #ccc;
@@ -204,7 +191,6 @@
     font-size: 14px;
 }
 
-/* Dark mode */
 .dark .custom-select.small,
 .dark .character-settings input[type="number"] {
         border-color: rgba(85, 85, 85, 0.6);
@@ -212,7 +198,6 @@
         color: #ddd;
     }
 
-/* Remove number spinners for consistency */
 .character-settings input::-webkit-outer-spin-button,
 .character-settings input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -240,6 +225,8 @@
     padding: 20px;
     overflow-y: auto;
     flex: 1;
+    mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
 }
 
 .menu-overlay {

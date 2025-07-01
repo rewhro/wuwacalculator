@@ -167,16 +167,22 @@
     color: lightgray;
 }
 
+#left-pane.rotation-mode {
+    /*overflow-y: hidden !important;*/
+}
+
 .saved-rotation-list {
     display: flex;
     flex-direction: column;
     margin-top: 12px;
 }
 
-.rotation-list-container {
-    max-height: 100%; /* or whatever you want */
+.rotation-list-container,
+.saved-rotation-list {
+    max-height: calc(100vh - 17.5rem);
     overflow-y: auto;
-    position: relative; /* important */
+    mask-image: linear-gradient(to bottom, black 98%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 98%, transparent 100%);
 }
 
 .entry-name {
