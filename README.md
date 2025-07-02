@@ -17,17 +17,6 @@
   <li><strong>More (somewhat relevant) Info:</strong> <a href="https://www.thewuwacalculator.com/info">https://www.thewuwacalculator.com/info</a></li>
 </ul>
 
----
-
-### Features
-
-- ✅ Real-time damage simulation for all characters
-- ✅ Custom buffs, Echoes, weapons, teams, and combat scenarios
-- ✅ Drag-and-drop skill rotations with damage previews
-- ✅ Google Drive backup & restore
-- ✅ Automatic dark/light mode with system theme sync
-- ✅ Persistent state with localStorage
-- ✅ Fully responsive UI for desktop and mobile
 
 ---
 
