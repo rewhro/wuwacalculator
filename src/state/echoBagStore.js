@@ -1,10 +1,8 @@
-// src/state/echoBagStore.js
 import { isEqual } from 'lodash';
 
 let echoBag = [];
 const listeners = new Set();
 
-// Load from localStorage initially
 try {
     const stored = localStorage.getItem('echoBag');
     if (stored) echoBag = JSON.parse(stored);
@@ -59,6 +57,6 @@ export function updateEchoInBag(updatedEcho) {
 
 export function subscribeEchoBag(callback) {
     listeners.add(callback);
-    callback([...echoBag]); // immediately call with current bag
-    return () => listeners.delete(callback); // this is your unsubscribe function
+    callback([...echoBag]);
+    return () => listeners.delete(callback);
 }

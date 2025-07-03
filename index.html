@@ -3,20 +3,20 @@
 <head>
   <script>
     try {
-      const theme = localStorage.getItem('user-theme'); // 'dark' or 'light'
-      const darkVariant = localStorage.getItem('user-dark-variant') || 'dark'; // 'dark' or 'dark-alt'
+      const theme = localStorage.getItem('user-theme');
+      const darkVariant = localStorage.getItem('user-dark-variant') || 'dark';
       const root = document.documentElement;
       root.classList.remove('light', 'dark', 'dark-alt');
       if (theme === 'light') {
         root.classList.add('light');
       } else if (theme === 'dark') {
-        root.classList.add(darkVariant); // ✅ use variant, not "dark"
+        root.classList.add(darkVariant);
       } else {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         root.classList.add(prefersDark ? darkVariant : 'light');
       }
     } catch (e) {
-      // fail silently
+      // fail
     }
   </script>
   <meta charset="UTF-8" />

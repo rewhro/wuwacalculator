@@ -28,7 +28,6 @@ export default function EnemyPane({
         <div className="character-settings">
             <h3>Enemy Settings</h3>
 
-            {/* Enemy Level */}
             <div className="slider-group">
                 <div className="slider-label-with-input">
                     <label htmlFor="enemy-level">Enemy Level</label>
@@ -55,7 +54,6 @@ export default function EnemyPane({
                 />
             </div>
 
-            {/* Enemy Resistance */}
             <div className="slider-group">
                 <div className="slider-label-with-input">
                     <label htmlFor="enemy-res">Enemy Resistance</label>
@@ -83,11 +81,9 @@ export default function EnemyPane({
                 />
             </div>
 
-            {/* 🟣 Debuff Section */}
             <div style={{ marginTop: '50px' }}>
                 <h4></h4>
 
-                {/* Spectro Frazzle */}
                 <div className="slider-group">
                     <div className="slider-label-with-input">
                         <label htmlFor="spectro-frazzle">Spectro Frazzle</label>
@@ -114,7 +110,6 @@ export default function EnemyPane({
                     />
                 </div>
 
-                {/* Aero Erosion */}
                 <div className="slider-group">
                     <div className="slider-label-with-input">
                         <label htmlFor="aero-erosion">Aero Erosion</label>

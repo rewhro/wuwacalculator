@@ -1,4 +1,3 @@
-// damageCalculator.c
 #include <math.h>
 
 double calculate_res_multiplier(double enemyRes, double resShred) {

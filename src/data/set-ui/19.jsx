@@ -1,10 +1,9 @@
-// /data/echo-set-ui/1001.jsx
 import {highlightKeywordsInText, setIconMap} from "../../constants/echoSetData.jsx";
 import React from "react";
 import {attributeColors} from "../../utils/attributeHelpers.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 
-export default function three19 ({ setInfo, activeStates, toggleState, charId, setCharacterRuntimeStates }) {
+export default function three19 ({ setInfo, activeStates, charId, setCharacterRuntimeStates }) {
     const dreamOfTheLostValue = activeStates?.dreamOfTheLost3pc ?? 0;
 
     const handleChange = (newValue) => {

@@ -1,4 +1,3 @@
-// /data/echo-set-ui/index.js
 import five17 from './17.jsx';
 import five2 from "./2.jsx";
 import five4 from "./4.jsx";

@@ -3,16 +3,9 @@ import DropdownSelect from "../../components/DropdownSelect.jsx";
 import React from "react";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function ChangliUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function ChangliUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function CustomInherentSkills({
@@ -71,7 +64,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // Clear toggle/value if locked
                 if (locked) {
                     if (isSweeping && activeStates.inherent2) updateState('inherent2', false);
                     if (isStrategist && (activeStates.inherent1 ?? 0) > 0) updateState('inherent1', 0);

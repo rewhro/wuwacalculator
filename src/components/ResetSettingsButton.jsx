@@ -38,7 +38,6 @@ export default function ResetSettingsButton() {
                 onClick={() => setShowConfirm(true)}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
-                {/*<RotateCcw size={20} />*/}
                 Delete
             </button>
 

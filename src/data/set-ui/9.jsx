@@ -1,10 +1,9 @@
-// /data/echo-set-ui/1001.jsx
 import {highlightKeywordsInText, setIconMap} from "../../constants/echoSetData.jsx";
 import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {attributeColors} from "../../utils/attributeHelpers.js";
 
-export default function five9 ({ setInfo, activeStates, toggleState, charId, setCharacterRuntimeStates }) {
+export default function five9 ({ setInfo, activeStates, charId, setCharacterRuntimeStates }) {
     const lingeringValue = activeStates?.lingering5p1 ?? 0;
 
     const handleChange = (newValue) => {

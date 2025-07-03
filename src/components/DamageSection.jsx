@@ -1,6 +1,5 @@
 import Rotations from "./Rotations.jsx";
 
-// src/components/DamageSection.jsx
 import React, {useState} from 'react';
 import { getHardcodedMultipliers } from '../data/character-behaviour';
 import { computeSkillDamage, getSkillData } from "../utils/computeSkillDamage.js";
@@ -8,7 +7,6 @@ import { setSkillDamageCache } from "../utils/skillDamageCache";
 import {elementToAttribute, attributeColors} from "../utils/attributeHelpers.js";
 import {calculateAeroErosionDamage, calculateDamage, calculateSpectroFrazzleDamage} from "../utils/damageCalculator.js";
 import { echoAttackMultipliers, echoElements } from '../data/echoes/echoMultipliers';
-import { parseMultiplierParts, parseCompoundMultiplier } from '../utils/computeSkillDamage';
 
 export default function DamageSection({
                                           activeCharacter,
@@ -63,7 +61,7 @@ export default function DamageSection({
         });
     }
 
-    const mainEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[0]; // Slot 0 is main
+    const mainEcho = characterRuntimeStates?.[charId]?.equippedEchoes?.[0];
     const echoSkillResults = [];
 
     if (mainEcho) {
@@ -246,7 +244,6 @@ export default function DamageSection({
 
                                 return (
                                     <React.Fragment key={index}>
-                                        {/* Main Skill Row */}
                                         <div style={isSupportSkill ? { color: supportColor, fontWeight: 'bold' } : {}}>
                                             {label ?? level.Name}
                                         </div>
@@ -284,7 +281,6 @@ export default function DamageSection({
                                             </>
                                         )}
 
-                                        {/* Sub-hits */}
                                         {showSubHits && result.subHits?.length > 0 && result.subHits.map((hit, i) => (
                                             <React.Fragment key={`${index}-subhit-${i}`}>
                                                 <div style={{ paddingLeft: '0.5rem', fontStyle: 'italic', fontSize: '0.9rem', opacity: 0.8 }}>

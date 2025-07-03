@@ -1,4 +1,3 @@
-// src/components/WeaponBuffs.jsx
 import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
 import DropdownSelect from './DropdownSelect';
@@ -76,7 +75,7 @@ const weaponBuffs = [
 export const weaponBuffList = weaponBuffs;
 
 
-export default function WeaponBuffs({ activeStates, toggleState, setCharacterRuntimeStates, charId }) {
+export default function WeaponBuffs({ activeStates, setCharacterRuntimeStates, charId }) {
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -101,7 +100,7 @@ export default function WeaponBuffs({ activeStates, toggleState, setCharacterRun
                         <div className="echo-buff-header">
                             <img src={icon} alt={name} className="echo-buff-icon" loading="lazy"
                                  onError={(e) => {
-                                     e.target.onerror = null; // prevent infinite loop
+                                     e.target.onerror = null;
                                      e.target.src = '/assets/weapon-icons/default.webp';
                                      e.currentTarget.classList.add('fallback-icon');
                                  }}

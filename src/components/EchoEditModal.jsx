@@ -18,7 +18,6 @@ export function getSubstatStep(key) {
 
     const rawStep = (range.max - range.min) / range.divisions;
 
-    // If the stat is a percentage, round to 1 decimal place
     if (!key.endsWith('Flat')) {
         return Math.round(rawStep * 10) / 10;
     }
@@ -38,11 +37,11 @@ export function getSubstatStepOptions(key) {
     for (let i = 0; i <= divisions; i++) {
         let val = min + step * i;
         if (isFlatStat) {
-            val = Math.ceil(val / 10) * 10; // round up to nearest 10
+            val = Math.ceil(val / 10) * 10;
         } else {
-            val = parseFloat(val.toFixed(1)); // keep decimal precision for %
+            val = parseFloat(val.toFixed(1));
         }
-        if (!values.includes(val)) values.push(val); // ensure unique values
+        if (!values.includes(val)) values.push(val);
     }
 
     return values;
@@ -83,15 +82,15 @@ const formatStatKey = (key) => {
 
 export default function EditSubstatsModal({
                                               isOpen,
-                                              echo = {}, // ✅ Default to empty object
+                                              echo = {},
                                               substats = {},
                                               onClose,
                                               onSave,
-                                              getValidMainStats = () => ({}), // ✅ Safe fallback
+                                              getValidMainStats = () => ({}),
                                               mainStats,
-                                              selectedSet: selectedSetProp, // ✅ Destructure as a separate variable
+                                              selectedSet: selectedSetProp,
                                           }) {
-    if (!isOpen || !echo || !echo.icon) return null; // ✅ Safe early return
+    if (!isOpen || !echo || !echo.icon) return null;
     const [localSubstats, setLocalSubstats] = useState(Object.entries(substats));
     const [mainStat, setMainStat] = useState(Object.keys(mainStats)[0] || null);
     const [selectedSet, setSelectedSet] = useState(selectedSetProp ?? echo.sets?.[0] ?? null);
@@ -119,7 +118,7 @@ export default function EditSubstatsModal({
             setTimeout(() => {
                 setIsVisible(false);
                 setIsAnimatingOut(false);
-            }, 300); // same as your transition duration
+            }, 300);
         }
     }, [isOpen]);
 
@@ -137,7 +136,6 @@ export default function EditSubstatsModal({
 
         let snapped = snapToNearestSubstatValue(key, clamped);
 
-        // ✅ Round % stats to 1 decimal place
         if (key.includes('%')) {
             snapped = parseFloat(snapped.toFixed(1));
         }
@@ -163,7 +161,7 @@ export default function EditSubstatsModal({
     };
 
     const handleSave = () => {
-        if (!mainStat) return; // Prevent save without main stat
+        if (!mainStat) return;
 
         const filteredSubstats = localSubstats;
 

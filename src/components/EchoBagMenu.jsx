@@ -1,9 +1,8 @@
-// src/components/EchoBagMenu.jsx
 import React, {useEffect, useState} from 'react';
 import { X } from 'lucide-react';
 import EditSubstatsModal from './EchoEditModal';
 import {setIconMap} from "../constants/echoSetData";
-import { isEqual } from 'lodash'; // optional if you prefer deep comparison
+import { isEqual } from 'lodash';
 import {
     getEchoBag,
     subscribeEchoBag,
@@ -34,7 +33,7 @@ export default function EchoBagMenu({
                                         setSearchTerm
 }) {
     const [echoBag, setEchoBag] = useState(getEchoBag());
-    const [version, setVersion] = useState(0); // unused, for forcing rerender
+    const [version, setVersion] = useState(0);
     const [editingEcho, setEditingEcho] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -45,7 +44,7 @@ export default function EchoBagMenu({
             setIsAnimatingOut(true);
             setTimeout(() => {
                 setIsVisible(false);
-                onClose(); // call parent's close
+                onClose();
                 setIsAnimatingOut(false);
             }, 300);
         }
@@ -155,7 +154,6 @@ export default function EchoBagMenu({
                 </div>
                 </div>
 
-                {/* Edit Modal */}
                 {editingEcho && (
                     <EditSubstatsModal
                         isOpen={true}

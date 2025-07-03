@@ -14,7 +14,6 @@ const type13 = ['107.33%*3', '123.43%*3', '139.53%*3', '155.63%*3', '171.73%*3']
 const type14 = [['28.80%+14.40%', '33.12%+16.56%', '37.44%+18.72%', '41.76%+20.88%', '46.08%+23.04%'], ['2.88%', '3.31%', '3.74%', '4.18%', '4.61%']];
 const type15 = ['9.00%', '10.35%', '11.70%', '13.05%', '14.40%'];
 export const echoAttackMultipliers = {
-    // Echo ID or name as key
     '6000083': type1,
     '6000044': ['125.10%*2+166.80%', '143.87%*2+191.82%', '162.63%*2+216.84%', '181.40%*2+241.86%', '200.16%*2+266.88%'],
     '6000049': ['170.00%', '195.50%', '221.00%', '246.50%', '272.00%'],
@@ -177,7 +176,6 @@ export const echoAttackMultipliers = {
 };
 
 export const echoElements = {
-    // Use ID or canonical name
     '6000083': 'glacio',
     '6000044': 'glacio',
     '6000049': 'glacio',
@@ -290,7 +288,6 @@ export const echoElements = {
 
 };
 
-// echoScalingRatios.js
 export const echoScalingRatios = {
     '390077024': { atk: 0, hp: 1, def: 0, energyRegen: 0 },
     '6000060': { atk: 0, hp: 1, def: 0, energyRegen: 0 },

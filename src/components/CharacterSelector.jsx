@@ -1,4 +1,3 @@
-// src/CharacterSelector.jsx
 import React, {useEffect, useRef} from 'react';
 import SequenceSkillsBox from './SequenceSkillsBox';
 import CharacterHeader from './CharacterHeader';
@@ -178,7 +177,6 @@ export default function CharacterSelector({
                     </div>
                 </div>
 
-                {/* Sequence slider */}
                 <div className="slider-group">
                     <label>Sequence</label>
                     <div className="slider-controls">

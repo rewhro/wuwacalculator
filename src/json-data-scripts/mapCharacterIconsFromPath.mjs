@@ -1,4 +1,3 @@
-// src/utils/mapCharacterIconsFromPath.mjs
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -6,13 +5,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ✅ OPTIONAL: replace with your full path if needed
-// const charactersPath = '/Users/runorewhro/Documents/wuwacalculator/src/data/characters.json';
 const charactersPath = path.resolve(__dirname, '../data/characters.json');
 const outputPath = path.resolve(__dirname, '../data/characters-mapped.json');
 
 async function loadCharacters() {
-    console.log(`📥 Reading file: ${charactersPath}`);
+    console.log(`Reading file: ${charactersPath}`);
     try {
         const data = await fs.readFile(charactersPath, 'utf-8');
         const json = JSON.parse(data);
@@ -25,14 +22,14 @@ async function loadCharacters() {
         } else if (Array.isArray(json.data)) {
             characters = json.data;
         } else {
-            console.error('❌ Could not detect array inside json file. Exiting.');
+            console.error('Could not detect array inside json file. Exiting.');
             process.exit(1);
         }
 
-        console.log(`✅ Found ${characters.length} characters.`);
+        console.log(`Found ${characters.length} characters.`);
         return characters;
     } catch (err) {
-        console.error(`❌ Failed to read or parse file:`, err);
+        console.error(`Failed to read or parse file:`, err);
         process.exit(1);
     }
 }
@@ -50,13 +47,12 @@ function mapIconsToCharacters(characters) {
 
         const iconId = extractIconIdFromPath(iconPath);
         if (!iconId) {
-            console.warn(`⚠️ Could not extract icon id from: ${iconPath}`);
+            console.warn(`Could not extract icon id from: ${iconPath}`);
             return char;
         }
 
         const newIconUrl = `https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_${iconId}_UI.webp`;
 
-        // ✅ update both icon/Icon just in case
         char.icon = newIconUrl;
         char.Icon = newIconUrl;
 
@@ -65,20 +61,19 @@ function mapIconsToCharacters(characters) {
 }
 
 async function run() {
-    console.log('🚀 Starting safe icon mapper...');
     const characters = await loadCharacters();
 
     if (!characters.length) {
-        console.warn('⚠️ No characters found. Exiting.');
+        console.warn('No characters found. Exiting.');
         process.exit(0);
     }
 
     const updated = mapIconsToCharacters(characters);
     await fs.writeFile(outputPath, JSON.stringify(updated, null, 2), 'utf-8');
-    console.log(`💾 Saved mapped file to: ${outputPath}`);
+    console.log(`Saved mapped file to: ${outputPath}`);
 }
 
 run().catch(err => {
-    console.error('❌ Unexpected error:', err);
+    console.error('Unexpected error:', err);
     process.exit(1);
 });

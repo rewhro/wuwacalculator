@@ -32,13 +32,11 @@ export function applyCarlottaLogic({
         skillMeta.visible = isActiveSequence(3);
     }
 
-    // === Deconstruction: DEF Ignore ===
     if (characterState?.activeStates?.deconstruction && !mergedBuffs.__carlottaDeconstruction) {
         mergedBuffs.enemyDefIgnore = (mergedBuffs.enemyDefIgnore ?? 0) + 18;
         mergedBuffs.__carlottaDeconstruction = true;
     }
 
-    // === Final Blow: Liberation skill multiplier boost ===
     if (tab === 'resonanceLiberation' && characterState?.activeStates?.finalBlow) {
         skillMeta.multiplier *= 1.8;
     }
@@ -97,15 +95,6 @@ export function carlottaBuffsLogic({
                                      mergedBuffs, characterState, activeCharacter
                                  }) {
     const state = characterState?.activeStates ?? {};
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.raindrops) {
         mergedBuffs.resonanceSkill = (mergedBuffs.resonanceSkill ?? 0) + 25;

@@ -17,11 +17,11 @@
 }
 
 .btn-danger:hover {
-    background-color: #b91c1c; /* Tailwind red-700 */
+    background-color: #b91c1c;
 }
 
 .btn-danger:active {
-    background-color: #991b1b; /* Tailwind red-800 */
+    background-color: #991b1b;
 }
 
 .dark .skills-modal-content {

@@ -1,24 +1,14 @@
-// src/data/character-ui/1102.jsx
 import React from 'react';
 import { formatDescription } from "../../utils/formatDescription.js";
 import DropdownSelect from '../../components/DropdownSelect';
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
 
-// ✅ Main Sanhua toggle UI component
-export default function SanhuaUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function SanhuaUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
-// ✅ Custom inherent skills section
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
@@ -129,8 +119,6 @@ export function CustomInherentSkills({
     );
 }
 
-// ✅ Custom sequence toggles
-
 export function SanhuaSequenceToggles({
                                           nodeKey,
                                           sequenceToggles,
@@ -145,7 +133,6 @@ export function SanhuaSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === Sequence 6: dropdown input ===
     if (String(nodeKey) === '6') {
         const value = sequenceToggles['6_value'] ?? 0;
 
@@ -175,7 +162,6 @@ export function SanhuaSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -189,7 +175,7 @@ export function SanhuaSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates }) {
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,

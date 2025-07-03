@@ -1,7 +1,3 @@
-// src/character-behaviors/1506.jsx
-
-import React from "react";
-
 export function applyPheobeLogic({
                                              mergedBuffs,
                                              combatState,
@@ -19,7 +15,6 @@ export function applyPheobeLogic({
         ...skillMeta
     };
 
-    const name = skillMeta.name?.toLowerCase();
     const tab = skillMeta.tab ?? '';
 
     const state =
@@ -33,7 +28,6 @@ export function applyPheobeLogic({
         mergedBuffs.__pheobeConfessionResShred = false;
     }
 
-    // === Damage Type Reassignments ===
     const basicSkills = [
         "Chamuel's Star: Stage 1 DMG",
         "Chamuel's Star: Stage 2 DMG",
@@ -56,7 +50,6 @@ export function applyPheobeLogic({
         skillMeta.multiplier = 528.41/100;
     }
 
-    // === Flat Multiplier Boosts ===
     if (state === 'Absolution') {
         if (skillMeta.name.includes('Starflash') && combatState.spectroFrazzle > 0)
             skillMeta.amplify = 256;
@@ -99,7 +92,6 @@ export function applyPheobeLogic({
         mergedBuffs.__attentive = true;
     }
 
-    // === Passive Buffs ===
     if ((state === 'Absolution' || state === 'Confession') && !mergedBuffs.__pheobeSpectro1 && characterLevel >= 70) {
         mergedBuffs.spectro += 12;
         mergedBuffs.__pheobeSpectro1 = true;

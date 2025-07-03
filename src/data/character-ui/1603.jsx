@@ -20,7 +20,6 @@ export default function CamellyaUI({ characterRuntimeStates, setCharacterRuntime
     return (
         <div className="status-toggles">
             <div className="status-toggle-box">
-                {/* Sweet Dream toggle */}
                 <div className="status-toggle-box-inner">
                     <h4 className={'highlight'} style={{ fontSize: '16px', fontWeight: 'bold' }}>Sweet Dream</h4>
                     <p>
@@ -51,7 +50,6 @@ export default function CamellyaUI({ characterRuntimeStates, setCharacterRuntime
                     </label>
                 </div>
 
-                {/* Crimson Bud Dropdown */}
                 <div className="status-toggle-box-inner">
                     <p>
                         Casting <span className='highlight'>Ephemeral</span> consumes all <span className='highlight'>Crimson Buds</span>. Each <span className='highlight'>Crimson Bud</span> consumed

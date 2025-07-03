@@ -1,4 +1,3 @@
-// src/components/SequenceSkillsBox.jsx
 import React from 'react';
 import { formatDescription } from '../utils/formatDescription';
 import { getSequenceToggleComponent } from '../data/character-ui';
@@ -52,7 +51,6 @@ export default function SequenceSkillsBox({
                         {highlightKeywordsInText(formatDescription(chain.Desc, chain.Param, currentSliderColor), keywords)}
                     </p>
 
-                    {/* 💡 Inline toggle for this specific sequence node */}
                     {ToggleComponent && (
                         <ToggleComponent
                             nodeKey={key}

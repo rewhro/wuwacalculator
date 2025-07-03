@@ -1,5 +1,3 @@
-// src/json-data-scripts/fetchWeaponsFromHakushin.js
-
 import fetch from 'node-fetch';
 import fs from 'fs/promises';
 import path from 'path';
@@ -8,10 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Output file location
 const outputPath = path.resolve(__dirname, '../src/data/weapons.json');
 
-// API endpoint
 const weaponApiUrl = 'https://api.hakush.in/ww/data/weapon.json';
 
 async function fetchAndSaveWeapons() {
@@ -36,9 +32,9 @@ async function fetchAndSaveWeapons() {
         }));
 
         await fs.writeFile(outputPath, JSON.stringify(weapons, null, 2));
-        console.log(`✅ Saved ${weapons.length} weapons to weapons.json`);
+        console.log(`Saved ${weapons.length} weapons to weapons.json`);
     } catch (err) {
-        console.error('❌ Error fetching weapon data:', err.message);
+        console.error('Error fetching weapon data:', err.message);
     }
 }
 

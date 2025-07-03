@@ -112,7 +112,6 @@ export default function EchoesPane({
     const handleEchoSelect = (selectedEcho) => {
         const currentEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [null, null, null, null, null];
 
-        // 1. Validate cost
         const totalCost = currentEchoes.reduce((sum, echo, index) => {
             if (index === activeSlot || !echo) return sum;
             return sum + (echo.cost ?? 0);
@@ -125,11 +124,9 @@ export default function EchoesPane({
             return;
         }
 
-        // 2. Inherit stats from old echo
         const oldEcho = currentEchoes[activeSlot];
         const oldCost = oldEcho?.cost;
 
-        // mainStats: only inherit if cost matches
         let mainStats;
         if (oldCost === newCost && oldEcho?.mainStats) {
             mainStats = { ...oldEcho.mainStats };
@@ -141,15 +138,12 @@ export default function EchoesPane({
             }, newCost);
         }
 
-        // subStats: always inherit
         const subStats = { ...(oldEcho?.subStats ?? {}) };
 
-        // selectedSet: only keep it if it's in the new echo's set list
         const validSets = selectedEcho.sets ?? [];
         const inheritedSet = oldEcho?.selectedSet;
         const selectedSet = validSets.includes(inheritedSet) ? inheritedSet : validSets[0] ?? null;
 
-        // 3. Construct new echo
         const newEcho = {
             ...selectedEcho,
             mainStats,
@@ -159,7 +153,6 @@ export default function EchoesPane({
             uid: crypto.randomUUID?.() ?? Date.now().toString(),
         };
 
-        // 4. Equip it
         setCharacterRuntimeStates(prev => ({
             ...prev,
             [charId]: {
@@ -428,7 +421,6 @@ export default function EchoesPane({
                                     )}
                                     {isMain && echo?.id && mainEchoBuffs?.[echo.id] && (
                                         <div className="main-echo-toggle-controls">
-                                            {/* Toggleable Buffs */}
                                             {mainEchoBuffs[echo.id].toggleable && (
                                                 <label className="modern-checkbox echo">
                                                     <input
@@ -662,7 +654,7 @@ export default function EchoesPane({
                     onEquip={(echo, slotIndex) => {
                         const currentEchoes = characterRuntimeStates[charId]?.equippedEchoes ?? [];
                         const currentTotalCost = currentEchoes.reduce((sum, e, i) => {
-                            return i === slotIndex ? sum : sum + (e?.cost ?? 0); // exclude the slot being replaced
+                            return i === slotIndex ? sum : sum + (e?.cost ?? 0);
                         }, 0);
 
                         const newTotalCost = currentTotalCost + (echo.cost ?? 0);
@@ -704,7 +696,6 @@ export function highlightKeywordsInText(text, extraKeywords = []) {
     const staticKeywords = [...skillKeywords, ...statKeywords, ...elementKeywords];
     const allKeywords = [...staticKeywords, ...extraKeywords];
 
-    // Escape keywords for RegExp
     const escapedKeywords = allKeywords.map(k =>
         k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
     );

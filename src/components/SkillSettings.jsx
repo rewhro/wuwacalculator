@@ -1,4 +1,3 @@
-// src/components/SkillSettings.jsx
 import React from 'react';
 import skillTabs from '../constants/skillTabs';
 

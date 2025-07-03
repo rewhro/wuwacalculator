@@ -42,8 +42,6 @@ export function ciacconaSequenceToggles({
                                          sequenceToggles,
                                          toggleSequence,
                                          currentSequenceLevel,
-                                         setCharacterRuntimeStates,
-                                         charId
                                      }) {
     const validKeys = ['1', '2'];
     if (!validKeys.includes(String(nodeKey))) return null;
@@ -52,7 +50,6 @@ export function ciacconaSequenceToggles({
     const isDisabled = currentSequenceLevel < requiredLevel;
 
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -66,20 +63,7 @@ export function ciacconaSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">
@@ -97,7 +81,7 @@ export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeS
                     />
                     Enable
                 </label>
-                {/*}
+                {/*
                 <DropdownSelect
                     label="Stacks"
                     options={[0, 1, 2, 3]}

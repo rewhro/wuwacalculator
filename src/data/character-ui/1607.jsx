@@ -3,16 +3,9 @@ import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function CantUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function CantUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function CustomInherentSkills({
@@ -25,19 +18,6 @@ export function CustomInherentSkills({
     const charId = character?.Id ?? character?.id ?? character?.link;
     const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
-
-    const toggleState = (key) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: !(prev[charId]?.activeStates?.[key] ?? false)
-                }
-            }
-        }));
-    };
 
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
@@ -123,8 +103,6 @@ export function cantSequenceToggles({
                                           sequenceToggles,
                                           toggleSequence,
                                           currentSequenceLevel,
-                                          setCharacterRuntimeStates,
-                                          charId
                                       }) {
     const validKeys = ['1', '4', '6'];
     if (!validKeys.includes(String(nodeKey))) return null;
@@ -132,7 +110,6 @@ export function cantSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -146,20 +123,7 @@ export function cantSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

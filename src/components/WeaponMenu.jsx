@@ -1,6 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { FaStar } from 'react-icons/fa';
-import {attributeMap, imageCache, weaponMap} from "../pages/calculator.jsx"; // Make sure react-icons is installed
 
 export default function WeaponMenu({
                                        weapons,

@@ -3,19 +3,11 @@ import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function EncoreUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function EncoreUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
-// ✅ Custom inherent skills section
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
@@ -58,7 +50,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Turn off toggle if locked and still active
                 if (locked) {
                     if (cosmos && activeStates.inherent1) {
                         toggleState('inherent1');
@@ -197,7 +188,6 @@ export function encoreSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -211,20 +201,7 @@ export function encoreSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

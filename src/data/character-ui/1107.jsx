@@ -44,7 +44,6 @@ export default function CarlottaUI({ activeStates, toggleState }) {
 }
 
 
-// If you have sequence toggles:
 export function CarolottaSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
     const validKeys = ['1', '4'];
     if (!validKeys.includes(String(nodeKey))) return null;

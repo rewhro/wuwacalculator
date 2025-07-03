@@ -38,15 +38,15 @@ export function highlightKeywordsInText(text, extraKeywords = []) {
 
     const resPhrases = elementKeywords.map(el => `${el.charAt(0).toUpperCase() + el.slice(1)} RES`);
     const escapedResPhrases = resPhrases.map(escapeRegex);
-    const resRegex = new RegExp(`(${escapedResPhrases.join('|')})`, 'g'); // Case-sensitive for "Cryo RES", etc.
+    const resRegex = new RegExp(`(${escapedResPhrases.join('|')})`, 'g');
 
-    const staticKeywords = [...elementPhrases]; // These remain case-insensitive
+    const staticKeywords = [...elementPhrases];
     const escapedInsensitiveKeywords = staticKeywords.map(escapeRegex);
     const percentPattern = '\\d+(\\.\\d+)?%';
     const ciRegex = new RegExp(`(${[...escapedInsensitiveKeywords, percentPattern].join('|')})`, 'gi');
 
     const escapedSensitiveKeywords = additionalWords.map(escapeRegex);
-    const csRegex = new RegExp(`(${escapedSensitiveKeywords.join('|')})`, 'g'); // Case-sensitive!
+    const csRegex = new RegExp(`(${escapedSensitiveKeywords.join('|')})`, 'g');
 
     let processed = text.replace(csRegex, (match) => {
         return `<strong class="highlight">${match}</strong>`;

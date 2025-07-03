@@ -925,7 +925,6 @@ export default function Calculator() {
                     <div className="main-content">
                         <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`} ref={layoutRef}>
                             <div className="split">
-                                {/* Left Pane */}
                                 <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
                                     {leftPaneView === 'characters' && (
                                         characters?.length > 0 ? (
@@ -1029,7 +1028,6 @@ export default function Calculator() {
                                     )}
                                 </div>
 
-                                {/* Right Pane */}
                                 <div id="right-pane" className="partition">
                                     <CharacterStats
                                         activeCharacter={activeCharacter}

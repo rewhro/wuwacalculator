@@ -1,7 +1,6 @@
 export const formatDescription = (desc, param = [], currentSliderColor = '#888') => {
     if (!desc) return '';
 
-    // Remove HTML formatting from the source string
     desc = desc
         .replace(/<size=\d+>|<\/size>/g, '')
         .replace(/<color=[^>]+>|<\/color>/g, '')
@@ -9,13 +8,11 @@ export const formatDescription = (desc, param = [], currentSliderColor = '#888')
         .replace(/<\/a>/gi, '')
         .replace(/\n/g, '<br>');
 
-    // Handle {Cus:S=... P=... SapTag=#}
     desc = desc.replace(/\{Cus:[^}]*S=([^ ]+)\s+P=([^ ]+)\s+SapTag=(\d+)[^}]*\}/g, (_, singular, plural, tagIndex) => {
         const value = parseFloat(param[parseInt(tagIndex, 10)]);
         return value === 1 ? singular : plural;
     });
 
-    // Highlight fixed keywords with fixed colors
     const fixedHighlights = {
         'Spectro Frazzle': 'rgb(202,179,63)',
         'Aero Erosion': 'rgb(15,205,160)',
@@ -30,11 +27,11 @@ export const formatDescription = (desc, param = [], currentSliderColor = '#888')
         desc = desc.replace(regex, `<span style="color: ${color}; font-weight: bold;">${word}</span>`);
     });
 
-    // Replace numbered parameters like {0}, {1}, etc.
     desc = desc.replace(/{(\d+)}/g, (_, index) => param[index] ?? `{${index}}`);
     desc = desc.replace(/\{Cus:Ipt,[^}]*Touch=([^ ]+)\s+PC=([^ ]+)\s+Gamepad=([^ }]+)[^}]*\}/g, (_, touch, pc, gamepad) => {
         const inputs = new Set([touch, pc, gamepad]);
         return Array.from(inputs).join('/');
     });
+
     return desc;
 };

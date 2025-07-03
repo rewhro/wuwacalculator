@@ -75,7 +75,6 @@ export function applyWeaponLogic({
     const atk = parseFloat(currentParamValues[0]);
     const basic = parseFloat(currentParamValues[4]);
 
-    //mergedBuffs.energyRegen = (mergedBuffs.energyRegen ?? 0) + energy;
     mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + atk;
     mergedBuffs.basicAtk = (mergedBuffs.basicAtk ?? 0) + stacks;
 

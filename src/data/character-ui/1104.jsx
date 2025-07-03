@@ -27,7 +27,6 @@ export default function LingYangUI({ activeStates, toggleState }) {
 }
 
 
-// If you also want to support inherent skill rendering:
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
@@ -70,7 +69,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // Turn off toggle if currently enabled but locked
                 if (locked) {
                     if (isPride && activeStates.inherent1) {
                         toggleState('inherent1');
@@ -140,7 +138,6 @@ export function CustomInherentSkills({
 }
 
 
-// If you have sequence toggles:
 export function LingyangSequenceToggles({ nodeKey, sequenceToggles, toggleSequence, currentSequenceLevel }) {
     const validKeys = ['3', '5', '6'];
     if (!validKeys.includes(String(nodeKey))) return null;
@@ -161,20 +158,7 @@ export function LingyangSequenceToggles({ nodeKey, sequenceToggles, toggleSequen
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

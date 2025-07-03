@@ -28,7 +28,6 @@ export function applyYouhuLogic({
     }
 
 
-    // inherent 1
     if (tab === 'resonanceSkill' && name.includes("treasured piece healing")) {
         const scrollNode = Object.values(getSkillData(baseCharacterState, 'resonanceSkill')?.Level ?? {})
             .find(level => level?.Name?.toLowerCase?.() === 'scroll divination healing');
@@ -36,7 +35,6 @@ export function applyYouhuLogic({
         const paramArray = scrollNode?.Param?.[0];
         const scrollRaw = paramArray?.[sliderValues?.resonanceSkill - 1] ?? paramArray?.[0];
 
-        // Extract both flat and percent from string like "1767+81.90% ATK"
         const flatAndPercent = extractFlatAndPercent(scrollRaw ?? '');
 
         const scaling = scrollNode?.scaling ?? { atk: 1 };
@@ -49,14 +47,13 @@ export function applyYouhuLogic({
             type: 'healing'
         });
 
-        skillMeta.scaling = { atk: 0 };        // prevent default ATK scaling
-        skillMeta.multiplier = 0;              // block % scaling
-        skillMeta.flatOverride = Math.floor(scrollHeal * 0.3);  // 30% of original
+        skillMeta.scaling = { atk: 0 };
+        skillMeta.multiplier = 0;
+        skillMeta.flatOverride = Math.floor(scrollHeal * 0.3);
         skillMeta.tags = ['healing'];
         skillMeta.visible = isToggleActiveLocal('inherent1');
     }
 
-    // inherent 2
     if (isToggleActiveLocal('inherent2')) {
         if (!mergedBuffs.__youhuInherent1) {
             mergedBuffs.glacio += 15;
@@ -154,18 +151,9 @@ function extractFlatAndPercent(str) {
 }
 
 export function youhuBuffsLogic({
-                                     mergedBuffs, characterState, activeCharacter
+                                     mergedBuffs, characterState
                                  }) {
     const state = characterState?.activeStates ?? {};
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.timeless) {
         mergedBuffs.damageTypeAmplify.coord = (mergedBuffs.damageTypeAmplify.coord ?? 0) + 100;

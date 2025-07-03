@@ -23,7 +23,7 @@ export default function CharacterMenu({
                 setIsVisible(false);
                 setIsAnimatingOut(false);
             }, 300);
-            return () => clearTimeout(timeout); // clean up
+            return () => clearTimeout(timeout);
         }
     }, [menuOpen]);
 
@@ -96,7 +96,6 @@ export default function CharacterMenu({
                 className={`icon-menu-vertical ${menuOpen ? 'show' : ''} ${isAnimatingOut ? 'hiding' : ''}`}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Menu Header */}
                 <div className="menu-header-with-buttons">
                     <div className="menu-header">Select Character</div>
 

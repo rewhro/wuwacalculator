@@ -1,4 +1,3 @@
-// src/components/EchoParser.jsx
 import React, { useRef, useState, useEffect } from 'react';
 import Tesseract from 'tesseract.js';
 import { echoImageMap, setNameImageMap } from '../utils/autoEchoImageMap';

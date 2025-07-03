@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applyBaizhiLogic({
                                      mergedBuffs,
                                      combatState,
@@ -23,7 +25,6 @@ export function applyBaizhiLogic({
         skillMeta.multiplier = 1.54/100;
     }
 
-
     if (characterState?.activeStates?.inherent1 && !mergedBuffs.__baizhiInherentApplied) {
         mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 15;
         mergedBuffs.__baizhiInherentApplied = true;
@@ -39,7 +40,6 @@ export function applyBaizhiLogic({
         mergedBuffs.__baizhiSeq2 = false;
     }
 
-    // === Sequence 3: +12% HP
     if (isToggleActive(3) && isActiveSequence(3)) {
         if (!mergedBuffs.__baizhiSeq3) {
             mergedBuffs.hpPercent = (mergedBuffs.hpPercent ?? 0) + 12;
@@ -49,22 +49,18 @@ export function applyBaizhiLogic({
         mergedBuffs.__baizhiSeq3 = false;
     }
 
-    // === Sequence 4 (Only apply once per skill)
     if (isToggleActive(4) && isActiveSequence(4)) {
-        // Buff: "Remnant Entities Healing" ×1.20 multiplier
         if (name === 'remnant entities healing' && !skillMeta.__baizhiS4HealingApplied) {
             skillMeta.multiplier = (skillMeta.multiplier ?? 0) * 1.20;
             skillMeta.__baizhiS4HealingApplied = true;
         }
 
-        // Buff: "Remnant Entities Damage" +0.012 multiplier
         if (name === 'remnant entities damage' && !skillMeta.__baizhiS4DamageApplied) {
             skillMeta.multiplier = (skillMeta.multiplier ?? 0) + 0.012;
             skillMeta.__baizhiS4DamageApplied = true;
         }
     }
 
-    // === Sequence 6: +12% glacio DMG
     if (isToggleActive(6) && isActiveSequence(6)) {
         if (!mergedBuffs.__baizhiSeq6) {
             mergedBuffs.glacio = (mergedBuffs.glacio ?? 0) + 12;
@@ -77,7 +73,6 @@ export function applyBaizhiLogic({
     return { mergedBuffs, combatState, skillMeta };
 }
 
-// Manual healing skill declarations only
 export const baizhiMultipliers = {
     resonanceSkill: [
         {
@@ -135,26 +130,18 @@ export const baizhiMultipliers = {
 };
 
 export function baizhiBuffsLogic({
-                                    mergedBuffs, characterState, activeCharacter
+                                    mergedBuffs, characterState
                                 }) {
     const state = characterState?.activeStates ?? {};
-
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.euphonia) {
         mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 15;
     }
 
     if (state.rejuvinating) {
-        mergedBuffs.elementDmgAmplify[element] = (mergedBuffs.elementDmgAmplify[element] ?? 0) + 15;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs.elementDmgAmplify[elem] = (mergedBuffs.elementDmgAmplify[elem] ?? 0) + 15;
+        }
     }
 
     if (state.devotion) {

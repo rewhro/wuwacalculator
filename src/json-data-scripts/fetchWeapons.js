@@ -1,4 +1,3 @@
-// src/json-data-scripts/fetchWeapons.js
 import weapons from '../data/weaponDetails.json';
 
 export async function fetchWeapons() {

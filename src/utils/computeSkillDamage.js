@@ -57,7 +57,6 @@ export function computeSkillDamage({
     }
     const tab = entry.tab;
 
-    // === Get raw multiplier from levelData ===
     let rawMultiplier = '0%';
     if (levelData?.Param) {
         rawMultiplier = typeof levelData.Param[0] === 'string'
@@ -84,7 +83,6 @@ export function computeSkillDamage({
 
     let localMergedBuffs = structuredClone(mergedBuffs);
 
-    // === Character override ===
     const override = getCharacterOverride(charId);
     if (override) {
         const result = override({
@@ -106,7 +104,6 @@ export function computeSkillDamage({
         localMergedBuffs = result.mergedBuffs ?? localMergedBuffs;
     }
 
-    // === Weapon override ===
     const weaponLogic = getWeaponOverride(combatState?.weaponId);
 
     if (typeof weaponLogic?.updateSkillMeta === 'function') {
@@ -160,7 +157,6 @@ export function computeSkillDamage({
     }
     scaling = scaling ?? skillMeta?.scaling;
 
-    // === Handle healing/shielding skills ===
     const tag = skillMeta.tags?.[0];
     const isSupportSkill = tag === 'healing' || tag === 'shielding';
 
@@ -178,7 +174,6 @@ export function computeSkillDamage({
         return { normal: 0, crit: 0, avg, skillMeta};
     }
 
-    // === Final damage ===
     let { normal, crit, avg } = calculateDamage({
         finalStats,
         combatState,
@@ -275,7 +270,6 @@ export function computeSkillDamage({
             }
         }
 
-        // Combine total damage from sub-hits
         normal = subHits.reduce((sum, hit) => sum + hit.normal * hit.count, 0);
         crit = subHits.reduce((sum, hit) => sum + hit.crit * hit.count, 0);
         avg = subHits.reduce((sum, hit) => sum + hit.avg * hit.count, 0);
@@ -307,16 +301,12 @@ export function parseCompoundMultiplier(formula) {
 }
 
 export function parseFlatComponent(formula) {
-    //console.log(formula);
     if (!formula) return 0;
 
-    // Extract all numeric values (both percent and flat)
     const allNumbers = formula.match(/\d+(\.\d+)?/g)?.map(Number) ?? [];
 
-    // Get percent contribution using existing function
     const percentMultiplier = parseCompoundMultiplier(formula) * 100;
 
-    // Total minus percentage portion = flat component
     const total = allNumbers.reduce((sum, n) => sum + n, 0);
     return total - percentMultiplier;
 }

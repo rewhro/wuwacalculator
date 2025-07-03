@@ -1,5 +1,4 @@
-// src/utils/wutheringFetch.js
-import iconLinks from '../data/iconLinks.json'; // ✅ Adjust path as needed
+import iconLinks from '../data/iconLinks.json';
 
 const LOCAL_ICON_MAP = Object.fromEntries(iconLinks.map(entry => [String(entry.id), entry.url]));
 const DEFAULT_API_PREFIX = 'https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_';
@@ -29,7 +28,7 @@ export async function fetchCharacters() {
 
         return characters;
     } catch (error) {
-        console.error('❌ Error loading characters-mapped.json:', error);
+        console.error('Error loading characters-mapped.json:', error);
         return [];
     }
 }

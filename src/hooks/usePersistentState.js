@@ -1,4 +1,3 @@
-// src/hooks/usePersistentState.js
 import { useState, useEffect } from 'react';
 
 export function usePersistentState(key, defaultValue) {

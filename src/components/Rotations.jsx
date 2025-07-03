@@ -12,7 +12,6 @@ export default function Rotations({ rotationEntries }) {
     for (const entry of rotationEntries) {
         const multiplier = entry.multiplier ?? 1;
 
-        // ✅ Use snapshot if locked
         const source = entry.locked ? entry.snapshot : skillCache.find(
             s => s.name === entry.label && s.tab === entry.tab
         );
@@ -30,7 +29,7 @@ export default function Rotations({ rotationEntries }) {
             } else {
                 supportTotals.shielding += avg;
             }
-            continue; // skip DMG
+            continue;
         }
 
         total.normal += normal;

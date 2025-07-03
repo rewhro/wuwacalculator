@@ -1,5 +1,3 @@
-// src/json-data-scripts/fetchWeaponDetails.js
-
 import fetch from 'node-fetch';
 import fs from 'fs/promises';
 import path from 'path';
@@ -23,7 +21,7 @@ async function fetchWeaponDetails() {
         const weaponIds = Object.keys(weaponMap);
         const weaponDetails = [];
 
-        console.log(`🧩 Fetching details for ${weaponIds.length} weapons...`);
+        console.log(`Fetching details for ${weaponIds.length} weapons...`);
 
         for (const id of weaponIds) {
             try {
@@ -31,20 +29,19 @@ async function fetchWeaponDetails() {
                 if (!res.ok) throw new Error(`Failed to fetch weapon ${id}: ${res.status}`);
                 const detail = await res.json();
 
-                // ✅ Add icon URL using ID
                 detail.icon = `https://api.hakush.in/ww/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon${id}_UI.webp`;
 
                 weaponDetails.push(detail);
-                console.log(`✅ ${id} loaded`);
+                console.log(`${id} loaded`);
             } catch (err) {
-                console.warn(`⚠️ Skipped ${id}: ${err.message}`);
+                console.warn(`Skipped ${id}: ${err.message}`);
             }
         }
 
         await fs.writeFile(outputPath, JSON.stringify(weaponDetails, null, 2));
-        console.log(`🎉 Done! Saved ${weaponDetails.length} entries to weaponDetails.json`);
+        console.log(`Done! Saved ${weaponDetails.length} entries to weaponDetails.json`);
     } catch (err) {
-        console.error('❌ Fatal error:', err.message);
+        console.error('Fatal error:', err.message);
     }
 }
 

@@ -2,7 +2,6 @@ import { echoes } from '../json-data-scripts/getEchoes.js';
 import { setIconMap } from '../constants/echoSetData.jsx';
 import {getValidMainStats} from "./echoHelper.js";
 
-// Helper: normalize label to stat key
 const labelToKey = {
     'Crit. Rate': 'critRate',
     'Crit. DMG': 'critDmg',
@@ -55,7 +54,6 @@ const applyFixedSecondMainStat = (mainStats, cost) => {
     return updated;
 };
 
-// ✅ New: substat parser
 const parseSubstats = (substats = []) => {
     const result = {};
 
@@ -81,7 +79,6 @@ const parseSubstats = (substats = []) => {
 
         let matchKey = null;
 
-        // Try direct or fuzzy matching
         for (const { label, key } of keyEntries) {
             if (cleanedLabel.includes(label)) {
                 matchKey = key;
@@ -89,7 +86,6 @@ const parseSubstats = (substats = []) => {
             }
         }
 
-        // Fallback for atk, hp, def
         if (matchKey) {
             if (['atk', 'hp', 'def'].includes(matchKey)) {
                 matchKey = hasPercent ? `${matchKey}Percent` : `${matchKey}Flat`;
@@ -102,7 +98,6 @@ const parseSubstats = (substats = []) => {
             }
         }
 
-        // Save matched stat
         if (matchKey) {
             result[matchKey] = value;
         } else {
@@ -130,7 +125,6 @@ export function getEchoIdSetIdAndMainStats(parsedList) {
             };
         }
 
-        // Fix ambiguous base keys: convert to Percent variant
         if (['atk', 'hp', 'def'].includes(mainKey)) {
             mainKey = `${mainKey}Percent`;
         }
@@ -143,7 +137,7 @@ export function getEchoIdSetIdAndMainStats(parsedList) {
             mainStats = applyFixedSecondMainStat(mainStats, cost);
         }
 
-        const subStats = parseSubstats(item.substats); // returns object now
+        const subStats = parseSubstats(item.substats);
 
         return {
             echoId,

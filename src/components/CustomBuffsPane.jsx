@@ -1,4 +1,3 @@
-// src/components/CustomBuffsPane.jsx
 import React from 'react';
 
 export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
@@ -28,7 +27,6 @@ export default function CustomBuffsPane({ customBuffs, setCustomBuffs }) {
             clamped = Math.min(Math.max(num, 0), 9999);
         }
 
-        // Map to nested damageTypeAmplify
         const damageTypeMap = {
             basicAtkAmplify: 'basic',
             heavyAtkAmplify: 'heavy',

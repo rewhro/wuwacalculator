@@ -2,16 +2,9 @@ import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 
-export default function JianxinUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function JianxinUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function jianxinSequenceToggles({
@@ -19,8 +12,6 @@ export function jianxinSequenceToggles({
                                          sequenceToggles,
                                          toggleSequence,
                                          currentSequenceLevel,
-                                         setCharacterRuntimeStates,
-                                         charId
                                      }) {
     const validKeys = ['4'];
     if (!validKeys.includes(String(nodeKey))) return null;
@@ -41,20 +32,7 @@ export function jianxinSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

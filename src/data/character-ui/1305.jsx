@@ -3,16 +3,9 @@ import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function YaoUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function YaoUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function CustomInherentSkills({
@@ -26,19 +19,6 @@ export function CustomInherentSkills({
     const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
 
     let activeStates = { ...(characterRuntimeStates?.[charId]?.activeStates ?? {}) };
-
-    const toggleState = (key) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: !(prev[charId]?.activeStates?.[key] ?? false)
-                }
-            }
-        }));
-    };
 
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
@@ -59,7 +39,6 @@ export function CustomInherentSkills({
 
     const unlockLevels = [50, 70];
 
-    // Clear locked states before render
     const lockedStates = { ...activeStates };
     if (charLevel < 50 && (lockedStates.inherent1 ?? 0) > 0) {
         lockedStates.inherent1 = 0;

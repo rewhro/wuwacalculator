@@ -2,16 +2,9 @@ import {formatDescription} from "../../utils/formatDescription.js";
 import React from 'react';
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function ChixiaUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function ChixiaUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 
@@ -43,7 +36,6 @@ export function CustomInherentSkills({
                 const unlockLevel = isScorching ? 50 : isThermobaric ? 70 : 1;
                 const locked = charLevel < unlockLevel;
 
-                // Reset state if locked
                 if (isThermobaric && locked && activeStates.inherent2 > 0) {
                     setCharacterRuntimeStates(prev => ({
                         ...prev,

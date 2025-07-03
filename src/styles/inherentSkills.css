@@ -1,8 +1,4 @@
-/* ========================== */
-/*   INHERENT SKILLS          */
-/* ========================== */
 .inherent-skills-box {
-    /*border: 1px solid #ccc;*/
     border-radius: 12px;
     padding: 16px;
     margin-top: 16px;
@@ -30,10 +26,6 @@
     color: #222
 }
 
-
-/* ========================== */
-/*   DARK MODE OVERRIDE       */
-/* ========================== */
 .dark .inherent-skills-box {
     background: rgba(31, 41, 55, 0.44);
         border-color: rgba(255,255,255,0.1);
@@ -49,10 +41,6 @@
     .dark .inherent-skills .inherent-skill p {
         color: #bbbbbb;
     }
-
-/* ===================== */
-/*   Buff Icons          */
-/* ===================== */
 
 .buff-icons {
     display: grid;
@@ -83,7 +71,6 @@
 }
 
 .buff-icon.active {
-    /*opacity: 0.7;*/
     background: none;
     border-radius: 40% !important;
     transform: scale(0.85);

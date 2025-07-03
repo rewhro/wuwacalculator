@@ -182,7 +182,6 @@ const characterBuffUIMap = {
     '1607': () => import('./1607.jsx').then(mod => mod.buffUI),
     '1403': () => import('./1403.jsx').then(mod => mod.buffUI),
     '1608': () => import('./1608.jsx').then(mod => mod.buffUI)
-    // add other character IDs here
 };
 
 export async function loadCharacterBuffUI(charId) {

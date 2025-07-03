@@ -14,23 +14,19 @@ export function calculateDamage({
                                     critRateBonus = 0,
                                     skillDefIgnore = 0
                                 }) {
-    // Normalize skillType into array
     const skillTypes = Array.isArray(skillType) ? skillType : [skillType];
 
-    // 1️⃣ Base stats
     const atk = finalStats.atk ?? 0;
     const hp = finalStats.hp ?? 0;
     const def = finalStats.def ?? 0;
     const energyRegen = finalStats.energyRegen ?? 0;
 
-    // 2️⃣ Base ability damage
     const baseAbility = (atk * (scaling.atk ?? 0)) +
         (hp * (scaling.hp ?? 0)) +
         (def * (scaling.def ?? 0)) +
         (energyRegen * (scaling.energyRegen ?? 0));
 
 
-    // 3️⃣ Flat damage additions
     let baseDmg = 0;
     if (flat != null) {
         baseDmg = flat;
@@ -39,7 +35,6 @@ export function calculateDamage({
     }
     baseDmg += (combatState.flatDmg ?? 0);
 
-    // 4️⃣ Resistance multiplier
     const enemyResShred = mergedBuffs?.enemyResShred ?? 0;
     const enemyRes = (combatState.enemyRes ?? 0) - enemyResShred;
 
@@ -52,7 +47,6 @@ export function calculateDamage({
         resMult = 1 / (1 + 5 * (enemyRes / 100));
     }
 
-    // 5️⃣ Enemy defense multiplier
     const enemyLevel = combatState.enemyLevel ?? 1;
     const charLevel = characterLevel ?? 1;
     const enemyDefIgnore = (skillDefIgnore ?? 0) + (mergedBuffs?.enemyDefIgnore ?? 0);
@@ -61,11 +55,9 @@ export function calculateDamage({
     const enemyDef = Math.max(0, rawEnemyDef);
     const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
 
-    // 6️⃣ Reduction multipliers
     const dmgReductionTotal = 1 + (mergedBuffs.dmgReduction ?? 0)/100;
     const elementReductionTotal = 1 + (mergedBuffs.elementDmgReduction ?? 0)/100;
 
-    // 7️⃣ Bonuses
     let skillTypeBonus = skillDmgBonus;
     for (const type of skillTypes) {
         skillTypeBonus += mergedBuffs?.[`${type}Atk`] ?? mergedBuffs?.[`${type}`] ?? 0;
@@ -92,17 +84,14 @@ export function calculateDamage({
 
     const dmgBonus = 1 + elementBonus / 100;
     const dmgAmplify = 1 + amplifyTotal / 100;
-    const special = 1 + 0; // Reserved for future use
+    const special = 1 + 0;
 
-    // 8️⃣ Final damage
     const normal = baseDmg * resMult * defMult * dmgReductionTotal * elementReductionTotal * dmgBonus * dmgAmplify * special;
 
-    // 9️⃣ Crit damage
     const critRate = Math.min(((finalStats.critRate ?? 0) / 100) + (critRateBonus / 100), 1);
     const critDmg = ((finalStats.critDmg ?? 0) / 100) + (critDmgBonus / 100);
     const crit = normal * critDmg;
 
-    // 🔟 Average damage
     const avg = critRate >= 1
         ? crit
         : (crit * critRate) + (normal * (1 - critRate));
@@ -122,7 +111,6 @@ export function calculateSpectroFrazzleDamage(combatState, mergedBuffs, characte
     const total = (447.9 * Math.pow(stacks, 2)) + (657.8 * stacks);
     const bonus = mergedBuffs?.damageTypeAmplify.spectroFrazzle ?? 0;
 
-    // === Enemy resistance multiplier
     const enemyLevel = combatState.enemyLevel ?? 1;
     const charLevel = characterLevel;
 
@@ -138,7 +126,6 @@ export function calculateSpectroFrazzleDamage(combatState, mergedBuffs, characte
         resMult = 1 / (1 + 5 * (enemyRes / 100));
     }
 
-    // === Defense multiplier
     const defIgnore = (mergedBuffs?.enemyDefIgnore ?? 0);
     const defShred = (mergedBuffs?.enemyDefShred ?? 0);
     const enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
@@ -165,7 +152,6 @@ export function calculateAeroErosionDamage(combatState, mergedBuffs, characterLe
     const total = 0;
     const bonus = mergedBuffs?.damageTypeAmplify.aeroErosion ?? 0;
 
-    // === Enemy resistance multiplier
     const enemyLevel = combatState.enemyLevel ?? 1;
     const charLevel = characterLevel;
 
@@ -181,7 +167,6 @@ export function calculateAeroErosionDamage(combatState, mergedBuffs, characterLe
         resMult = 1 / (1 + 5 * (enemyRes / 100));
     }
 
-    // === Defense multiplier
     const defIgnore = (mergedBuffs?.enemyDefIgnore ?? 0);
     const defShred = (mergedBuffs?.enemyDefShred ?? 0);
     const enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);

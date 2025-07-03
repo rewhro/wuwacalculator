@@ -43,7 +43,6 @@ export default function YouhuUI({ activeStates, toggleState }) {
     );
 }
 
-// ✅ Custom inherent skills section
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
@@ -87,7 +86,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Auto-disable toggle if locked
                 if (locked) {
                     if (isInherent1 && activeStates.inherent1) toggleState('inherent1');
                     if (isInherent2 && activeStates.inherent2) toggleState('inherent2');
@@ -166,7 +164,6 @@ export function youhuSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === Sequence 6: dropdown input ===
     if (String(nodeKey) === '6') {
         const value = sequenceToggles['6_value'] ?? 0;
 
@@ -196,7 +193,6 @@ export function youhuSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -210,20 +206,7 @@ export function youhuSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

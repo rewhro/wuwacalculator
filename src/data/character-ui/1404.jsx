@@ -67,7 +67,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Turn off toggle if locked and still active
                 if (locked) {
                     if (balance && activeStates.inherent1) {
                         toggleState('inherent1');
@@ -208,7 +207,6 @@ export function jiyanSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -222,20 +220,7 @@ export function jiyanSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

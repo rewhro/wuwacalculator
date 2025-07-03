@@ -134,7 +134,6 @@ export function rocciaSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === Sequence 6: dropdown input ===
     if (String(nodeKey) === '2') {
         const value = sequenceToggles['2_value'] ?? 0;
 
@@ -164,7 +163,6 @@ export function rocciaSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input

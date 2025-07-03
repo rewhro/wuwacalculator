@@ -1,4 +1,3 @@
-/* Buffs Box Container */
 .buffs-box {
     border-radius: 12px;
     padding: 16px;
@@ -9,14 +8,12 @@
     flex-direction: column;
 }
 
-/* Dark theme adjustments */
 .dark .buffs-box {
     background: rgba(31, 41, 55, 0.44);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.19);
     color: #ddd;
 }
 
-/* Panel title (inside the box) */
 .buffs-box .menu-header {
     margin: 0;
     font-size: 18px;
@@ -24,8 +21,6 @@
     padding: 20px;
 }
 
-
-/* Flex wrapper for icons */
 .icon-body {
     display: flex;
     justify-content: center;
@@ -34,7 +29,6 @@
     margin-bottom: 60px;
 }
 
-/* Individual icon slot + name */
 .team-slot-wrapper {
     display: flex;
     flex-direction: column;
@@ -45,7 +39,6 @@
     position: relative;
 }
 
-/* Icon slot */
 .team-slot {
     width: 90px;
     height: 90px;
@@ -61,19 +54,16 @@
     overflow: visible;
 }
 
-/* Locked (main character) slot */
 .header-icon.locked {
     cursor: not-allowed !important;
     transform: scale(1);
     opacity: 0.6;
 }
 
-/* Locked empty slots still clickable */
 .team-slot.locked .empty-slot {
     pointer-events: auto;
 }
 
-/* Empty slot circle */
 .team-icon.empty-slot {
     width: 90px;
     height: 90px;
@@ -82,7 +72,6 @@
     pointer-events: auto;
 }
 
-/* Character name below icon */
 .character-name {
     margin-top: 6px;
     font-size: 14px;
@@ -107,7 +96,7 @@
     background: rgba(172, 172, 172, 0.36) !important;
     border: none;
     border-radius: 50%;
-    display: flex;                  /* ensures centering */
+    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -128,5 +117,5 @@
 }
 
 .team-slot {
-    position: relative; /* Required for absolute positioning the "X" */
+    position: relative;
 }

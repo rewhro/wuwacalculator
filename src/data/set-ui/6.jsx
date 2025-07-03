@@ -1,4 +1,3 @@
-// /data/echo-set-ui/1001.jsx
 import {highlightKeywordsInText, setIconMap} from "../../constants/echoSetData.jsx";
 import React from "react";
 import DropdownSelect from "../../components/DropdownSelect.jsx";

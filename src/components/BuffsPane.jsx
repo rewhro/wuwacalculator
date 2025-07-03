@@ -1,4 +1,3 @@
-// src/components/BuffsPane.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import CharacterMenu from './CharacterMenu';
 import ExpandableSection from "./Expandable.jsx";
@@ -48,7 +47,6 @@ export default function BuffsPane({
         newTeam[activeCharacterSlot] = char.link;
         setTeam(newTeam);
 
-        // ✅ Save per-main-character team
         const mainCharId = team[0];
         setCharacterRuntimeStates(prev => ({
             ...prev,
@@ -141,17 +139,15 @@ export default function BuffsPane({
                                     <div className="team-icon empty-slot" />
                                 )}
 
-                                {/* ✅ "X" button for teammates only */}
                                 {!isDisabled && character && (
                                     <button
                                         className="remove-teammate-button"
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevent opening the menu
+                                            e.stopPropagation();
                                             const newTeam = [...team];
                                             newTeam[index] = null;
                                             setTeam(newTeam);
 
-                                            // ✅ Save per-main-character team
                                             const mainCharId = team[0];
                                             setCharacterRuntimeStates(prev => ({
                                                 ...prev,

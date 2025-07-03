@@ -2,16 +2,9 @@ import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function MortefiUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function MortefiUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 
@@ -69,7 +62,6 @@ export function CustomInherentSkills({
                     }));
                 }
 
-                // If locked, reset numeric value
                 if (isRhythmic && locked && activeStates.inherent2 > 0) {
                     setCharacterRuntimeStates(prev => ({
                         ...prev,

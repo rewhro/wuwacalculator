@@ -1,10 +1,5 @@
-/* ===================== */
-/*   CHARACTER SETTINGS  */
-/* ===================== */
-
 .character-settings,
 .skills-settings {
-    /*border: 1px solid #ccc;*/
     border-radius: 12px;
     padding: 16px;
     margin-top: 16px;
@@ -13,24 +8,18 @@
     color: #222;
 }
 
-/* Subtle hover effect for light mode */
 .skills-settings:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     background-color: #f0f0f0;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Settings sliders label + input */
 .slider-label-with-input {
     display: flex;
     align-items: center;
     gap: 8px;
     color: #222
 }
-
-/* ===================== */
-/*   DARK MODE OVERRIDE  */
-/* ===================== */
 
 .dark .slider-label-with-input {
     color: #ddd;

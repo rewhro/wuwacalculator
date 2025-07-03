@@ -68,7 +68,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Turn off toggle if locked and still active
                 if (locked) {
                     if (crimson && activeStates.inherent1) {
                         toggleState('inherent1');
@@ -151,7 +150,6 @@ export function danjinSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === Sequence 6: dropdown input ===
     if (String(nodeKey) === '1') {
         const value = sequenceToggles['1_value'] ?? 0;
 
@@ -193,7 +191,6 @@ export function danjinSequenceToggles({
         );
     }
 
-        // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -207,20 +204,7 @@ export function danjinSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

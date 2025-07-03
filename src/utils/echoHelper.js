@@ -84,12 +84,10 @@ export function getEchoStatsFromEquippedEchoes(equippedEchoes = []) {
     for (const echo of equippedEchoes) {
         if (!echo) continue;
 
-        // Add mainStats
         for (const [key, value] of Object.entries(echo.mainStats ?? {})) {
             echoStats[key] = (echoStats[key] ?? 0) + value;
         }
 
-        // Add subStats (even if key overlaps, we add)
         for (const [key, value] of Object.entries(echo.subStats ?? {})) {
             echoStats[key] = (echoStats[key] ?? 0) + value;
         }
@@ -118,12 +116,10 @@ export function getSetCounts(equippedEchoes) {
 
         if (!setId || !echoId) continue;
 
-        // Initialize a Set for this setId if not already done
         if (!seenEchoIdsPerSet[setId]) {
             seenEchoIdsPerSet[setId] = new Set();
         }
 
-        // Only count if this echo ID hasn't been seen yet for this set
         if (!seenEchoIdsPerSet[setId].has(echoId)) {
             seenEchoIdsPerSet[setId].add(echoId);
             counts[setId] = (counts[setId] ?? 0) + 1;

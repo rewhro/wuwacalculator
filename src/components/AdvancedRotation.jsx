@@ -30,8 +30,8 @@ export default function AdvancedRotation({
                     index={idx}
                     id={entry.createdAt?.toString() ?? idx.toString()}
                     entry={entry}
-                    disabled // <- disables interactivity
-                    compact // <- make RotationItem.jsx support compact mode
+                    disabled
+                    compact
                     currentSliderColor={currentSliderColor}
                 />
             ))
@@ -39,7 +39,6 @@ export default function AdvancedRotation({
 
     return (
         <div className="advanced-grid">
-            {/* Left: Teammate 1 and 2 */}
             <div className="teammate-column">
                 {teammates.map(id => (
                     <div key={id} className="teammate-box rotation-pane">
@@ -51,7 +50,6 @@ export default function AdvancedRotation({
                 ))}
             </div>
 
-            {/* Main Character */}
             <div className="main-character-box rotation-pane">
                 <h2 className="panel-title">{activeCharacter?.displayName}</h2>
                 <div className="rotation-list-container">
@@ -59,7 +57,6 @@ export default function AdvancedRotation({
                 </div>
             </div>
 
-            {/* Total Summary */}
             <div className="total-damage-summary">
                 <Rotations rotationEntries={totalAllEntries} />
             </div>

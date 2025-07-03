@@ -5,7 +5,6 @@ export function applyRocciaLogic({
                                      characterState,
                                      isActiveSequence = () => false,
                                      isToggleActive = () => false,
-                                     characterLevel = 1,
                                  }) {
     skillMeta = {
         name: skillMeta?.name ?? '',
@@ -22,7 +21,6 @@ export function applyRocciaLogic({
     let atkFlat = 0;
 
     if (mergedBuffs.critRate + 5 > 50) {
-        // 1 point per 0.1% over 50%
         atkFlat = (mergedBuffs.critRate + 5 - 50) * 10;
 
         if (atkFlat > 200) {
@@ -121,7 +119,7 @@ export const rocciaMultipliers = {
 };
 
 export function rocciaBuffsLogic({
-                                     mergedBuffs, characterState, activeCharacter
+                                     mergedBuffs, characterState
                                  }) {
     const state = characterState?.activeStates ?? {};
     let atkFlat = 0;
@@ -133,23 +131,12 @@ export function rocciaBuffsLogic({
     }
 
     if (state.commediaCr > 50) {
-        // 1 point per 0.1% over 50%
         atkFlat = (state.commediaCr - 50) * 10;
 
         if (atkFlat > 200) {
             atkFlat = 200;
         }
     }
-
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.applause) {
         mergedBuffs.damageTypeAmplify.basic = (mergedBuffs.damageTypeAmplify.basic ?? 0) + 25;

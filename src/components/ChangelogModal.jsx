@@ -1,4 +1,3 @@
-// src/components/ChangelogModal.jsx
 import React, {useEffect, useRef, useState} from 'react';
 
 export default function ChangelogModal({ open, onClose, shouldScroll }) {
@@ -285,7 +284,6 @@ export default function ChangelogModal({ open, onClose, shouldScroll }) {
                 }
             ]
         }
-        // Add more changelogs as needed
     ];
 
     const changelogRef = useRef(null);

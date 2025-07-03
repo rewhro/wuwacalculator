@@ -1,4 +1,3 @@
-// src/components/EchoBuffs.jsx
 import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
 const echoBuffs = [

@@ -10,7 +10,6 @@ export function mapExtraStatToCombat(stat) {
     const value = stat.Value ?? 0;
     const name = stat.Name.toLowerCase();
 
-    // Handle ratio and percent
     const scaled = stat.IsRatio ? value * 100 : stat.IsPercent ? value / 100 : value;
 
     switch (name) {
@@ -198,10 +197,8 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
             </div>
 
             <div className="character-settings">
-                {/* Weapon Icon Trigger */}
                 <div className="weapon-header-row">
                     <div className="weapon-sliders-column">
-                        {/* Level Slider */}
                         <div className="weapon-slider">
                             <div className="slider-label-inline">
                                 <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Level</label>
@@ -228,7 +225,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                             />
                         </div>
 
-                        {/* Rank Slider */}
                         <div className="weapon-slider">
                             <div className="slider-label-inline">
                                 <label style={{ fontWeight: 'bold', marginRight: '8px' }}>Rank</label>
@@ -264,7 +260,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                 </div>
 
 
-                {/* Weapon Menu */}
                 <WeaponMenu
                     weapons={filteredWeapons}
                     handleWeaponSelect={handleWeaponSelect}
@@ -276,7 +271,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                 />
             </div>
             <div className="inherent-skills-box">
-                {/* Weapon Base ATK display */}
                 <div className="slider-group">
                     <div className="slider-label-with-input" style={{
                         display: 'flex', alignItems: 'center', gap: '8px'
@@ -300,7 +294,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
                         </span>
                     </div>
                 </div>
-                {/* Weapon Stat Display */}
+
                 {combatState.weaponStat && (
                     <div style={{ fontWeight: 'bold', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <div
@@ -355,7 +349,7 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
 }
 
 function formatEffectWithParams(effect = '', param = [], rank = 1) {
-    const index = Math.max(0, Math.min((rank ?? 1) - 1, 4)); // Clamp rank between 0 and 4
+    const index = Math.max(0, Math.min((rank ?? 1) - 1, 4));
     return effect.replace(/{(\d+)}/g, (_, group) => {
         const groupIndex = parseInt(group, 10);
         return param?.[groupIndex]?.[index] ?? `{${group}}`;

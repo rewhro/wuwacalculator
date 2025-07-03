@@ -1,4 +1,3 @@
-// src/data/character-ui/1103.jsx
 import React from 'react';
 import { formatDescription } from "../../utils/formatDescription.js";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
@@ -41,7 +40,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // Force toggle off if locked
                 const toggleKey = index === 0 ? 'inherent1' : index === 1 ? 'inherent2' : null;
                 if (locked && toggleKey && activeStates?.[toggleKey]) {
                     toggleState(toggleKey);

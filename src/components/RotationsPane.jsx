@@ -182,7 +182,6 @@ export default function RotationsPane({
         setRotationEntries(patched);
     }, [charId]);
 
-    // Save rotation to character runtime state on change
     useEffect(() => {
         if (!charId) return;
         setCharacterRuntimeStates(prev => ({
@@ -199,11 +198,9 @@ export default function RotationsPane({
         const newCharacter = characters.find(c => String(c.Id ?? c.id ?? c.link) === String(id));
         if (!newCharacter) return;
 
-        // Set character
         setActiveCharacter(newCharacter);
         setActiveCharacterId(id);
 
-        // Set state in React
         setCharacterRuntimeStates(prev => ({
             ...prev,
             [id]: saved.fullCharacterState
@@ -223,7 +220,6 @@ export default function RotationsPane({
             }))
         );
 
-        // Store persistently
         const prevRuntime = JSON.parse(localStorage.getItem("characterRuntimeStates") || "{}");
         localStorage.setItem("characterRuntimeStates", JSON.stringify({
             ...prevRuntime,
@@ -280,9 +276,8 @@ export default function RotationsPane({
                             onClick={() => {
                                 const characterId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
                                 const characterName = activeCharacter?.displayName ?? 'Unknown';
-                                const dateId = Date.now(); // Use timestamp as unique ID
+                                const dateId = Date.now();
 
-                                // Compute totals using skill damage cache (as in your Rotations component)
                                 const cache = getSkillDamageCache();
                                 let total = { normal: 0, crit: 0, avg: 0 };
 
@@ -296,7 +291,6 @@ export default function RotationsPane({
                                     total.avg += (source.avg ?? 0) * multiplier;
                                 }
 
-                                // Save full rotation snapshot
                                 const newSaved = {
                                     id: dateId,
                                     characterId,
@@ -527,13 +521,13 @@ export default function RotationsPane({
                                                     Load
                                                 </button>
                                                 {/*
-                                            <button
-                                                className="rotation-button"
-                                                title="Export Rotation"
-                                            >
-                                                Export
-                                            </button>
-*/}
+                                                <button
+                                                    className="rotation-button"
+                                                    title="Export Rotation"
+                                                >
+                                                    Export
+                                                </button>
+                                                */}
                                             </div>
                                         </div>
 

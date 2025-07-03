@@ -25,13 +25,11 @@ export function applyZhezhiLogic({
     const name = skillMeta.name?.toLowerCase();
     const tab = skillMeta.tab ?? '';
 
-    // 🦁 Passive Buff: Zenith
     if (characterState?.activeStates?.zenith && !mergedBuffs.__zhezhiZenithApplied) {
         mergedBuffs.basicAtk = (mergedBuffs.basicAtk ?? 0) + 18;
         mergedBuffs.__zhezhiZenithApplied = true;
     }
 
-    // ✅ Skill type reassignments
     if (['stroke of genius dmg', 'creation\'s zenith dmg'].some(n => name.includes(n))) {
         skillMeta.skillType = 'basic';
     } else if (['ha dmg', 'ha - conjuration dmg'].some(n => name.includes(n))) {
@@ -40,7 +38,6 @@ export function applyZhezhiLogic({
         skillMeta.skillType = ['basic', 'coord'];
     }
 
-    // 🧠 Inherent 1 stacks: +6% ATK per stack (up to 18%)
     const inherent1Stacks = characterState?.activeStates?.inherent1 ?? 0;
     const inherent1 = Math.min(inherent1Stacks * 6, 18);
     if (!mergedBuffs.__zhezhiInherent1) {
@@ -48,7 +45,6 @@ export function applyZhezhiLogic({
         mergedBuffs.__zhezhiInherent1 = true;
     }
 
-    // 🧩 Sequence Effects
     if (isToggleActive(1) && isActiveSequence(1)) {
         if (!mergedBuffs.__ZhezhiSeq1) {
             mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 10;
@@ -78,7 +74,6 @@ export function applyZhezhiLogic({
     }
 
 
-    // Composition’s Clue = 140% of Inklit Spirit
     if (tab === 'resonanceLiberation' && name.includes("composition's clue")) {
         const inklitNode = Object.values(getSkillData(baseCharacterState, 'resonanceLiberation')?.Level ?? {})
             .find(level => level?.Name?.toLowerCase?.() === 'inklit spirit dmg');
@@ -90,7 +85,6 @@ export function applyZhezhiLogic({
         skillMeta.visible = isActiveSequence(5);
     }
 
-    // Infinite Legacy Stroke of Genius = 120% of Stroke of Genius
     if (tab === 'forteCircuit' && name.includes("infinite legacy")) {
         const strokeNode = Object.values(getSkillData(baseCharacterState, 'forteCircuit')?.Level ?? {})
             .find(level => level?.Name?.toLowerCase?.() === 'stroke of genius dmg');
@@ -127,16 +121,6 @@ export function zhezhiBuffsLogic({
                                  mergedBuffs, characterState, activeCharacter
                              }) {
     const state = characterState?.activeStates ?? {};
-
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.carveAndDraw) {
         mergedBuffs.elementDmgAmplify.glacio = (mergedBuffs.elementDmgAmplify.glacio ?? 0) + 20;

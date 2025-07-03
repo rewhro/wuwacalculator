@@ -1,9 +1,9 @@
 .info-section {
-    margin-bottom: 3rem; /* increase space between sections */
+    margin-bottom: 3rem;
 }
 
 .info-section p {
-    margin: 0.2rem 0; /* reduce space between lines in the same section */
+    margin: 0.2rem 0;
 }
 
 .info-section h3 {

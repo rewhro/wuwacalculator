@@ -276,7 +276,6 @@ export default function Setting() {
                     />
                 )}
 
-                {/* Main Content */}
                 <div className="main-content settings-page" style={{ padding: '2rem' }}>
                     <div className="settings-header">
                         <h1>Settings</h1>

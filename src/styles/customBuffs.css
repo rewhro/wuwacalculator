@@ -42,7 +42,6 @@
     font-weight: bold;
 }
 
-/* Dark mode compatibility */
 .dark .buff-row {
         background: rgba(19, 20, 23, 0.38);
     }
@@ -53,14 +52,12 @@
         color: #ddd;
     }
 
-/* Chrome, Safari, Edge, Opera */
 .buff-row input::-webkit-outer-spin-button,
 .buff-row input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Firefox */
 .buff-row input[type=number] {
     -moz-appearance: textfield;
 }

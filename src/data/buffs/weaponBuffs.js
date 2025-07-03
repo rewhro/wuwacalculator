@@ -11,7 +11,6 @@ export function applyWeaponBuffLogic({ mergedBuffs, characterState, activeCharac
     };
     const element = elementMap?.[activeCharacter?.attribute];
 
-    // Example logic for each weapon
     const buffs = {
         staticMist: () => {
             const rank = state['staticMist_rank'] ?? 0;

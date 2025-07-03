@@ -24,16 +24,12 @@ export function applySanhuaLogic({
 
     const isDetonate = name.includes('detonate damage');
 
-    // === Skill Type Reassignment ===
     if (isBurstAttack) {
         skillMeta.skillType = 'skill';
     } else if (isDetonate) {
         skillMeta.skillType = 'heavy';
     }
 
-    // === Inherent Skills ===
-
-    // Inherent 1: +20% Skill DMG (only if "Skill DMG" and under resonanceSkill tab)
     if (
         isToggleActive('inherent1') &&
         skillMeta.tab === 'resonanceSkill' &&
@@ -42,14 +38,10 @@ export function applySanhuaLogic({
         skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 20;
     }
 
-    // Inherent 2: +20% to specific burst attacks
     if (isToggleActive('inherent2') && isBurstAttack) {
         skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 20;
     }
 
-    // === Passive Buffs (sequence toggles) ===
-
-    // Sequence 1: +15% Crit Rate
     if (isToggleActive(1) && isActiveSequence(1)) {
         if (!mergedBuffs.__sanhuaSeq1) {
             mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 15;
@@ -59,7 +51,6 @@ export function applySanhuaLogic({
         mergedBuffs.__sanhuaSeq1 = false;
     }
 
-    // Sequence 3: +35% Glacio
     if (isToggleActive(3) && isActiveSequence(3)) {
         if (!mergedBuffs.__sanhuaSeq3) {
             mergedBuffs.glacio = (mergedBuffs.glacio ?? 0) + 35;
@@ -69,7 +60,6 @@ export function applySanhuaLogic({
         mergedBuffs.__sanhuaSeq3 = false;
     }
 
-    // Sequence 6: +20% ATK
     const seq6Value = characterState?.toggles?.['6_value'] ?? 0;
     if (isActiveSequence(6) && seq6Value > 0) {
         if (!mergedBuffs.__sanhuaSeq6) {
@@ -80,14 +70,10 @@ export function applySanhuaLogic({
         mergedBuffs.__sanhuaSeq6 = false;
     }
 
-    // === Per-skill Buffs (dynamic) ===
-
-    // Sequence 4: +120% skill dmg bonus to Detonate Damage
     if (isToggleActive(4) && isDetonate) {
         skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 120;
     }
 
-    // Sequence 5: Passive +100% Crit DMG for burst attacks
     if (isActiveSequence(5) && isToggleActive(5) && isBurstAttack) {
         skillMeta.critDmgBonus = (skillMeta.critDmgBonus ?? 0) + 100;
     }
@@ -96,19 +82,10 @@ export function applySanhuaLogic({
 }
 
 export function sanhuaBuffsLogic({
-                                      mergedBuffs, characterState, activeCharacter
+                                      mergedBuffs, characterState
                                   }) {
     const state = characterState?.activeStates ?? {};
     const stacks = (state.daybreak ?? 0) * 10;
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.silversnow) {
         mergedBuffs.damageTypeAmplify.basic = (mergedBuffs.damageTypeAmplify.basic ?? 0) + 38;

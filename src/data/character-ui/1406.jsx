@@ -3,16 +3,9 @@ import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function AeroMUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function AeroMUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function CustomInherentSkills({
@@ -57,7 +50,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Turn off toggle if locked and still active
                 if (locked) {
                     if (storm && activeStates.inherent1) {
                         toggleState('inherent1');
@@ -131,8 +123,6 @@ export function aeroMSequenceToggles({
                                          sequenceToggles,
                                          toggleSequence,
                                          currentSequenceLevel,
-                                         setCharacterRuntimeStates,
-                                         charId
                                      }) {
     const validKeys = ['4'];
     if (!validKeys.includes(String(nodeKey))) return null;
@@ -140,7 +130,6 @@ export function aeroMSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input

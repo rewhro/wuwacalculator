@@ -3,16 +3,9 @@ import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function PhrolovaUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function PhrolovaUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function CustomInherentSkills({
@@ -37,19 +30,6 @@ export function CustomInherentSkills({
         'Hecate',
         'Maestro'
     );
-
-    const toggleState = (key) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: !(prev[charId]?.activeStates?.[key] ?? false)
-                }
-            }
-        }));
-    };
 
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
@@ -148,8 +128,6 @@ export function phrolovaSequenceToggles({
                                         sequenceToggles,
                                         toggleSequence,
                                         currentSequenceLevel,
-                                        setCharacterRuntimeStates,
-                                        charId
                                     }) {
     const validKeys = ['4', '6'];
     if (!validKeys.includes(String(nodeKey))) return null;
@@ -157,7 +135,6 @@ export function phrolovaSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -171,20 +148,7 @@ export function phrolovaSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

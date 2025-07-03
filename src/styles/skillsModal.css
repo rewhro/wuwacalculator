@@ -1,7 +1,3 @@
-/* ===================== */
-/*   SKILLS MODAL        */
-/* ===================== */
-
 .skills-modal-overlay {
     position: fixed;
     top: 0;
@@ -46,7 +42,6 @@
     animation: fadeInOverlay 0.3s ease;
 }
 
-/* Tabs */
 .skills-modal-tabs {
     display: flex;
     justify-content: center;
@@ -78,7 +73,7 @@
 .skills-modal-content button:active {
     outline: none;
     box-shadow: none;
-    background-color: #7c7b7b; /* optional hover state */
+    background-color: #7c7b7b;
 }
 
 .skills-tab:hover {
@@ -90,8 +85,6 @@
     transform: translateY(2px);
 }
 
-
-/* Modal content area */
 .skills-modal-content-area {
     color: #222;
     max-height: 400px;
@@ -104,8 +97,6 @@
     font-size: 14px;
 }
 
-
-/* Modal close button */
 .skills-modal-content button {
     padding: 6px 12px;
     font-size: 0.9rem;

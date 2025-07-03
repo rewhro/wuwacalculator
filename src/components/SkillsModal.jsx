@@ -1,4 +1,3 @@
-// src/components/SkillsModal.jsx
 import React, {useState} from 'react';
 import { formatDescription } from '../utils/formatDescription';
 import skillTabs from '../constants/skillTabs';

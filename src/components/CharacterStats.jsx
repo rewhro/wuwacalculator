@@ -33,7 +33,6 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
     }, []);
     if (!activeCharacter) return null;
 
-    // MAIN STATS
     const characterBaseAtk = getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0;
     const weaponBaseAtk = combatState?.weaponBaseAtk ?? 0;
     const baseAtk = ((getStatsForLevel(activeCharacter?.raw?.Stats, characterLevel)?.["Atk"] ?? 0) + weaponBaseAtk);
@@ -51,7 +50,6 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
         { label: 'DEF', base: baseDef, bonus: defBonus, total: finalStats.def ?? 0 }
     ];
 
-    // SECONDARY STATS
     const energyRegenBase = baseCharacterState?.Stats?.energyRegen ?? 0;
     const energyRegenTotal = finalStats.energyRegen ?? 0;
     const secondaryStats = ['energyRegen', 'critRate', 'critDmg', 'healingBonus'].map(statKey => {
@@ -76,12 +74,11 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
         };
     });
 
-    // ELEMENTAL & DAMAGE MODIFIERS
     const stats = [...mainStats, ...secondaryStats];
     ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
         const key = `${element}DmgBonus`;
         const base = baseCharacterState?.Stats?.[key] ?? 0;
-        const bonus = mergedBuffs?.[element] ?? 0;  // mergedBuffs carries the bonus part only
+        const bonus = mergedBuffs?.[element] ?? 0;
         const total = base + bonus;
 
         stats.push({
@@ -108,7 +105,6 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
         stats.push({ label, base, bonus, total });
     });
 
-    // ✅ FINAL STUDIO POLISHED DISPLAY
     const renderStatsGrid = group => (
         <div className="stats-grid">
             {group.map((stat, index) => {

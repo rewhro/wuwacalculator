@@ -92,7 +92,7 @@
     justify-content: flex-end;
     align-items: center;
     gap: 4px;
-    margin-left: auto; /* pushes it to the right */
+    margin-left: auto;
 }
 
 .rotation-item.locked {
@@ -165,10 +165,6 @@
     background: rgba(14, 18, 25, 0.82);
     border-color: rgba(68, 68, 68, 0.61);
     color: lightgray;
-}
-
-#left-pane.rotation-mode {
-    /*overflow-y: hidden !important;*/
 }
 
 .saved-rotation-list {
@@ -258,7 +254,6 @@
     border-color: #888;
 }
 
-/* 🌙 Dark mode support */
 .dark .sort-controls label {
     color: #ccc;
 }

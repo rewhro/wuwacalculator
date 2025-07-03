@@ -1,4 +1,3 @@
-// src/data/character-ui/1506.jsx
 import {formatDescription} from "../../utils/formatDescription.js";
 import React from "react";
 import {attributeColors} from "../../utils/attributeHelpers.js";

@@ -44,8 +44,6 @@ export function applyLupaLogic({
         mergedBuffs.__packHunt2 = true;
     }
 
-
-    // ✅ Skill type fixes
     if (name.includes('mid-air attack - firestrike dmg')) {
         skillMeta.skillType = 'heavy';
     } else if (['dance with the wolf dmg', 'dance with the wolf - climax dmg'].some(n => name.includes(n))) {
@@ -54,7 +52,6 @@ export function applyLupaLogic({
         skillMeta.skillType = 'skill';
     }
 
-    // ✅ Inherent 2 (enemyResShred), applied once
     const inherent2Stacks = characterState?.activeStates?.inherent2 ?? 0;
     const baseStacks = Math.min(inherent2Stacks * 3, 9);
     const inherent2 = baseStacks + (isTeamValid && baseStacks >= 3 ? 6 : 0);
@@ -64,7 +61,6 @@ export function applyLupaLogic({
         mergedBuffs.__lupaInherent2Applied = true;
     }
 
-    // Sequence 1: +25% Crit Rate
     if (isToggleActive(1) && isActiveSequence(1)) {
         if (!mergedBuffs.__lupSeq1) {
             mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 25;
@@ -74,7 +70,6 @@ export function applyLupaLogic({
         mergedBuffs.__lupSeq1 = false;
     }
 
-    // Sequence 2: +40% fusion
     const seq2Value = characterState?.toggles?.['2_value'] ?? 0;
     if (isActiveSequence(2) && seq2Value > 0) {
         if (!mergedBuffs.__lupSeq2) {
@@ -85,17 +80,14 @@ export function applyLupaLogic({
         mergedBuffs.__lupSeq2 = false;
     }
 
-    // sequence 3
     if (isActiveSequence(3) && name.includes('nowhere to run dmg')) {
         skillMeta.multiplier *= 2;
     }
 
-    // sequence 4
     if (isActiveSequence(4) && name.includes('dance with the wolf - climax dmg')) {
         skillMeta.multiplier *= 2.25;
     }
 
-    // sequence 5
     if (isToggleActive(5) && isActiveSequence(5)) {
         if (!mergedBuffs.__lupSeq3) {
             mergedBuffs.resonanceLiberation = (mergedBuffs.resonanceLiberation ?? 0) + 15;
@@ -105,7 +97,6 @@ export function applyLupaLogic({
         mergedBuffs.__lupSeq3 = false;
     }
 
-    // sequence 6
     if (isActiveSequence(6)) {
         const isTargetSkill =
             ['nowhere to run dmg', 'dance with the wolf - climax dmg'].some(n => name.includes(n)) ||

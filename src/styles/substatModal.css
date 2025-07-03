@@ -353,6 +353,6 @@
 
 select {
     appearance: none;
-    -webkit-appearance: none; /* For Safari */
-    -moz-appearance: none;    /* For Firefox */
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }

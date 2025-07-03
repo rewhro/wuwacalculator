@@ -89,23 +89,23 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
 }
 
 export const echoSetBuffs = {
-    1: { twoPiece: { glacio: 10 } },                   // Freezing Frost
-    2: { twoPiece: { fusion: 10 } },                   // Molten Rift
-    3: { twoPiece: { electro: 10 } },                  // Void Thunder
-    4: { twoPiece: { aero: 10 } },                     // Sierra Gale
-    5: { twoPiece: { spectro: 10 } },                  // Celestial Light
-    6: { twoPiece: { havoc: 10 } },                    // Sun-sinking Eclipse
-    7: { twoPiece: { healingBonus: 10 } },             // Rejuvenating Glow
-    8: { twoPiece: { energyRegen: 10 } },              // Moonlit Clouds
-    9: { twoPiece: { atkPercent: 10 }, fivePiece: {outroAtk: 60} },               // Lingering Tunes
-    10: { twoPiece: { resonanceSkill: 12 } },          // Frosty Resolve
-    11: { twoPiece: { spectro: 10 } },                  // Eternal Radiance
-    12: { twoPiece: { havoc: 10 } },                    // Midnight Veil
-    13: { twoPiece: { energyRegen: 10 }, fivePiece: { coord: 80 } },              // Empyrean Anthem
-    14: { twoPiece: { energyRegen: 10 }, fivePiece: { atkPercent: 10 } },              // Tidebreaking Courage
-    16: { twoPiece: { aero: 10 } },                     // Gusts of Welkin
-    17: { twoPiece: { aero: 10 } },                     // Windward Pilgrimage
-    18: { twoPiece: { fusion: 10 } }                    // Flaming Clawprint
+    1: { twoPiece: { glacio: 10 } },                                                // Freezing Frost
+    2: { twoPiece: { fusion: 10 } },                                                // Molten Rift
+    3: { twoPiece: { electro: 10 } },                                               // Void Thunder
+    4: { twoPiece: { aero: 10 } },                                                  // Sierra Gale
+    5: { twoPiece: { spectro: 10 } },                                               // Celestial Light
+    6: { twoPiece: { havoc: 10 } },                                                 // Sun-sinking Eclipse
+    7: { twoPiece: { healingBonus: 10 } },                                          // Rejuvenating Glow
+    8: { twoPiece: { energyRegen: 10 } },                                           // Moonlit Clouds
+    9: { twoPiece: { atkPercent: 10 }, fivePiece: {outroAtk: 60} },                 // Lingering Tunes
+    10: { twoPiece: { resonanceSkill: 12 } },                                       // Frosty Resolve
+    11: { twoPiece: { spectro: 10 } },                                              // Eternal Radiance
+    12: { twoPiece: { havoc: 10 } },                                                // Midnight Veil
+    13: { twoPiece: { energyRegen: 10 }, fivePiece: { coord: 80 } },                // Empyrean Anthem
+    14: { twoPiece: { energyRegen: 10 }, fivePiece: { atkPercent: 10 } },           // Tidebreaking Courage
+    16: { twoPiece: { aero: 10 } },                                                 // Gusts of Welkin
+    17: { twoPiece: { aero: 10 } },                                                 // Windward Pilgrimage
+    18: { twoPiece: { fusion: 10 } }                                                // Flaming Clawprint
 };
 
 
@@ -120,7 +120,6 @@ export function applyEchoSetBuffLogic({ mergedBuffs, equippedEchoes, activeChara
     };
     const element = elementMap?.[activeCharacter?.attribute];
 
-    // Count set IDs
     const setCounts = {};
     for (const echo of equippedEchoes) {
         const setId = Number(echo?.selectedSet);
@@ -128,7 +127,6 @@ export function applyEchoSetBuffLogic({ mergedBuffs, equippedEchoes, activeChara
         setCounts[setId] = (setCounts[setId] || 0) + 1;
     }
 
-    // Apply 2pc and 5pc buffs
     for (const [setIdStr, count] of Object.entries(setCounts)) {
         const setId = Number(setIdStr);
         const buffs = echoSetBuffs[setId];
@@ -241,7 +239,7 @@ export const mainEchoBuffs = {
     },
     '6000090': {
         always: { havoc: 12, basicAtk: 12 },
-        skillMetaModifier: (skillMeta, { characterState }) => {
+        skillMetaModifier: (skillMeta) => {
             if (skillMeta.name.includes('Nightmare: Crownless')) {
                 skillMeta.skillDmgBonus = (skillMeta.skillDmgBonus ?? 0) + 20;
             }
@@ -404,8 +402,6 @@ export const mainEchoBuffs = {
             return skillMeta;
         }
     },
-
-    // Add more Echo IDs here...
 };
 
 export function applyMainEchoBuffLogic({ equippedEchoes, mergedBuffs, characterState, activeCharacter, combatState, charId }) {
@@ -427,14 +423,12 @@ export function applyMainEchoBuffLogic({ equippedEchoes, mergedBuffs, characterS
 
     const { always, toggleable, stackable } = buffs;
 
-    // Always apply static buffs
     if (always) {
         for (const [stat, val] of Object.entries(always)) {
             mergedBuffs[stat] = (mergedBuffs[stat] ?? 0) + val;
         }
     }
 
-    // Conditionally apply toggleable buffs
     if (toggleable && activeStates?.mainEchoToggle && toggleable.buffs) {
         for (const [stat, val] of Object.entries(toggleable.buffs)) {
             if (stat === 'element') {

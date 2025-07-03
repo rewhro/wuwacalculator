@@ -1,4 +1,3 @@
-// src/data/character-ui/1506.jsx
 import {formatDescription} from "../../utils/formatDescription.js";
 import DropdownSelect from "../../components/DropdownSelect.jsx";
 import React from "react";
@@ -73,7 +72,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // Reset dropdown value if locked and currently active
                 if (locked && isCalligrapher && activeStates.inherent1 !== 0) {
                     toggleState('inherent1', 0);
                 }
@@ -126,7 +124,6 @@ export function ZhezhiSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === Sequence 6: dropdown input ===
     if (String(nodeKey) === '3') {
         const value = sequenceToggles['3_value'] ?? 0;
 
@@ -156,7 +153,6 @@ export function ZhezhiSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -170,20 +166,7 @@ export function ZhezhiSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColors }) {
-    const updateState = (key, value) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: value
-                }
-            }
-        }));
-    };
-
+export function buffUI({ activeStates, toggleState, attributeColors }) {
     return (
         <div className="echo-buffs">
             <div className="echo-buff">

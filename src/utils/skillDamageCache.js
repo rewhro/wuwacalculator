@@ -1,4 +1,3 @@
-// src/state/skillDamageCache.js
 let cachedSkillDamage = [];
 
 export function setSkillDamageCache(data) {

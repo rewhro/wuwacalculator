@@ -28,7 +28,6 @@ export function ResetCharacter ({
                                     defaultCustomBuffs,
                                     defaultTraceBuffs,
                                     defaultCombatState,
-                                    characterRuntimeStates,
                                     weapons,
                                     handleClose,
                                     isClosing,
@@ -36,21 +35,16 @@ export function ResetCharacter ({
     const handleReset = () => {
         if (!activeId) return;
 
-        const cached = characterRuntimeStates?.[activeId];
-
-        // 1. Clear from localStorage
         const runtime = JSON.parse(localStorage.getItem('characterRuntimeStates') || '{}');
         delete runtime[activeId];
         localStorage.setItem('characterRuntimeStates', JSON.stringify(runtime));
 
-        // 2. Clear from React state
         setCharacterRuntimeStates(prev => {
             const updated = { ...prev };
             delete updated[activeId];
             return updated;
         });
 
-        // 3. Reset all local React UI states
         setSliderValues(defaultSliderValues);
         setCustomBuffs(defaultCustomBuffs);
         setTraceNodeBuffs(defaultTraceBuffs);
@@ -91,7 +85,6 @@ export function ResetCharacter ({
             };
         });
 
-        // 5. Close modal
         handleClose();
     };
 

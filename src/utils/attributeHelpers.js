@@ -1,4 +1,3 @@
-// src/utils/attributeHelpers.js
 export const attributeColors = {
     glacio: 'rgb(62,189,227)',
     spectro: 'rgb(202,179,63)',

@@ -64,7 +64,6 @@ export function applyCartethyiaLogic({
         mergedBuffs.__divinity = true;
     }
 
-    // Sequence 2
     const seq1Value = (characterState?.toggles?.['1_value'] ?? 0) / 30;
     if (isActiveSequence(1) && seq1Value > 0) {
         if (!mergedBuffs.__cartethyiaSeq1) {
@@ -117,7 +116,6 @@ export function applyCartethyiaLogic({
     return { mergedBuffs, combatState, skillMeta };
 }
 
-// Manual healing skill declarations only
 export const cartethyiaMultipliers = {
     normalAttack: [
         {
@@ -129,18 +127,9 @@ export const cartethyiaMultipliers = {
 };
 
 export function cartBuffsLogic({
-                                      mergedBuffs, characterState, activeCharacter, combatState
+                                      mergedBuffs, characterState, combatState
                                   }) {
     const state = characterState?.activeStates ?? {};
-    const elementMap = {
-        1: 'glacio',
-        2: 'fusion',
-        3: 'electro',
-        4: 'aero',
-        5: 'spectro',
-        6: 'havoc'
-    };
-    const element = elementMap?.[activeCharacter?.attribute];
 
     if (state.wishes) {
         mergedBuffs.healingBonus = (mergedBuffs.healingBonus ?? 0) + 20;
@@ -155,7 +144,6 @@ export function cartBuffsLogic({
     if (state.blessing && (combatState.aeroErosion > 0 || combatState.spectroFrazzle > 0)) {
         mergedBuffs.elementDmgAmplify.aero = (mergedBuffs.elementDmgAmplify.aero ?? 0) + 17.5;
     }
-
 
     return { mergedBuffs };
 }

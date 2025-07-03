@@ -2,16 +2,9 @@ import React from "react";
 import {formatDescription} from "../../utils/formatDescription.js";
 import {highlightKeywordsInText} from "../../constants/echoSetData.jsx";
 
-export default function YinlinUI({ activeStates, toggleState }) {
-    const hasToggles = false; // set to `false` if no actual toggles for this character yet
-
-    if (!hasToggles) return null; // prevents empty box rendering
-
-    return (
-        <div className="status-toggles">
-            {/* Your checkboxes and toggle logic here */}
-        </div>
-    );
+export default function YinlinUI() {
+    const hasToggles = false;
+    if (!hasToggles) return null;
 }
 
 export function CustomInherentSkills({
@@ -56,7 +49,6 @@ export function CustomInherentSkills({
                 const unlockLevel = unlockLevels[index] ?? 1;
                 const locked = charLevel < unlockLevel;
 
-                // ✅ Turn off toggle if locked and still active
                 if (locked) {
                     if (immersion && activeStates.inherent1) {
                         toggleState('inherent1');

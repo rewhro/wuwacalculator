@@ -1,6 +1,3 @@
-// src/data/weapon-ui/index.js
-import {updateSkillMeta} from "./21040036.jsx";
-
 const modules = import.meta.glob('./*.jsx', { eager: true });
 
 const weaponUIMap = {};

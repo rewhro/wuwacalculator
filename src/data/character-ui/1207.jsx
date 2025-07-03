@@ -81,7 +81,6 @@ export default function LupaUI({ characterRuntimeStates, setCharacterRuntimeStat
 }
 
 
-// If you also want to support inherent skill rendering:
 export function CustomInherentSkills({
                                          character,
                                          currentSliderColor,
@@ -92,19 +91,6 @@ export function CustomInherentSkills({
     const charId = character?.Id ?? character?.id ?? character?.link;
     const charLevel = characterRuntimeStates?.[charId]?.CharacterLevel ?? 1;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};
-
-    const toggleState = (key) => {
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                activeStates: {
-                    ...(prev[charId]?.activeStates ?? {}),
-                    [key]: !(prev[charId]?.activeStates?.[key] ?? false)
-                }
-            }
-        }));
-    };
 
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
@@ -122,8 +108,6 @@ export function CustomInherentSkills({
     const skills = Object.values(character?.raw?.SkillTrees ?? {}).filter(
         node => node.Skill?.Type === "Inherent Skill"
     );
-
-    const unlockLevels = [50, 70];
 
     return (
         <div className="inherent-skills">
@@ -184,7 +168,6 @@ export function CustomInherentSkills({
 }
 
 
-// If you have sequence toggles:
 export function LupaSequenceToggles({
                                           nodeKey,
                                           sequenceToggles,
@@ -199,7 +182,6 @@ export function LupaSequenceToggles({
     const requiredLevel = Number(nodeKey);
     const isDisabled = currentSequenceLevel < requiredLevel;
 
-    // === Sequence 6: dropdown input ===
     if (String(nodeKey) === '2') {
         const value = sequenceToggles['2_value'] ?? 0;
 
@@ -229,7 +211,6 @@ export function LupaSequenceToggles({
         );
     }
 
-    // === All other sequences: checkbox ===
     return (
         <label className="modern-checkbox" style={{ opacity: isDisabled ? 0.5 : 1 }}>
             <input
@@ -243,7 +224,7 @@ export function LupaSequenceToggles({
     );
 }
 
-export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, attributeColor, characterRuntimeStates }) {
+export function buffUI({ activeStates, toggleState, charId, setCharacterRuntimeStates, characterRuntimeStates }) {
     const updateState = (key, value) => {
         setCharacterRuntimeStates(prev => ({
             ...prev,
