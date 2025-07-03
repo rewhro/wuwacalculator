@@ -37,6 +37,14 @@ const imageToCanvasContext = (image, width, height) => {
     canvas.height = height;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(image, 0, 0, width, height);
+
+    const imgData = ctx.getImageData(0, 0, width, height);
+    const data = imgData.data;
+    for (let i = 0; i < data.length; i += 4) {
+        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        data[i] = data[i + 1] = data[i + 2] = avg;
+    }
+    ctx.putImageData(imgData, 0, 0);
     return ctx;
 };
 
@@ -75,7 +83,7 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
     const handleImageFile = (file) => {
         (async () => {
             await preloadReferenceImages(echoImageMap, { width: 192, height: 182 }, echoImageCache);
-            await preloadReferenceImages(setNameImageMap, { width: 56, height: 56 }, setIconImageCache);
+            await preloadReferenceImages(setNameImageMap, { width: 48, height: 48 }, setIconImageCache);
         })();
         setErrorImageSize(false);
         const img = new Image();
@@ -178,11 +186,16 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
     const compareImageData = (ctx1, ctx2, width, height) => {
         const d1 = ctx1.getImageData(0, 0, width, height).data;
         const d2 = ctx2.getImageData(0, 0, width, height).data;
-        let diff = 0;
+
+        let sumSq = 0;
         for (let i = 0; i < d1.length; i += 4) {
-            diff += Math.abs(d1[i] - d2[i]) + Math.abs(d1[i + 1] - d2[i + 1]) + Math.abs(d1[i + 2] - d2[i + 2]);
+            for (let j = 0; j < 3; j++) {
+                const diff = d1[i + j] - d2[i + j];
+                sumSq += diff * diff;
+            }
         }
-        return diff;
+
+        return sumSq / (width * height * 3);
     };
 
     const matchImageRegion = async (canvas, region, referenceMap, size, cache = null) => {
@@ -228,8 +241,18 @@ const EchoParser = ({ onEchoesParsed, charId, setCharacterRuntimeStates }) => {
         return coords;
     };
 
-    const echoImageRegion = (index) => ({ x: 22 + index * 374, y: 650, width: 192, height: 182 });
-    const setIconRegion = (index) => ({ x: 264 + index * 374, y: 660, width: 56, height: 56 });
+    const echoImageRegion = (index) => ({
+        x: 22 + index * 374,
+        y: 650,
+        width: 192,
+        height: 182
+    });
+    const setIconRegion = (index) => ({
+        x: 267 + index * 374,
+        y: 663,
+        width: 48,
+        height: 48
+    });
 
     const [showRulesModal, setShowRulesModal] = useState(false);
     const [isClosing, setIsClosing] = useState(false);

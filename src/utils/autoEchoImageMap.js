@@ -1,5 +1,5 @@
 import { echoes } from '../json-data-scripts/getEchoes.js';
-import { setIconMap } from '../constants/echoSetData.jsx';
+import echoSets, { setIconMap } from '../constants/echoSetData.jsx';
 
 export const echoImageMap = {};
 for (const echo of echoes) {
@@ -8,15 +8,16 @@ for (const echo of echoes) {
 }
 
 export const setNameImageMap = {};
-for (const [id, path] of Object.entries(setIconMap)) {
-    const filename = path.split('/').pop().replace(/\.[^.]+$/, '');
-    const name = filename
-        .replace(/[-_]/g, ' ')
-        .replace(/([a-z])([A-Z])/g, '$1 $2')
-        .replace(/\b\w/g, char => char.toUpperCase())
-        .trim();
+export const setIdFromName = {};
+for (const set of echoSets) {
+    const id = set.id;
+    const name = set.name;
+    const path = setIconMap[id];
 
-    setNameImageMap[name] = path;
+    if (name && path) {
+        setNameImageMap[name] = path;
+        setIdFromName[name] = id;
+    }
 }
 
 export default { echoImageMap, setNameImageMap };
