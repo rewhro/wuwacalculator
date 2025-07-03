@@ -664,13 +664,13 @@ export default function Calculator() {
             .map(([key, val]) => [val.Id, val.Rarity])
     );
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1070);
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
     const [isOverlayClosing, setIsOverlayClosing] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 700);
+            setIsMobile(window.innerWidth < 1070);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -911,6 +911,22 @@ export default function Calculator() {
                             </button>
                         </div>
                         <div className="sidebar-footer">
+                            <a
+                                href="https://discord.gg/wNaauhE4uH"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="sidebar-button discord"
+                            >
+                                <div className="icon-slot">
+                                    <img src="/assets/icons/discord.svg" alt="Discord" className="discord-icon" style={{ maxWidth:'24px', maxHeight:'24px' }} />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">
+                                        Discord
+                                    </span>
+                                </div>
+                            </a>
+
                             <ResetButton onClick={() => setResetModalOpen(true)} />
                         </div>
                     </div>

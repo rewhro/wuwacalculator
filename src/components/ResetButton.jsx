@@ -4,7 +4,7 @@ import {mapExtraStatToCombat} from "./WeaponPane.jsx";
 
 export default function ResetButton({ onClick }) {
     return (
-        <button className="sidebar-button" onClick={onClick}>
+        <button className="sidebar-button reset" onClick={onClick}>
             <div className="icon-slot">
                 <RotateCcw size={24} className="reset-icon" />
             </div>

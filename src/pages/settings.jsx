@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {Sun, Moon, Sparkle, Info, Settings, History} from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
 import ResetSettingsButton from '../components/ResetSettingsButton.jsx';
-import { jwtDecode } from 'jwt-decode';
 import {googleLogout, useGoogleLogin} from '@react-oauth/google';
 import {getSyncData, restoreFromDrive, uploadToDrive} from "../utils/driveSync.js";
 
@@ -266,7 +265,24 @@ export default function Setting() {
                             </div>
                         </button>
                     </div>
-                    <div className="sidebar-footer"></div>
+                    <div className="sidebar-footer">
+                        <a
+                            href="https://discord.gg/wNaauhE4uH"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="sidebar-button discord"
+                            title="Join our Discord"
+                        >
+                            <div className="icon-slot">
+                                <img src="/assets/icons/discord.svg" alt="Discord" className="discord-icon" style={{ maxWidth:'24px', maxHeight:'24px' }} />
+                            </div>
+                            <div className="label-slot">
+                                <span className="label-text">
+                                    Discord
+                                </span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
 
                 {isOverlayVisible && isMobile && (

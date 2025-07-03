@@ -154,7 +154,7 @@ export default function InfoPage() {
 
                     <div className="info-section">
                         <h3>How to contact MOI?</h3>
-                        <p>Join the <a href="https://discord.gg/nPyA9Rwa" target="_blank" rel="noopener noreferrer">discord</a> bro.</p>
+                        <p>Join the <a href="https://discord.gg/wNaauhE4uH" target="_blank" rel="noopener noreferrer">discord</a> bro.</p>
                     </div>
                 </div>
             </div>

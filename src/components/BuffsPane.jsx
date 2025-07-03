@@ -127,6 +127,7 @@ export default function BuffsPane({
                                     setActiveCharacterSlot(index);
                                     setCharacterMenuOpen(true);
                                 }}
+                                style={{ cursor: !isDisabled ? 'pointer' : 'not-allowed' }}
                             >
                                 {character?.icon ? (
                                     <img

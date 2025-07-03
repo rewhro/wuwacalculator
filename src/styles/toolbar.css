@@ -355,7 +355,7 @@
     transform: translateX(-0.625rem);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1070px) {
     .sidebar {
         position: absolute;
         top: 3.75rem;
@@ -402,4 +402,26 @@
     padding-left: 3rem;
     text-align: center;
     margin: 0;
+}
+
+.sidebar-button.discord:hover {
+    color: #5865f2;
+}
+
+.sidebar-button.reset:hover {
+    color: #e53935;
+}
+
+.label-text {
+    transition: ease all 0.3s !important;
+    font-weight: bold;
+}
+
+.discord-icon {
+    transition: ease all 0.3s;
+}
+
+.sidebar-button:hover .discord-icon {
+    transform: scale(1.15) rotate(6deg);
+    filter: drop-shadow(0 0 4px rgba(88, 101, 242, 0.6));
 }
