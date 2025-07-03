@@ -1078,6 +1078,7 @@ export default function Calculator() {
                     combatState={combatState}
                     handleClose={handleClose}
                     isClosing={isClosing}
+                    setTeam={setTeam}
                 />
             )}
             <ChangelogModal

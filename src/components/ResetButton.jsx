@@ -31,6 +31,7 @@ export function ResetCharacter ({
                                     weapons,
                                     handleClose,
                                     isClosing,
+                                    setTeam,
                                 }) {
     const handleReset = () => {
         if (!activeId) return;
@@ -50,6 +51,7 @@ export function ResetCharacter ({
         setTraceNodeBuffs(defaultTraceBuffs);
         setCharacterLevel(1);
         setRotationEntries([]);
+        setTeam([activeId ?? null, null, null]);
 
         setCombatState(prev => {
             const weaponId = prev.weaponId;
