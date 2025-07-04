@@ -32,7 +32,7 @@ async function fetchAllEchoes() {
     }
 
     fs.writeFileSync(
-        path.join(__dirname, 'echoes.json'),
+        path.join(__dirname, '../data/echoes.json'),
         JSON.stringify(allEchoes, null, 2)
     );
     console.log('All echoes saved to echoes.json');

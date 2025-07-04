@@ -77,13 +77,11 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
     const voidElectro = Math.min(voidStack * 15, 30);
     mergedBuffs.electro = (mergedBuffs.electro ?? 0) + voidElectro;
 
-    const dreamOfTheLostStacks = effect.dreamOfTheLost3pc ?? 0;
-    let dreamOfTheLostCritRate = Math.min(dreamOfTheLostStacks * 3, 12);
-    if (dreamOfTheLostCritRate >= 12) {
-        dreamOfTheLostCritRate = 20;
-        mergedBuffs.havoc = (mergedBuffs.havoc ?? 0) + 15;
+    if (effect.dreamOfTheLost3pc) {
+        mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 20;
+        mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 35;
     }
-    mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + dreamOfTheLostCritRate;
+    console.log(mergedBuffs);
 
     return mergedBuffs;
 }

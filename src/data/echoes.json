@@ -2738,6 +2738,22 @@
             ]
           }
         }
+      },
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
+            "Param": [
+              "0",
+              "20%",
+              "35%"
+            ]
+          }
+        }
       }
     },
     "Rarity": [
@@ -3976,6 +3992,22 @@
               "15%",
               "250%",
               "30%"
+            ]
+          }
+        }
+      },
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
+            "Param": [
+              "0",
+              "20%",
+              "35%"
             ]
           }
         }
@@ -7430,35 +7462,35 @@
     "Place": "",
     "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34016_UI.T_IconMonsterHead_34016_UI",
     "Skill": {
-      "Desc": "Transform into Nightmare: Hecate. Leap up and smash down, dealing 2 stages of Havoc DMG equal to {0} of ATK.\nThe Resonator with the Echo equipped in the main slot gains {1} Havoc DMG Bonus and {2} Echo Skill DMG Bonus.\nCD: {3}s",
-      "SimpleDesc": "Transform into Nightmare: Hecate. Leap up and smash down to deliver 2 stages of Havoc DMG.\nThe Resonator with the Echo equipped in the main slot gains Havoc DMG Bonus and Echo Skill DMG Bonus.",
+      "Desc": "Transform into Nightmare: Hecate. Leap up and smash down, dealing 3 stages of damage, each dealing Havoc DMG equal to {0} of her ATK.\nThe Resonator with the Echo equipped in the main slot gains {1} Havoc DMG Bonus and {2} Echo Skill DMG Bonus.\nCD: {3}s",
+      "SimpleDesc": "Transform into Nightmare: Hecate. Leap up and smash down to deliver 3 stages of Havoc DMG.\nThe Resonator with the Echo equipped in the main slot gains Havoc DMG Bonus and Echo Skill DMG Bonus.",
       "Param": [
         [
-          "124.50%",
+          "84.66%",
           "12.00%",
           "20.00%",
           "25"
         ],
         [
-          "149.40%",
+          "101.59%",
           "12.00%",
           "20.00%",
           "25"
         ],
         [
-          "174.30%",
+          "118.52%",
           "12.00%",
           "20.00%",
           "25"
         ],
         [
-          "199.20%",
+          "135.46%",
           "12.00%",
           "20.00%",
           "25"
         ],
         [
-          "224.10%",
+          "152.39%",
           "12.00%",
           "20.00%",
           "25"
@@ -7474,12 +7506,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
             "Param": [
-              "3%",
-              "4",
-              "8%",
-              "15%"
+              "0",
+              "20%",
+              "35%"
             ]
           }
         }
@@ -7508,47 +7539,51 @@
       "SimpleDesc": "Summon the Sanctum of the Deep to bind any enemy within. The status is removed when the enemy is hit or when the Sanctum of the Deep ends.\nThe Resonator with the Echo equipped in the main slot gains Aero DMG Bonus and Echo Skill DMG Bonus.",
       "Param": [
         [
-          "5",
+          "152.00%",
+          "12.00%",
+          "12.00%",
           "20"
         ],
         [
-          "5",
+          "182.40%",
+          "12.00%",
+          "12.00%",
           "20"
         ],
         [
-          "5",
+          "212.80%",
+          "12.00%",
+          "12.00%",
           "20"
         ],
         [
-          "5",
+          "243.20%",
+          "12.00%",
+          "12.00%",
           "20"
         ],
         [
-          "5",
+          "273.60%",
+          "12.00%",
+          "12.00%",
           "20"
         ]
       ],
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_Mstskil_34015_UI.T_Mstskil_34015_UI"
     },
     "Group": {
-      "17": {
-        "Id": 17,
-        "Name": "Windward Pilgrimage",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriWindErrorA.T_IconElementAttriWindErrorA",
+      "19": {
+        "Id": 19,
+        "Name": "Dream of the Lost",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriDarkVision.T_IconElementAttriDarkVision",
         "Color": "FFFFFF00",
         "Set": {
-          "2": {
-            "Desc": "Aero DMG + {0}",
+          "3": {
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
             "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "Hitting a target with Aero Erosion increases Crit. Rate by {0} and grants {1} Aero DMG Bonus, lasting for {2}s.",
-            "Param": [
-              "10%",
-              "30%",
-              "10"
+              "0",
+              "20%",
+              "35%"
             ]
           }
         }
@@ -7607,12 +7642,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
             "Param": [
-              "3%",
-              "4",
-              "8%",
-              "15%"
+              "0",
+              "20%",
+              "35%"
             ]
           }
         }
@@ -7681,12 +7715,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
             "Param": [
-              "3%",
-              "4",
-              "8%",
-              "15%"
+              "0",
+              "20%",
+              "35%"
             ]
           }
         }
@@ -7745,12 +7778,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Gain {0} Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to {1} stacks. At max stacks, gain additional {2} Crit. Rate increase and {3} Havoc DMG Bonus increase.",
+            "Desc": "Holding {0} Resonance Energy increases Crit. Rate by {1} and grants {2} Echo Skill DMG Bonus.",
             "Param": [
-              "3%",
-              "4",
-              "8%",
-              "15%"
+              "0",
+              "20%",
+              "35%"
             ]
           }
         }

@@ -181,7 +181,7 @@ const echoSets = [
     {
         id: 19,
         name: 'Dream of the Lost',
-        threePiece: 'Gain 3% Crit. Rate increase each time the Resonators in the team cast a new type of Echo Skill, up to 4 stacks. At max stacks, gain additional 8% Crit. Rate increase and 15% Havoc DMG Bonus increase.'
+        threePiece: 'Holding 0 Resonance Energy increases Crit. Rate by 20% and grants 35% Echo Skill DMG Bonus.'
     }
 ];
 
