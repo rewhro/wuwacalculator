@@ -104,7 +104,7 @@
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    transition: ease all 0.3s;
 }
 
 .clear-button:hover {
@@ -122,16 +122,16 @@
         background-color: #2a2a2a;
         border-color: #444;
         box-shadow: none;
-    }
+}
 
-    .dark .clear-button:hover {
+.dark .clear-button:hover {
         border-color: #555;
         background-color: #333;
     }
 
-    .dark .clear-button:focus {
+.dark .clear-button:focus {
         box-shadow: 0 0 0 2px #555;
-    }
+}
 
 .clear-button:active {
     transform: scale(0.97);

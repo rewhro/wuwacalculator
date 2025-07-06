@@ -40,7 +40,7 @@ export default function OverviewDetailPane({
         ? `/assets/weapon-icons/${weaponId}.webp`
         : '/assets/weapon-icons/default.webp';
     const getImageSrc = (icon) => imageCache[icon]?.src || icon;
-    const finalStats = runtime?.FinalStats ?? {};
+    const finalStats = runtime?.FinalStats ?? runtime.Stats ?? {};
     const statGroups = [
         [
             { label: 'ATK', key: 'atk' },
@@ -168,41 +168,28 @@ export default function OverviewDetailPane({
                     <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(25rem, 1fr))' }}>
                         <div
                             className="inherent-skills-box weapon-container"
-                            style={{ margin: 'unset', minHeight: '7rem' }}
                             onClick={() => switchLeftPane('weapon')}
                         >
                             <div className="gear-content">
-                                <div
-                                    style=
-                                        {{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            gap: '1rem',
-                                        }}
-                                >
-                                    <img
-                                        src={activeWeaponIconPath}
-                                        alt="Weapon"
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="gear-icon overview-weapon"
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = '/assets/weapon-icons/default.webp';
-                                            e.currentTarget.classList.add('fallback-icon');
-                                        }}
-                                    />
-                                    <span className="gear-level">Lv.{weapon.weaponLevel ?? 1} - R{weapon.weaponRank ?? 1}</span>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <img
+                                    src={activeWeaponIconPath}
+                                    alt="Weapon"
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="gear-icon overview-weapon"
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = '/assets/weapon-icons/default.webp';
+                                        e.currentTarget.classList.add('fallback-icon');
+                                    }}
+                                />
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <div className="gear-title highlight" style={{ display: 'flex', alignSelf: 'flex-start' }}>
                                         {weaponDetail.Name || 'No Weapon'}
                                     </div>
                                     <span className="gear-desc">
-                                {highlightKeywordsInText(formatWeaponEffect(weapon), keywords)}
-                            </span>
+                                        {highlightKeywordsInText(formatWeaponEffect(weapon), keywords)}
+                                    </span>
                                 </div>
                             </div>
                             {weapon.weaponStat && (
@@ -214,24 +201,13 @@ export default function OverviewDetailPane({
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '8px',
-                                            justifySelf: 'flex-end',
+                                            justifyContent: 'right',
                                             opacity: '0.6'
                                         }}
                                 >
-                                    <div
-                                        style={{
-                                            width: 20,
-                                            height: 20,
-                                            backgroundColor: '#999',
-                                            WebkitMaskImage: `url(${statIconMap[weapon.weaponStat.Name.toLowerCase()] ?? '/assets/icons/default.png'})`,
-                                            maskImage: `url(${statIconMap[weapon.weaponStat.Name.toLowerCase()] ?? '/assets/icons/default.png'})`,
-                                            WebkitMaskRepeat: 'no-repeat',
-                                            maskRepeat: 'no-repeat',
-                                            WebkitMaskSize: 'contain',
-                                            maskSize: 'contain'
-                                        }}
-                                    />
+                                    <span>Lv.{weapon.weaponLevel ?? 1} - R{weapon.weaponRank ?? 1}</span> |
                                     <span>{formatStatValue(weapon.weaponStat)}</span>
+                                    <span>ATK: {weapon.weaponBaseAtk}</span>
                                 </div>
                             )}
                         </div>
@@ -243,10 +219,10 @@ export default function OverviewDetailPane({
                             <div className="overview-teammates">
                                 <span className="character-level">Teammates</span>
                                 <div className="icon-body">
-                                    {runtime.Team?.map((charId, index) => {
-                                        const isDisabled = index === 0;
+                                    {[1, 2].map(index => {
+                                        const charId = runtime.Team?.[index];
                                         const character = characters.find(c => String(c.link) === String(charId));
-                                        if (isDisabled) return null;
+
                                         return (
                                             <div key={charId ?? index} className="team-slot-wrapper">
                                                 {character?.icon ? (
@@ -262,35 +238,76 @@ export default function OverviewDetailPane({
                                                         loading="lazy"
                                                     />
                                                 ) : (
-                                                    <div className="team-icon empty-slot" />
+                                                    <div className="team-icon empty-slot overview" />
                                                 )}
-                                                <div className="character-name highlight">{character?.displayName ?? ''}</div>
+                                                <div className="character-name highlight">
+                                                    {character?.displayName ?? ''}
+                                                </div>
                                             </div>
                                         );
                                     })}
                                 </div>
                             </div>
                             <div className="overview-buffs-container">
-                                <span className="character-level">Weapons</span>
-                                <div>
-                                    {buffWeapons.length === 0 ? (
-                                        <div className="overview-buff-placeholder">hmm...</div>
-                                    ) : (
-                                        buffWeapons.map(({ id, value }) => {
-                                            const weaponData = weaponMap[id];
-                                            if (!weaponData) return null;
+                                <div className="overview-buffs-container-item">
+                                    <span className="character-level">Weapons</span>
+                                    <div>
+                                        {buffWeapons.length === 0 ? (
+                                            <div className="overview-buff-placeholder">hmm...</div>
+                                        ) : (
+                                            buffWeapons.map(({ id, value }) => {
+                                                const weaponData = weaponMap[id];
+                                                if (!weaponData) return null;
 
-                                            return (
+                                                return (
+                                                    <div key={id}>
+                                                        <div className="echo-buff-header overview-buffs">
+                                                            <img
+                                                                src={`/assets/weapon-icons/${id}.webp`}
+                                                                alt={weaponData.name}
+                                                                className="echo-buff-icon overview-weapon mini"
+                                                                loading="lazy"
+                                                                onError={(e) => {
+                                                                    e.target.onerror = null;
+                                                                    e.currentTarget.src = '/assets/weapon-icons/default.webp';
+                                                                    e.currentTarget.classList.add('fallback-icon');
+                                                                }}
+                                                            />
+                                                            <div className="character-name"
+                                                                 style={{
+                                                                     margin: 'unset',
+                                                                     maxWidth: '65%',
+                                                                     fontSize: '0.85rem',
+                                                                     opacity: '0.7',
+                                                                     fontWeight: 'bold'
+                                                                 }}>
+                                                                R{value} {weaponData.name}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="overview-buffs-container-item">
+                                    <span className="character-level">Set Buffs</span>
+                                    <div>
+                                        {activeEchoes.length === 0 ? (
+                                            <div className="overview-buff-placeholder">hmm...</div>
+                                        ) : (
+                                            activeEchoes.map(({ id, name, icon }) => (
                                                 <div key={id}>
                                                     <div className="echo-buff-header overview-buffs">
                                                         <img
-                                                            src={`/assets/weapon-icons/${id}.webp`}
-                                                            alt={weaponData.name}
+                                                            src={icon}
+                                                            alt={name}
                                                             className="echo-buff-icon overview-weapon mini"
                                                             loading="lazy"
                                                             onError={(e) => {
                                                                 e.target.onerror = null;
-                                                                e.currentTarget.src = '/assets/weapon-icons/default.webp';
+                                                                e.currentTarget.src = '/assets/echoes/default.webp';
                                                                 e.currentTarget.classList.add('fallback-icon');
                                                             }}
                                                         />
@@ -302,48 +319,13 @@ export default function OverviewDetailPane({
                                                                  opacity: '0.7',
                                                                  fontWeight: 'bold'
                                                              }}>
-                                                            R{value} {weaponData.name}
+                                                            {name}
                                                         </div>
                                                     </div>
                                                 </div>
-                                            );
-                                        })
-                                    )}
-                                </div>
-
-                                <span className="character-level">Set Buffs</span>
-                                <div>
-                                    {activeEchoes.length === 0 ? (
-                                        <div className="overview-buff-placeholder">hmm...</div>
-                                    ) : (
-                                        activeEchoes.map(({ id, name, icon }) => (
-                                            <div key={id}>
-                                                <div className="echo-buff-header overview-buffs">
-                                                    <img
-                                                        src={icon}
-                                                        alt={name}
-                                                        className="echo-buff-icon overview-weapon mini"
-                                                        loading="lazy"
-                                                        onError={(e) => {
-                                                            e.target.onerror = null;
-                                                            e.currentTarget.src = '/assets/echoes/default.webp';
-                                                            e.currentTarget.classList.add('fallback-icon');
-                                                        }}
-                                                    />
-                                                    <div className="character-name"
-                                                         style={{
-                                                             margin: 'unset',
-                                                             maxWidth: '65%',
-                                                             fontSize: '0.85rem',
-                                                             opacity: '0.7',
-                                                             fontWeight: 'bold'
-                                                         }}>
-                                                        {name}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
+                                            ))
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -38,6 +38,15 @@
     min-height: 240px;
 }
 
+.weapon-container {
+    display: flex;
+    flex-direction: column;
+    margin: unset;
+    min-height: 7rem;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
 .character-portrait-content:hover,
 .inherent-skills-box.weapon-container:hover,
 .overview-teammates-box:hover,
@@ -61,8 +70,8 @@
 
 .gear-icon {
     border-radius: 50%;
-    width: 64px;
-    height: 64px;
+    width: 4rem;
+    height: 4rem;
     object-fit: contain;
     margin: 0.5rem 0;
 }
@@ -81,7 +90,7 @@
 }
 
 .dark-alt .header-icon.overview,
-.dark-alt .gear-icon.overview-weapon.overview-teammates {
+.dark-alt .gear-icon.overview-weapon {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 0%, black 100%);
     border: 0.01rem solid rgba(255, 255, 255, 0.1);
 }
@@ -90,10 +99,6 @@
 .dark .gear-icon.overview-weapon {
     background: linear-gradient(to bottom, rgba(31, 41, 55, 0.44)  0%, rgba(0, 0, 0, 0.18) 100%);
     border: 0.01rem solid rgba(255, 255, 255, 0.1);
-}
-
-.header-icon.overview {
-    border: 0.01rem solid transparent;
 }
 
 .overview-weapon.mini {
@@ -168,11 +173,9 @@
 
 .echo-slot-cost-badge.overview {
     font-size: 0.75rem;
-    background-color: rgba(0, 0, 0, 0.07);
     border-radius: 50%;
     height: 1.5rem;
     width: 1.5rem;
-    color: #222;
 }
 
 .echo-stats-preview {
@@ -196,9 +199,10 @@
 }
 
 .gear-content {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    height: 100%;
     align-items: center;
+    grid-template-columns: minmax(100px, 20%) 1fr;
     gap: 1rem;
 }
 
@@ -268,12 +272,6 @@
     border-radius: 0.75rem;
 }
 
-.dark .echo-slot-cost-badge.overview,
-.dark-alt .echo-slot-cost-badge.overview {
-    color: #aaa;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
 .overview-teammates {
     display: flex;
     flex-direction: column;
@@ -290,11 +288,13 @@
 }
 
 .overview-buffs-container {
+    display: grid;
+    grid-template-rows: auto;
+}
+
+.overview-buffs-container-item {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    gap: 0.2rem;
 }
 
 .overview-buff-placeholder {
@@ -302,4 +302,13 @@
     font-style: italic;
     opacity: 0.4;
     padding-left: 0.5rem;
+}
+
+.team-icon.empty-slot.overview {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .team-icon.empty-slot.overview,
+.dark-alt .team-icon.empty-slot.overview {
+    background-color: rgba(255, 255, 255, 0.1);
 }
