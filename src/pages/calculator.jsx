@@ -20,7 +20,7 @@ import { usePersistentState } from '../hooks/usePersistentState';
 import useDarkMode from '../hooks/useDarkMode';
 import {getBuffsLogic, getCharacterOverride} from '../data/character-behaviour';
 import ChangelogModal from '../components/ChangelogModal';
-import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle } from 'lucide-react';
+import { Settings, HelpCircle, History, Moon, Sun, Info, Sparkle, UserRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { fetchWeapons } from '../json-data-scripts/fetchWeapons';
 import { getWeaponOverride } from '../data/weapon-behaviour';
@@ -33,9 +33,11 @@ import {applyEchoSetBuffLogic, applyMainEchoBuffLogic, applySetEffect} from "../
 import {getEchoStatsFromEquippedEchoes, statIconMap} from "../utils/echoHelper.js";
 import { useLayoutEffect } from 'react';
 import {getSkillDamageCache} from "../utils/skillDamageCache.js";
+import CharacterOverviewPane from "../components/CharacterOverview.jsx";
 
 export default function Calculator() {
-    loadBase();
+    const [characters, setCharacters] = useState([]);
+    loadBase( characters );
     const navigate = useNavigate();
     const LATEST_CHANGELOG_VERSION = '2025-06-27 18:03';
     const [showChangelog, setShowChangelog] = useState(false);
@@ -59,7 +61,6 @@ export default function Calculator() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [skillsModalOpen, setSkillsModalOpen] = useState(false);
     const [activeSkillTab, setActiveSkillTab] = useState('normalAttack');
-    const [characters, setCharacters] = useState([]);
     const [activeCharacter, setActiveCharacter] = useState(null);
     const [baseCharacterState, setBaseCharacterState] = useState(null);
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
@@ -84,6 +85,7 @@ export default function Calculator() {
     const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
     const [showSubHits, setShowSubHits] = usePersistentState('showSubHits', false);
     const splitInstance = useRef(null);
+    const [showCharacterOverview, setShowCharacterOverview] = usePersistentState('showCharacterOverview',false);
 
     useEffect(() => {
         Promise.all([fetchCharacters(), fetchWeapons()]).then(([charData, weaponData]) => {
@@ -228,15 +230,24 @@ export default function Calculator() {
     }, [menuOpen]);
 
     useEffect(() => {
-        document.querySelectorAll('.gutter').forEach(gutter => gutter.remove());
-        splitInstance.current = Split(['#left-pane', '#right-pane'], {
-            sizes: [50, 50],
-            gutterSize: 1
-        });
-        return () => {
-            document.querySelectorAll('.gutter').forEach(gutter => gutter.remove());
-        };
-    }, []);
+        if (!showCharacterOverview) {
+            const setupSplit = () => {
+                const left = document.querySelector('#left-pane');
+                const right = document.querySelector('#right-pane');
+
+                if (left && right) {
+                    document.querySelectorAll('.gutter').forEach(gutter => gutter.remove());
+
+                    splitInstance.current = Split(['#left-pane', '#right-pane'], {
+                        sizes: [50, 50],
+                        gutterSize: 1
+                    });
+                }
+            };
+
+            requestAnimationFrame(setupSplit);
+        }
+    }, [showCharacterOverview]);
 
     useLayoutEffect(() => {
         const handleResize = () => {
@@ -259,7 +270,7 @@ export default function Calculator() {
         window.addEventListener('resize', handleResize);
         handleResize();
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [showCharacterOverview]);
 
     useEffect(() => {
         if (!charId) return;
@@ -538,30 +549,40 @@ export default function Calculator() {
     mergedBuffs.basicAtk = mergedBuffs.basicAtk ?? 0;
     mergedBuffs.skillAtk = mergedBuffs.resonanceSkill ?? 0;
     mergedBuffs.ultimateAtk = mergedBuffs.resonanceLiberation ?? 0;
+    let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
 
     useEffect(() => {
         if (!activeCharacter) return;
 
         const charId = activeCharacter.Id ?? activeCharacter.id ?? activeCharacter.link;
-        setCharacterRuntimeStates(prev => ({
-            ...prev,
-            [charId]: {
-                ...(prev[charId] ?? {}),
-                Name: activeCharacter.displayName,
-                Id: charId,
-                Attribute: activeCharacter.attribute,
-                WeaponType: activeCharacter.weaponType ?? 0,
-                Stats: baseCharacterState?.Stats ?? {},
-                CharacterLevel: characterLevel,
-                SkillLevels: sliderValues,
-                TraceNodeBuffs: traceNodeBuffs,
-                CustomBuffs: customBuffs,
-                CombatState: combatState,
-            }
-        }));
-    }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState]);
 
-    let finalStats = getFinalStats(activeCharacter, baseCharacterState, characterLevel, mergedBuffs, combatState);
+        setCharacterRuntimeStates(prev => {
+            const prevStats = prev[charId]?.FinalStats;
+            const same =
+                JSON.stringify(prevStats) === JSON.stringify(finalStats);
+
+            if (same) return prev;
+
+            return {
+                ...prev,
+                [charId]: {
+                    ...(prev[charId] ?? {}),
+                    Name: activeCharacter.displayName,
+                    Id: charId,
+                    Attribute: activeCharacter.attribute,
+                    WeaponType: activeCharacter.weaponType ?? 0,
+                    Stats: baseCharacterState?.Stats ?? {},
+                    CharacterLevel: characterLevel,
+                    SkillLevels: sliderValues,
+                    TraceNodeBuffs: traceNodeBuffs,
+                    CustomBuffs: customBuffs,
+                    CombatState: combatState,
+                    FinalStats: finalStats
+                }
+            };
+        });
+    }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState, finalStats]);
+
 /*
     console.log(team);
     team.forEach((id) => {
@@ -680,7 +701,7 @@ export default function Calculator() {
         if (isMobile) {
             setHamburgerOpen(false);
         }
-    }, [isMobile, leftPaneView]);
+    }, [isMobile, leftPaneView, showCharacterOverview]);
 
     useEffect(() => {
         if (hamburgerOpen) {
@@ -712,6 +733,74 @@ export default function Calculator() {
         }
     }, [leftPaneView]);
 
+    const switchLeftPane = (paneName) => {
+        setShowCharacterOverview(false);
+        setLeftPaneView(paneName);
+    };
+
+    useEffect(() => {
+        const characterIconPaths = characters.map(char =>
+            char.icon || 'https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_1_UI.webp'
+        );
+        preloadImages([...characterIconPaths]);
+    }, [characters]);
+
+    const handleReset = () => {
+        const activeId = activeCharacterId;
+        if (!activeId) return;
+
+        const runtime = JSON.parse(localStorage.getItem('characterRuntimeStates') || '{}');
+        delete runtime[activeId];
+        localStorage.setItem('characterRuntimeStates', JSON.stringify(runtime));
+
+        setCharacterRuntimeStates(prev => {
+            const updated = { ...prev };
+            delete updated[activeId];
+            return updated;
+        });
+
+        setSliderValues(defaultSliderValues);
+        setCustomBuffs(defaultCustomBuffs);
+        setTraceNodeBuffs(defaultTraceBuffs);
+        setCharacterLevel(1);
+        setRotationEntries([]);
+        setTeam([activeId ?? null, null, null]);
+
+        setCombatState(prev => {
+            const weaponId = prev.weaponId;
+            const weapon = weapons?.[weaponId];
+
+            if (weapon) {
+                const levelData = weapon.Stats?.["0"]?.["1"] ?? weapon.Stats?.["0"]?.["0"];
+                const baseAtk = levelData?.[0]?.Value ?? 0;
+                const stat = levelData?.[1] ?? null;
+                const mappedStat = mapExtraStatToCombat(stat);
+
+                return {
+                    ...defaultCombatState,
+                    enemyLevel: prev.enemyLevel,
+                    enemyRes: prev.enemyRes,
+                    weaponId,
+                    weaponLevel: 1,
+                    weaponRank: 1,
+                    weaponBaseAtk: baseAtk,
+                    weaponStat: stat,
+                    weaponRarity: weapon.Rarity ?? 1,
+                    weaponEffect: weapon.Effect ?? null,
+                    weaponEffectName: weapon.EffectName ?? null,
+                    weaponParam: weapon.Param ?? [],
+                    ...mappedStat
+                };
+            }
+
+            return {
+                ...defaultCombatState,
+                enemyLevel: prev.enemyLevel,
+                enemyRes: prev.enemyRes
+            };
+        });
+    };
+
     //console.log(characterRuntimeStates);
 
     return (
@@ -734,43 +823,43 @@ export default function Calculator() {
                             <ToolbarIconButton
                                 iconName="character"
                                 altText="Characters"
-                                onClick={() => setLeftPaneView('characters')}
+                                onClick={() => switchLeftPane('characters')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
                                 iconName="weapon"
                                 altText="Weapon"
-                                onClick={() => setLeftPaneView('weapon')}
+                                onClick={() => switchLeftPane('weapon')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
                                 iconName="echoes"
                                 altText="Echoes"
-                                onClick={() => setLeftPaneView('echoes')}
+                                onClick={() => switchLeftPane('echoes')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
                                 iconName="teams"
                                 altText="Team"
-                                onClick={() => setLeftPaneView('teams')}
+                                onClick={() => switchLeftPane('teams')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
                                 iconName="enemy"
                                 altText="Enemy"
-                                onClick={() => setLeftPaneView('enemy')}
+                                onClick={() => switchLeftPane('enemy')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
                                 iconName="buffs"
                                 altText="Buffs"
-                                onClick={() => setLeftPaneView('buffs')}
+                                onClick={() => switchLeftPane('buffs')}
                                 effectiveTheme={effectiveTheme}
                             />
                             <ToolbarIconButton
                                 iconName="rotations"
                                 altText="Rotation"
-                                onClick={() => setLeftPaneView('rotation')}
+                                onClick={() => switchLeftPane('rotation')}
                                 effectiveTheme={effectiveTheme}
                             />
                         </div>
@@ -849,54 +938,65 @@ export default function Calculator() {
                                     <ToolbarSidebarButton
                                         iconName="character"
                                         label="Characters"
-                                        onClick={() => setLeftPaneView('characters')}
+                                        onClick={() => switchLeftPane('characters')}
                                         selected={leftPaneView === 'characters'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
                                         iconName="weapon"
                                         label="Weapon"
-                                        onClick={() => setLeftPaneView('weapon')}
+                                        onClick={() => switchLeftPane('weapon')}
                                         selected={leftPaneView === 'weapon'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
                                         iconName="echoes"
                                         label="Echoes"
-                                        onClick={() => setLeftPaneView('echoes')}
+                                        onClick={() => switchLeftPane('echoes')}
                                         selected={leftPaneView === 'echoes'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
                                         iconName="teams"
                                         label="Team Buffs"
-                                        onClick={() => setLeftPaneView('teams')}
+                                        onClick={() => switchLeftPane('teams')}
                                         selected={leftPaneView === 'teams'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
                                         iconName="enemy"
                                         label="Enemy"
-                                        onClick={() => setLeftPaneView('enemy')}
+                                        onClick={() => switchLeftPane('enemy')}
                                         selected={leftPaneView === 'enemy'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
                                         iconName="buffs"
                                         label="Custom Bonuses"
-                                        onClick={() => setLeftPaneView('buffs')}
+                                        onClick={() => switchLeftPane('buffs')}
                                         selected={leftPaneView === 'buffs'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                     <ToolbarSidebarButton
                                         iconName="rotations"
                                         label="Rotation"
-                                        onClick={() => setLeftPaneView('rotation')}
+                                        onClick={() => switchLeftPane('rotation')}
                                         selected={leftPaneView === 'rotations'}
                                         effectiveTheme={effectiveTheme}
                                     />
                                 </div>
                             )}
+
+                            <button className="sidebar-button" onClick={() => setShowCharacterOverview(true)}>
+                                <div className="icon-slot">
+                                    <UserRound />
+                                </div>
+                                <div className="label-slot">
+                                    <span className="label-text">
+                                        Overview
+                                    </span>
+                                </div>
+                            </button>
 
                             <button className="sidebar-button" onClick={toggleTheme}>
                                 <div className="icon-slot theme-toggle-icon">
@@ -931,7 +1031,7 @@ export default function Calculator() {
                         </div>
                     </div>
 
-                    {isOverlayVisible && isMobile &&(
+                    {isOverlayVisible && isMobile && (
                         <div
                             className={`mobile-overlay ${hamburgerOpen ? 'visible' : ''} ${isOverlayClosing ? 'closing' : ''}`}
                             onClick={() => setHamburgerOpen(false)}
@@ -940,6 +1040,22 @@ export default function Calculator() {
 
                     <div className="main-content">
                         <div className={`layout ${isCollapsedMode ? 'collapsed-mode' : ''}`} ref={layoutRef}>
+                            {showCharacterOverview ? (
+                                <CharacterOverviewPane
+                                    characters={characters}
+                                    keywords={keywords}
+                                    activeCharacterId={activeCharacterId}
+                                    characterRuntimeStates={characterRuntimeStates}
+                                    onClose={() => setShowCharacterOverview(false)}
+                                    weapons={weapons}
+                                    handleCharacterSelect={handleCharacterSelect}
+                                    switchLeftPane={switchLeftPane}
+                                    setLeftPaneView={setLeftPaneView}
+                                    isCollapsedMode={isCollapsedMode}
+                                    setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                    handleReset={handleReset}
+                                />
+                                ) : (
                             <div className="split">
                                 <div id="left-pane" className={`partition ${leftPaneView}-mode`}>
                                     {leftPaneView === 'characters' && (
@@ -1069,6 +1185,7 @@ export default function Calculator() {
                                     />
                                 </div>
                             </div>
+                                )}
                         </div>
                     </div>
 
@@ -1095,6 +1212,8 @@ export default function Calculator() {
                     handleClose={handleClose}
                     isClosing={isClosing}
                     setTeam={setTeam}
+                    handleReset={handleReset}
+                    setHamburgerOpen={setHamburgerOpen}
                 />
             )}
             <ChangelogModal
@@ -1160,8 +1279,6 @@ const weaponIconPaths = Object.keys(weaponMap).map(weapon =>
 
 export const imageCache = {};
 const preloadedImages = new Set();
-
-
 export const preloadImages = (srcList = []) => {
     srcList.forEach(src => {
         if (preloadedImages.has(src)) return;
@@ -1180,7 +1297,23 @@ export const preloadImages = (srcList = []) => {
 
 export function loadBase() {
     useEffect(() => {
-        preloadImages([...darkIcons, ...lightIcons, ...skillIconPaths, ...baseImages, ...attributeIconPaths, ...weaponIconPaths]);
+        let splashPaths = [];
+        if (characterStatesRaw) {
+            splashPaths = Object.values(characterStatesRaw)
+                .map(char => char.SplashArt)
+                .filter(Boolean);
+        }
+
+
+        preloadImages([
+            ...darkIcons,
+            ...lightIcons,
+            ...skillIconPaths,
+            ...baseImages,
+            ...attributeIconPaths,
+            ...weaponIconPaths,
+            ...splashPaths
+        ]);
     }, []);
 }
 
@@ -1231,6 +1364,9 @@ function getHighlightKeywords(character) {
 
         result.push(...cleaned);
     }
+
+    result.push('Negative Statuses', 'Negative Status');
+
 
     return result;
 }

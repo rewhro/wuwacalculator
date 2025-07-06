@@ -1,3 +1,5 @@
+import echoSets, {setIconMap} from "../../constants/echoSetData.jsx";
+
 export function applyEchoLogic({ mergedBuffs, characterState, activeCharacter }) {
     const echo = characterState?.activeStates ?? {};
 
@@ -48,4 +50,37 @@ export function applyEchoLogic({ mergedBuffs, characterState, activeCharacter })
     }
 
     return mergedBuffs;
+}
+
+
+export function getActiveEchoes(activeStates = {}) {
+    const echoKeyToNameMap = {
+        rejuvenatingGlow: 'Rejuvenating Glow',
+        moonlitClouds: 'Moonlit Clouds',
+        impermanenceHeron: 'Impermanence Heron',
+        bellBorne: 'Bell-Borne Geochelone',
+        fallacy: 'Fallacy of Dawn',
+        midnightVeil: 'Midnight Veil',
+        empyreanAnthem: 'Empyrean Anthem',
+        gustsOfWelkin: 'Gusts of Welkin',
+        clawprint: 'Flaming Clawprint',
+    };
+
+    const result = [];
+
+    Object.entries(echoKeyToNameMap).forEach(([key, name]) => {
+        const value = activeStates[key];
+        if (value === true || (typeof value === 'number' && value > 0)) {
+            const echoSet = echoSets.find(e => e.name === name);
+            if (echoSet) {
+                result.push({
+                    id: echoSet.id,
+                    name: echoSet.name,
+                    icon: setIconMap[echoSet.id] || '/assets/echoes/default.webp'
+                });
+            }
+        }
+    });
+
+    return result;
 }

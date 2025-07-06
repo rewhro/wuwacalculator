@@ -27,7 +27,7 @@ export function WeaponUI({
         <div className="status-toggles">
             <div className="status-toggle-box">
                 <div className="status-toggle-box-inner">
-                    <p>Increase ATK by {currentParamValues[0]}.</p>
+                    <p>{highlightKeywordsInText(`Increase ATK by ${currentParamValues[0]}.`, keywords)}</p>
                 </div>
 
                 <div className="status-toggle-box-inner">

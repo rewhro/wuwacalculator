@@ -81,7 +81,6 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
         mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + 20;
         mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 35;
     }
-    console.log(mergedBuffs);
 
     return mergedBuffs;
 }

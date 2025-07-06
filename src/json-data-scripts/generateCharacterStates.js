@@ -53,7 +53,8 @@ function generateStates() {
             CurrentLevelMultipliers: {},
             CurrentSequenceLevel: 0,
             CurrentWeapon: null,
-            CharacterLevel: 1
+            CharacterLevel: 1,
+            SplashArt: `/assets/splash/${charData.Id}.webp`
         };
     });
 

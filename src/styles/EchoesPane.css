@@ -151,8 +151,13 @@
 }
 
 .echo-stat-label {
-    color: #555;
+    font-weight: 600;
+    color: #606060;
     text-align: left;
+}
+
+.dark .echo-stat-label {
+    color: #bdbdbd;
 }
 
 .echo-stat-value {
@@ -199,16 +204,6 @@
     justify-content: center;
     margin-top: 0;
 }
-
-.echo-stat-label {
-    font-weight: 600;
-    color: #606060;
-}
-
-.dark .echo-stat-label {
-    color: #bdbdbd;
-}
-
 
 .echo-stat-value {
     justify-self: right;

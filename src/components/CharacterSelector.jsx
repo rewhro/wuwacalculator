@@ -6,7 +6,6 @@ import SkillSettings from './SkillSettings';
 import { formatDescription } from '../utils/formatDescription';
 import { getCharacterUIComponent } from '../data/character-ui';
 import { getCustomInherentSkillsComponent } from '../data/character-ui';
-import {preloadImages} from "../pages/calculator.jsx";
 import {highlightKeywordsInText} from "../constants/echoSetData.jsx";
 
 const cleanTooltipText = html => html.replace(/<[^>]*>?/gm, '');
@@ -40,12 +39,6 @@ export default function CharacterSelector({
                                               characterRuntimeStates, setCharacterRuntimeStates, effectiveTheme, triggerRef,
                                               characterStates, keywords, rarityMap
                                           }) {
-    useEffect(() => {
-        const characterIconPaths = characters.map(char =>
-            char.icon || 'https://api.hakush.in/ww/UI/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_1_UI.webp'
-        );
-        preloadImages([...characterIconPaths]);
-    }, [characters]);
     const safeLevel = Math.min(Math.max(Number(characterLevel ?? 1), 1), 90);
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
     const activeStates = characterRuntimeStates?.[charId]?.activeStates ?? {};

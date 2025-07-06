@@ -37,12 +37,14 @@
     background: rgba(9, 9, 9, 0.85);
 }
 
-.dark-alt .dropdown-item {
+.dark-alt .dropdown-item,
+.dark-alt .character-row-item {
     background-color: rgba(19, 20, 23, 0.38);
     color: #ddd;
 }
 
-.dark-alt .dropdown-item:hover {
+.dark-alt .dropdown-item:hover,
+.dark-alt .character-row-item:hover {
     background-color: rgba(19, 20, 23, 0.62);
 }
 

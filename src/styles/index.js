@@ -30,3 +30,5 @@ import './echoBag.css'
 import './parser.css';
 import './advancedRotation.css';
 import './dark-alt.css';
+import './CharacterOverviewPane.css';
+import './characterDetail.css';

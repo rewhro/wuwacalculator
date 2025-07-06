@@ -125,25 +125,6 @@ export default function WeaponPane({ activeCharacter, combatState, setCombatStat
         }));
     };
 
-    const formatStatValue = (stat) => {
-        const name = stat?.Name ?? 'Stat';
-        const value = stat?.Value ?? 0;
-        const isRatio = stat?.IsRatio;
-        const isPercent = stat?.IsPercent;
-
-        let formattedValue = value;
-
-        if (isRatio) {
-            formattedValue = `${(value * 100).toFixed(2)}%`;
-        } else if (isPercent) {
-            formattedValue = `${(value / 100).toFixed(2)}%`;
-        } else {
-            formattedValue = value.toFixed(2);
-        }
-
-        return `${name}: ${formattedValue}`;
-    };
-
     useEffect(() => {
         const weaponIconPaths = filteredWeapons
             .map(w => `/assets/weapon-icons/${w.Id}.webp`)
@@ -360,3 +341,22 @@ export function getCurrentParamValues(param = [], rank = 1) {
     const index = Math.max(0, Math.min((rank ?? 1) - 1, 4));
     return param.map(group => group?.[index] ?? null);
 }
+
+export const formatStatValue = (stat) => {
+    const name = stat?.Name ?? 'Stat';
+    const value = stat?.Value ?? 0;
+    const isRatio = stat?.IsRatio;
+    const isPercent = stat?.IsPercent;
+
+    let formattedValue = value;
+
+    if (isRatio) {
+        formattedValue = `${(value * 100).toFixed(2)}%`;
+    } else if (isPercent) {
+        formattedValue = `${(value / 100).toFixed(2)}%`;
+    } else {
+        formattedValue = value.toFixed(2);
+    }
+
+    return `${name}: ${formattedValue}`;
+};

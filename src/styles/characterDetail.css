@@ -1,0 +1,305 @@
+.overview-panel-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.character-portrait-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap: 0.5rem;
+}
+
+.character-splash {
+    mask-image: linear-gradient(to top, black 80%, transparent 100%);
+    width: 100%;
+    object-fit: cover;
+}
+
+.character-level {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.echo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1rem;
+}
+
+.echo-tile.overview {
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 240px;
+}
+
+.character-portrait-content:hover,
+.inherent-skills-box.weapon-container:hover,
+.overview-teammates-box:hover,
+.echo-tile.overview:hover {
+    cursor: pointer;
+    transform: scale(1.01);
+    transition: ease all 0.3s;
+}
+
+.gear-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.gear-label {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.gear-icon {
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin: 0.5rem 0;
+}
+
+.gear-icon.overview-weapon {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.03) 100%);
+    filter: unset;
+    opacity: unset;
+    height: 100px;
+    width: 100px;
+    border: 0.01rem solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 1rem rgba(0, 0, 0, 0.9);
+    border-radius: 1rem;
+
+    mask-image: radial-gradient(circle at bottom left, rgba(0, 0, 0, 0) 0%, black 10%);
+}
+
+.dark-alt .header-icon.overview,
+.dark-alt .gear-icon.overview-weapon.overview-teammates {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 0%, black 100%);
+    border: 0.01rem solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .header-icon.overview,
+.dark .gear-icon.overview-weapon {
+    background: linear-gradient(to bottom, rgba(31, 41, 55, 0.44)  0%, rgba(0, 0, 0, 0.18) 100%);
+    border: 0.01rem solid rgba(255, 255, 255, 0.1);
+}
+
+.header-icon.overview {
+    border: 0.01rem solid transparent;
+}
+
+.overview-weapon.mini {
+    background-color: transparent;
+    padding: 0.1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    box-shadow: 0 2px 0.5rem rgba(0, 0, 0, 0.4);
+    filter: unset;
+    opacity: unset;
+}
+
+.dark-alt .overview-weapon.mini {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+.dark .overview-weapon.mini {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+.overview-buffs {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 2rem 1.8rem 1.8rem 2rem;
+    overflow: hidden;
+}
+
+.overview-buffs::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    border-radius: inherit;
+    z-index: 0;
+
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 0%, transparent 100%);
+    background-repeat: no-repeat;
+}
+
+.dark-alt .overview-buffs::before {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.14) 0%, transparent 100%);
+}
+
+.dark .overview-buffs::before {
+    background-image: linear-gradient(to right, rgba(69, 86, 124, 0.2) 0%, transparent 100%);
+}
+
+.overview-buffs > * {
+    position: relative;
+    z-index: 1;
+}
+
+.gear-title {
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.gear-level {
+    font-size: 0.85rem;
+    font-weight: bold;
+    opacity: 0.6;
+}
+
+.echo-set-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: unset;
+}
+
+.echo-slot-cost-badge.overview {
+    font-size: 0.75rem;
+    background-color: rgba(0, 0, 0, 0.07);
+    border-radius: 50%;
+    height: 1.5rem;
+    width: 1.5rem;
+    color: #222;
+}
+
+.echo-stats-preview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.echo-bag-info-main {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.overview-gear {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.gear-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.character-portrait-content {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    max-height: 43rem;
+    width: 100%;
+    margin: auto;
+
+    mask-image:
+            linear-gradient(to bottom, black 80%, transparent 100%),
+            linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+
+    -webkit-mask-composite: intersect;
+    mask-composite: intersect;
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%, 100% 100%;
+    mask-size: 100% 100%, 100% 100%;
+}
+
+.character-overview-details {
+    flex-wrap: nowrap;
+    position: absolute;
+    z-index: 1;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(249, 249, 249, 0.76);
+    border-radius: 0 0 1rem 0;
+}
+
+.dark-alt .character-overview-details {
+    background: rgba(0, 0, 0, 0.82);
+}
+
+.dark .character-overview-details {
+    background: rgba(25, 32, 43, 0.51);
+}
+
+.character-name.details {
+    max-width: 100%;
+    white-space: normal;
+}
+
+.stats-grid.overview {
+    margin: unset;
+    width: 100%;
+}
+
+.empty-echo-tile {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-style: italic;
+    border: 1px dashed #555;
+    border-radius: 0.75rem;
+}
+
+.dark .echo-slot-cost-badge.overview,
+.dark-alt .echo-slot-cost-badge.overview {
+    color: #aaa;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.overview-teammates {
+    display: flex;
+    flex-direction: column;
+}
+
+.overview-teammates .icon-body {
+    gap: unset;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    margin: unset;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.overview-buffs-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 0.2rem;
+}
+
+.overview-buff-placeholder {
+    font-size: 0.8rem;
+    font-style: italic;
+    opacity: 0.4;
+    padding-left: 0.5rem;
+}

@@ -17,16 +17,16 @@ async function buildFullCharacterList() {
                 const detailRes = await fetch(url);
                 const characterData = await detailRes.json();
                 allCharacters.push(characterData);
-                console.log(`✅ Added character ${id}`);
+                console.log(`Added character ${id}`);
             } catch (err) {
                 console.warn(`❌ Failed to fetch character ${id}:`, err.message);
             }
         }
 
         await fs.writeFile('../data/characters-mapped.json', JSON.stringify(allCharacters, null, 2));
-        console.log('🎉 characters-mapped.generated.json has been saved.');
+        console.log('characters-mapped.generated.json has been saved.');
     } catch (err) {
-        console.error('💥 Failed to build character list:', err.message);
+        console.error('Failed to build character list:', err.message);
     }
 }
 

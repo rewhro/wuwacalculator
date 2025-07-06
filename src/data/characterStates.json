@@ -27,7 +27,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1102.webp"
   },
   "1": {
     "Name": "Baizhi",
@@ -57,7 +58,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1103.webp"
   },
   "2": {
     "Name": "Lingyang",
@@ -87,7 +89,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1104.webp"
   },
   "3": {
     "Name": "Zhezhi",
@@ -117,7 +120,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1105.webp"
   },
   "4": {
     "Name": "Youhu",
@@ -147,7 +151,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1106.webp"
   },
   "5": {
     "Name": "Carlotta",
@@ -177,7 +182,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1107.webp"
   },
   "6": {
     "Name": "Chixia",
@@ -207,7 +213,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1202.webp"
   },
   "7": {
     "Name": "Encore",
@@ -237,7 +244,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1203.webp"
   },
   "8": {
     "Name": "Mortefi",
@@ -267,7 +275,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1204.webp"
   },
   "9": {
     "Name": "Changli",
@@ -297,7 +306,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1205.webp"
   },
   "10": {
     "Name": "Brant",
@@ -327,7 +337,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1206.webp"
   },
   "11": {
     "Name": "Lupa",
@@ -357,7 +368,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1207.webp"
   },
   "12": {
     "Name": "Calcharo",
@@ -387,7 +399,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1301.webp"
   },
   "13": {
     "Name": "Yinlin",
@@ -417,7 +430,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1302.webp"
   },
   "14": {
     "Name": "Yuanwu",
@@ -447,7 +461,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1303.webp"
   },
   "15": {
     "Name": "Jinhsi",
@@ -477,7 +492,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1304.webp"
   },
   "16": {
     "Name": "Xiangli Yao",
@@ -507,7 +523,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1305.webp"
   },
   "17": {
     "Name": "Yangyang",
@@ -537,7 +554,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1402.webp"
   },
   "18": {
     "Name": "Aalto",
@@ -567,7 +585,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1403.webp"
   },
   "19": {
     "Name": "Jiyan",
@@ -597,7 +616,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1404.webp"
   },
   "20": {
     "Name": "Jianxin",
@@ -627,7 +647,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1405.webp"
   },
   "21": {
     "Name": "Rover: Aero",
@@ -657,7 +678,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1406.webp"
   },
   "22": {
     "Name": "Ciaccona",
@@ -687,7 +709,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1407.webp"
   },
   "23": {
     "Name": "Rover: Aero",
@@ -717,7 +740,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1408.webp"
   },
   "24": {
     "Name": "Cartethyia",
@@ -747,7 +771,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1409.webp"
   },
   "25": {
     "Name": "Rover: Spectro",
@@ -777,7 +802,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1501.webp"
   },
   "26": {
     "Name": "Rover: Spectro",
@@ -807,7 +833,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1502.webp"
   },
   "27": {
     "Name": "Verina",
@@ -837,7 +864,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1503.webp"
   },
   "28": {
     "Name": "Lumi",
@@ -867,7 +895,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1504.webp"
   },
   "29": {
     "Name": "Shorekeeper",
@@ -897,7 +926,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1505.webp"
   },
   "30": {
     "Name": "Phoebe",
@@ -927,7 +957,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1506.webp"
   },
   "31": {
     "Name": "Zani",
@@ -957,7 +988,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1507.webp"
   },
   "32": {
     "Name": "Taoqi",
@@ -987,7 +1019,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1601.webp"
   },
   "33": {
     "Name": "Danjin",
@@ -1017,7 +1050,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1602.webp"
   },
   "34": {
     "Name": "Camellya",
@@ -1047,7 +1081,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1603.webp"
   },
   "35": {
     "Name": "Rover: Havoc",
@@ -1077,7 +1112,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1604.webp"
   },
   "36": {
     "Name": "Rover: Havoc",
@@ -1107,7 +1143,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1605.webp"
   },
   "37": {
     "Name": "Roccia",
@@ -1137,7 +1174,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1606.webp"
   },
   "38": {
     "Name": "Cantarella",
@@ -1167,7 +1205,8 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1607.webp"
   },
   "39": {
     "Name": "Phrolova",
@@ -1197,6 +1236,7 @@
     "CurrentLevelMultipliers": {},
     "CurrentSequenceLevel": 0,
     "CurrentWeapon": null,
-    "CharacterLevel": 1
+    "CharacterLevel": 1,
+    "SplashArt": "/assets/splash/1608.webp"
   }
 }

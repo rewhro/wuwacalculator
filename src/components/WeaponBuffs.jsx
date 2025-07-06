@@ -3,7 +3,7 @@ import { attributeColors } from '../utils/attributeHelpers';
 import DropdownSelect from './DropdownSelect';
 import { getCurrentParamValues } from './WeaponPane';
 
-const weaponBuffs = [
+export const weaponBuffs = [
     {
         key: 'staticMist',
         name: 'Static Mist',

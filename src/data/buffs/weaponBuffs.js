@@ -54,3 +54,25 @@ export function applyWeaponBuffLogic({ mergedBuffs, characterState, activeCharac
 
     return mergedBuffs;
 }
+
+export function getActiveStateWeapons(activeStates) {
+    if (!activeStates) return [];
+
+    const weaponIdMap = {
+        staticMist: 21030015,
+        stellarSymphony: 21050036,
+        luminousHymn: 21050046,
+        bloodpactsPledge: 21020046,
+        woodlandAria: 21030026,
+        wildfireMark: 21010036
+    };
+
+    return Object.entries(weaponIdMap)
+        .map(([key, id]) => {
+            const value = activeStates?.[`${key}_rank`];
+            return typeof value === 'number' && value > 0
+                ? { id, key, value }
+                : null;
+        })
+        .filter(Boolean);
+}
