@@ -567,7 +567,7 @@ export default function EchoesPane({
                                 const iconUrl = statIconMap[label];
 
                                 return (
-                                    <div key={key} className="stat-row">
+                                    <div className="stat-row" style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
                                           <span className="echo-stat-label">
                                               {iconUrl && (
                                                   <div
@@ -596,8 +596,6 @@ export default function EchoesPane({
 
                                               )}
                                           </span>
-                                        <div className="stat-value"></div>
-                                        <div className="stat-bonus"></div>
                                         <div className="stat-total">
                                             {key === 'critValue' ? (
                                                 <span className="highlight">{val.toFixed(1)}</span>
