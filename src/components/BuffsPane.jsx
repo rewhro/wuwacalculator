@@ -8,17 +8,19 @@ import { attributeColors } from '../utils/attributeHelpers';
 import { X } from 'lucide-react';
 import {preloadImages} from "../pages/calculator.jsx";
 import {runInContext as echoBuffs, runInContext as weaponBuffs} from "lodash";
+import {calculateRotationTotals} from "./Rotations.jsx";
 
 export default function BuffsPane({
                                       characters,
                                       activeCharacterId,
                                       team,
                                       setTeam,
-    characterRuntimeStates,
-    setCharacterRuntimeStates,
-    activeCharacter,
-    characterStates,
-    rarityMap
+                                        characterRuntimeStates,
+                                        setCharacterRuntimeStates,
+                                        activeCharacter,
+                                        characterStates,
+                                        rarityMap,
+                                      savedRotations,
                                   }) {
     loadBase();
     const menuRef = useRef(null);
@@ -38,7 +40,6 @@ export default function BuffsPane({
             }
         }));
     };
-
 
     const handleCharacterSelect = (char) => {
         if (activeCharacterSlot === 0) return;
@@ -106,6 +107,14 @@ export default function BuffsPane({
             }
         }));
     }, [team, charId, setCharacterRuntimeStates]);
+
+    const runtime = characterRuntimeStates[charId];
+    const teamRotation = runtime?.teamRotation ?? {};
+    const hasValidTeamRotation = (
+        runtime?.Team?.length > 1 &&
+        typeof teamRotation === 'object' &&
+        Object.keys(teamRotation ?? {}).length > 0
+    );
 
     return (
         <div className="team-pane">
@@ -200,6 +209,88 @@ export default function BuffsPane({
                 );
             })}
 
+            {hasValidTeamRotation && (
+                <ExpandableSection
+                    title="Rotations"
+                    defaultOpen={true}
+                >
+                    <div
+                        className="rotations-box"
+                        style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}
+                    >
+                        {runtime?.Team?.slice(1, 3).map((teammateId, i) => {
+                            const teammateIndex = i + 1;
+                            const key = `teammateRotation-${teammateIndex}`;
+
+                            const allTotals = getTeamRotationTotals(runtime, characterRuntimeStates, savedRotations)[teammateId];
+                            if (!allTotals || allTotals.length === 0) return null;
+
+                            const character = characters.find(c => String(c.link) === String(teammateId));
+                            if (!character) return null;
+
+                            const selectedTotal = teamRotation[teammateId] ?? allTotals[0];
+                            const selectedId = selectedTotal.id;
+                            const selectedIndex = allTotals.findIndex(entry => entry.id === selectedId);
+                            const fallbackIndex = selectedIndex >= 0 ? selectedIndex : 0;
+                            const currentTotal = allTotals[fallbackIndex];
+                            const { avg, crit, normal } = currentTotal.total;
+
+                            return (
+                                <div key={teammateId} className="echo-buff">
+                                    <div className="rotation-header">
+                                        <span className="highlight">{character.displayName}</span>
+                                        <span className="entry-type-detail">
+                                            <select
+                                                value={fallbackIndex}
+                                                onChange={(e) => {
+                                                    const selected = allTotals[Number(e.target.value)];
+                                                    setCharacterRuntimeStates(prev => ({
+                                                        ...prev,
+                                                        [charId]: {
+                                                            ...prev[charId],
+                                                            teamRotation: {
+                                                                ...(prev[charId]?.teamRotation ?? {}),
+                                                                [teammateId]: selected
+                                                            }
+                                                        }
+                                                    }));
+                                                }}
+                                                className="entry-detail-dropdown"
+                                            >
+                                                {allTotals.map((entry, index) => (
+                                                    <option key={index} value={index}>
+                                                        {entry.characterName ?? character.displayName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div className="rotation-values">
+                                        <span className="value-label">Normal</span>
+                                        <span className="value">{Math.round(normal).toLocaleString()}</span>
+                                        <span className="value-label">Crit</span>
+                                        <span className="value">{Math.round(crit).toLocaleString()}</span>
+                                        <span className="value-label">Avg</span>
+                                        <span className="value avg" style={{ fontWeight: 'bold' }}>
+                                            {Math.round(avg).toLocaleString()}
+                                        </span>
+                                        <label className="modern-checkbox" style={{ marginLeft: 'auto' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={activeStates[key] || false}
+                                                onChange={() => toggleState(key)}
+                                            />
+                                            Enable
+                                        </label>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </ExpandableSection>
+            )}
+
             <CharacterMenu
                 characters={characters.filter(
                     (char) =>
@@ -221,4 +312,74 @@ function loadBase() {
         const weaponBuffIcons = weaponBuffList.map(buff => buff.icon);
         preloadImages([...echoBuffIcons, ...weaponBuffIcons]);
     }, []);
+}
+
+export function getTeamRotationTotals(mainRuntime, characterRuntimeStates, savedRotations = []) {
+    const teamIds = [
+        mainRuntime?.Team?.[1],
+        mainRuntime?.Team?.[2]
+    ].filter(Boolean);
+
+    const totalsByCharId = {};
+
+    for (const charId of teamIds) {
+        const entries = [];
+        const state = characterRuntimeStates[charId];
+        const hasLiveData =
+            state && Array.isArray(state.allSkillResults) && Array.isArray(state.rotationEntries);
+
+        if (hasLiveData) {
+            const liveTotal = calculateRotationTotals(state.allSkillResults, state.rotationEntries);
+            const { normal, crit, avg } = liveTotal.total;
+            if (normal !== 0 || crit !== 0 || avg !== 0) {
+                entries.push({
+                    ...liveTotal,
+                    characterName: characterRuntimeStates[charId]?.Name,
+                    id: 'live'
+                });
+            }
+        }
+
+        const charSavedRotations = savedRotations.filter(
+            (r) => String(r.characterId) === String(charId)
+        );
+
+        charSavedRotations.forEach((saved, index) => {
+            const { normal, crit, avg } = saved.total ?? {};
+            if (normal !== 0 || crit !== 0 || avg !== 0) {
+                entries.push({
+                    total: saved.total,
+                    characterName: saved.characterName,
+                    id: `saved-${index}`
+                });
+            }
+        });
+
+        if (entries.length > 0) {
+            totalsByCharId[charId] = entries;
+        }
+    }
+
+    return totalsByCharId;
+}
+
+export function getResolvedTeamRotations(runtime, characterRuntimeStates, savedRotations) {
+    const teamRotation = {};
+    const team = runtime?.Team?.slice(1, 3) ?? [];
+
+    for (const teammateId of team) {
+        const allTotals = getTeamRotationTotals(runtime, characterRuntimeStates, savedRotations)?.[teammateId];
+        if (!allTotals || allTotals.length === 0) continue;
+
+        const stored = runtime?.teamRotation?.[teammateId];
+        const selectedId = stored?.id ?? allTotals[0].id;
+
+        const selectedIndex = allTotals.findIndex(entry => entry.id === selectedId);
+        const fallbackIndex = selectedIndex >= 0 ? selectedIndex : 0;
+
+        const selected = allTotals[fallbackIndex];
+        teamRotation[teammateId] = selected;
+    }
+
+    return teamRotation;
 }

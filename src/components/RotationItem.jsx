@@ -14,6 +14,7 @@ export default function RotationItem({
                                  onDelete,
                                  setRotationEntries,
                                  currentSliderColor,
+                                         allSkillResults
                              }) {
     const {
         attributes,
@@ -29,8 +30,7 @@ export default function RotationItem({
     };
 
     const multiplier = entry.multiplier ?? 1;
-    const cache = getSkillDamageCache();
-    const match = cache.find(s => s.name === entry.label && s.tab === entry.tab);
+    const match = allSkillResults.find(s => s.name === entry.label && s.tab === entry.tab);
 
     const source = entry.locked && entry.snapshot
         ? entry.snapshot
@@ -50,7 +50,7 @@ export default function RotationItem({
             const item = copy[index];
             const locked = !item.locked;
 
-            const match = getSkillDamageCache().find(
+            const match = allSkillResults.find(
                 s => s.name === item.label && s.tab === item.tab
             );
 

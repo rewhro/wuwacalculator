@@ -9,7 +9,7 @@ import CharacterStats from '../components/CharacterStats';
 import DamageSection from '../components/DamageSection';
 import WeaponPane, {mapExtraStatToCombat} from '../components/WeaponPane';
 import EnemyPane from '../components/EnemyPane';
-import BuffsPane from "../components/BuffsPane.jsx";
+import BuffsPane, {getResolvedTeamRotations} from "../components/BuffsPane.jsx";
 import CustomBuffsPane from '../components/CustomBuffsPane';
 import ToolbarIconButton, {ToolbarSidebarButton} from '../components/ToolbarIconButton';
 import ResetButton, {ResetCharacter} from '../components/ResetButton.jsx';
@@ -34,6 +34,8 @@ import {getEchoStatsFromEquippedEchoes, statIconMap} from "../utils/echoHelper.j
 import { useLayoutEffect } from 'react';
 import {getSkillDamageCache} from "../utils/skillDamageCache.js";
 import CharacterOverviewPane from "../components/CharacterOverview.jsx";
+import {isEqual} from "lodash";
+import {calculateRotationTotals} from "../components/Rotations.jsx";
 
 export default function Calculator() {
     const [characters, setCharacters] = useState([]);
@@ -86,6 +88,9 @@ export default function Calculator() {
     const [showSubHits, setShowSubHits] = usePersistentState('showSubHits', false);
     const splitInstance = useRef(null);
     const [showCharacterOverview, setShowCharacterOverview] = usePersistentState('showCharacterOverview',false);
+    const [savedRotations, setSavedRotations] = usePersistentState('globalSavedRotations', []);
+    const teamRotation = getResolvedTeamRotations(characterRuntimeStates[charId], characterRuntimeStates, savedRotations);
+    const [savedTeamRotations, setSavedTeamRotations] = usePersistentState('globalSavedTeamRotations', []);
 
     useEffect(() => {
         Promise.all([fetchCharacters(), fetchWeapons()]).then(([charData, weaponData]) => {
@@ -116,6 +121,7 @@ export default function Calculator() {
             setSliderValues(profile.SkillLevels ?? defaultSliderValues);
             setTraceNodeBuffs(profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs);
             profile.TraceNodeBuffs = profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs;
+
             delete profile.TemporaryBuffs;
             delete profile.CharacterState;
             setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
@@ -306,11 +312,13 @@ export default function Calculator() {
                     CustomBuffs: customBuffs,
                     CombatState: combatState,
                     Team: team,
-                    rotationEntries: rotationEntries
+                    rotationEntries: rotationEntries,
+                    FinalStats: finalStats ?? {},
+                    allSkillsResults: allSkillResults ?? {},
+                    teamRotation: teamRotation ?? {}
                 }
             }));
         }
-
 
         const newMainId = char.Id ?? char.id ?? char.link;
         const cached = characterRuntimeStates[newMainId] ?? {};
@@ -577,19 +585,12 @@ export default function Calculator() {
                     TraceNodeBuffs: traceNodeBuffs,
                     CustomBuffs: customBuffs,
                     CombatState: combatState,
-                    FinalStats: finalStats
+                    FinalStats: finalStats,
+                    allSkillsResults: allSkillResults,
                 }
             };
         });
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState, finalStats]);
-
-/*
-    console.log(team);
-    team.forEach((id) => {
-        if (!id) return;
-        console.log(id, characterRuntimeStates[id].rotationEntries);
-    });
-    */
 
     useEffect(() => {
         const cleaned = {};
@@ -630,18 +631,6 @@ export default function Calculator() {
         localStorage.setItem('characterRuntimeStates', JSON.stringify(cleaned));
     }, []);
 
-
-    /*
-    useEffect(() => {
-        Object.entries(characterRuntimeStates).forEach(([charId, state]) => {
-            const entries = state.rotationEntries;
-            if (Array.isArray(entries) && entries.length > 0) {
-                console.log(`Character ID: ${charId}`);
-                console.log("Rotation Entries:", entries);
-            }
-        });
-    },[]);
-*/
     useLayoutEffect(() => {
         const handleResize = () => {
             setMoveToolbarToSidebar(window.innerWidth < 900);
@@ -653,9 +642,51 @@ export default function Calculator() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const allSkillResults = getSkillDamageCache();
+
     useEffect(() => {
-        const cache = getSkillDamageCache();
+        if (!teamRotation) return;
+
+        const existing = characterRuntimeStates?.[charId]?.teamRotation ?? {};
+        if (!isEqual(existing, teamRotation)) {
+            setCharacterRuntimeStates(prev => ({
+                ...prev,
+                [charId]: {
+                    ...(prev[charId] ?? {}),
+                    teamRotation
+                }
+            }));
+        }
+
+    }, [characterRuntimeStates]);
+
+    useEffect(() => {
+        if (!charId) return;
+
+        const runtime = characterRuntimeStates?.[charId];
+        if (!runtime) return;
+
+        const hasSummary = !!runtime.teamRotationSummary;
+
+        if (!hasSummary) {
+            const teamRotationSummary = {
+                name: runtime.Name ?? '',
+                total: { normal: 0, crit: 0, avg: 0 },
+            };
+
+            setCharacterRuntimeStates(prev => ({
+                ...prev,
+                [charId]: {
+                    ...(prev[charId] ?? {}),
+                    teamRotationSummary
+                }
+            }));
+        }
+    }, [characterRuntimeStates]);
+
+    useEffect(() => {
         const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
+        const cache = characterRuntimeStates?.[charId]?.allSkillsResults ?? [];
 
         setRotationEntries(prev => {
             const updated = prev.map(entry => {
@@ -676,7 +707,7 @@ export default function Calculator() {
 
             return updated;
         });
-    }, [sliderValues]);
+    }, [sliderValues, charId]);
 
     const keywords = getHighlightKeywords(activeCharacter);
 
@@ -801,7 +832,7 @@ export default function Calculator() {
         });
     };
 
-    //console.log(characterRuntimeStates);
+    //console.log(characterRuntimeStates[charId]);
 
     return (
         <>
@@ -987,7 +1018,7 @@ export default function Calculator() {
                                 </div>
                             )}
 
-                            <button className="sidebar-button" onClick={() => setShowCharacterOverview(true)}>
+                            <button className="sidebar-button" onClick={() => setShowCharacterOverview(!showCharacterOverview)}>
                                 <div className="icon-slot">
                                     <UserRound />
                                 </div>
@@ -1119,6 +1150,7 @@ export default function Calculator() {
                                             setCharacterRuntimeStates={setCharacterRuntimeStates}
                                             characterStates={characterStates}
                                             rarityMap={rarityMap}
+                                            savedRotations={savedRotations}
                                         />
                                     )}
                                     {leftPaneView === 'rotation' && (
@@ -1146,6 +1178,11 @@ export default function Calculator() {
                                             setRotationEntries={setRotationEntries}
                                             currentSliderColor={currentSliderColor}
                                             setLeftPaneView={setLeftPaneView}
+                                            savedRotations={savedRotations}
+                                            setSavedRotations={setSavedRotations}
+                                            charId={charId}
+                                            setSavedTeamRotations={setSavedTeamRotations}
+                                            savedTeamRotations={savedTeamRotations}
                                         />
                                     )}
                                     {leftPaneView === 'echoes' && (
@@ -1182,6 +1219,8 @@ export default function Calculator() {
                                         currentSliderColor={currentSliderColor}
                                         showSubHits={showSubHits}
                                         setShowSubHits={setShowSubHits}
+                                        setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                        characterStates={characterStates}
                                     />
                                 </div>
                             </div>

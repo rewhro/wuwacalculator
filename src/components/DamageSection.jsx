@@ -1,4 +1,4 @@
-import Rotations from "./Rotations.jsx";
+import Rotations, {TeamRotation} from "./Rotations.jsx";
 
 import React, {useState} from 'react';
 import { getHardcodedMultipliers } from '../data/character-behaviour';
@@ -18,7 +18,9 @@ export default function DamageSection({
                                           mergedBuffs,
                                           rotationEntries,
                                           setShowSubHits,
-                                          showSubHits
+                                          showSubHits,
+                                          characterStates,
+                                          setCharacterRuntimeStates
                                       }) {
     if (!activeCharacter) return null;
 
@@ -139,6 +141,16 @@ export default function DamageSection({
         }
     }
 
+    const teamRotation = characterRuntimeStates[charId]?.teamRotation ?? {};
+    const activeStates = characterRuntimeStates[charId]?.activeStates ?? {};
+
+    const toggleKeys = ["teammateRotation-1", "teammateRotation-2"];
+    const hasValidTeamRotation = (
+        characterRuntimeStates[charId]?.Team?.length > 1 &&
+        Object.keys(teamRotation).length > 0 &&
+        (activeStates[toggleKeys[0]] || activeStates[toggleKeys[1]])
+    );
+
     const getSubHitFormula = (hits, type) => {
         if (!hits || hits.length === 0) return '';
         return hits.map(hit => {
@@ -194,7 +206,7 @@ export default function DamageSection({
 
                             {levels.map((level, index) => {
                                 let label = level.Name;
-                                if (label === 'Skill DMG' || label === 'Skill Dmg' || label === 'Skill Damage') {
+                                if (label === 'Skill DMG' || label === 'Skill Dmg' || label === 'Skill Damage' || label === 'Dmg' || label === 'DMG') {
                                     if (label.includes('Damage')) {
                                         label = `${skill.Name} Damage`;
                                     } else if (label.includes('Dmg')) {
@@ -204,6 +216,13 @@ export default function DamageSection({
                                     }
                                 } else if (label === 'Healing' || label === 'Shielding' || label === 'Shield') {
                                     label = `${skill.Name} ${level.Name}`;
+                                } else if (
+                                    label.includes('Press DMG') ||
+                                    label.includes('Hold DMG') ||
+                                    label.includes('Press Damage') ||
+                                    label.includes('Hold Damage')
+                                ) {
+                                    label = `${skill.Name}: ${level.Name}`;
                                 }
                                 const result = computeSkillDamage({
                                     entry: {
@@ -306,7 +325,7 @@ export default function DamageSection({
         );
     });
 
-    setSkillDamageCache(allSkillResults);
+    setSkillDamageCache(allSkillResults, charId, characterRuntimeStates, setCharacterRuntimeStates);
     if (typeof window !== 'undefined') {
         window.lastSkillCacheUpdate = Date.now();
     }
@@ -450,14 +469,22 @@ export default function DamageSection({
                     <div className="box-wrapper">
                         <div className="damage-inner-box">
                             <Rotations
-                                activeCharacter={activeCharacter}
+                                charId={charId}
                                 rotationEntries={rotationEntries}
-                                finalStats={finalStats}
-                                combatState={combatState}
-                                mergedBuffs={mergedBuffs}
-                                sliderValues={sliderValues}
-                                characterLevel={characterLevel}
                                 characterRuntimeStates={characterRuntimeStates}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {hasValidTeamRotation && (
+                    <div className="box-wrapper">
+                        <div className="damage-inner-box">
+                            <TeamRotation
+                                mainCharId={charId}
+                                characterRuntimeStates={characterRuntimeStates}
+                                characterStates={characterStates}
+                                setCharacterRuntimeStates={setCharacterRuntimeStates}
                             />
                         </div>
                     </div>

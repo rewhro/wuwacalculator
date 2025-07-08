@@ -331,7 +331,7 @@
     color: lightgray;
 }
 
-.dark-alt .sort-controls select {
+.dark-alt select {
     background: rgba(100, 100, 100, 0.3);
     color: #ddd;
 }
@@ -354,7 +354,7 @@
     color: #ccc;
 }
 
-.dark-alt .sort-controls select:focus {
+.dark-alt select:focus {
     border-color: #888;
 }
 

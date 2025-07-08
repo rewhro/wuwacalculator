@@ -173,12 +173,19 @@
     margin-top: 12px;
 }
 
-.rotation-list-container,
-.saved-rotation-list {
+.rotation-list-container {
     max-height: calc(100vh - 17.5rem);
     overflow-y: auto;
-    mask-image: linear-gradient(to bottom, black 98%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 98%, transparent 100%);
+}
+
+.saved-rotation-list {
+    max-height: calc(100vh - 18rem);
+    overflow-y: auto;
+}
+
+.saved-rotation-list.team {
+    max-height: calc(100vh - 20.5rem);
+    overflow-y: auto;
 }
 
 .entry-name {
@@ -204,7 +211,7 @@
 }
 
 .view-toggle-button,
-.sort-controls select {
+select {
     padding: 6px 16px;
     font-weight: bold;
     border-radius: 10px;
@@ -220,7 +227,7 @@
 }
 
 .dark .view-toggle-button,
-.dark .sort-controls select {
+.dark select {
     background: rgba(100, 100, 100, 0.3);
     color: #ddd;
 }
@@ -244,12 +251,16 @@
     color: #555;
 }
 
-.sort-controls select {
+select {
+    width: 6rem;
     padding: 6px 10px;
+    text-overflow: ellipsis;
+    display: flex;
+    text-align: center;
     transition: border-color 0.2s ease;
 }
 
-.sort-controls select:focus {
+select:focus {
     outline: none;
     border-color: #888;
 }
@@ -258,7 +269,7 @@
     color: #ccc;
 }
 
-.dark .sort-controls select:focus {
+.dark select:focus {
     border-color: #888;
 }
 

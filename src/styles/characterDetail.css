@@ -13,7 +13,9 @@
 }
 
 .character-splash {
-    mask-image: linear-gradient(to top, black 80%, transparent 100%);
+    object-position: top;
+    transform: translateY(-5%);
+    mask-image: linear-gradient(to top, transparent 0%, black 15%, black 80%, transparent 100%);
     width: 100%;
     object-fit: cover;
 }

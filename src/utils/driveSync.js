@@ -109,7 +109,8 @@ const syncKeys = [
     'showSubHits',
     'user-dark-variant',
     'user-has-selected-theme',
-    'user-theme'
+    'user-theme',
+    'globalSavedTeamRotations'
 ]
 
 export function getSyncData() {

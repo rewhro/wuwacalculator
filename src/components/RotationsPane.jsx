@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import { Pencil, Trash2, Clock3 } from 'lucide-react';
 import {
     DndContext,
@@ -81,7 +81,12 @@ export default function RotationsPane({
                                           setTraceNodeBuffs,
                                           setBaseCharacterState,
                                           setCombatState,
-                                          characters
+                                          characters,
+                                          savedRotations,
+                                          setSavedRotations,
+                                          charId,
+                                          setSavedTeamRotations,
+                                          savedTeamRotations
                                       }) {
     const [viewMode, setViewMode] = useState('new');
     const [showSkillOptions, setShowSkillOptions] = useState(false);
@@ -91,9 +96,9 @@ export default function RotationsPane({
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: { distance: 5 }
     }));
-    const [savedRotations, setSavedRotations] = usePersistentState('globalSavedRotations', []);
+    const allSkillResults = characterRuntimeStates[charId]?.allSkillResults ?? getSkillDamageCache();
     const groupedSkillOptions = React.useMemo(() => {
-        const allSkills = getSkillDamageCache().filter(skill => skill.visible !== false);
+        const allSkills = allSkillResults.filter(skill => skill.visible !== false);
         const groups = {};
 
         for (const skill of allSkills) {
@@ -109,10 +114,11 @@ export default function RotationsPane({
         }
         return groups;
     }, []);
-    const [sortKey, setSortKey] = useState('date');
-    const [sortOrder, setSortOrder] = useState('desc');
+    const [sortKey, setSortKey] = usePersistentState('sortKey', 'date');
+    const [sortOrder, setSortOrder] = usePersistentState('sortOrder', 'desc');
     const [editingId, setEditingId] = useState(null);
     const [editedName, setEditedName] = useState('');
+    const [filterCharId, setFilterCharId] = useState('');
     const [, forceUpdate] = useState(0);
     useEffect(() => {
         let lastSeen = 0;
@@ -168,7 +174,6 @@ export default function RotationsPane({
         setEditIndex(null);
         setShowSkillOptions(false);
     };
-    const charId = activeCharacter?.Id?.toString();
 
     useEffect(() => {
         if (!charId) return;
@@ -194,7 +199,7 @@ export default function RotationsPane({
     }, [rotationEntries, charId]);
 
     const loadSavedRotation = (saved) => {
-        const id = saved.characterId;
+        const id = saved.characterId ?? saved.charId;
         const newCharacter = characters.find(c => String(c.Id ?? c.id ?? c.link) === String(id));
         if (!newCharacter) return;
 
@@ -226,11 +231,6 @@ export default function RotationsPane({
             [id]: saved.fullCharacterState
         }));
         localStorage.setItem("activeCharacterId", JSON.stringify(id));
-        localStorage.setItem("team", JSON.stringify([
-            id,
-            saved.fullCharacterState.Team?.[1] ?? null,
-            saved.fullCharacterState.Team?.[2] ?? null
-        ]));
     };
 
     const normalizedEntries = rotationEntries.map((entry, idx) => ({
@@ -248,6 +248,39 @@ export default function RotationsPane({
         }, 200);
     };
 
+    const teamRotation = characterRuntimeStates[charId]?.teamRotation ?? {};
+    const activeStates = characterRuntimeStates[charId]?.activeStates ?? {};
+
+    const toggleKeys = ["teammateRotation-1", "teammateRotation-2"];
+    const hasValidTeamRotation = (
+        characterRuntimeStates[charId]?.Team?.length > 1 &&
+        Object.keys(teamRotation).length > 0 &&
+        (activeStates[toggleKeys[0]] || activeStates[toggleKeys[1]])
+    );
+
+    function getCharacterFilterOptions(fromEntries, characters) {
+        const seenIds = new Set();
+
+        for (const entry of fromEntries) {
+            const id = String(entry.characterId ?? entry.charId);
+            if (id) seenIds.add(id);
+        }
+
+        return characters
+            .filter(char => seenIds.has(String(char.link)))
+            .map(char => ({
+                id: String(char.link),
+                name: char.displayName
+            }));
+    }
+
+    const filterOptions = useMemo(() =>
+        getCharacterFilterOptions(savedRotations, characters), [savedRotations, characters]);
+
+    const teamFilterOptions = useMemo(() =>
+        getCharacterFilterOptions(savedTeamRotations, characters), [savedTeamRotations, characters]);
+
+
     return (
         <div className="rotation-pane">
             <div className="rotation-view-toggle">
@@ -256,6 +289,12 @@ export default function RotationsPane({
                 </button>
                 <button className={`view-toggle-button ${viewMode === 'saved' ? 'active' : ''}`} onClick={() => setViewMode('saved')}>
                     Saved
+                </button>
+                <button
+                    className={`view-toggle-button ${viewMode === 'team' ? 'active' : ''}`}
+                    onClick={() => setViewMode('team')}
+                >
+                    Team
                 </button>
             </div>
 
@@ -278,7 +317,7 @@ export default function RotationsPane({
                                 const characterName = activeCharacter?.displayName ?? 'Unknown';
                                 const dateId = Date.now();
 
-                                const cache = getSkillDamageCache();
+                                const cache = allSkillResults;
                                 let total = { normal: 0, crit: 0, avg: 0 };
 
                                 for (const entry of rotationEntries) {
@@ -342,6 +381,7 @@ export default function RotationsPane({
                                             setRotationEntries(updated);
                                         }}
                                         setRotationEntries={setRotationEntries}
+                                        allSkillResults={allSkillResults}
                                         currentSliderColor={currentSliderColor}
                                     />
                                 ))}
@@ -430,22 +470,25 @@ export default function RotationsPane({
                             <option value="desc">Descending</option>
                             <option value="asc">Ascending</option>
                         </select>
+                        <select value={filterCharId} onChange={(e) => setFilterCharId(e.target.value)}>
+                            <option value="">Character</option>
+                            {filterOptions.map(opt => (
+                                <option key={opt.id} value={opt.id}>{opt.name}</option>
+                            ))}
+                        </select>
+                        <button
+                            className="rotation-button clear"
+                            onClick={() => setSavedRotations([])}
+                            style={{ marginLeft: 'auto'}}
+                        >Clear</button>
+
                     </div>
                     <div className="saved-rotation-list">
-                        {/*
-                    <div className="saved-rotation-header">
-                        <button
-                            className="rotation-button"
-                            style={{ marginLeft: 'auto', marginBottom: '8px' }}
-                        >
-                            Import
-                        </button>
-                    </div>
-                                            */}
                         {savedRotations.length === 0 ? (
                             <p style={{ color: '#5c5c5c' }}>hmm...</p>
                         ) : (
                             [...savedRotations]
+                                .filter(entry => !filterCharId || String(entry.characterId ?? entry.charId) === filterCharId)
                                 .sort((a, b) => {
                                     let valA, valB;
                                     switch (sortKey) {
@@ -508,9 +551,9 @@ export default function RotationsPane({
                                                 <span className="value-label">Crit</span>
                                                 <span className="value">{Math.round(saved.total.crit).toLocaleString()}</span>
                                                 <span className="value-label">Avg</span>
-                                                <span className="value avg" style={{ fontWeight: 'bold' }}>
-                                                {Math.round(saved.total.avg).toLocaleString()}
-                                            </span>
+                                                    <span className="value avg" style={{ fontWeight: 'bold' }}>
+                                                    {Math.round(saved.total.avg).toLocaleString()}
+                                                </span>
 
                                                 <button
                                                     className="rotation-button load-button"
@@ -559,7 +602,171 @@ export default function RotationsPane({
                         )}
                     </div>
                 </>
+            )}
 
+            {viewMode === 'team' && (
+                <>
+                    <h2 className="panel-title">Saved Team Rotations</h2>
+                    <div className="sort-controls">
+                        <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
+                        <select value={sortKey} onChange={(e) => setSortKey(e.target.value)}>
+                            <option value="date">Date Added</option>
+                            <option value="name">Name</option>
+                            <option value="dmg">Total DMG</option>
+                        </select>
+                        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                            <option value="desc">Descending</option>
+                            <option value="asc">Ascending</option>
+                        </select>
+                        <select value={filterCharId} onChange={(e) => setFilterCharId(e.target.value)}>
+                            <option value="">Character</option>
+                            {teamFilterOptions.map(opt => (
+                                <option key={opt.id} value={opt.id}>{opt.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="rotation-controls">
+                        <div className="rotation-buttons-left">
+                            <button className="rotation-button clear" onClick={() => setSavedTeamRotations([])}>Clear</button>
+                        </div>
+                        {!hasValidTeamRotation ? (
+                            <span style={{ fontSize: '0.8rem', color: 'gray', marginLeft: 'auto', fontWeight: 'bold' }}>
+                                No Team Rotation
+                            </span>
+                        ) : (
+                            <button
+                                className="rotation-button add-button"
+                                disabled={!hasValidTeamRotation}
+                                onClick={() => {
+                                    const summary = characterRuntimeStates?.[charId]?.teamRotationSummary;
+                                    if (!summary || Math.round(summary?.total?.avg ?? 0) === 0) return;
+
+                                    const newEntry = {
+                                        id: Date.now(),
+                                        charId: charId,
+                                        name: summary.name ?? characterRuntimeStates?.[charId]?.Name,
+                                        total: summary.total,
+                                        fullCharacterState: characterRuntimeStates?.[charId] ?? {}
+                                    };
+                                    setSavedTeamRotations(prev => [...prev, newEntry]);
+                                }}
+                            >
+                                +
+                            </button>
+                        )}
+                    </div>
+                    <div className="saved-rotation-list team">
+                        {(() => {
+                            const summaries = [...savedTeamRotations]
+                                .filter(entry => !filterCharId || String(entry.charId) === filterCharId)
+                                .sort((a, b) => {
+                                let valA, valB;
+
+                                switch (sortKey) {
+                                    case 'name':
+                                        valA = a.name?.toLowerCase() ?? '';
+                                        valB = b.name?.toLowerCase() ?? '';
+                                        break;
+                                    case 'dmg':
+                                        valA = a.total?.avg ?? 0;
+                                        valB = b.total?.avg ?? 0;
+                                        break;
+                                    case 'date':
+                                    default:
+                                        valA = a.id;
+                                        valB = b.id;
+                                }
+
+                                if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+                                if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+                                return 0;
+                            });
+
+                            if (summaries.length === 0) {
+                                return <p style={{ color: '#5c5c5c' }}>hmm...</p>;
+                            }
+
+                            return summaries.map(({ charId, name, total, id, fullCharacterState }) => (
+                                <div key={id} className="rotation-item-wrapper">
+                                    <div className="rotation-item">
+                                        <div className="rotation-header">
+                                            {editingId === id ? (
+                                                <input
+                                                    className="entry-name-edit"
+                                                    value={editedName}
+                                                    onChange={(e) => setEditedName(e.target.value)}
+                                                    onBlur={() => {
+                                                        setSavedTeamRotations(prev =>
+                                                            prev.map(entry =>
+                                                                entry.id === editingId ? { ...entry, name: editedName } : entry
+                                                            )
+                                                        );
+                                                        setEditingId(null);
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <span className="highlight">{name}</span>
+                                            )}
+                                            <span className="entry-type-detail">
+                                                {/*<span className="entry-detail-text">{characterRuntimeStates[charId]?.Name}'s team</span>*/}
+                                                <span className="entry-detail-text">
+                                                        {new Date(id).toLocaleDateString(undefined, {
+                                                            day: 'numeric',
+                                                            month: 'short',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                            </span>
+                                        </div>
+
+                                        <div className="rotation-values">
+                                            <span className="value-label">Normal</span>
+                                            <span className="value">{Math.round(total.normal).toLocaleString()}</span>
+                                            <span className="value-label">Crit</span>
+                                            <span className="value">{Math.round(total.crit).toLocaleString()}</span>
+                                            <span className="value-label">Avg</span>
+                                            <span className="value avg" style={{ fontWeight: 'bold' }}>
+                                                    {Math.round(total.avg).toLocaleString()}
+                                                </span>
+                                            <button
+                                                className="rotation-button load-button"
+                                                title="Load Rotation"
+                                                onClick={() => loadSavedRotation({ charId, fullCharacterState })}
+                                                style={{ marginLeft: 'auto' }}
+                                            >
+                                                Load
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="rotation-actions external-actions">
+                                        <button
+                                            className="rotation-button"
+                                            title="Edit Name"
+                                            onClick={() => {
+                                                setEditingId(id);
+                                                setEditedName(name ?? '');
+                                            }}
+                                        >
+                                            <Pencil size={18} />
+                                        </button>
+                                        <button
+                                            className="rotation-button"
+                                            title="Delete"
+                                            onClick={() =>
+                                                setSavedTeamRotations(prev =>
+                                                    prev.filter(entry => entry.id !== id)
+                                                )
+                                            }
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ));
+                        })()}
+                    </div>
+                </>
             )}
         </div>
     );
