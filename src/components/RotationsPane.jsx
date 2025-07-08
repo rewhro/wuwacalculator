@@ -644,6 +644,7 @@ export default function RotationsPane({
                                     const newEntry = {
                                         id: Date.now(),
                                         charId: charId,
+                                        entries: rotationEntries,
                                         name: summary.name ?? characterRuntimeStates?.[charId]?.Name,
                                         total: summary.total,
                                         fullCharacterState: characterRuntimeStates?.[charId] ?? {}
@@ -686,7 +687,7 @@ export default function RotationsPane({
                                 return <p style={{ color: '#5c5c5c' }}>hmm...</p>;
                             }
 
-                            return summaries.map(({ charId, name, total, id, fullCharacterState }) => (
+                            return summaries.map(({ charId, name, total, id, fullCharacterState, entries }) => (
                                 <div key={id} className="rotation-item-wrapper">
                                     <div className="rotation-item">
                                         <div className="rotation-header">
@@ -732,7 +733,7 @@ export default function RotationsPane({
                                             <button
                                                 className="rotation-button load-button"
                                                 title="Load Rotation"
-                                                onClick={() => loadSavedRotation({ charId, fullCharacterState })}
+                                                onClick={() => loadSavedRotation({ charId, fullCharacterState, entries })}
                                                 style={{ marginLeft: 'auto' }}
                                             >
                                                 Load
