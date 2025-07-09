@@ -219,7 +219,7 @@ export default function RotationsPane({
         setBaseCharacterState({ Stats: saved.fullCharacterState.Stats ?? {} });
 
         setRotationEntries(
-            (saved.entries ?? []).map(e => ({
+            (saved.entries ?? saved.fullCharacterState.rotationEntries ?? []).map(e => ({
                 ...e,
                 createdAt: e.createdAt ?? Date.now() + Math.random()
             }))
