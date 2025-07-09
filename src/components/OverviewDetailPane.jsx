@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { highlightKeywordsInText, setIconMap } from '../constants/echoSetData';
 import {imageCache} from '../pages/calculator.jsx';
 import { formatStatKey } from '../utils/echoHelper.js';
@@ -8,6 +8,7 @@ import {formatStatValue} from "./WeaponPane.jsx";
 import {getActiveStateWeapons} from "../data/buffs/weaponBuffs.js";
 import weaponsRaw from '../data/weapons.json';
 import {getActiveEchoes} from "../data/buffs/applyEchoLogic.js";
+import {calculateRotationTotals} from "./Rotations.jsx";
 
 export default function OverviewDetailPane({
                                                character,
@@ -68,6 +69,23 @@ export default function OverviewDetailPane({
         ]
     ];
 
+    const rotationEntries = runtime.rotationEntries ?? [];
+    const allSkillResults = runtime.allSkillResults ?? [];
+    const rotationDmg = calculateRotationTotals(allSkillResults, rotationEntries).total;
+    const teamRotationDmg = runtime.teamRotationSummary?.total;
+    console.log(runtime);
+
+    const teamRotation = runtime?.teamRotation ?? {};
+    const activeStates = runtime?.activeStates ?? {};
+
+    const toggleKeys = ["teammateRotation-1", "teammateRotation-2"];
+    const hasValidTeamRotation = (
+        runtime?.Team?.length > 1 &&
+        Object.keys(teamRotation).length > 0 &&
+        (activeStates[toggleKeys[0]] || activeStates[toggleKeys[1]])
+    );
+
+
     function deleteCharacter() {
         const currentId = String(character.link);
 
@@ -97,6 +115,21 @@ export default function OverviewDetailPane({
         });
     }
 
+    function formatNumber(num) {
+        if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
+        if (num >= 10000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 100000) return (num / 1000).toFixed(1) + 'K';
+        return Math.round(num).toLocaleString();
+    }
+
+    const [pop, setPop] = useState(false);
+
+    useEffect(() => {
+        setPop(true);
+        const timeout = setTimeout(() => setPop(false), 300);
+        return () => clearTimeout(timeout);
+    }, [rotationDmg.avg]);
+
     const displayValue = (key, val) => ['atk', 'hp', 'def'].includes(key) ? Math.floor(val) : `${val.toFixed(1)}%`;
 
     return (
@@ -121,47 +154,121 @@ export default function OverviewDetailPane({
                             }}
                         />
                     </div>
-                    {runtime?.FinalStats &&(
-                        <div className="stats-grid overview" style={{marginTop: '0.5rem'}}>
-                            {statGroups.flat().map((stat, i) => {
-                                const val = finalStats[stat.key];
-                                return (
-                                    <div key={stat.key ?? i} className="stat-row" style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
-                                        <div
-                                            className="stat-label"
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '6px',
-                                                ...(stat.color ? { color: stat.color } : {})
-                                            }}
-                                        >
-                                            {statIconMap[stat.label] && (
-                                                <div
-                                                    className="stat-icon"
-                                                    style={{
-                                                        width: 18,
-                                                        height: 18,
-                                                        backgroundColor: stat.color ?? '#999',
-                                                        WebkitMaskImage: `url(${statIconMap[stat.label]})`,
-                                                        maskImage: `url(${statIconMap[stat.label]})`,
-                                                        WebkitMaskRepeat: 'no-repeat',
-                                                        maskRepeat: 'no-repeat',
-                                                        WebkitMaskSize: 'contain',
-                                                        maskSize: 'contain'
-                                                    }}
-                                                />
-                                            )}
-                                            {stat.label}
+                    <div className="overview-dmg">
+                        {runtime?.FinalStats &&(
+                            <div className="stats-grid overview" style={{marginTop: '0.5rem'}}>
+                                {statGroups.flat().map((stat, i) => {
+                                    const val = finalStats[stat.key];
+                                    return (
+                                        <div key={stat.key ?? i} className="stat-row" style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
+                                            <div
+                                                className="stat-label"
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '6px',
+                                                    ...(stat.color ? { color: stat.color } : {})
+                                                }}
+                                            >
+                                                {statIconMap[stat.label] && (
+                                                    <div
+                                                        className="stat-icon"
+                                                        style={{
+                                                            width: 18,
+                                                            height: 18,
+                                                            backgroundColor: stat.color ?? '#999',
+                                                            WebkitMaskImage: `url(${statIconMap[stat.label]})`,
+                                                            maskImage: `url(${statIconMap[stat.label]})`,
+                                                            WebkitMaskRepeat: 'no-repeat',
+                                                            maskRepeat: 'no-repeat',
+                                                            WebkitMaskSize: 'contain',
+                                                            maskSize: 'contain'
+                                                        }}
+                                                    />
+                                                )}
+                                                {stat.label}
+                                            </div>
+                                            <div className="stat-total">
+                                                <span>{displayValue(stat.key, val)}</span>
+                                            </div>
                                         </div>
-                                        <div className="stat-total">
-                                            <span>{displayValue(stat.key, val)}</span>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        <div className="rotations-overview-boxes">
+                            {rotationEntries.length > 0 && (
+                                <div className="rotation-box inherent-skills-box">
+                                    <div className="box-header">Rotation DMG</div>
+                                    <div className="box-stat dashed-line">
+                                        <strong className="label">Normal</strong>
+                                        <div className="dash-separator" />
+                                        <div
+                                            className="damage-tooltip-wrapper"
+                                            data-tooltip={rotationDmg.normal.toLocaleString()}
+                                        >
+                                            <span className="value">{formatNumber(rotationDmg.normal)}</span>
                                         </div>
                                     </div>
-                                );
-                            })}
+                                    <div className="box-stat dashed-line">
+                                        <strong className="label">CRIT</strong>
+                                        <div className="dash-separator" />
+                                        <div
+                                            className="damage-tooltip-wrapper"
+                                            data-tooltip={rotationDmg.crit.toLocaleString()}
+                                        >
+                                            <span className="value">{formatNumber(rotationDmg.crit)}</span>
+                                        </div>
+                                    </div>
+                                    <div className="box-stat dashed-line">
+                                        <strong className="label">AVG</strong>
+                                        <div className="dash-separator" />
+                                        <div
+                                            className="damage-tooltip-wrapper"
+                                            data-tooltip={rotationDmg.avg.toLocaleString()}
+                                        >
+                                            <span className="value avg">{formatNumber(rotationDmg.avg)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {hasValidTeamRotation && teamRotationDmg &&(
+                                <div className="rotation-box inherent-skills-box">
+                                    <div className="box-header">Team Rotation DMG</div>
+                                    <div className="box-stat dashed-line">
+                                        <strong className="label">Normal</strong>
+                                        <div className="dash-separator" />
+                                        <div
+                                            className="damage-tooltip-wrapper"
+                                            data-tooltip={teamRotationDmg.normal.toLocaleString()}
+                                        >
+                                            <span className="value">{formatNumber(teamRotationDmg.normal)}</span>
+                                        </div>
+                                    </div>
+                                    <div className="box-stat dashed-line">
+                                        <strong className="label">CRIT</strong>
+                                        <div className="dash-separator" />
+                                        <div
+                                            className="damage-tooltip-wrapper"
+                                            data-tooltip={teamRotationDmg.crit.toLocaleString()}
+                                        >
+                                            <span className="value">{formatNumber(teamRotationDmg.crit)}</span>
+                                        </div>
+                                    </div>
+                                    <div className="box-stat dashed-line">
+                                        <strong className="label">AVG</strong>
+                                        <div className="dash-separator" />
+                                        <div
+                                            className="damage-tooltip-wrapper"
+                                            data-tooltip={teamRotationDmg.avg.toLocaleString()}
+                                        >
+                                            <span className="value avg">{formatNumber(teamRotationDmg.avg)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
 
                 <div className="overview-gear">

@@ -128,7 +128,8 @@ export function calculateSpectroFrazzleDamage(combatState, mergedBuffs, characte
 
     const defIgnore = (mergedBuffs?.enemyDefIgnore ?? 0);
     const defShred = (mergedBuffs?.enemyDefShred ?? 0);
-    const enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
+    let enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
+    enemyDef = enemyDef > 0 ? enemyDef : 0;
     const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
 
     const perStackDmg = perStack * (1 + bonus / 100) * (resMult * defMult);
@@ -169,7 +170,8 @@ export function calculateAeroErosionDamage(combatState, mergedBuffs, characterLe
 
     const defIgnore = (mergedBuffs?.enemyDefIgnore ?? 0);
     const defShred = (mergedBuffs?.enemyDefShred ?? 0);
-    const enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
+    let enemyDef = ((8 * enemyLevel) + 792) * (1 - (defIgnore + defShred) / 100);
+    enemyDef = enemyDef > 0 ? enemyDef : 0;
     const defMult = (800 + 8 * charLevel) / (800 + 8 * charLevel + enemyDef);
 
     const perStackDmg = perStack * (1 + bonus / 100) * (resMult * defMult);

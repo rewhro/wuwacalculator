@@ -258,6 +258,8 @@
 .stats-grid.overview {
     margin: unset;
     width: 100%;
+    overflow-y: auto;
+    height: unset;
 }
 
 .empty-echo-tile {
@@ -313,4 +315,80 @@
 .dark .team-icon.empty-slot.overview,
 .dark-alt .team-icon.empty-slot.overview {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.overview-dmg {
+    max-height: 44rem;
+    display: grid;
+    grid-template-rows: auto;
+    gap: 1rem;
+}
+
+.rotations-overview-boxes {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.rotation-box {
+    margin: unset;
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+.rotation-box:hover {
+    transform: translateY(-2px);
+}
+
+.box-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.box-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.15rem 0;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+    .rotations-overview-boxes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.value {
+    font-weight: 600;
+}
+
+.value.animated {
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+.dashed-line {
+    display: flex;
+    align-items: center;
+}
+.dash-separator {
+    opacity: 0.4;
+    flex-grow: 1;
+    border-bottom: 1px dashed #aaa;
+    margin: 0 0.5rem;
+    height: 1px;
+}
+
+.box-stat .label {
+    opacity: 0.5;
 }
