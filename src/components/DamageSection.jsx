@@ -141,6 +141,12 @@ export default function DamageSection({
         }
     }
 
+    function formatNumber(num) {
+        if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
+        if (num >= 10000000) return (num / 1000000).toFixed(1) + 'M';
+        return Math.round(num).toLocaleString();
+    }
+
     const teamRotation = characterRuntimeStates[charId]?.teamRotation ?? {};
     const activeStates = characterRuntimeStates[charId]?.activeStates ?? {};
 
@@ -281,21 +287,21 @@ export default function DamageSection({
                                                     data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'normal')}` : `${normal.toLocaleString()}`}
                                                     style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]], fontWeight: 'bold' }}
                                                 >
-                                                    {normal.toLocaleString()}
+                                                    {formatNumber(normal)}
                                                 </div>
                                                 <div
                                                     className="damage-tooltip-wrapper"
                                                     data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'crit')}` : `${crit.toLocaleString()}`}
                                                     style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]], fontWeight: 'bold' }}
                                                 >
-                                                    {crit.toLocaleString()}
+                                                    {formatNumber(crit)}
                                                 </div>
                                                 <div
                                                     className="damage-tooltip-wrapper"
                                                     data-tooltip={result.subHits?.length > 0 ? `${getSubHitFormula(result.subHits, 'avg')}` : `${avg.toLocaleString()}`}
                                                     style={{ color: attributeColors[elementToAttribute[activeCharacter?.attribute]], fontWeight: 'bold' }}
                                                 >
-                                                    {avg.toLocaleString()}
+                                                    {formatNumber(avg)}
                                                 </div>
                                             </>
                                         )}
@@ -306,11 +312,11 @@ export default function DamageSection({
                                                     ↳ {level.Name}-{i + 1}{hit.label && ` (${hit.label})`}
                                                 </div>
                                                 <div className='subhit'
-                                                    style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
+                                                     style={{ fontSize: '0.9rem', opacity: 0.6 }}>{formatNumber(Math.round(hit.normal))}</div>
                                                 <div className='subhit'
-                                                    style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
+                                                     style={{ fontSize: '0.9rem', opacity: 0.6 }}>{formatNumber(Math.round(hit.crit))}</div>
                                                 <div className='subhit'
-                                                    style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
+                                                     style={{ fontSize: '0.9rem', opacity: 0.6 }}>{formatNumber(Math.round(hit.avg))}</div>
                                             </React.Fragment>
                                         ))}
                                     </React.Fragment>
@@ -370,7 +376,7 @@ export default function DamageSection({
                                                     <div></div>
                                                     <div></div>
                                                     <div style={{ color: supportColor, fontWeight: 'bold' }}>
-                                                        {skill.avg.toLocaleString()}
+                                                        {formatNumber(skill.avg)}
                                                     </div>
                                                 </>
                                             ) : (
@@ -380,21 +386,21 @@ export default function DamageSection({
                                                         data-tooltip={skill.subHits?.length > 0 ? getSubHitFormula(skill.subHits, 'normal') : skill.normal.toLocaleString()}
                                                         style={{ color: attributeColors[echoElement], fontWeight: 'bold' }}
                                                     >
-                                                        {skill.normal.toLocaleString()}
+                                                        {formatNumber(skill.normal)}
                                                     </div>
                                                     <div
                                                         className="damage-tooltip-wrapper"
                                                         data-tooltip={skill.subHits?.length > 0 ? getSubHitFormula(skill.subHits, 'crit') : skill.crit.toLocaleString()}
                                                         style={{ color: attributeColors[echoElement], fontWeight: 'bold' }}
                                                     >
-                                                        {skill.crit.toLocaleString()}
+                                                        {formatNumber(skill.crit)}
                                                     </div>
                                                     <div
                                                         className="damage-tooltip-wrapper"
                                                         data-tooltip={skill.subHits?.length > 0 ? getSubHitFormula(skill.subHits, 'avg') : skill.avg.toLocaleString()}
                                                         style={{ color: attributeColors[echoElement], fontWeight: 'bold' }}
                                                     >
-                                                        {skill.avg.toLocaleString()}
+                                                        {formatNumber(skill.avg)}
                                                     </div>
                                                 </>
                                             )}
@@ -405,11 +411,11 @@ export default function DamageSection({
                                                         ↳ {skill.name}-{j + 1}{hit.label && ` (${hit.label})`}
                                                     </div>
                                                     <div className='subhit'
-                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.normal).toLocaleString()}</div>
+                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{formatNumber(Math.round(hit.normal))}</div>
                                                     <div className='subhit'
-                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.crit).toLocaleString()}</div>
+                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{formatNumber(Math.round(hit.crit))}</div>
                                                     <div className='subhit'
-                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{Math.round(hit.avg).toLocaleString()}</div>
+                                                        style={{ fontSize: '0.9rem', opacity: 0.6 }}>{formatNumber(Math.round(hit.avg))}</div>
                                                 </React.Fragment>
                                             ))}
                                         </React.Fragment>
@@ -435,7 +441,7 @@ export default function DamageSection({
                                             Spectro Frazzle
                                         </div>
                                         <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold'}}>
-                                            {Math.floor(frazzle).toLocaleString()}
+                                            {(Math.floor(frazzle)).toLocaleString()}
                                         </div>
                                         <div className="damage-tooltip-wrapper" style={{color: attributeColors.spectro, fontWeight: 'bold'}}>
                                             {Math.floor(frazzle).toLocaleString()}

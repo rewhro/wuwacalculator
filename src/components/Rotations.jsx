@@ -1,6 +1,13 @@
 import React, {useEffect} from 'react';
 import { getSkillDamageCache } from '../utils/skillDamageCache';
 
+
+function formatNumber(num) {
+    if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
+    if (num >= 10000000) return (num / 1000000).toFixed(1) + 'M';
+    return Math.round(num).toLocaleString();
+}
+
 export default function Rotations({ rotationEntries, characterRuntimeStates, charId }) {
     if (!rotationEntries || rotationEntries.length === 0) return null;
 
@@ -17,9 +24,9 @@ export default function Rotations({ rotationEntries, characterRuntimeStates, cha
                 <div>AVG</div>
 
                 <div>Total DMG</div>
-                <div>{Math.round(total.normal).toLocaleString()}</div>
-                <div>{Math.round(total.crit).toLocaleString()}</div>
-                <div>{Math.round(total.avg).toLocaleString()}</div>
+                <div>{formatNumber(Math.round(total.normal))}</div>
+                <div>{formatNumber(Math.round(total.crit))}</div>
+                <div>{formatNumber(Math.round(total.avg))}</div>
 
                 {Object.entries(breakdownMap).map(([type, dmg]) => {
                     const percent = total.avg > 0 ? (dmg.avg / total.avg) * 100 : 0;
@@ -28,9 +35,9 @@ export default function Rotations({ rotationEntries, characterRuntimeStates, cha
                             <div style={{ color: '#999' }}>
                                 ({percent.toFixed(1)}%) {type}
                             </div>
-                            <div style={{ color: '#999' }}>{Math.round(dmg.normal).toLocaleString()}</div>
-                            <div style={{ color: '#999' }}>{Math.round(dmg.crit).toLocaleString()}</div>
-                            <div style={{ color: '#999' }}>{Math.round(dmg.avg).toLocaleString()}</div>
+                            <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.normal))}</div>
+                            <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.crit))}</div>
+                            <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.avg))}</div>
                         </React.Fragment>
                     );
                 })}
@@ -41,7 +48,7 @@ export default function Rotations({ rotationEntries, characterRuntimeStates, cha
                         <div></div>
                         <div></div>
                         <div style={{ color: 'limegreen', fontWeight: 'bold' }}>
-                            {Math.round(supportTotals.healing).toLocaleString()}
+                            {formatNumber(Math.round(supportTotals.healing))}
                         </div>
                     </>
                 )}
@@ -143,9 +150,9 @@ export function TeamRotation({ mainCharId, characterRuntimeStates, characterStat
                 <div>AVG</div>
 
                 <div>Total Team DMG</div>
-                <div>{Math.round(teamTotal.normal).toLocaleString()}</div>
-                <div>{Math.round(teamTotal.crit).toLocaleString()}</div>
-                <div>{Math.round(teamTotal.avg).toLocaleString()}</div>
+                <div>{formatNumber(Math.round(teamTotal.normal))}</div>
+                <div>{formatNumber(Math.round(teamTotal.crit))}</div>
+                <div>{formatNumber(Math.round(teamTotal.avg))}</div>
 
                 {characterContributions.map(({ id, total }) => {
                     const char = characterStates.find(c => String(c.Id) === String(id));
@@ -156,9 +163,9 @@ export function TeamRotation({ mainCharId, characterRuntimeStates, characterStat
                             <div style={{ color: '#999' }}>
                                 ({percent.toFixed(1)}%) {char?.Name ?? 'Unknown'}
                             </div>
-                            <div style={{ color: '#999' }}>{Math.round(total.normal).toLocaleString()}</div>
-                            <div style={{ color: '#999' }}>{Math.round(total.crit).toLocaleString()}</div>
-                            <div style={{ color: '#999' }}>{Math.round(total.avg).toLocaleString()}</div>
+                            <div style={{ color: '#999' }}>{formatNumber(Math.round(total.normal))}</div>
+                            <div style={{ color: '#999' }}>{formatNumber(Math.round(total.crit))}</div>
+                            <div style={{ color: '#999' }}>{formatNumber(Math.round(total.avg))}</div>
                         </React.Fragment>
                     );
                 })}
@@ -190,7 +197,7 @@ export function calculateRotationTotals(skillCache, rotationEntries) {
     for (const entry of rotationEntries) {
         const multiplier = entry.multiplier ?? 1;
 
-        const source = entry.locked ? entry.snapshot : skillCache.find(
+        const source = entry.locked ? entry.snapshot : skillCache?.find(
             s => s.name === entry.label && s.tab === entry.tab
         );
 

@@ -146,11 +146,11 @@ export default function RotationItem({
                     ) : (
                         <>
                             <span className="value-label">Normal</span>
-                            <span className="value">{Math.round(normal)}</span>
+                            <span className="value">{Math.round(normal).toLocaleString()}</span>
                             <span className="value-label">Crit</span>
-                            <span className="value">{Math.round(crit)}</span>
+                            <span className="value">{Math.round(crit).toLocaleString()}</span>
                             <span className="value-label">Avg</span>
-                            <span className="value avg">{Math.round(avg)}</span>
+                            <span className="value avg">{Math.round(avg).toLocaleString()}</span>
                         </>
                     )}
                     <div className="rotation-multiplier-inline" onClick={(e) => e.stopPropagation()}>

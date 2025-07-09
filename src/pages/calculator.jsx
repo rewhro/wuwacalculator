@@ -314,7 +314,7 @@ export default function Calculator() {
                     Team: team,
                     rotationEntries: rotationEntries,
                     FinalStats: finalStats ?? {},
-                    allSkillsResults: allSkillResults ?? {},
+                    allSkillResults: allSkillResults ?? {},
                     teamRotation: teamRotation ?? {}
                 }
             }));
@@ -586,7 +586,7 @@ export default function Calculator() {
                     CustomBuffs: customBuffs,
                     CombatState: combatState,
                     FinalStats: finalStats,
-                    allSkillsResults: allSkillResults,
+                    allSkillResults: allSkillResults,
                 }
             };
         });
@@ -686,7 +686,7 @@ export default function Calculator() {
 
     useEffect(() => {
         const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-        const cache = characterRuntimeStates?.[charId]?.allSkillsResults ?? [];
+        const cache = characterRuntimeStates?.[charId]?.allSkillResults ?? [];
 
         setRotationEntries(prev => {
             const updated = prev.map(entry => {
@@ -831,6 +831,29 @@ export default function Calculator() {
             };
         });
     };
+
+    useEffect(() => {
+        const cleanedStates = {};
+
+        for (const [charId, state] of Object.entries(characterRuntimeStates)) {
+            const { allSkillsResults, ...rest } = state;
+            cleanedStates[charId] = rest;
+        }
+
+        setCharacterRuntimeStates(cleanedStates);
+    }, []);
+
+    useEffect(() => {
+        const raw = JSON.parse(localStorage.getItem('characterRuntimeStates') || '{}');
+        const cleaned = {};
+
+        for (const [charId, state] of Object.entries(raw)) {
+            const { allSkillsResults, ...rest } = state;
+            cleaned[charId] = rest;
+        }
+
+        localStorage.setItem('characterRuntimeStates', JSON.stringify(cleaned));
+    }, []);
 
     //console.log(characterRuntimeStates[charId]);
 
