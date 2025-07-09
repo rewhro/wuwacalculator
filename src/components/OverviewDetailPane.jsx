@@ -73,7 +73,6 @@ export default function OverviewDetailPane({
     const allSkillResults = runtime.allSkillResults ?? [];
     const rotationDmg = calculateRotationTotals(allSkillResults, rotationEntries).total;
     const teamRotationDmg = runtime.teamRotationSummary?.total;
-    console.log(runtime);
 
     const teamRotation = runtime?.teamRotation ?? {};
     const activeStates = runtime?.activeStates ?? {};
