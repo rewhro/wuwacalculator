@@ -267,13 +267,13 @@ export default function OverviewDetailPane({
                                         const contributorCharacter = characters.find(c => String(c.link) === String(contributors[contributorId]?.id));
 
                                         const displayed = contributorCycleIndex === 0
-                                            ? selected.total
+                                            ? selected?.total
                                             : contributors[contributorId]?.total;
 
                                         const contributor = contributors?.[contributorId];
                                         const teamAvg = teamRotationDmg?.avg ?? 0;
                                         const percent = teamAvg > 0 && contributor?.total?.avg
-                                            ? ((contributor.total.avg / teamAvg) * 100).toFixed(1)
+                                            ? ((contributor?.total?.avg / teamAvg) * 100).toFixed(1)
                                             : null;
 
                                         return (
@@ -299,8 +299,8 @@ export default function OverviewDetailPane({
                                                         <span className="value avg">{formatNumber(displayed?.avg)}</span>
                                                     </div>
                                                 </div>
-                                                <div className="overview-weapon-details highlight">
-                                                    {contributorCycleIndex === 0 ? 'Total' : `${contributorCharacter.displayName ?? ''}`}
+                                                <div className="overview-weapon-details">
+                                                    {contributorCycleIndex === 0 ? 'Total' : `${contributorCharacter?.displayName ?? ''}`}
                                                     {percent ? ' · ' : ''}
                                                     {percent ? `${percent}%` : ''}
                                                 </div>
