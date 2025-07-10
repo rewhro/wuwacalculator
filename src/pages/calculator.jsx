@@ -812,7 +812,7 @@ export default function Calculator() {
     const allRotations = getMainRotationTotals(charId, characterRuntimeStates, savedRotations, savedTeamRotations);
     const teamRotationDmg = getTeamRotationTotal(charId, characterRuntimeStates);
 
-    console.log(getSkillDamageCache());
+    //console.log(getSkillDamageCache());
 
     return (
         <>
