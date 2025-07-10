@@ -57,7 +57,7 @@ export default function NotFound() {
                         <span></span>
                     </button>
                     <h4 className="toolbar-title">
-                        Wuthering Waves Damage Calculator (& Optimizer soon... maybe)
+                        Wuthering Waves Damage Calculator & Optimizer
                     </h4>
                 </div>
             </div>

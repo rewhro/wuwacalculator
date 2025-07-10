@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { Sun, Moon, Sparkle, Info, Settings } from "lucide-react";
 import useDarkMode from "../hooks/useDarkMode";
@@ -57,7 +58,7 @@ export default function InfoPage() {
                         <span></span>
                     </button>
                     <h4 className="toolbar-title">
-                        Wuthering Waves Damage Calculator (& Optimizer soon... maybe)
+                        Wuthering Waves Damage Calculator & Optimizer
                     </h4>
                 </div>
             </div>
@@ -135,26 +136,43 @@ export default function InfoPage() {
                     />
                 )}
 
-                <div className="main-content info-page" style={{ padding: '2rem' }}>
-                    <div className="info-section">
-                        <h1>Hi!</h1>
-                        <p>First off, i made this solely because i was bored and wanted to try out programming with javascript.
-                            I was initially working with spreadsheets but later found out how easy it was to like make something
-                            so i was like "why not?" and yeah.
-                            It's still a work in progress, i will stay avoiding grass for as long as i can to push out more stuff
-                            to make it functional.
-                        </p>
-                    </div>
+                <div className="main-content info-page"
+                     style={{
+                         padding: '2rem',
+                         display: 'flex',
+                         flexDirection: 'column',
+                         justifyContent: 'space-between',
+                         maxHeight: '100dvh',
+                         overflowY: 'hidden',
+                    }}>
+                    <div style={{ overflowY: 'auto' }}>
+                        <div className="info-section">
+                            <h1>Hi!</h1>
+                            <p>First off, i made this solely because i was bored and wanted to try out programming with javascript.
+                                I was initially working with spreadsheets but later found out how easy it was to like make something
+                                so i was like "why not?" and yeah.
+                                It's still a work in progress, i will stay avoiding grass for as long as i can to push out more stuff
+                                to make it functional.
+                            </p>
+                        </div>
 
-                    <div className="info-section">
-                        <h3>...SO</h3>
-                        <p>Most assets and character data are sourced from <a href="https://ww.hakush.in/" target="_blank" rel="noopener noreferrer">Hakush</a> and the internet.</p>
-                        <p>The formulas for calculating damage were gotten from <a href="https://wutheringwaves.fandom.com/wiki/Damage" target="_blank" rel="noopener noreferrer">Wuthering Waves Wiki</a>.</p>
-                    </div>
+                        <div className="info-section">
+                            <h3>...SO</h3>
+                            <p>Most assets and character data are sourced from <a href="https://ww.hakush.in/" target="_blank" rel="noopener noreferrer">Hakush</a> and the internet.</p>
+                            <p>The formulas for calculating damage were gotten from <a href="https://wutheringwaves.fandom.com/wiki/Damage" target="_blank" rel="noopener noreferrer">Wuthering Waves Wiki</a>.</p>
+                        </div>
 
-                    <div className="info-section">
-                        <h3>How to contact MOI?</h3>
-                        <p>Join the <a href="https://discord.gg/wNaauhE4uH" target="_blank" rel="noopener noreferrer">discord</a> bro.</p>
+                        <div className="info-section">
+                            <h3>How to contact MOI?</h3>
+                            <p>Join the <a href="https://discord.gg/wNaauhE4uH" target="_blank" rel="noopener noreferrer">discord</a> bro.</p>
+                        </div>
+                    </div>
+                    <div className="legal">
+                        <hr style={{ margin: '1rem 0', opacity: '0.1' }} />
+                        <div className="legal-links">
+                            <Link className="links" to="/privacy" >Privacy Policy</Link>
+                            <Link className="links" to="/terms">Terms of Service</Link>
+                        </div>
                     </div>
                 </div>
             </div>

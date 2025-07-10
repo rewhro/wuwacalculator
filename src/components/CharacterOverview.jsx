@@ -39,7 +39,7 @@ export default function CharacterOverviewPane({
         <div className="character-overview-pane">
             <div className="character-overview-header">
                 <h2>Overview</h2>
-                <button onClick={onClose} className="character-overview-close">Back</button>
+                <button onClick={onClose} className="character-overview-close">← Back</button>
             </div>
 
             {isCollapsedMode ? (
