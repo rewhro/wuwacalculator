@@ -22,7 +22,8 @@ export default function OverviewDetailPane({
                                                setSelectedId,
                                                handleCharacterSelect,
                                                handleReset,
-                                               sortedCharacterIds
+                                               sortedCharacterIds,
+                                               allRotations
                                            }) {
     if (!character || !runtime) return null;
     const weaponMap = {};
@@ -69,21 +70,13 @@ export default function OverviewDetailPane({
         ]
     ];
 
-    const rotationEntries = runtime.rotationEntries ?? [];
-    const allSkillResults = runtime.allSkillResults ?? [];
-    const rotationDmg = calculateRotationTotals(allSkillResults, rotationEntries).total;
-    const teamRotationDmg = runtime.teamRotationSummary?.total;
+    const [selectedRotationIndex, setSelectedRotationIndex] = useState(0);
+    const [selectedTeamRotationIndex, setSelectedTeamRotationIndex] = useState(0);
+    const rotationDmg = allRotations?.personalRotations?.[selectedRotationIndex]?.total;
+    const teamRotationDmg = allRotations?.teamRotations?.[selectedTeamRotationIndex]?.total;
 
     const teamRotation = runtime?.teamRotation ?? {};
     const activeStates = runtime?.activeStates ?? {};
-
-    const toggleKeys = ["teammateRotation-1", "teammateRotation-2"];
-    const hasValidTeamRotation = (
-        runtime?.Team?.length > 1 &&
-        Object.keys(teamRotation).length > 0 &&
-        (activeStates[toggleKeys[0]] || activeStates[toggleKeys[1]])
-    );
-
 
     function deleteCharacter() {
         const currentId = String(character.link);
@@ -120,14 +113,6 @@ export default function OverviewDetailPane({
         if (num >= 100000) return (num / 1000).toFixed(1) + 'K';
         return Math.round(num).toLocaleString();
     }
-
-    const [pop, setPop] = useState(false);
-
-    useEffect(() => {
-        setPop(true);
-        const timeout = setTimeout(() => setPop(false), 300);
-        return () => clearTimeout(timeout);
-    }, [rotationDmg.avg]);
 
     const displayValue = (key, val) => ['atk', 'hp', 'def'].includes(key) ? Math.floor(val) : `${val.toFixed(1)}%`;
 
@@ -196,17 +181,29 @@ export default function OverviewDetailPane({
                             </div>
                         )}
                         <div className="rotations-overview-boxes">
-                            {rotationEntries.length > 0 && (
+                            {allRotations?.personalRotations?.length > 0 && (
                                 <div className="rotation-box inherent-skills-box">
-                                    <div className="box-header">Rotation DMG</div>
+                                    <select
+                                        className="box-header entry-detail-dropdown"
+                                        value={selectedRotationIndex}
+                                        onChange={(e) => setSelectedRotationIndex(Number(e.target.value))}
+                                    >
+                                        {allRotations.personalRotations.map((entry, index) => (
+                                            <option key={entry.id} value={index}>
+                                                {entry.id === 'live'
+                                                    ? "Rotation DMG"
+                                                    : entry.name ??`Saved #${index}`}
+                                            </option>
+                                        ))}
+                                    </select>
                                     <div className="box-stat dashed-line">
                                         <strong className="label">Normal</strong>
                                         <div className="dash-separator" />
                                         <div
                                             className="damage-tooltip-wrapper"
-                                            data-tooltip={rotationDmg.normal.toLocaleString()}
+                                            data-tooltip={rotationDmg?.normal.toLocaleString()}
                                         >
-                                            <span className="value">{formatNumber(rotationDmg.normal)}</span>
+                                            <span className="value">{formatNumber(rotationDmg?.normal)}</span>
                                         </div>
                                     </div>
                                     <div className="box-stat dashed-line">
@@ -214,9 +211,9 @@ export default function OverviewDetailPane({
                                         <div className="dash-separator" />
                                         <div
                                             className="damage-tooltip-wrapper"
-                                            data-tooltip={rotationDmg.crit.toLocaleString()}
+                                            data-tooltip={rotationDmg?.crit.toLocaleString()}
                                         >
-                                            <span className="value">{formatNumber(rotationDmg.crit)}</span>
+                                            <span className="value">{formatNumber(rotationDmg?.crit)}</span>
                                         </div>
                                     </div>
                                     <div className="box-stat dashed-line">
@@ -224,24 +221,37 @@ export default function OverviewDetailPane({
                                         <div className="dash-separator" />
                                         <div
                                             className="damage-tooltip-wrapper"
-                                            data-tooltip={rotationDmg.avg.toLocaleString()}
+                                            data-tooltip={rotationDmg?.avg.toLocaleString()}
                                         >
-                                            <span className="value avg">{formatNumber(rotationDmg.avg)}</span>
+                                            <span className="value avg">{formatNumber(rotationDmg?.avg)}</span>
                                         </div>
                                     </div>
                                 </div>
                             )}
-                            {hasValidTeamRotation && teamRotationDmg &&(
+                            {allRotations?.teamRotations?.length > 0 &&(
                                 <div className="rotation-box inherent-skills-box">
-                                    <div className="box-header">Team Rotation DMG</div>
+                                    <select
+                                        className="box-header entry-detail-dropdown"
+                                        style={{ width: '11.2rem' }}
+                                        value={selectedTeamRotationIndex}
+                                        onChange={(e) => setSelectedTeamRotationIndex(Number(e.target.value))}
+                                    >
+                                        {allRotations.teamRotations.map((entry, index) => (
+                                            <option key={entry.id} value={index}>
+                                                {entry.id === 'live Team'
+                                                    ? "Team Rotation DMG"
+                                                    : entry.name ??`Saved #${index}`}
+                                            </option>
+                                        ))}
+                                    </select>
                                     <div className="box-stat dashed-line">
                                         <strong className="label">Normal</strong>
                                         <div className="dash-separator" />
                                         <div
                                             className="damage-tooltip-wrapper"
-                                            data-tooltip={teamRotationDmg.normal.toLocaleString()}
+                                            data-tooltip={teamRotationDmg?.normal.toLocaleString()}
                                         >
-                                            <span className="value">{formatNumber(teamRotationDmg.normal)}</span>
+                                            <span className="value">{formatNumber(teamRotationDmg?.normal)}</span>
                                         </div>
                                     </div>
                                     <div className="box-stat dashed-line">
@@ -249,9 +259,9 @@ export default function OverviewDetailPane({
                                         <div className="dash-separator" />
                                         <div
                                             className="damage-tooltip-wrapper"
-                                            data-tooltip={teamRotationDmg.crit.toLocaleString()}
+                                            data-tooltip={teamRotationDmg?.crit.toLocaleString()}
                                         >
-                                            <span className="value">{formatNumber(teamRotationDmg.crit)}</span>
+                                            <span className="value">{formatNumber(teamRotationDmg?.crit)}</span>
                                         </div>
                                     </div>
                                     <div className="box-stat dashed-line">
@@ -259,9 +269,9 @@ export default function OverviewDetailPane({
                                         <div className="dash-separator" />
                                         <div
                                             className="damage-tooltip-wrapper"
-                                            data-tooltip={teamRotationDmg.avg.toLocaleString()}
+                                            data-tooltip={teamRotationDmg?.avg.toLocaleString()}
                                         >
-                                            <span className="value avg">{formatNumber(teamRotationDmg.avg)}</span>
+                                            <span className="value avg">{formatNumber(teamRotationDmg?.avg)}</span>
                                         </div>
                                     </div>
                                 </div>

@@ -12,7 +12,8 @@ export default function CharacterOverviewPane({
                                                   switchLeftPane,
                                                   setLeftPaneView,
                                                   setCharacterRuntimeStates,
-                                                  handleReset
+                                                  handleReset,
+                                                  allRotations
 }) {
     const isCollapsedMode = window.innerWidth <= 910;
     const [selectedId, setSelectedId] = React.useState(
@@ -87,6 +88,7 @@ export default function CharacterOverviewPane({
                                 handleCharacterSelect={handleCharacterSelect}
                                 sortedCharacterIds={sortedCharacterIds}
                                 handleReset={handleReset}
+                                allRotations={allRotations}
                             />
                         ) : (
                             <div className="placeholder">No character selected</div>
@@ -148,6 +150,7 @@ export default function CharacterOverviewPane({
                                 characterRuntimeStates={characterRuntimeStates}
                                 sortedCharacterIds={sortedCharacterIds}
                                 handleReset={handleReset}
+                                allRotations={allRotations}
                             />
                         ) : (
                             <div className="placeholder">No character selected</div>

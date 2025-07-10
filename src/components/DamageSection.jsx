@@ -1,11 +1,11 @@
 import Rotations, {TeamRotation} from "./Rotations.jsx";
 
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import { getHardcodedMultipliers } from '../data/character-behaviour';
 import { computeSkillDamage, getSkillData } from "../utils/computeSkillDamage.js";
 import { setSkillDamageCache } from "../utils/skillDamageCache";
 import {elementToAttribute, attributeColors} from "../utils/attributeHelpers.js";
-import {calculateAeroErosionDamage, calculateDamage, calculateSpectroFrazzleDamage} from "../utils/damageCalculator.js";
+import {calculateAeroErosionDamage, calculateSpectroFrazzleDamage} from "../utils/damageCalculator.js";
 import { echoAttackMultipliers, echoElements } from '../data/echoes/echoMultipliers';
 
 export default function DamageSection({
@@ -331,10 +331,12 @@ export default function DamageSection({
         );
     });
 
-    setSkillDamageCache(allSkillResults, charId, characterRuntimeStates, setCharacterRuntimeStates);
-    if (typeof window !== 'undefined') {
-        window.lastSkillCacheUpdate = Date.now();
-    }
+    useEffect(() => {
+        setSkillDamageCache(allSkillResults, charId, characterRuntimeStates, setCharacterRuntimeStates);
+        if (typeof window !== 'undefined') {
+            window.lastSkillCacheUpdate = Date.now();
+        }
+    }, [allSkillResults, charId, characterRuntimeStates]);
 
     return (
         <div className="damage-box">

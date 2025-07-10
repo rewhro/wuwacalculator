@@ -325,14 +325,13 @@
 }
 
 .rotations-overview-boxes {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
     gap: 1rem;
-    justify-content: center;
 }
 
 .rotation-box {
     margin: unset;
-    width: 100%;
     border-radius: 1rem;
     padding: 1rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -367,16 +366,6 @@
     font-weight: 600;
 }
 
-.value.animated {
-    animation: pop 0.3s ease;
-}
-
-@keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.25); }
-    100% { transform: scale(1); }
-}
-
 .dashed-line {
     display: flex;
     align-items: center;
@@ -391,4 +380,17 @@
 
 .box-stat .label {
     opacity: 0.5;
+}
+
+.box-header.entry-detail-dropdown {
+    width: 8rem;
+    padding: 3px 5px;
+    justify-self: center;
+    cursor: pointer;
+    border-radius: 0.4rem;
+    transition: ease all 0.3s
+}
+
+.box-header.entry-detail-dropdown:hover {
+    transform: scale(1.05);
 }

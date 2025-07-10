@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useReducer, useRef, useState} from 'react';
 import { Pencil, Trash2, Clock3 } from 'lucide-react';
 import {
     DndContext,
@@ -93,6 +93,7 @@ export default function RotationsPane({
     const [expandedTabs, setExpandedTabs] = useState(() =>
         Object.fromEntries(tabDisplayOrder.map(key => [key, true]))
     );
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: { distance: 5 }
     }));
@@ -118,15 +119,15 @@ export default function RotationsPane({
     const [sortOrder, setSortOrder] = usePersistentState('sortOrder', 'desc');
     const [editingId, setEditingId] = useState(null);
     const [editedName, setEditedName] = useState('');
-    const [filterCharId, setFilterCharId] = useState('');
-    const [, forceUpdate] = useState(0);
+    const [personalFilterCharId, setPersonalFilterCharId] = useState('');
+    const [teamFilterCharId, setTeamFilterCharId] = useState('');
     useEffect(() => {
         let lastSeen = 0;
         const interval = setInterval(() => {
             const next = window.lastSkillCacheUpdate ?? 0;
             if (next > lastSeen) {
                 lastSeen = next;
-                forceUpdate(Date.now());
+                forceUpdate();
             }
         }, 300);
         return () => clearInterval(interval);
@@ -280,6 +281,21 @@ export default function RotationsPane({
     const teamFilterOptions = useMemo(() =>
         getCharacterFilterOptions(savedTeamRotations, characters), [savedTeamRotations, characters]);
 
+    useEffect(() => {
+        const isInPersonal = filterOptions.some(opt => String(opt.id) === String(charId));
+        if (isInPersonal) {
+            setPersonalFilterCharId(charId);
+        } else {
+            setPersonalFilterCharId('');
+        }
+
+        const isInTeam = teamFilterOptions.some(opt => String(opt.value) === String(charId));
+        if (isInTeam) {
+            setTeamFilterCharId(charId);
+        } else {
+            setTeamFilterCharId('');
+        }
+    }, [charId, filterOptions, teamFilterOptions]);
 
     return (
         <div className="rotation-pane">
@@ -470,8 +486,8 @@ export default function RotationsPane({
                             <option value="desc">Descending</option>
                             <option value="asc">Ascending</option>
                         </select>
-                        <select value={filterCharId} onChange={(e) => setFilterCharId(e.target.value)}>
-                            <option value="">Character</option>
+                        <select value={personalFilterCharId} onChange={(e) => setPersonalFilterCharId(e.target.value)}>
+                            <option value="">Filter</option>
                             {filterOptions.map(opt => (
                                 <option key={opt.id} value={opt.id}>{opt.name}</option>
                             ))}
@@ -488,7 +504,7 @@ export default function RotationsPane({
                             <p style={{ color: '#5c5c5c' }}>hmm...</p>
                         ) : (
                             [...savedRotations]
-                                .filter(entry => !filterCharId || String(entry.characterId ?? entry.charId) === filterCharId)
+                                .filter(entry => !personalFilterCharId || String(entry.characterId ?? entry.charId) === personalFilterCharId)
                                 .sort((a, b) => {
                                     let valA, valB;
                                     switch (sortKey) {
@@ -618,8 +634,8 @@ export default function RotationsPane({
                             <option value="desc">Descending</option>
                             <option value="asc">Ascending</option>
                         </select>
-                        <select value={filterCharId} onChange={(e) => setFilterCharId(e.target.value)}>
-                            <option value="">Character</option>
+                        <select value={teamFilterCharId} onChange={(e) => setTeamFilterCharId(e.target.value)}>
+                            <option value="">Filter</option>
                             {teamFilterOptions.map(opt => (
                                 <option key={opt.id} value={opt.id}>{opt.name}</option>
                             ))}
@@ -659,7 +675,7 @@ export default function RotationsPane({
                     <div className="saved-rotation-list team">
                         {(() => {
                             const summaries = [...savedTeamRotations]
-                                .filter(entry => !filterCharId || String(entry.charId) === filterCharId)
+                                .filter(entry => !teamFilterCharId || String(entry.charId) === teamFilterCharId)
                                 .sort((a, b) => {
                                 let valA, valB;
 

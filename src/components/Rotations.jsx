@@ -75,45 +75,10 @@ export function TeamRotation({ mainCharId, characterRuntimeStates, characterStat
     const team = runtime.Team ?? [];
     if (team.length < 1) return null;
 
-    const teamTotal = { normal: 0, crit: 0, avg: 0 };
-    const characterContributions = [];
+    const result = getTeamRotationTotal(mainCharId, characterRuntimeStates);
+    if (!result) return null;
 
-    const mainState = characterRuntimeStates[mainCharId];
-
-    if (Array.isArray(mainState?.rotationEntries) && Array.isArray(mainState?.allSkillResults)) {
-        const result = calculateRotationTotals(mainState.allSkillResults, mainState.rotationEntries);
-        const { normal, crit, avg } = result.total ?? {};
-
-        const isZero = [normal, crit, avg].every(val => Math.round(val) === 0);
-
-        if (!isZero) {
-            characterContributions.push({ id: mainCharId, total: result.total });
-            teamTotal.normal += normal;
-            teamTotal.crit += crit;
-            teamTotal.avg += avg;
-        }
-    }
-
-    const teamRotation = mainState?.teamRotation ?? {};
-    team.slice(1, 3).forEach((teammateId, i) => {
-        const toggleKey = `teammateRotation-${i + 1}`;
-        const isEnabled = characterRuntimeStates?.[mainCharId]?.activeStates?.[toggleKey];
-        if (!isEnabled) return;
-
-        const selected = teamRotation[teammateId];
-        if (!selected?.total) return;
-
-        const { normal, crit, avg } = selected.total;
-        const isZero = [normal, crit, avg].every(val => Math.round(val) === 0);
-        if (isZero) return;
-
-        characterContributions.push({ id: teammateId, total: selected.total });
-        teamTotal.normal += normal;
-        teamTotal.crit += crit;
-        teamTotal.avg += avg;
-    });
-
-    if (teamTotal.avg === 0) return null;
+    const { teamTotal, characterContributions } = result;
 
     useEffect(() => {
         if (!mainCharId || teamTotal.avg === 0) return;
@@ -230,6 +195,127 @@ export function calculateRotationTotals(skillCache, rotationEntries) {
         breakdownMap[type].crit += crit;
         breakdownMap[type].avg += avg;
     }
-
     return { total, supportTotals, breakdownMap };
+}
+
+export function getTeamRotationTotal(mainCharId, characterRuntimeStates) {
+    if (!mainCharId || !characterRuntimeStates?.[mainCharId]) return null;
+
+    const runtime = characterRuntimeStates[mainCharId];
+    const team = runtime.Team ?? [];
+    if (team.length < 1) return null;
+
+    const teamTotal = { normal: 0, crit: 0, avg: 0 };
+    const characterContributions = [];
+
+    const mainResult = calculateRotationTotals(runtime.allSkillResults, runtime.rotationEntries);
+    if (mainResult?.total && !isZero(mainResult.total)) {
+        characterContributions.push({ id: mainCharId, total: mainResult.total });
+        accumulate(teamTotal, mainResult.total);
+    }
+
+    const teamRotation = runtime?.teamRotation ?? {};
+
+    team.slice(1, 3).forEach((teammateId, i) => {
+        const toggleKey = `teammateRotation-${i + 1}`;
+        const isEnabled = runtime?.activeStates?.[toggleKey];
+        if (!isEnabled) return;
+
+        const selected = teamRotation[teammateId];
+        if (!selected?.total || isZero(selected.total)) return;
+
+        characterContributions.push({ id: teammateId, total: selected.total });
+        accumulate(teamTotal, selected.total);
+    });
+
+    return teamTotal.avg === 0 ? null : { teamTotal, characterContributions };
+}
+
+function accumulate(total, toAdd) {
+    total.normal += toAdd.normal ?? 0;
+    total.crit += toAdd.crit ?? 0;
+    total.avg += toAdd.avg ?? 0;
+}
+
+function isZero(total) {
+    return [total.normal, total.crit, total.avg].every(val => Math.round(val) === 0);
+}
+
+export function getMainRotationTotals(mainCharId, characterRuntimeStates, savedRotations = [], savedTeamRotations = []) {
+    const personalRotations = [];
+    const teamRotations = [];
+
+    const runtime = characterRuntimeStates[mainCharId];
+
+    const hasLiveData = runtime &&
+        Array.isArray(runtime.allSkillResults) &&
+        Array.isArray(runtime.rotationEntries);
+
+    if (hasLiveData) {
+        const liveTotal = calculateRotationTotals(runtime.allSkillResults, runtime.rotationEntries);
+        const { normal, crit, avg } = liveTotal.total;
+        if (normal !== 0 || crit !== 0 || avg !== 0) {
+            personalRotations.push({
+                ...liveTotal,
+                name: runtime?.Name,
+                id: 'live'
+            });
+        }
+    }
+
+
+    const charSavedRotations = savedRotations.filter(
+        (r) => String(r.characterId) === String(mainCharId)
+    );
+
+    charSavedRotations.forEach((saved, index) => {
+        const { normal, crit, avg } = saved.total ?? {};
+        if (normal !== 0 || crit !== 0 || avg !== 0) {
+            personalRotations.push({
+                total: saved.total,
+                name: saved.characterName,
+                id: `saved-${index}`
+            });
+        }
+    });
+
+    const teamRotation = characterRuntimeStates[mainCharId]?.teamRotation ?? {};
+    const activeStates = characterRuntimeStates[mainCharId]?.activeStates ?? {};
+
+    const toggleKeys = ["teammateRotation-1", "teammateRotation-2"];
+    const hasValidTeamRotation = (
+        characterRuntimeStates[mainCharId]?.Team?.length > 1 &&
+        Object.keys(teamRotation).length > 0 &&
+        (activeStates[toggleKeys[0]] || activeStates[toggleKeys[1]])
+    );
+
+    if (hasValidTeamRotation) {
+        const liveTotal = getTeamRotationTotal(mainCharId, characterRuntimeStates);
+        const { normal, crit, avg } = liveTotal.teamTotal;
+        if (normal !== 0 || crit !== 0 || avg !== 0 || liveTotal) {
+            teamRotations.push({
+                name: runtime?.Name,
+                id: 'live Team',
+                total: liveTotal.teamTotal
+            });
+        }
+    }
+
+    const charTeamRotations = savedTeamRotations.filter(
+        (r) => String(r.charId) === String(mainCharId)
+    );
+
+    charTeamRotations.forEach((saved, index) => {
+        const { normal, crit, avg } = saved.total ?? {};
+        if (normal !== 0 || crit !== 0 || avg !== 0) {
+            teamRotations.push({
+                total: saved.total,
+                name: saved.name,
+                id: `team-${index}`,
+                char: saved.fullCharacterState ?? {}
+            });
+        }
+    });
+
+    return { personalRotations, teamRotations };
 }

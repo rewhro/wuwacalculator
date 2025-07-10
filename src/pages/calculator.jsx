@@ -35,7 +35,7 @@ import { useLayoutEffect } from 'react';
 import {getSkillDamageCache} from "../utils/skillDamageCache.js";
 import CharacterOverviewPane from "../components/CharacterOverview.jsx";
 import {isEqual} from "lodash";
-import {calculateRotationTotals} from "../components/Rotations.jsx";
+import {calculateRotationTotals, getMainRotationTotals} from "../components/Rotations.jsx";
 
 export default function Calculator() {
     const [characters, setCharacters] = useState([]);
@@ -855,6 +855,8 @@ export default function Calculator() {
         localStorage.setItem('characterRuntimeStates', JSON.stringify(cleaned));
     }, []);
 
+    const allRotations = getMainRotationTotals(charId, characterRuntimeStates, savedRotations, savedTeamRotations);
+
     //console.log(characterRuntimeStates[charId]);
 
     return (
@@ -1108,6 +1110,7 @@ export default function Calculator() {
                                     isCollapsedMode={isCollapsedMode}
                                     setCharacterRuntimeStates={setCharacterRuntimeStates}
                                     handleReset={handleReset}
+                                    allRotations={allRotations}
                                 />
                                 ) : (
                             <div className="split">
