@@ -23,8 +23,6 @@ export default function DamageSection({
                                           characterStates,
                                           teamRotationDmg,
                                           setCharacterRuntimeStates,
-                                          setAllSkillResults,
-                                          allSkillResults
                                       }) {
     if (!activeCharacter) return null;
 
@@ -33,6 +31,8 @@ export default function DamageSection({
     const negativeEffect = combatState?.spectroFrazzle > 0 || combatState?.aeroErosion > 0;
     const {frazzleTotal, frazzle} = calculateSpectroFrazzleDamage(combatState, mergedBuffs, characterLevel);
     const {erosionTotal, erosion} = calculateAeroErosionDamage(combatState, mergedBuffs, characterLevel);
+
+    const allSkillResults =[];
 
     if (frazzle > 0) {
         allSkillResults.push({
@@ -339,7 +339,17 @@ export default function DamageSection({
         if (typeof window !== 'undefined') {
             window.lastSkillCacheUpdate = Date.now();
         }
-        setAllSkillResults(allSkillResults);
+        const existing = characterRuntimeStates?.[charId]?.allSkillResults ?? [];
+        const isEqual = JSON.stringify(existing) === JSON.stringify(allSkillResults);
+        if (!isEqual) {
+            setCharacterRuntimeStates(prev => ({
+                ...prev,
+                [charId]: {
+                    ...(prev[charId] ?? {}),
+                    allSkillResults
+                }
+            }));
+        }
     }, [allSkillResults, charId, characterRuntimeStates]);
 
     return (

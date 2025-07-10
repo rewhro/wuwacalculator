@@ -83,7 +83,6 @@ export default function Calculator() {
     const [weapons, setWeapons] = useState({});
     const charId = activeCharacterId ?? activeCharacter?.id ?? activeCharacter?.link;
     const [rotationEntries, setRotationEntries] = useState([]);
-    const [allSkillResults, setAllSkillResults] = useState([]);
     const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
     const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
     const [showSubHits, setShowSubHits] = usePersistentState('showSubHits', false);
@@ -122,7 +121,6 @@ export default function Calculator() {
             setSliderValues(profile.SkillLevels ?? defaultSliderValues);
             setTraceNodeBuffs(profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs);
             profile.TraceNodeBuffs = profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs;
-            profile.allSkillResults = profile.allSkillResults ?? allSkillResults
             setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
 
 
@@ -313,7 +311,6 @@ export default function Calculator() {
                     Team: team,
                     rotationEntries: rotationEntries,
                     FinalStats: finalStats ?? {},
-                    allSkillResults: allSkillResults,
                     teamRotation: teamRotation ?? {}
                 }
             }));
@@ -585,7 +582,6 @@ export default function Calculator() {
                     CustomBuffs: customBuffs,
                     CombatState: combatState,
                     FinalStats: finalStats,
-                    allSkillResults: allSkillResults,
                 }
             };
         });
@@ -1207,8 +1203,6 @@ export default function Calculator() {
                                         setCharacterRuntimeStates={setCharacterRuntimeStates}
                                         characterStates={characterStates}
                                         teamRotationDmg={teamRotationDmg}
-                                        allSkillResults={allSkillResults}
-                                        setAllSkillResults={setAllSkillResults}
                                     />
                                 </div>
                             </div>
