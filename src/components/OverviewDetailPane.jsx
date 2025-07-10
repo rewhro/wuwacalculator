@@ -114,6 +114,13 @@ export default function OverviewDetailPane({
         return Math.round(num).toLocaleString();
     }
 
+    const [contributorCycleIndex, setContributorCycleIndex] = useState(0);
+    const handleCycleClick = () => {
+        const contributors = allRotations.teamRotations[selectedTeamRotationIndex]?.contributors ?? {};
+        const numContributors = Object.keys(contributors).length;
+        setContributorCycleIndex((prev) => (prev + 1) % (numContributors + 1));
+    };
+
     const displayValue = (key, val) => ['atk', 'hp', 'def'].includes(key) ? Math.floor(val) : `${val.toFixed(1)}%`;
 
     return (
@@ -228,52 +235,78 @@ export default function OverviewDetailPane({
                                     </div>
                                 </div>
                             )}
-                            {allRotations?.teamRotations?.length > 0 &&(
-                                <div className="rotation-box inherent-skills-box">
+                            {allRotations?.teamRotations?.length > 0 && (
+                                <div
+                                    className="rotation-box inherent-skills-box"
+                                    onClick={handleCycleClick}
+                                >
                                     <select
                                         className="box-header entry-detail-dropdown"
                                         style={{ width: '11.2rem' }}
                                         value={selectedTeamRotationIndex}
-                                        onChange={(e) => setSelectedTeamRotationIndex(Number(e.target.value))}
+                                        onChange={(e) => {
+                                            setSelectedTeamRotationIndex(Number(e.target.value));
+                                            setContributorCycleIndex(0);
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         {allRotations.teamRotations.map((entry, index) => (
                                             <option key={entry.id} value={index}>
                                                 {entry.id === 'live Team'
                                                     ? "Team Rotation DMG"
-                                                    : entry.name ??`Saved #${index}`}
+                                                    : entry.name ?? `Saved #${index}`}
                                             </option>
                                         ))}
                                     </select>
-                                    <div className="box-stat dashed-line">
-                                        <strong className="label">Normal</strong>
-                                        <div className="dash-separator" />
-                                        <div
-                                            className="damage-tooltip-wrapper"
-                                            data-tooltip={teamRotationDmg?.normal.toLocaleString()}
-                                        >
-                                            <span className="value">{formatNumber(teamRotationDmg?.normal)}</span>
-                                        </div>
-                                    </div>
-                                    <div className="box-stat dashed-line">
-                                        <strong className="label">CRIT</strong>
-                                        <div className="dash-separator" />
-                                        <div
-                                            className="damage-tooltip-wrapper"
-                                            data-tooltip={teamRotationDmg?.crit.toLocaleString()}
-                                        >
-                                            <span className="value">{formatNumber(teamRotationDmg?.crit)}</span>
-                                        </div>
-                                    </div>
-                                    <div className="box-stat dashed-line">
-                                        <strong className="label">AVG</strong>
-                                        <div className="dash-separator" />
-                                        <div
-                                            className="damage-tooltip-wrapper"
-                                            data-tooltip={teamRotationDmg?.avg.toLocaleString()}
-                                        >
-                                            <span className="value avg">{formatNumber(teamRotationDmg?.avg)}</span>
-                                        </div>
-                                    </div>
+
+                                    {(() => {
+                                        const selected = allRotations.teamRotations[selectedTeamRotationIndex];
+                                        const contributors = selected?.contributors ?? {};
+                                        const contributorIds = Object.keys(contributors);
+                                        const contributorId = contributorIds[contributorCycleIndex - 1];
+                                        const contributorCharacter = characters.find(c => String(c.link) === String(contributors[contributorId]?.id));
+
+                                        const displayed = contributorCycleIndex === 0
+                                            ? selected.total
+                                            : contributors[contributorId]?.total;
+
+                                        const contributor = contributors?.[contributorId];
+                                        const teamAvg = teamRotationDmg?.avg ?? 0;
+                                        const percent = teamAvg > 0 && contributor?.total?.avg
+                                            ? ((contributor.total.avg / teamAvg) * 100).toFixed(1)
+                                            : null;
+
+                                        return (
+                                            <>
+                                                <div className="box-stat dashed-line">
+                                                    <strong className="label">Normal</strong>
+                                                    <div className="dash-separator" />
+                                                    <div className="damage-tooltip-wrapper" data-tooltip={displayed?.normal?.toLocaleString()}>
+                                                        <span className="value">{formatNumber(displayed?.normal)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="box-stat dashed-line">
+                                                    <strong className="label">CRIT</strong>
+                                                    <div className="dash-separator" />
+                                                    <div className="damage-tooltip-wrapper" data-tooltip={displayed?.crit?.toLocaleString()}>
+                                                        <span className="value">{formatNumber(displayed?.crit)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="box-stat dashed-line">
+                                                    <strong className="label">AVG</strong>
+                                                    <div className="dash-separator" />
+                                                    <div className="damage-tooltip-wrapper" data-tooltip={displayed?.avg?.toLocaleString()}>
+                                                        <span className="value avg">{formatNumber(displayed?.avg)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="overview-weapon-details highlight">
+                                                    {contributorCycleIndex === 0 ? 'Total' : `${contributorCharacter.displayName ?? ''}`}
+                                                    {percent ? ' · ' : ''}
+                                                    {percent ? `${percent}%` : ''}
+                                                </div>
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             )}
                         </div>
@@ -309,18 +342,7 @@ export default function OverviewDetailPane({
                                 </div>
                             </div>
                             {weapon.weaponStat && (
-                                <div
-                                    style=
-                                        {{
-                                            fontWeight: 'bold',
-                                            fontSize: '0.75rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '8px',
-                                            justifyContent: 'right',
-                                            opacity: '0.6'
-                                        }}
-                                >
+                                <div className="overview-weapon-details">
                                     <span>Lv.{weapon.weaponLevel ?? 1} - R{weapon.weaponRank ?? 1}</span> |
                                     <span>{formatStatValue(weapon.weaponStat)}</span>
                                     <span>ATK: {weapon.weaponBaseAtk}</span>

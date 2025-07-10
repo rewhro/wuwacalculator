@@ -35,7 +35,7 @@ import { useLayoutEffect } from 'react';
 import {getSkillDamageCache} from "../utils/skillDamageCache.js";
 import CharacterOverviewPane from "../components/CharacterOverview.jsx";
 import {isEqual} from "lodash";
-import {calculateRotationTotals, getMainRotationTotals} from "../components/Rotations.jsx";
+import {calculateRotationTotals, getMainRotationTotals, getTeamRotationTotal} from "../components/Rotations.jsx";
 
 export default function Calculator() {
     const [characters, setCharacters] = useState([]);
@@ -83,6 +83,7 @@ export default function Calculator() {
     const [weapons, setWeapons] = useState({});
     const charId = activeCharacterId ?? activeCharacter?.id ?? activeCharacter?.link;
     const [rotationEntries, setRotationEntries] = useState([]);
+    const [allSkillResults, setAllSkillResults] = useState([]);
     const equippedEchoes = characterRuntimeStates?.[charId]?.equippedEchoes ?? [];
     const echoStats = getEchoStatsFromEquippedEchoes(equippedEchoes);
     const [showSubHits, setShowSubHits] = usePersistentState('showSubHits', false);
@@ -121,9 +122,7 @@ export default function Calculator() {
             setSliderValues(profile.SkillLevels ?? defaultSliderValues);
             setTraceNodeBuffs(profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs);
             profile.TraceNodeBuffs = profile.TraceNodeBuffs ?? profile.TemporaryBuffs ?? defaultTraceBuffs;
-
-            delete profile.TemporaryBuffs;
-            delete profile.CharacterState;
+            profile.allSkillResults = profile.allSkillResults ?? allSkillResults
             setCustomBuffs(profile.CustomBuffs ?? defaultCustomBuffs);
 
 
@@ -314,7 +313,7 @@ export default function Calculator() {
                     Team: team,
                     rotationEntries: rotationEntries,
                     FinalStats: finalStats ?? {},
-                    allSkillResults: allSkillResults ?? {},
+                    allSkillResults: allSkillResults,
                     teamRotation: teamRotation ?? {}
                 }
             }));
@@ -592,45 +591,6 @@ export default function Calculator() {
         });
     }, [characterLevel, sliderValues, traceNodeBuffs, customBuffs, combatState, finalStats]);
 
-    useEffect(() => {
-        const cleaned = {};
-        for (const [id, data] of Object.entries(characterRuntimeStates)) {
-            if ('CharacterState' in data) {
-                const { CharacterState, ...rest } = data;
-                cleaned[id] = rest;
-            } else {
-                cleaned[id] = data;
-            }
-        }
-        setCharacterRuntimeStates(cleaned);
-    }, []);
-
-    useEffect(() => {
-        localStorage.removeItem('characterLevel');
-        localStorage.removeItem('rotationEntriesStore');
-        localStorage.removeItem('teamCache');
-        localStorage.removeItem('team');
-        localStorage.removeItem('sliderValues');
-        setCharacterRuntimeStates(prev => {
-            const updated = {};
-
-            for (const [charId, runtime] of Object.entries(prev)) {
-                const { TemporaryBuffs, ...rest } = runtime;
-                updated[charId] = rest;
-            }
-
-            return updated;
-        });
-        const raw = JSON.parse(localStorage.getItem('characterRuntimeStates') || '{}');
-        const cleaned = {};
-
-        for (const [charId, runtime] of Object.entries(raw)) {
-            const { TemporaryBuffs, ...rest } = runtime;
-            cleaned[charId] = rest;
-        }
-        localStorage.setItem('characterRuntimeStates', JSON.stringify(cleaned));
-    }, []);
-
     useLayoutEffect(() => {
         const handleResize = () => {
             setMoveToolbarToSidebar(window.innerWidth < 900);
@@ -641,8 +601,6 @@ export default function Calculator() {
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const allSkillResults = getSkillDamageCache();
 
     useEffect(() => {
         if (!teamRotation) return;
@@ -856,8 +814,9 @@ export default function Calculator() {
     }, []);
 
     const allRotations = getMainRotationTotals(charId, characterRuntimeStates, savedRotations, savedTeamRotations);
+    const teamRotationDmg = getTeamRotationTotal(charId, characterRuntimeStates);
 
-    //console.log(characterRuntimeStates[charId]);
+    console.log(getSkillDamageCache());
 
     return (
         <>
@@ -1247,6 +1206,9 @@ export default function Calculator() {
                                         setShowSubHits={setShowSubHits}
                                         setCharacterRuntimeStates={setCharacterRuntimeStates}
                                         characterStates={characterStates}
+                                        teamRotationDmg={teamRotationDmg}
+                                        allSkillResults={allSkillResults}
+                                        setAllSkillResults={setAllSkillResults}
                                     />
                                 </div>
                             </div>

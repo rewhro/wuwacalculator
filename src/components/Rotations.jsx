@@ -68,14 +68,13 @@ export default function Rotations({ rotationEntries, characterRuntimeStates, cha
     );
 }
 
-export function TeamRotation({ mainCharId, characterRuntimeStates, characterStates, setCharacterRuntimeStates }) {
+export function TeamRotation({ mainCharId, characterRuntimeStates, characterStates, setCharacterRuntimeStates, result }) {
     if (!mainCharId || !characterRuntimeStates?.[mainCharId]) return null;
 
     const runtime = characterRuntimeStates[mainCharId];
     const team = runtime.Team ?? [];
     if (team.length < 1) return null;
 
-    const result = getTeamRotationTotal(mainCharId, characterRuntimeStates);
     if (!result) return null;
 
     const { teamTotal, characterContributions } = result;
@@ -263,7 +262,6 @@ export function getMainRotationTotals(mainCharId, characterRuntimeStates, savedR
         }
     }
 
-
     const charSavedRotations = savedRotations.filter(
         (r) => String(r.characterId) === String(mainCharId)
     );
@@ -296,7 +294,8 @@ export function getMainRotationTotals(mainCharId, characterRuntimeStates, savedR
             teamRotations.push({
                 name: runtime?.Name,
                 id: 'live Team',
-                total: liveTotal.teamTotal
+                total: liveTotal.teamTotal,
+                contributors: liveTotal.characterContributions
             });
         }
     }
@@ -306,13 +305,14 @@ export function getMainRotationTotals(mainCharId, characterRuntimeStates, savedR
     );
 
     charTeamRotations.forEach((saved, index) => {
+        const contributors = getTeamRotationTotal(mainCharId, { [mainCharId]: saved.fullCharacterState }).characterContributions;
         const { normal, crit, avg } = saved.total ?? {};
         if (normal !== 0 || crit !== 0 || avg !== 0) {
             teamRotations.push({
                 total: saved.total,
                 name: saved.name,
                 id: `team-${index}`,
-                char: saved.fullCharacterState ?? {}
+                contributors: contributors ?? {}
             });
         }
     });

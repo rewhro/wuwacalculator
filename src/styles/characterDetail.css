@@ -394,3 +394,17 @@
 .box-header.entry-detail-dropdown:hover {
     transform: scale(1.05);
 }
+
+.overview-weapon-details {
+    font-weight: bold;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+    opacity: 0.6;
+}
+
+.overview-weapon-details.highlight {
+    color: unset !important;
+}

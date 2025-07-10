@@ -7,6 +7,7 @@ import { setSkillDamageCache } from "../utils/skillDamageCache";
 import {elementToAttribute, attributeColors} from "../utils/attributeHelpers.js";
 import {calculateAeroErosionDamage, calculateSpectroFrazzleDamage} from "../utils/damageCalculator.js";
 import { echoAttackMultipliers, echoElements } from '../data/echoes/echoMultipliers';
+import {isEqual} from "lodash";
 
 export default function DamageSection({
                                           activeCharacter,
@@ -20,13 +21,15 @@ export default function DamageSection({
                                           setShowSubHits,
                                           showSubHits,
                                           characterStates,
-                                          setCharacterRuntimeStates
+                                          teamRotationDmg,
+                                          setCharacterRuntimeStates,
+                                          setAllSkillResults,
+                                          allSkillResults
                                       }) {
     if (!activeCharacter) return null;
 
     const skillTabs = ['normalAttack', 'resonanceSkill', 'forteCircuit', 'resonanceLiberation', 'introSkill', 'outroSkill'];
     const charId = activeCharacter?.Id ?? activeCharacter?.id ?? activeCharacter?.link;
-    const allSkillResults = [];
     const negativeEffect = combatState?.spectroFrazzle > 0 || combatState?.aeroErosion > 0;
     const {frazzleTotal, frazzle} = calculateSpectroFrazzleDamage(combatState, mergedBuffs, characterLevel);
     const {erosionTotal, erosion} = calculateAeroErosionDamage(combatState, mergedBuffs, characterLevel);
@@ -332,10 +335,11 @@ export default function DamageSection({
     });
 
     useEffect(() => {
-        setSkillDamageCache(allSkillResults, charId, characterRuntimeStates, setCharacterRuntimeStates);
+        setSkillDamageCache(allSkillResults);
         if (typeof window !== 'undefined') {
             window.lastSkillCacheUpdate = Date.now();
         }
+        setAllSkillResults(allSkillResults);
     }, [allSkillResults, charId, characterRuntimeStates]);
 
     return (
@@ -493,6 +497,7 @@ export default function DamageSection({
                                 characterRuntimeStates={characterRuntimeStates}
                                 characterStates={characterStates}
                                 setCharacterRuntimeStates={setCharacterRuntimeStates}
+                                result={teamRotationDmg}
                             />
                         </div>
                     </div>
