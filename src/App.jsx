@@ -1,18 +1,18 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Calculator from './pages/calculator.jsx';
 import InfoPage from './pages/infoPage';
 import NotFound from './pages/NotFound';
-import { Navigate } from 'react-router-dom';
 import Setting from "./pages/settings.jsx";
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
-import CookieConsent, {getCookieConsentValue} from 'react-cookie-consent';
+import CookieConsent, { getCookieConsentValue } from 'react-cookie-consent';
 
 const GA_ID = 'G-W502BDD62S';
 
-
 export default function App() {
+    usePageTracking();
+
     useEffect(() => {
         const consent = getCookieConsentValue('wwa_cookie_consent');
         if (consent === 'true' && typeof window.gtag === 'function') {
@@ -22,50 +22,49 @@ export default function App() {
 
     const handleAccept = () => {
         if (typeof window.gtag === 'function') {
+            console.log('[GA] Consent accepted — enabling tracking');
             window.gtag('config', GA_ID, { anonymize_ip: true });
         }
     };
 
     const handleReject = () => {
         document.cookie = "wwa_cookie_consent=false;path=/;max-age=" + 60 * 60 * 24 * 365;
+        console.log('[GA] Consent rejected — tracking disabled');
     };
-    usePageTracking();
 
     return (
         <>
             <Routes>
-                {/*<Route path="/" element={<Navigate to="/" />} />*/}
                 <Route path="/" element={<Calculator />} />
                 <Route path="/info" element={<InfoPage />} />
                 <Route path="/settings" element={<Setting />} />
-                <Route path="*" element={<NotFound />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
+
             <CookieConsent
-                enableDeclineButton
-                declineButtonText="Reject"
-                onAccept={handleAccept}
-                onDecline={handleReject}
                 cookieName="wwa_cookie_consent"
                 location="bottom"
                 buttonText="Accept"
-                style={{ background: "#2B373B", opacity: 0.9}}
+                declineButtonText="Reject"
+                enableDeclineButton
+                onAccept={handleAccept}
+                onDecline={handleReject}
+                style={{ background: "#2B373B", opacity: 0.9 }}
                 buttonStyle={{ color: "#fff", backgroundColor: "#20bfb9", fontSize: "13px" }}
                 declineButtonStyle={{ color: "#fff", backgroundColor: "#777", fontSize: "13px", marginLeft: "1rem" }}
             >
                 This site uses cookies to analyze traffic via Google Analytics. No personal information is shared.{" "}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#fff", textDecoration: "underline" }}>Learn more</a>.
+                <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#fff", textDecoration: "underline" }}>
+                    Learn more
+                </a>.
             </CookieConsent>
         </>
-
     );
 }
 
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-
-export function usePageTracking() {
+function usePageTracking() {
     const location = useLocation();
 
     useEffect(() => {
