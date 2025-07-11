@@ -258,8 +258,18 @@ export default function OverviewDetailPane({
                                                     </div>
                                                 </div>
                                                 <div className="overview-weapon-details">
-                                                    {selectedKey ?? 'Total'}
-                                                    {percent ? ` · ${percent}` : ''}
+                                                    {!selected.breakdownMap ? (
+                                                        <div
+                                                             className="damage-tooltip-wrapper text"
+                                                             data-tooltip={'Load in saved rotation and save again :3'}>
+                                                            Re-save to see breakdown
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            {selectedKey ?? 'Total'}
+                                                            {percent ? ` · ${percent}` : ''}
+                                                        </>
+                                                    )}
                                                 </div>
                                             </>
                                         );

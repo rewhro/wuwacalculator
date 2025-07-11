@@ -408,3 +408,9 @@
 .overview-weapon-details.highlight {
     color: unset !important;
 }
+
+.damage-tooltip-wrapper.text::after {
+    white-space: unset;
+    font-size: 0.75rem;
+    max-width: unset;
+}
