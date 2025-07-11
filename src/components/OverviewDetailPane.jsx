@@ -258,7 +258,7 @@ export default function OverviewDetailPane({
                                                     </div>
                                                 </div>
                                                 <div className="overview-weapon-details">
-                                                    {!selected.breakdownMap ? (
+                                                    {!selected?.breakdownMap ? (
                                                         <div
                                                              className="damage-tooltip-wrapper text"
                                                              data-tooltip={'Load in saved rotation and save again :3'}>
