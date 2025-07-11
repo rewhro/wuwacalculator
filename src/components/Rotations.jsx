@@ -272,7 +272,8 @@ export function getMainRotationTotals(mainCharId, characterRuntimeStates, savedR
             personalRotations.push({
                 total: saved.total,
                 name: saved.characterName,
-                id: `saved-${index}`
+                id: `saved-${index}`,
+                breakdownMap: saved.breakdownMap
             });
         }
     });

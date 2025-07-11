@@ -812,8 +812,6 @@ export default function Calculator() {
     const allRotations = getMainRotationTotals(charId, characterRuntimeStates, savedRotations, savedTeamRotations);
     const teamRotationDmg = getTeamRotationTotal(charId, characterRuntimeStates);
 
-    //console.log(getSkillDamageCache());
-
     return (
         <>
             <SkillsModal

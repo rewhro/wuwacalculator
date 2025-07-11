@@ -1,21 +1,12 @@
-import React, {useEffect, useMemo, useReducer, useRef, useState} from 'react';
-import { Pencil, Trash2, Clock3 } from 'lucide-react';
-import {
-    DndContext,
-    closestCenter,
-    PointerSensor,
-    useSensor,
-    useSensors
-} from '@dnd-kit/core';
-import {
-    SortableContext,
-    arrayMove,
-    verticalListSortingStrategy
-} from '@dnd-kit/sortable';
-import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+import React, {useEffect, useMemo, useReducer, useState} from 'react';
+import {Pencil, Trash2} from 'lucide-react';
+import {closestCenter, DndContext, PointerSensor, useSensor, useSensors} from '@dnd-kit/core';
+import {arrayMove, SortableContext, verticalListSortingStrategy} from '@dnd-kit/sortable';
+import {restrictToFirstScrollableAncestor} from '@dnd-kit/modifiers';
 import RotationItem from "./RotationItem.jsx";
-import { getSkillDamageCache } from '../utils/skillDamageCache';
+import {getSkillDamageCache} from '../utils/skillDamageCache';
 import {usePersistentState} from "../hooks/usePersistentState.js";
+import {calculateRotationTotals} from "./Rotations.jsx";
 
 const tabDisplayOrder = [
     'normalAttack',
@@ -333,25 +324,16 @@ export default function RotationsPane({
                                 const characterName = activeCharacter?.displayName ?? 'Unknown';
                                 const dateId = Date.now();
 
-                                const cache = allSkillResults;
-                                let total = { normal: 0, crit: 0, avg: 0 };
-
-                                for (const entry of rotationEntries) {
-                                    const multiplier = entry.multiplier ?? 1;
-                                    const source = entry.locked ? entry.snapshot : cache.find(s => s.name === entry.label && s.tab === entry.tab);
-                                    if (!source || source.visible === false || source.isSupportSkill) continue;
-
-                                    total.normal += (source.normal ?? 0) * multiplier;
-                                    total.crit += (source.crit ?? 0) * multiplier;
-                                    total.avg += (source.avg ?? 0) * multiplier;
-                                }
+                                const result = calculateRotationTotals( allSkillResults, rotationEntries )
 
                                 const newSaved = {
                                     id: dateId,
                                     characterId,
                                     characterName,
                                     entries: rotationEntries,
-                                    total,
+                                    total: result.total,
+                                    breakdownMap: result.breakdownMap,
+                                    supportTotals: result.supportTotals,
                                     fullCharacterState: characterRuntimeStates?.[characterId] ?? {}
                                 };
                                 setSavedRotations(prev => [...prev, newSaved]);

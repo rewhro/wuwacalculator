@@ -72,11 +72,9 @@ export default function OverviewDetailPane({
 
     const [selectedRotationIndex, setSelectedRotationIndex] = useState(0);
     const [selectedTeamRotationIndex, setSelectedTeamRotationIndex] = useState(0);
+    const [personalBreakdownCycleIndex, setPersonalBreakdownCycleIndex] = useState(0);
     const rotationDmg = allRotations?.personalRotations?.[selectedRotationIndex]?.total;
     const teamRotationDmg = allRotations?.teamRotations?.[selectedTeamRotationIndex]?.total;
-
-    const teamRotation = runtime?.teamRotation ?? {};
-    const activeStates = runtime?.activeStates ?? {};
 
     function deleteCharacter() {
         const currentId = String(character.link);
@@ -189,50 +187,83 @@ export default function OverviewDetailPane({
                         )}
                         <div className="rotations-overview-boxes">
                             {allRotations?.personalRotations?.length > 0 && (
-                                <div className="rotation-box inherent-skills-box">
+                                <div
+                                    className="rotation-box inherent-skills-box"
+                                    onClick={() => {
+                                        const selected = allRotations.personalRotations[selectedRotationIndex];
+                                        const skillKeys = Object.keys(selected?.breakdownMap ?? {});
+                                        if (skillKeys.length > 0) {
+                                            setPersonalBreakdownCycleIndex((prev) => (prev + 1) % (skillKeys.length + 1));
+                                        }
+                                    }}
+                                >
                                     <select
                                         className="box-header entry-detail-dropdown"
                                         value={selectedRotationIndex}
-                                        onChange={(e) => setSelectedRotationIndex(Number(e.target.value))}
+                                        onChange={(e) => {
+                                            setSelectedRotationIndex(Number(e.target.value));
+                                            setPersonalBreakdownCycleIndex(0);
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         {allRotations.personalRotations.map((entry, index) => (
                                             <option key={entry.id} value={index}>
                                                 {entry.id === 'live'
                                                     ? "Rotation DMG"
-                                                    : entry.name ??`Saved #${index}`}
+                                                    : entry.name ?? `Saved #${index}`}
                                             </option>
                                         ))}
                                     </select>
-                                    <div className="box-stat dashed-line">
-                                        <strong className="label">Normal</strong>
-                                        <div className="dash-separator" />
-                                        <div
-                                            className="damage-tooltip-wrapper"
-                                            data-tooltip={rotationDmg?.normal.toLocaleString()}
-                                        >
-                                            <span className="value">{formatNumber(rotationDmg?.normal)}</span>
-                                        </div>
-                                    </div>
-                                    <div className="box-stat dashed-line">
-                                        <strong className="label">CRIT</strong>
-                                        <div className="dash-separator" />
-                                        <div
-                                            className="damage-tooltip-wrapper"
-                                            data-tooltip={rotationDmg?.crit.toLocaleString()}
-                                        >
-                                            <span className="value">{formatNumber(rotationDmg?.crit)}</span>
-                                        </div>
-                                    </div>
-                                    <div className="box-stat dashed-line">
-                                        <strong className="label">AVG</strong>
-                                        <div className="dash-separator" />
-                                        <div
-                                            className="damage-tooltip-wrapper"
-                                            data-tooltip={rotationDmg?.avg.toLocaleString()}
-                                        >
-                                            <span className="value avg">{formatNumber(rotationDmg?.avg)}</span>
-                                        </div>
-                                    </div>
+
+                                    {(() => {
+                                        const selected = allRotations.personalRotations[selectedRotationIndex];
+                                        const skillKeys = Object.keys(selected?.breakdownMap ?? {});
+                                        const hasBreakdown = skillKeys.length > 0;
+
+                                        const selectedKey = hasBreakdown && personalBreakdownCycleIndex > 0
+                                            ? skillKeys[personalBreakdownCycleIndex - 1]
+                                            : null;
+
+                                        const displayed = selectedKey
+                                            ? selected?.breakdownMap?.[selectedKey]
+                                            : selected?.total;
+
+                                        const totalAvg = selected?.total?.avg ?? 0;
+                                        const currentAvg = displayed?.avg ?? 0;
+                                        const percent = selectedKey && totalAvg > 0
+                                            ? `${((currentAvg / totalAvg) * 100).toFixed(1)}%`
+                                            : null;
+
+                                        return (
+                                            <>
+                                                <div className="box-stat dashed-line">
+                                                    <strong className="label">Normal</strong>
+                                                    <div className="dash-separator" />
+                                                    <div className="damage-tooltip-wrapper" data-tooltip={displayed?.normal?.toLocaleString()}>
+                                                        <span className="value">{formatNumber(displayed?.normal)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="box-stat dashed-line">
+                                                    <strong className="label">CRIT</strong>
+                                                    <div className="dash-separator" />
+                                                    <div className="damage-tooltip-wrapper" data-tooltip={displayed?.crit?.toLocaleString()}>
+                                                        <span className="value">{formatNumber(displayed?.crit)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="box-stat dashed-line">
+                                                    <strong className="label">AVG</strong>
+                                                    <div className="dash-separator" />
+                                                    <div className="damage-tooltip-wrapper" data-tooltip={displayed?.avg?.toLocaleString()}>
+                                                        <span className="value avg">{formatNumber(displayed?.avg)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="overview-weapon-details">
+                                                    {selectedKey ?? 'Total'}
+                                                    {percent ? ` · ${percent}` : ''}
+                                                </div>
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             )}
                             {allRotations?.teamRotations?.length > 0 && (
