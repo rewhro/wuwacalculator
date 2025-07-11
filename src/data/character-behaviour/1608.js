@@ -1,3 +1,5 @@
+import {elementToAttribute} from "../../utils/attributeHelpers.js";
+
 export function applyPhrolovaLogic({
                                    mergedBuffs,
                                    combatState,
@@ -39,6 +41,11 @@ export function applyPhrolovaLogic({
         mergedBuffs.__phrolovaInherent2 = true;
     }
 
+    if (characterState?.activeStates?.maestro && !mergedBuffs.__phrolovaMaestro) {
+        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 120;
+        mergedBuffs.__phrolovaMaestro = true;
+    }
+
     if (name.includes('dmg multiplier increase per aftersound')) {
         characterState.activeStates.__aftersound = skillMeta.multiplier;
         skillMeta.visible = false;
@@ -60,7 +67,7 @@ export function applyPhrolovaLogic({
 
     if (isActiveSequence(3)) {
         if (!mergedBuffs.__phrolovaS3) {
-            mergedBuffs.damageTypeAmplify.echoSkill = (mergedBuffs.damageTypeAmplify.echoSkill ?? 0) + 60;
+            mergedBuffs.damageTypeAmplify.echoSkill = (mergedBuffs.damageTypeAmplify.echoSkill ?? 0) + 80;
             mergedBuffs.__phrolovaS3 = true;
         }
 
@@ -70,23 +77,28 @@ export function applyPhrolovaLogic({
     }
 
     if (isActiveSequence(4) && isToggleActive(4) && !mergedBuffs.__phrolovaS4) {
-        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 20;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+        }
         mergedBuffs.__phrolovaS4 = true;
     }
 
     if (isActiveSequence(6)) {
         if (name.includes('enhanced attack - hecate')) {
-            const bonusMultiplier = 1 + Math.min(stacks * 0.03, 24 * 0.03);
-            skillMeta.multiplier *= bonusMultiplier;
+            skillMeta.multiplier *= 1.24;
         }
 
-        if (isToggleActive(6) && name.includes('basic attack - hecate')) {
-            skillMeta.multiplier *= 4;
+        if (isToggleActive('6-a') && !mergedBuffs.__phrolovaS6a) {
+            mergedBuffs.dmgReduction = (mergedBuffs.dmgReduction ?? 0) + 40;
+            mergedBuffs.__phrolovaS6a = true;
+        } else if (isToggleActive('6-b') && !mergedBuffs.__phrolovaS6b) {
+            mergedBuffs.havoc = (mergedBuffs.havoc ?? 0) + 60;
+            mergedBuffs.__phrolovaS6b = true;
         }
     }
 
     if (name.includes('apparition of beyond - hecate')) {
-        skillMeta.multiplier = 304.8/100;
+        skillMeta.multiplier = 216.4/100;
         skillMeta.skillType = 'echoSkill';
         skillMeta.visible = isActiveSequence(6);
     }
@@ -105,12 +117,14 @@ export const phrolovaMultipliers = {
 
 
 export function phrolovaBuffsLogic({
-                                   mergedBuffs, characterState, activeCharacter
+                                   mergedBuffs, characterState
                                }) {
     const state = characterState?.activeStates ?? {};
 
     if (state.illuminating) {
-        mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 20;
+        for (const elem of Object.values(elementToAttribute)) {
+            mergedBuffs[elem] = (mergedBuffs[elem] ?? 0) + 20;
+        }
     }
 
     if (state.unfinishedPiece) {

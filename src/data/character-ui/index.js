@@ -34,7 +34,7 @@ import {havocWSequenceToggles, CustomInherentSkills as HavocInherents} from "./1
 import RocciaUI, {rocciaSequenceToggles, CustomInherentSkills as RocciaInherents} from "./1606.jsx";
 import {cantSequenceToggles, CustomInherentSkills as CantInherents} from "./1607.jsx";
 import AaltoUI, {aaltoSequenceToggles, CustomInherentSkills as AaltoInherents} from "./1403.jsx";
-import {phrolovaSequenceToggles, CustomInherentSkills as PhrolovaInherents} from "./1608.jsx";
+import PhrolovaUI, {phrolovaSequenceToggles, CustomInherentSkills as PhrolovaInherents} from "./1608.jsx";
 
 
 export function getCharacterUIComponent(characterId) {
@@ -57,6 +57,7 @@ export function getCharacterUIComponent(characterId) {
         case '1603': return CamellyaUI;
         case '1606': return RocciaUI;
         case '1403': return AaltoUI;
+        case '1608': return PhrolovaUI;
         default: return null;
     }
 }
