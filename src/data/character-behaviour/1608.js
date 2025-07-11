@@ -89,10 +89,10 @@ export function applyPhrolovaLogic({
         }
 
         if (isToggleActive('6-a') && !mergedBuffs.__phrolovaS6a) {
-            mergedBuffs.dmgReduction = (mergedBuffs.dmgReduction ?? 0) + 40;
+            mergedBuffs.havoc = (mergedBuffs.havoc ?? 0) + 60;
             mergedBuffs.__phrolovaS6a = true;
         } else if (isToggleActive('6-b') && !mergedBuffs.__phrolovaS6b) {
-            mergedBuffs.havoc = (mergedBuffs.havoc ?? 0) + 60;
+            mergedBuffs.dmgReduction = (mergedBuffs.dmgReduction ?? 0) + 40;
             mergedBuffs.__phrolovaS6b = true;
         }
     }
