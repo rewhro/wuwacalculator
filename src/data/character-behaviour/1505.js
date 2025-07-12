@@ -124,8 +124,8 @@ export function SKBuffsLogic({
                                     mergedBuffs, characterState, activeCharacter
                                 }) {
     const state = characterState?.activeStates ?? {};
-    const critRate = state.innerEnergy * 0.05;
-
+    const critRate = Math.min(state.innerEnergy * 0.05, 12.5);
+    const critDmg = Math.min(state.innerEnergy * 0.1, 25);
     const name = activeCharacter?.displayName?.toLowerCase();
     const isRover = name.includes("rover");
 
@@ -138,7 +138,7 @@ export function SKBuffsLogic({
     }
 
     if (state.supernal && critRate > 0) {
-        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + critRate * 2;
+        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + critDmg;
     }
 
     if (state.butterfly) {
