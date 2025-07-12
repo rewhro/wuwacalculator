@@ -9,10 +9,11 @@ function formatNumber(num) {
 }
 
 export default function Rotations({ rotationEntries, characterRuntimeStates, charId }) {
-    if (!rotationEntries || rotationEntries.length === 0) return null;
+    if (!Array.isArray(rotationEntries) || rotationEntries.length === 0) return null;
 
     const skillCache = characterRuntimeStates[charId]?.allSkillResults ?? getSkillDamageCache();
-    const { total, supportTotals, breakdownMap } = calculateRotationTotals(skillCache, rotationEntries);
+    const safeEntries = Array.isArray(rotationEntries) ? rotationEntries : [];
+    const { total, supportTotals, breakdownMap } = calculateRotationTotals(skillCache, safeEntries);
 
     return (
         <>
@@ -28,19 +29,21 @@ export default function Rotations({ rotationEntries, characterRuntimeStates, cha
                 <div>{formatNumber(Math.round(total.crit))}</div>
                 <div>{formatNumber(Math.round(total.avg))}</div>
 
-                {Object.entries(breakdownMap).map(([type, dmg]) => {
-                    const percent = total.avg > 0 ? (dmg.avg / total.avg) * 100 : 0;
-                    return (
-                        <React.Fragment key={type}>
-                            <div style={{ color: '#999' }}>
-                                ({percent.toFixed(1)}%) {type}
-                            </div>
-                            <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.normal))}</div>
-                            <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.crit))}</div>
-                            <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.avg))}</div>
-                        </React.Fragment>
-                    );
-                })}
+                {Object.entries(breakdownMap)
+                    .sort((a, b) => b[1].avg - a[1].avg)
+                    .map(([type, dmg]) => {
+                        const percent = total.avg > 0 ? (dmg.avg / total.avg) * 100 : 0;
+                        return (
+                            <React.Fragment key={type}>
+                                <div style={{ color: '#999' }}>
+                                    ({percent.toFixed(1)}%) {type}
+                                </div>
+                                <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.normal))}</div>
+                                <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.crit))}</div>
+                                <div style={{ color: '#999' }}>{formatNumber(Math.round(dmg.avg))}</div>
+                            </React.Fragment>
+                        );
+                    })}
 
                 {supportTotals.healing > 0 && (
                     <>
@@ -157,6 +160,8 @@ export function calculateRotationTotals(skillCache, rotationEntries) {
     const total = { normal: 0, crit: 0, avg: 0 };
     const supportTotals = { healing: 0, shielding: 0 };
     const breakdownMap = {};
+
+    if (!Array.isArray(rotationEntries) || !skillCache) return { total, supportTotals, breakdownMap };
 
     for (const entry of rotationEntries) {
         const multiplier = entry.multiplier ?? 1;
