@@ -171,7 +171,7 @@ export default function Calculator() {
                     })
                 }));
             }
-            const rawEntries = profile.rotationEntries ?? [];
+            const rawEntries = Array.isArray(profile.rotationEntries) ? profile.rotationEntries : [];
             const normalizedEntries = rawEntries.map(entry => ({
                 ...entry,
                 createdAt: entry.createdAt ?? Date.now() + Math.random()
@@ -324,7 +324,8 @@ export default function Calculator() {
         }
 
         setTeam(cached.Team);
-        setRotationEntries((cached.rotationEntries ?? []).map(entry => ({
+        const safeRotation = Array.isArray(cached.rotationEntries) ? cached.rotationEntries : [];
+        setRotationEntries(safeRotation.map(entry => ({
             ...entry,
             multiplier: typeof entry.multiplier === 'number' ? entry.multiplier : 1,
             createdAt: entry.createdAt ?? Date.now() + Math.random()
