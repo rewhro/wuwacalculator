@@ -33,7 +33,7 @@ export function getSubstatStepOptions(key) {
 
     const isFlatStat = key.endsWith('Flat');
 
-    const values = [];
+    let values = [];
     for (let i = 0; i <= divisions; i++) {
         let val = min + step * i;
         if (isFlatStat) {
@@ -42,6 +42,10 @@ export function getSubstatStepOptions(key) {
             val = parseFloat(val.toFixed(1));
         }
         if (!values.includes(val)) values.push(val);
+    }
+
+    if (key === 'hpFlat') {
+        values = [320, 360, 390, 430, 470, 510, 540, 580]
     }
 
     return values;
@@ -61,7 +65,6 @@ function snapToNearestSubstatValue(key, value) {
             closest = opt;
         }
     }
-
     return closest;
 }
 
