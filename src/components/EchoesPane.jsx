@@ -567,7 +567,11 @@ export default function EchoesPane({
                                 const iconUrl = statIconMap[label];
 
                                 return (
-                                    <div className="stat-row" style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
+                                    <div
+                                        key={key}
+                                        className="stat-row"
+                                        style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}
+                                    >
                                           <span className="echo-stat-label">
                                               {iconUrl && (
                                                   <div

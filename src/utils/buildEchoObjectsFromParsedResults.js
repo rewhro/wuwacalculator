@@ -155,7 +155,7 @@ const correctionMap = {
     '1.6': '7.6',
     '1.5': '7.5',
     '1.4': '7.4',
-    '1.3': '7.93',
+    '1.3': '7.3',
     '1.2': '7.2',
     '1.1': '7.1',
     '1.0': '7.0',
@@ -166,7 +166,7 @@ const fixOCRNumber = (str) => correctionMap[str] ?? str;
 export function applyParsedEchoesToEquipped(parsedList, charId, setCharacterRuntimeStates) {
     const mapped = getEchoIdSetIdAndMainStats(parsedList);
 
-    const newEquippedEchoes = mapped.map((result, i) => {
+    const newEquippedEchoes = mapped.map((result) => {
         const baseEcho = echoes.find(e => String(e.id) === String(result.echoId));
         if (!baseEcho) return null;
 
