@@ -2994,70 +2994,6 @@
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/MstSkil_31046_UI.MstSkil_31046_UI"
     },
     "Group": {
-      "5": {
-        "Id": 5,
-        "Name": "Celestial Light",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriLight.T_IconElementAttriLight",
-        "Color": "FFFFFF00",
-        "Set": {
-          "2": {
-            "Desc": "Spectro DMG + 10%.",
-            "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "Spectro DMG + 30% for 15s after releasing Intro Skill.",
-            "Param": [
-              "30%"
-            ]
-          }
-        }
-      },
-      "8": {
-        "Id": 8,
-        "Name": "Moonlit Clouds",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriCloud.T_IconElementAttriCloud",
-        "Color": "FFFFFF00",
-        "Set": {
-          "2": {
-            "Desc": "Energy Regen + {0}.",
-            "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "Upon using Outro Skill, increases the ATK of the next Resonator by 22.5% for 15s.",
-            "Param": [
-              "22.5%",
-              "15"
-            ]
-          }
-        }
-      },
-      "9": {
-        "Id": 9,
-        "Name": "Lingering Tunes",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriAttack.T_IconElementAttriAttack",
-        "Color": "FFFFFF00",
-        "Set": {
-          "2": {
-            "Desc": "ATK +10%",
-            "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "While on the field, ATK increases by 5% every 1.5s. This effect stacks up to 4 times. Outro Skill DMG + 60%.",
-            "Param": [
-              "1.5",
-              "5%",
-              "20%",
-              "60%"
-            ]
-          }
-        }
-      },
       "10": {
         "Id": 10,
         "Name": "Frosty Resolve",
@@ -4166,47 +4102,6 @@
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/MstSkil_32030_UI.MstSkil_32030_UI"
     },
     "Group": {
-      "2": {
-        "Id": 2,
-        "Name": "Molten Rift",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriFire.T_IconElementAttriFire",
-        "Color": "FFFFFF00",
-        "Set": {
-          "2": {
-            "Desc": "Fusion DMG + 10%.",
-            "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "Fusion DMG + 30% for 15s after releasing Resonance Skill.",
-            "Param": [
-              "30%"
-            ]
-          }
-        }
-      },
-      "3": {
-        "Id": 3,
-        "Name": "Void Thunder",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriThunder.T_IconElementAttriThunder",
-        "Color": "FFFFFF00",
-        "Set": {
-          "2": {
-            "Desc": "Electro DMG + 10%.",
-            "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "Electro DMG + 15% after releasing Heavy Attack or Resonance Skill. This effect stacks up to 2 times, each stack lasts 15s.",
-            "Param": [
-              "15%",
-              "15"
-            ]
-          }
-        }
-      },
       "10": {
         "Id": 10,
         "Name": "Frosty Resolve",
@@ -5117,7 +5012,7 @@
     "IntensityCode": 2,
     "MonsterInfo": 330000190,
     "Phantom": {
-      "Name": "Stay tuned",
+      "Name": "Phantom: Nightmare Inferno Rider",
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_33019_UI.T_IconMonsterGoods_SG_33019_UI"
     }
   },
@@ -7272,8 +7167,8 @@
     "Place": "",
     "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_33021_UI.T_IconMonsterHead_33021_UI",
     "Skill": {
-      "Desc": "Transform into Nightmare: Kelpie to attack nearby targets, dealing {0} Glacio DMG.\nThe Resonator with this Echo equipped in the main slot gains {2} Glacio DMG Bonus and {3} Aero DMG Bonus. Switching out the Resonator with Outro Skill summons Nightmares: Kelpie to deal {1} Aero DMG.\nCD: {4}s",
-      "SimpleDesc": "Transform into Nightmare: Kelpie to attack nearby targets, dealing Glacio DMG.\nThe Resonator with this Echo equipped in the main slot gains Glacio and Aero DMG Bonus. Switching out the Resonator with Outro Skill summons Nightmares: Kelpie to deal Aero DMG.",
+      "Desc": "Transform into Nightmare: Kelpie to attack nearby targets, dealing {0} Glacio DMG.\nThe Resonator with this Echo equipped in the main slot gains {2} Glacio DMG Bonus and {3} Aero DMG Bonus. Switching out the Resonator with Outro Skill summons Nightmare: Kelpie to deal {1} Aero DMG.\nCD: {4}s",
+      "SimpleDesc": "Transform into Nightmare: Kelpie to attack nearby targets, dealing Glacio DMG.\nThe Resonator with this Echo equipped in the main slot gains Glacio and Aero DMG Bonus. Switching out the Resonator with Outro Skill summons Nightmare: Kelpie to deal Aero DMG.",
       "Param": [
         [
           "225.00%",
@@ -7529,14 +7424,14 @@
     "id": "6000116",
     "Id": 6000116,
     "Code": "X79-",
-    "Name": "Stay tuned",
+    "Name": "Reminiscence: Fenrico",
     "Type": "",
     "Intensity": "",
     "Place": "",
     "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34015_2_UI.T_IconMonsterHead_34015_2_UI",
     "Skill": {
-      "Desc": "Summon the Sanctum of the Deep that lasts for {0}s to bind any enemy within. The status is removed when the enemy is hit or when the Sanctum of the Deep ends.\nThe Resonator with the Echo equipped in the main slot gains {1} Aero DMG Bonus and {2} Echo Skill DMG Bonus.\nCD: {3}s",
-      "SimpleDesc": "Summon the Sanctum of the Deep to bind any enemy within. The status is removed when the enemy is hit or when the Sanctum of the Deep ends.\nThe Resonator with the Echo equipped in the main slot gains Aero DMG Bonus and Echo Skill DMG Bonus.",
+      "Desc": "Summon the Talons of Decree to attack nearby enemies, dealing {0} Aero DMG.\nThe Resonator with this Echo equipped in their main slot gains {1} Aero DMG Bonus and {2} Heavy Attack DMG Bonus.\nCD: {3}s.",
+      "SimpleDesc": "Summon the Talons of Decree to deal Aero DMG to nearby enemies.\nThe Resonator with this Echo equipped in the main slot gains Aero and Heavy Attack DMG Bonus.",
       "Param": [
         [
           "152.00%",
@@ -7602,7 +7497,7 @@
     "id": "6000117",
     "Id": 6000117,
     "Code": "W31-",
-    "Name": "Stay tuned",
+    "Name": "Nightmare: Havoc Warrior",
     "Type": "",
     "Intensity": "",
     "Place": "",
@@ -7665,7 +7560,7 @@
     "id": "6000118",
     "Id": 6000118,
     "Code": "W26-",
-    "Name": "Stay tuned",
+    "Name": "Nightmare: Glacio Predator",
     "Type": "",
     "Intensity": "",
     "Place": "",
@@ -7738,7 +7633,7 @@
     "id": "6000119",
     "Id": 6000119,
     "Code": "W60-",
-    "Name": "Stay tuned",
+    "Name": "Nightmare: Tambourinist",
     "Type": "",
     "Intensity": "",
     "Place": "",

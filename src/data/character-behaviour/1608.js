@@ -98,7 +98,7 @@ export function applyPhrolovaLogic({
     }
 
     if (name.includes('apparition of beyond - hecate')) {
-        skillMeta.multiplier = 216.4/100;
+        skillMeta.multiplier = 216.42/100;
         skillMeta.skillType = 'echoSkill';
         skillMeta.visible = isActiveSequence(6);
     }
