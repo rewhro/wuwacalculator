@@ -75,6 +75,8 @@ export default function RotationItem({
         });
     };
 
+    //console.log(entry);
+
     return (
         <div
             ref={setNodeRef}

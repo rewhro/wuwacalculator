@@ -37,11 +37,11 @@ const skillTypeIconMap = {
     ultimate: '/assets/stat-icons/liberation.png',
     intro: '/assets/stat-icons/intro.png',
     outro: '/assets/stat-icons/outro.png',
-    healing: '/assets/stat-icons/healing.png',
+    //healing: '/assets/stat-icons/healing.png',
     shielding: '/assets/stat-icons/shield.png',
-    spectroFrazzle: '/assets/stat-icons/flat-attribute/spectro.webp',
-    aeroErosion: '/assets/stat-icons/flat-attribute/aero.webp',
-    echoSkill: '/assets/stat-icons/echo.png'
+    spectrofrazzle: '/assets/stat-icons/flat-attribute/spectro.webp',
+    aeroerosion: '/assets/stat-icons/flat-attribute/aero.webp',
+    echoskill: '/assets/stat-icons/echo.png'
 };
 
 const skillTypeLabelMap = {
@@ -53,7 +53,9 @@ const skillTypeLabelMap = {
     outro: 'Outro Skill',
     spectroFrazzle: 'Spectro Frazzle',
     aeroErosion: 'Aero Erosion',
-    echoSkill: 'Echo Skill'
+    echoSkill: 'Echo Skill',
+    healing: 'Healing',
+    shielding: 'Shielding',
 };
 
 export default function RotationsPane({
@@ -132,7 +134,6 @@ export default function RotationsPane({
         const iconPath = type && typeof type === 'string' && skillTypeIconMap[type.toLowerCase?.()]
             ? skillTypeIconMap[type.toLowerCase()]
             : null;
-
         const newEntryBase = {
             id: crypto.randomUUID(),
             label: skill.name,

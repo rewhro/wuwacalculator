@@ -40,10 +40,10 @@ async function run() {
         const downloaded = await downloadImage(url, dest);
 
         if (downloaded) {
-            console.log(`✅ Downloaded icon ${id}`);
+            console.log(`Downloaded icon ${id}`);
             foundIcons.push({ id, url: `/icons/${id}.webp` });
         } else {
-            console.log(`❌ Not found: ${id}`);
+            console.log(`Not found: ${id}`);
         }
     }
 

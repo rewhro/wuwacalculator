@@ -25,7 +25,7 @@ export const statIconMap = {
 
 const statIconPaths = Object.values(statIconMap);
 
-export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, mergedBuffs, finalStats, combatState }) {
+export default function CharacterStats({ activeCharacter, baseCharacterState, characterLevel, mergedBuffs, finalStats, combatState, traceNodeBuffs }) {
     useEffect(() => {
         preloadImages(statIconPaths);
     }, []);
@@ -57,10 +57,9 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
             critDmg: 'Crit DMG',
             healingBonus: 'Healing Bonus'
         };
-
         const baseFromCharacter = baseCharacterState?.Stats?.[statKey] ?? 0;
         const baseFromWeapon = combatState?.[statKey] ?? 0;
-        const base = baseFromCharacter + baseFromWeapon;
+        const base = baseFromCharacter + (traceNodeBuffs[statKey] ?? 0) + baseFromWeapon;
         const total = finalStats?.[statKey] ?? base;
         const bonus = total - base;
 
@@ -75,8 +74,8 @@ export default function CharacterStats({ activeCharacter, baseCharacterState, ch
     const stats = [...mainStats, ...secondaryStats];
     ['aero','glacio','spectro','fusion','electro','havoc'].forEach(element => {
         const key = `${element}DmgBonus`;
-        const base = baseCharacterState?.Stats?.[key] ?? 0;
-        const bonus = mergedBuffs?.[element] ?? 0;
+        const base = (baseCharacterState?.Stats?.[key] ?? 0) + (traceNodeBuffs[element] ?? 0);
+        const bonus = (mergedBuffs?.[element] ?? 0) - (traceNodeBuffs[element] ?? 0);
         const total = base + bonus;
 
         stats.push({

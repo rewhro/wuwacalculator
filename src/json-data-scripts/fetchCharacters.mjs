@@ -19,7 +19,7 @@ async function buildFullCharacterList() {
                 allCharacters.push(characterData);
                 console.log(`Added character ${id}`);
             } catch (err) {
-                console.warn(`❌ Failed to fetch character ${id}:`, err.message);
+                console.warn(`Failed to fetch character ${id}:`, err.message);
             }
         }
 

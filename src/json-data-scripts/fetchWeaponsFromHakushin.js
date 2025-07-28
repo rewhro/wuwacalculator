@@ -12,7 +12,7 @@ const weaponApiUrl = 'https://api.hakush.in/ww/data/weapon.json';
 
 async function fetchAndSaveWeapons() {
     try {
-        console.log('🔄 Fetching weapon data from Hakushin...');
+        console.log('Fetching weapon data from Hakushin...');
         const response = await fetch(weaponApiUrl);
         if (!response.ok) throw new Error(`HTTP error ${response.status}`);
 

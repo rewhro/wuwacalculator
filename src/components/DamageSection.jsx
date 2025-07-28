@@ -253,11 +253,15 @@ export default function DamageSection({
                                 const { normal, crit, avg, skillMeta = {} } = result;
                                 const isSupportSkill = skillMeta.tags?.includes('healing') || skillMeta.tags?.includes('shielding');
                                 const supportColor = skillMeta.tags?.includes('healing') ? 'limegreen' : '#838383';
+                                let skillType =  result?.skillMeta?.skillType ?? 'basic';
+                                if (isSupportSkill) {
+                                    skillType = skillMeta.tags[0];
+                                }
 
-                                allSkillResults.push({
+                                    allSkillResults.push({
                                     name: label ?? level.Name,
                                     tab,
-                                    skillType: result?.skillMeta?.skillType ?? 'basic',
+                                    skillType,
                                     normal: result.normal,
                                     crit: result.crit,
                                     avg: result.avg,

@@ -13,7 +13,7 @@ const outputPath = path.resolve(__dirname, '../src/data/weaponDetails.json');
 
 async function fetchWeaponDetails() {
     try {
-        console.log('🔄 Fetching weapon list...');
+        console.log('Fetching weapon list...');
         const listResponse = await fetch(weaponListUrl);
         if (!listResponse.ok) throw new Error(`Failed to fetch weapon list: ${listResponse.status}`);
         const weaponMap = await listResponse.json();

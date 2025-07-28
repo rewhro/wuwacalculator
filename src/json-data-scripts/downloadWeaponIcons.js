@@ -23,9 +23,9 @@ async function downloadIcons() {
 
             const buffer = await res.arrayBuffer();
             await fs.writeFile(savePath, Buffer.from(buffer));
-            console.log(`✅ Saved ${id}.webp`);
+            console.log(`Saved ${id}.webp`);
         } catch (err) {
-            console.warn(`⚠️ Failed ${id}: ${err.message}`);
+            console.warn(`Failed ${id}: ${err.message}`);
         }
     }
 }
