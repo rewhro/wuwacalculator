@@ -153,9 +153,19 @@ export default function RotationsPane({
 
             if (editIndex !== null && copy[editIndex]) {
                 const prevMultiplier = copy[editIndex].multiplier ?? 1;
+                const prevSnapshot = copy[editIndex].snapshot ?? undefined;
                 copy[editIndex] = {
                     ...newEntryBase,
-                    multiplier: prevMultiplier
+                    multiplier: prevMultiplier,
+                    locked: copy[editIndex].locked ?? false,
+                    snapshot: prevSnapshot ? {
+                            avg: prevSnapshot.avg,
+                            crit: prevSnapshot.crit,
+                            normal: prevSnapshot.normal,
+                            tab: skill.tab,
+                            label: skill.label,
+                            element: skill.element ?? null
+                    } : undefined
                 };
             } else {
                 copy.push(newEntryBase);
