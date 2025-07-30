@@ -50,7 +50,7 @@ export function applyWeaponLogic({
 
     if (characterState?.activeStates?.firstP) {
         mergedBuffs.resonanceSkill = (mergedBuffs.resonanceSkill ?? 0) + dmgBonus;
-        mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + dmgBonus;
+        mergedBuffs.damageTypeAmplify.echoSkill = (mergedBuffs.damageTypeAmplify.echoSkill ?? 0) + dmgBonus;
         mergedBuffs.enemyDefIgnore = (mergedBuffs.enemyDefIgnore ?? 0) + defIgnore;
     }
 
