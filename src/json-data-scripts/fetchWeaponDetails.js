@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const weaponListUrl = 'https://api.hakush.in/ww/data/weapon.json';
 const weaponDetailBase = 'https://api.hakush.in/ww/data/en/weapon/';
 
-const outputPath = path.resolve(__dirname, '../src/data/weaponDetails.json');
+const outputPath = path.resolve(__dirname, '../data/weaponDetails.json');
 
 async function fetchWeaponDetails() {
     try {

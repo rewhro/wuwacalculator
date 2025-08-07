@@ -54,11 +54,8 @@ export function applyWeaponLogic({
 }
 
 export function updateSkillMeta({
-                                    mergedBuffs,
-                                    combatState,
                                     characterState,
                                     skillMeta = {},
-                                    isToggleActive = () => false,
                                     currentParamValues = []
                                 } ) {
     const defIgnore = parseFloat(currentParamValues[1]);

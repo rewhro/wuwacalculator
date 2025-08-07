@@ -35,6 +35,8 @@ import RocciaUI, {rocciaSequenceToggles, CustomInherentSkills as RocciaInherents
 import {cantSequenceToggles, CustomInherentSkills as CantInherents} from "./1607.jsx";
 import AaltoUI, {aaltoSequenceToggles, CustomInherentSkills as AaltoInherents} from "./1403.jsx";
 import PhrolovaUI, {phrolovaSequenceToggles, CustomInherentSkills as PhrolovaInherents} from "./1608.jsx";
+import AugustaUI, {AugustaSequenceToggles} from "./1306.jsx";
+import IunoUI, {IunoSequenceToggles} from "./1410.jsx";
 
 
 export function getCharacterUIComponent(characterId) {
@@ -58,6 +60,8 @@ export function getCharacterUIComponent(characterId) {
         case '1606': return RocciaUI;
         case '1403': return AaltoUI;
         case '1608': return PhrolovaUI;
+        case '1306': return AugustaUI;
+        case '1410': return IunoUI;
         default: return null;
     }
 }
@@ -140,6 +144,8 @@ export function getSequenceToggleComponent(characterId) {
         case '1607': return cantSequenceToggles;
         case '1403': return aaltoSequenceToggles;
         case '1608': return phrolovaSequenceToggles;
+        case '1306': return AugustaSequenceToggles;
+        case '1410': return IunoSequenceToggles;
         default: return null;
     }
 }
@@ -182,7 +188,10 @@ const characterBuffUIMap = {
     '1606': () => import('./1606.jsx').then(mod => mod.buffUI),
     '1607': () => import('./1607.jsx').then(mod => mod.buffUI),
     '1403': () => import('./1403.jsx').then(mod => mod.buffUI),
-    '1608': () => import('./1608.jsx').then(mod => mod.buffUI)
+    '1608': () => import('./1608.jsx').then(mod => mod.buffUI),
+    '1306': () => import('./1306.jsx').then(mod => mod.buffUI),
+    '1410': () => import('./1410.jsx').then(mod => mod.buffUI),
+
 };
 
 export async function loadCharacterBuffUI(charId) {

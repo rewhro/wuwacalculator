@@ -49,6 +49,9 @@ export function applyEchoLogic({ mergedBuffs, characterState, activeCharacter })
         mergedBuffs.fusion = (mergedBuffs.fusion ?? 0) + 15;
     }
 
+    const lawOfHarmonyStack = echo.lawOfHarmony ?? 0;
+    mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 8 * lawOfHarmonyStack;
+
     return mergedBuffs;
 }
 
@@ -64,6 +67,7 @@ export function getActiveEchoes(activeStates = {}) {
         empyreanAnthem: 'Empyrean Anthem',
         gustsOfWelkin: 'Gusts of Welkin',
         clawprint: 'Flaming Clawprint',
+        lawOfHarmony: 'Law of Harmony',
     };
 
     const result = [];

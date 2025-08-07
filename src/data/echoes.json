@@ -2098,7 +2098,11 @@
       5
     ],
     "IntensityCode": 2,
-    "MonsterInfo": 330000070
+    "MonsterInfo": 330000070,
+    "Phantom": {
+      "Name": "Phantom: Fallacy of No Return",
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_350_UI.T_IconMonsterGoods_SG_350_UI"
+    }
   },
   {
     "id": "6000061",
@@ -5095,7 +5099,11 @@
       5
     ],
     "IntensityCode": 2,
-    "MonsterInfo": 330000200
+    "MonsterInfo": 330000200,
+    "Phantom": {
+      "Name": "Phantom: Nightmare Mourning Aix",
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_33020_UI.T_IconMonsterGoods_SG_33020_UI"
+    }
   },
   {
     "id": "6000093",
@@ -5178,6 +5186,23 @@
               "10",
               "15%",
               "15"
+            ]
+          }
+        }
+      },
+      "21": {
+        "Id": 21,
+        "Name": "Law of Harmony",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriSupport.T_IconElementAttriSupport",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Param": [
+              "8%",
+              "5%",
+              "4",
+              "30"
             ]
           }
         }
@@ -5269,6 +5294,24 @@
               "15%",
               "250%",
               "30%"
+            ]
+          }
+        }
+      },
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
             ]
           }
         }
@@ -5463,6 +5506,23 @@
             ]
           }
         }
+      },
+      "21": {
+        "Id": 21,
+        "Name": "Law of Harmony",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriSupport.T_IconElementAttriSupport",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Param": [
+              "8%",
+              "5%",
+              "4",
+              "30"
+            ]
+          }
+        }
       }
     },
     "Rarity": [
@@ -5556,6 +5616,24 @@
               "15%",
               "15%",
               "20"
+            ]
+          }
+        }
+      },
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
             ]
           }
         }
@@ -7155,7 +7233,11 @@
       5
     ],
     "IntensityCode": 1,
-    "MonsterInfo": 320000340
+    "MonsterInfo": 320000340,
+    "Phantom": {
+      "Name": "Phantom: Kerasaur",
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_31062_UI.T_IconMonsterGoods_SG_31062_UI"
+    }
   },
   {
     "id": "6000113",
@@ -7482,6 +7564,23 @@
             ]
           }
         }
+      },
+      "21": {
+        "Id": 21,
+        "Name": "Law of Harmony",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriSupport.T_IconElementAttriSupport",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Param": [
+              "8%",
+              "5%",
+              "4",
+              "30"
+            ]
+          }
+        }
       }
     },
     "Rarity": [
@@ -7691,6 +7790,684 @@
     ],
     "IntensityCode": 1,
     "MonsterInfo": 320000430
+  },
+  {
+    "id": "6000120",
+    "Id": 6000120,
+    "Code": "H56-",
+    "Name": "Corrosaurus",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_32044_UI.T_IconMonsterHead_32044_UI",
+    "Skill": {
+      "Desc": "Summon a Corrosaurus to attack enemies, dealing {0} Fusion DMG.\nThe Resonator with this Echo equipped in the main slot gains {1} Fusion DMG Bonus and {2} Echo Skill DMG Bonus.\nCD: {3}s",
+      "SimpleDesc": "Summon a Corrosaurus to deal Fusion DMG to enemies.\nThe Resonator with this Echo equipped in the main slot gains Fusion and Echo Skill DMG Bonus.",
+      "Param": [
+        [
+          "152.00%",
+          "12.00%",
+          "20.00%",
+          "20"
+        ],
+        [
+          "182.40%",
+          "12.00%",
+          "20.00%",
+          "20"
+        ],
+        [
+          "212.80%",
+          "12.00%",
+          "20.00%",
+          "20"
+        ],
+        [
+          "243.20%",
+          "12.00%",
+          "20.00%",
+          "20"
+        ],
+        [
+          "273.60%",
+          "12.00%",
+          "20.00%",
+          "20"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_32044_UI.T_MstSkil_32044_UI"
+    },
+    "Group": {
+      "18": {
+        "Id": 18,
+        "Name": "Flaming Clawprint",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriFireUltimateSkill.T_IconElementAttriFireUltimateSkill",
+        "Color": "FFFFFF00",
+        "Set": {
+          "2": {
+            "Desc": "Fusion DMG + {0}",
+            "Param": [
+              "10%"
+            ]
+          },
+          "5": {
+            "Desc": "Casting Resonance Liberation grants all Resonators in the team {0} Fusion DMG Bonus and the caster {1} Resonance Liberation DMG Bonus, lasting for {2}s.",
+            "Param": [
+              "15%",
+              "20%",
+              "35"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 1,
+    "MonsterInfo": 320000440
+  },
+  {
+    "id": "6000121",
+    "Id": 6000121,
+    "Code": "W87-",
+    "Name": "The False Sovereign",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34017_UI.T_IconMonsterHead_34017_UI",
+    "Skill": {
+      "Desc": "Transform into the False Sovereign and dash forward in a spinning strike, dealing {0} Electro DMG 4 times.\nThe Resonator with this Echo equipped in the main slot gains {1} Electro DMG Bonus and {2} Heavy Attack DMG Bonus. Upon casting Intro Skill, summon Overflowing Tidal Blight to deal {3} Havoc DMG.\nStarts with {4} charges. Gains 1 charge every {5}s, up to {6} charges.\nCD: {7}s",
+      "SimpleDesc": "Transform into the False Sovereign to attack nearby enemies and deal Electro DMG.\nThe Resonator with this Echo equipped in the main slot gains Electro and Heavy Attack DMG Bonus. Upon casting Echo Skill, summon the False Sovereign to deal Electro DMG.",
+      "Param": [
+        [
+          "41.25%",
+          "12.00%",
+          "12.00%",
+          "225.00%",
+          "2",
+          "15",
+          "2",
+          "15"
+        ],
+        [
+          "49.50%",
+          "12.00%",
+          "12.00%",
+          "270.00%",
+          "2",
+          "15",
+          "2",
+          "15"
+        ],
+        [
+          "57.75%",
+          "12.00%",
+          "12.00%",
+          "315.00%",
+          "2",
+          "15",
+          "2",
+          "15"
+        ],
+        [
+          "66.00%",
+          "12.00%",
+          "12.00%",
+          "360.00%",
+          "2",
+          "15",
+          "2",
+          "15"
+        ],
+        [
+          "74.25%",
+          "12.00%",
+          "12.00%",
+          "405.00%",
+          "2",
+          "15",
+          "2",
+          "15"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_34017_UI.T_MstSkil_34017_UI"
+    },
+    "Group": {
+      "18": {
+        "Id": 18,
+        "Name": "Flaming Clawprint",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriFireUltimateSkill.T_IconElementAttriFireUltimateSkill",
+        "Color": "FFFFFF00",
+        "Set": {
+          "2": {
+            "Desc": "Fusion DMG + {0}",
+            "Param": [
+              "10%"
+            ]
+          },
+          "5": {
+            "Desc": "Casting Resonance Liberation grants all Resonators in the team {0} Fusion DMG Bonus and the caster {1} Resonance Liberation DMG Bonus, lasting for {2}s.",
+            "Param": [
+              "15%",
+              "20%",
+              "35"
+            ]
+          }
+        }
+      },
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 2,
+    "MonsterInfo": 340000170
+  },
+  {
+    "id": "6000160",
+    "Id": 6000160,
+    "Code": "W88-",
+    "Name": "Lady of the Sea",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34018_UI.T_IconMonsterHead_34018_UI",
+    "Skill": {
+      "Desc": "Summon a Tidestorm to deal {0} Aero DMG ten times and {1} Aero DMG one time to enemies.\nThe Resonator with this Echo equipped in the main slot gains {2} Aero DMG Bonus and {3} Resonance Liberation DMG Bonus.\nCD: {4}s",
+      "SimpleDesc": "Summon a Tidestorm to deal Aero DMG to enemies.\nThe Resonator with this Echo equipped in the main slot gains Aero and Resonance Liberation DMG Bonus.",
+      "Param": [
+        [
+          "112.50%",
+          "12.00%",
+          "12.00%",
+          "25"
+        ],
+        [
+          "135.00%",
+          "12.00%",
+          "12.00%",
+          "25"
+        ],
+        [
+          "157.50%",
+          "12.00%",
+          "12.00%",
+          "25"
+        ],
+        [
+          "180.00%",
+          "12.00%",
+          "12.00%",
+          "25"
+        ],
+        [
+          "202.50%",
+          "12.00%",
+          "12.00%",
+          "25"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_34018_UI.T_MstSkil_34018_UI"
+    },
+    "Group": {
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 2,
+    "MonsterInfo": 340000180
+  },
+  {
+    "id": "6000161",
+    "Id": 6000161,
+    "Code": "H42-",
+    "Name": "Nightmare: Violet-Feathered Heron",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_32045_UI.T_IconMonsterHead_32045_UI",
+    "Skill": {
+      "Desc": "Transform into Violet-Feathered Heron and enter a Parry Stance. Counterattack when the Parry stance is over, dealing {0} Electro DMG. If attacked during Parry Stance, you can counterattack in advance and additionally recover {1} Concerto Energy.\n\nCD: {2}s",
+      "SimpleDesc": "Transform into Violet-Feathered Heron to block enemy attacks. Counterattack to deal Electro DMG and recover Concerto Energy.",
+      "Param": [
+        [
+          "180.00%",
+          "5",
+          "15"
+        ],
+        [
+          "207.00%",
+          "5",
+          "15"
+        ],
+        [
+          "234.00%",
+          "5",
+          "15"
+        ],
+        [
+          "261.00%",
+          "5",
+          "15"
+        ],
+        [
+          "288.00%",
+          "5",
+          "15"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_Z_B2_UI.T_MstSkil_Z_B2_UI"
+    },
+    "Group": {
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 1,
+    "MonsterInfo": 320000450
+  },
+  {
+    "id": "6000162",
+    "Id": 6000162,
+    "Code": "H41-",
+    "Name": "Nightmare: Cyan-Feathered Heron",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_32046_UI.T_IconMonsterHead_32046_UI",
+    "Skill": {
+      "Desc": "Transform into Cyan-Feathered Heron and charge at the enemies, dealing {0} Aero DMG; This Echo Skill interrupts enemy <color=Highlight>Special Skills</color> upon dealing damage.\n \nCD: {1}s",
+      "SimpleDesc": "Transform into Cyan-Feathered Heron to charge at the enemies, dealing Aero DMG and interrupt enemy <color=Highlight>Special Skill</color>.",
+      "Param": [
+        [
+          "148.00%",
+          "15"
+        ],
+        [
+          "170.20%",
+          "15"
+        ],
+        [
+          "192.40%",
+          "15"
+        ],
+        [
+          "214.60%",
+          "15"
+        ],
+        [
+          "236.80%",
+          "15"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_Z_B1_UI.T_MstSkil_Z_B1_UI"
+    },
+    "Group": {
+      "21": {
+        "Id": 21,
+        "Name": "Law of Harmony",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriSupport.T_IconElementAttriSupport",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Param": [
+              "8%",
+              "5%",
+              "4",
+              "30"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 1,
+    "MonsterInfo": 320000460
+  },
+  {
+    "id": "6000163",
+    "Id": 6000163,
+    "Code": "W25-",
+    "Name": "Nightmare: Electro Predator",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31065_UI.T_IconMonsterHead_31065_UI",
+    "Skill": {
+      "Desc": "Summon an Electro Predator to shoot the enemy 5 times. The first 4 shots deals {0} Electro DMG, and the last deals {1} Electro DMG.\r\n\r\nCD: {2}s",
+      "SimpleDesc": "Summon an Electro Predator to fire a rain of arrows, dealing Electro DMG.",
+      "Param": [
+        [
+          "10.80%",
+          "28.80%",
+          "8"
+        ],
+        [
+          "12.42%",
+          "33.12%",
+          "8"
+        ],
+        [
+          "14.04%",
+          "37.44%",
+          "8"
+        ],
+        [
+          "15.66%",
+          "41.76%",
+          "8"
+        ],
+        [
+          "17.28%",
+          "46.08%",
+          "8"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_Z_Z1_UI.T_MstSkil_Z_Z1_UI"
+    },
+    "Group": {
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 0,
+    "MonsterInfo": 310000650
+  },
+  {
+    "id": "6000164",
+    "Id": 6000164,
+    "Code": "W27-",
+    "Name": "Nightmare: Aero Predator",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31066_UI.T_IconMonsterHead_31066_UI",
+    "Skill": {
+      "Desc": "Summon an Aero Predator that throws a dart forward. The dart will bounce between enemies up to three times, dealing {0} Aero DMG each time it hits.\n\nCD: {1}s",
+      "SimpleDesc": "Summon an Aero Predator to deal Aero DMG.",
+      "Param": [
+        [
+          "18.00%",
+          "8"
+        ],
+        [
+          "20.70%",
+          "8"
+        ],
+        [
+          "23.40%",
+          "8"
+        ],
+        [
+          "26.10%",
+          "8"
+        ],
+        [
+          "28.80%",
+          "8"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_235_UI.T_MstSkil_235_UI"
+    },
+    "Group": {
+      "20": {
+        "Id": 20,
+        "Name": "Crown of Valor",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriShield.T_IconElementAttriShield",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Upon gaining a Shield, increase the Resonator's ATK by {0} and Crit. DMG by {1} for {3}s. This effect can be triggered once every {4}s and stacks up to {2} times.",
+            "Param": [
+              "6%",
+              "4%",
+              "5",
+              "4",
+              "0.5"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 0,
+    "MonsterInfo": 310000660
+  },
+  {
+    "id": "6000165",
+    "Id": 6000165,
+    "Code": "H01-",
+    "Name": "Nightmare: Gulpuff",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31067_UI.T_IconMonsterHead_31067_UI",
+    "Skill": {
+      "Desc": "Summon a Gulpuff that blows bubbles {0} times, each time dealing {1} Glacio DMG.\r\n\r\nCD: {2}s",
+      "SimpleDesc": "Summon a Gulpuff to blow bubbles and deal Glacio DMG.",
+      "Param": [
+        [
+          "5",
+          "14.40%",
+          "8"
+        ],
+        [
+          "5",
+          "16.56%",
+          "8"
+        ],
+        [
+          "5",
+          "18.72%",
+          "8"
+        ],
+        [
+          "5",
+          "20.88%",
+          "8"
+        ],
+        [
+          "5",
+          "23.04%",
+          "8"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_115_UI.T_MstSkil_115_UI"
+    },
+    "Group": {
+      "21": {
+        "Id": 21,
+        "Name": "Law of Harmony",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriSupport.T_IconElementAttriSupport",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Param": [
+              "8%",
+              "5%",
+              "4",
+              "30"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 0,
+    "MonsterInfo": 310000670
+  },
+  {
+    "id": "6000166",
+    "Id": 6000166,
+    "Code": "H02-",
+    "Name": "Nightmare: Chirpuff",
+    "Type": "",
+    "Intensity": "",
+    "Place": "",
+    "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31068_UI.T_IconMonsterHead_31068_UI",
+    "Skill": {
+      "Desc": "Summon a Chirpuff that self-inflates and blasts a powerful gust of wind forward {0} times. Each blast inflicts {1} Aero DMG and pushes enemies backwards.\r\n\r\nCD: {2}s",
+      "SimpleDesc": "Summon a Chirpuff to blast a powerful gust of wind. Deals Aero DMG and knocks enemies back.",
+      "Param": [
+        [
+          "3",
+          "24.00%",
+          "8"
+        ],
+        [
+          "3",
+          "27.60%",
+          "8"
+        ],
+        [
+          "3",
+          "31.20%",
+          "8"
+        ],
+        [
+          "3",
+          "34.80%",
+          "8"
+        ],
+        [
+          "3",
+          "38.40%",
+          "8"
+        ]
+      ],
+      "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_971_UI.T_MstSkil_971_UI"
+    },
+    "Group": {
+      "21": {
+        "Id": 21,
+        "Name": "Law of Harmony",
+        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriSupport.T_IconElementAttriSupport",
+        "Color": "FFFFFF00",
+        "Set": {
+          "3": {
+            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Param": [
+              "8%",
+              "5%",
+              "4",
+              "30"
+            ]
+          }
+        }
+      }
+    },
+    "Rarity": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "IntensityCode": 0,
+    "MonsterInfo": 310000680
   },
   {
     "id": "390070051",

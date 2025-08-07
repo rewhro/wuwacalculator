@@ -41,7 +41,7 @@ export default function Calculator() {
     const [characters, setCharacters] = useState([]);
     loadBase( characters );
     const navigate = useNavigate();
-    const LATEST_CHANGELOG_VERSION = '2025-06-27 18:03';
+    const LATEST_CHANGELOG_VERSION = '2025-08-07 14:55';
     const [showChangelog, setShowChangelog] = useState(false);
     const [shouldScrollChangelog, setShouldScrollChangelog] = useState(false);
     const [characterLevel, setCharacterLevel] = useState(1);

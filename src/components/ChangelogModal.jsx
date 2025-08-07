@@ -283,6 +283,19 @@ export default function ChangelogModal({ open, onClose, shouldScroll }) {
                     content: `Added <strong>Dream of the Lost</strong> set echoes.`
                 }
             ]
+        },
+        {
+            date: '07/08/2025',
+            entries: [
+                {
+                    type: 'paragraph',
+                    content: `Added <strong>Augusta</strong> and <strong>Iuno</strong>.`
+                },
+                {
+                    type: 'paragraph',
+                    content: `Added <strong>2.6</strong> beta content.`
+                }
+                ]
         }
     ];
 

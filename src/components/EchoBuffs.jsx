@@ -1,5 +1,6 @@
 import React from 'react';
 import { attributeColors } from '../utils/attributeHelpers';
+import DropdownSelect from "./DropdownSelect.jsx";
 const echoBuffs = [
     {
         key: 'rejuvenatingGlow',
@@ -50,6 +51,13 @@ const echoBuffs = [
         effect: <>Casting Resonance Liberation increases <span style={{ color: attributeColors['fusion'], fontWeight: 'bold' }}>Fusion DMG</span> of Resonators in the team by <span className="highlight">15s</span>.</>
     },
     {
+        key: 'lawOfHarmony',
+        name: 'Law of Harmony',
+        type: 'stack',
+        icon: '/assets/echo-icons/lawOfHarmony.webp',
+        effect: <>Casting Echo Skill grants <span className="highlight">8% Echo Skill DMG Bonus</span> to all Resonators in the team for <span className="highlight">30s</span>, stacking up to 4 times.</>
+    },
+    {
         key: 'bellBorne',
         name: 'Bell-Borne Geochelone',
         icon: '/assets/echo-icons/bell-borne.webp',
@@ -79,10 +87,22 @@ const echoBuffs = [
 export const echoBuffList = echoBuffs;
 
 
-export default function EchoBuffs({ activeStates, toggleState }) {
+export default function EchoBuffs({ activeStates, toggleState, characterId, characterRuntimeStates, setCharacterRuntimeStates }) {
+    const handleLawOfHarmonyChange = (newValue) => {
+        setCharacterRuntimeStates(prev => ({
+            ...prev,
+            [characterId]: {
+                ...(prev[characterId] ?? {}),
+                activeStates: {
+                    ...(prev[characterId]?.activeStates ?? {}),
+                    lawOfHarmony: newValue
+                }
+            }
+        }));
+    };
     return (
         <div className="echo-buffs">
-            {echoBuffs.map(({ key, name, effect, element, icon, className }) => (
+            {echoBuffs.map(({ key, name, effect, element, icon, className, type }) => (
                 <div className="echo-buff" key={key}>
                     <div className="echo-buff-header">
                         <img src={icon} alt={name} className={`echo-buff-icon ${className ?? ''}`} loading="lazy" />
@@ -94,14 +114,24 @@ export default function EchoBuffs({ activeStates, toggleState }) {
                         </div>
                     </div>
                     <div className="echo-buff-effect">{effect}</div>
-                    <label className="modern-checkbox">
-                        <input
-                            type="checkbox"
-                            checked={activeStates?.[key] || false}
-                            onChange={() => toggleState(key)}
+                    {type === 'stack' ? (
+                        <DropdownSelect
+                            label=""
+                            options={[0, 1, 2, 3, 4]}
+                            value={activeStates?.lawOfHarmony ?? 0}
+                            onChange={handleLawOfHarmonyChange}
+                            width="80px"
                         />
-                        Enable
-                    </label>
+                    ) : (
+                        <label className="modern-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={activeStates?.[key] || false}
+                                onChange={() => toggleState(key)}
+                            />
+                            Enable
+                        </label>
+                    )}
                 </div>
             ))}
         </div>

@@ -35,6 +35,8 @@ import {applyRocciaLogic, rocciaBuffsLogic, rocciaMultipliers} from "./1606.js";
 import {applyCantLogic, cantBuffsLogic, cantMultipliers} from "./1607.js";
 import {applyAaltoLogic, aaltoMultipliers, aaltoBuffsLogic} from "./1403.js";
 import {applyPhrolovaLogic, phrolovaBuffsLogic, phrolovaMultipliers} from "./1608.js";
+import {applyAugustaLogic, augustaBuffsLogic, augustaMultipliers} from "./1306.js";
+import {applyIunoLogic, iunoBuffsLogic, iunoMultipliers} from "./1410.js";
 
 const overrides = {
     '1506': {
@@ -228,6 +230,16 @@ const overrides = {
         logic: applyPhrolovaLogic,
         multipliers: phrolovaMultipliers,
         buffsLogic: phrolovaBuffsLogic
+    },
+    "1306": {
+        logic: applyAugustaLogic,
+        multipliers: augustaMultipliers,
+        buffsLogic: augustaBuffsLogic
+    },
+    "1410": {
+        logic: applyIunoLogic,
+        multipliers: iunoMultipliers,
+        buffsLogic: iunoBuffsLogic,
     }
 };
 

@@ -96,6 +96,14 @@
     "type": 1
   },
   {
+    "id": "21010046",
+    "name": "Thunderflare Dominion",
+    "description": "Thunder shall purge her pain and weakness. From the crucible of blood and sand, the Sun rises. Not dimmed by dust, but ablaze in her full radiance.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21010046_UI.T_IconWeapon21010046_UI.webp",
+    "rank": 5,
+    "type": 1
+  },
+  {
     "id": "21010053",
     "name": "Guardian Broadblade",
     "description": "The first Jinzhou Magistrate, in memory of the mysterious person who helped defend the border and build the city, created the Guardian series under his guidance. Today, it has become an indispensable cornerstone in the development of new weapons.",
@@ -140,6 +148,14 @@
     "name": "Meditations on Mercy",
     "description": "This weapon draws its design inspiration from the play—Meditations on Mercy.\nIn the brief pauses between each swing, a warrior wrestles with an inner conflict: to bring down righteous punishment or extend a hand of redemption? Behind every clash of steel is the struggle between wrath and mercy.",
     "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21010094_UI.T_IconWeapon21010094_UI.webp",
+    "rank": 4,
+    "type": 1
+  },
+  {
+    "id": "21010104",
+    "name": "Aureate Zenith",
+    "description": "A Broadblade awarded to Gladiators of exceptional merit. Its engravings draw inspiration from Griffrexes—natural-born hunters and the first allies Septimontians found in this land. Their bond needs no words, radiant and pure, like the blazing sun that watches over all.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21010104_UI.T_IconWeapon21010104_UI.webp",
     "rank": 4,
     "type": 1
   },
@@ -304,6 +320,14 @@
     "type": 2
   },
   {
+    "id": "21020104",
+    "name": "Feather Edge",
+    "description": "A Sword awarded to Gladiators of exceptional merit. Its engravings draw inspiration from Griffrexes—natural-born hunters and the first allies Septimontians found in this land. Their bond needs no words, radiant and pure, like the blazing sun that watches over all.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21020104_UI.T_IconWeapon21020104_UI.webp",
+    "rank": 4,
+    "type": 2
+  },
+  {
     "id": "21030011",
     "name": "Training Pistols",
     "description": "These pistols are designed specifically for training and teaching, offering only the basic features.",
@@ -432,6 +456,14 @@
     "type": 3
   },
   {
+    "id": "21030104",
+    "name": "Solar Flame",
+    "description": "A pair of Pistols awarded to Gladiators of exceptional merit. Its engravings draw inspiration from Griffrexes—natural-born hunters and the first allies Septimontians found in this land. Their bond needs no words, radiant and pure, like the blazing sun that watches over all.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21030104_UI.T_IconWeapon21030104_UI.webp",
+    "rank": 4,
+    "type": 3
+  },
+  {
     "id": "21040011",
     "name": "Training Gauntlets",
     "description": "These gauntlets are designed specifically for training and teaching, offering only the basic features.",
@@ -528,6 +560,14 @@
     "type": 4
   },
   {
+    "id": "21040046",
+    "name": "Moongazer's Sigil",
+    "description": "By what means do all things endure? By light and heat, by matter and word, by the mechanics of converging chances, by the soft dissolution into silence, by a moment that mimics the eternal... All things rise and fall in endless rhythm, each bearing its meaning. As for hers, it lies here within her grasp.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21040046_UI.T_IconWeapon21040046_UI.webp",
+    "rank": 5,
+    "type": 4
+  },
+  {
     "id": "21040053",
     "name": "Guardian Gauntlets",
     "description": "The first Jinzhou Magistrate, in memory of the mysterious person who helped defend the border and build the city, created the Guardian series under his guidance. Now, it has become the cornerstone of the development of new weapons.",
@@ -564,6 +604,14 @@
     "name": "Legend of Drunken Hero",
     "description": "This weapon draws its design inspiration from the play—Legend of Drunken Hero.\nFrom the cup flows a liquid that grants courage and strength, empowering the hero to defy fate and turn the tide with his gauntlets. Yet in this intoxicating delight lies peril—dulled senses become the hero's undoing as enemies close in. Thus, in those wine-stained pages, one always read about triumphs followed by defeats.",
     "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21040094_UI.T_IconWeapon21040094_UI.webp",
+    "rank": 4,
+    "type": 4
+  },
+  {
+    "id": "21040104",
+    "name": "Aether Strike",
+    "description": "A pair of Gauntlets awarded to Gladiators of exceptional merit. Its engravings draw inspiration from Griffrexes—natural-born hunters and the first allies Septimontians found in this land. Their bond needs no words, radiant and pure, like the blazing sun that watches over all.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21040104_UI.T_IconWeapon21040104_UI.webp",
     "rank": 4,
     "type": 4
   },
@@ -740,6 +788,14 @@
     "name": "Waltz in Masquerade",
     "description": "This weapon draws its design inspiration from the play—Waltz in Masquerade.\nA waltz is a dance of spectacle and masquerade, where the grand symphony drowns whispered secrets and swirling dresses conceal the exchange of letters and promises. The dancers speak a silent language, as smooth and precise as the perfect resonance of a rectifier.",
     "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21050094_UI.T_IconWeapon21050094_UI.webp",
+    "rank": 4,
+    "type": 5
+  },
+  {
+    "id": "21050104",
+    "name": "Radiant Dawn",
+    "description": "A Rectifier awarded to Gladiators of exceptional merit. Its engravings draw inspiration from Griffrexes—natural-born hunters and the first allies Septimontians found in this land. Their bond needs no words, radiant and pure, like the blazing sun that watches over all.",
+    "icon": "https://api.hakush.in/ww/Game/Aki/UI/UIResources/Common/Image/IconWeapon/T_IconWeapon21050104_UI.T_IconWeapon21050104_UI.webp",
     "rank": 4,
     "type": 5
   }

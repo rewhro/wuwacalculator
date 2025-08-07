@@ -328,6 +328,7 @@ export default function CharacterSelector({
                                 characterRuntimeStates={characterRuntimeStates}
                                 setCharacterRuntimeStates={setCharacterRuntimeStates}
                                 charId={charId}
+                                currentSequenceLevel={sliderValues.sequence}
                             />
                         </div>
                     )}

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const outputPath = path.resolve(__dirname, '../src/data/weapons.json');
+const outputPath = path.resolve(__dirname, '../data/weapons.json');
 
 const weaponApiUrl = 'https://api.hakush.in/ww/data/weapon.json';
 

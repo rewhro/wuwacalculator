@@ -82,6 +82,14 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
         mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 35;
     }
 
+    const crownOfValorStack = effect.crownOfValor3pc ?? 0;
+    mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + 6 * crownOfValorStack;
+    mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + 4 * crownOfValorStack;
+
+    const lawOfHarmonyStack = effect.lawOfHarmony3p ?? 0;
+    mergedBuffs.heavyAtk = (mergedBuffs.heavyAtk ?? 0) + 5 * lawOfHarmonyStack;
+    mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 8 * lawOfHarmonyStack;
+
     return mergedBuffs;
 }
 
@@ -284,6 +292,15 @@ export const mainEchoBuffs = {
     },
     '6000116': {
         always: { aero: 20}
+    },
+    '6000121': {
+        always: { electro: 12, heavyAtk: 12 }
+    },
+    '6000160': {
+        always: { aero: 12, resonanceLiberation: 20 }
+    },
+    '6000120': {
+        always: { fusion: 12, echoSkill: 20 }
     },
 
 

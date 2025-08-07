@@ -13,6 +13,8 @@ import five6 from "./6.jsx";
 import five3 from "./3.jsx";
 import five1 from "./1.jsx";
 import three19 from "./19.jsx";
+import three20 from "./20.jsx";
+import three21 from "./21.jsx";
 
 export function getEchoSetUIOverrides(setId) {
     switch (setId) {
@@ -75,7 +77,15 @@ export function getEchoSetUIOverrides(setId) {
         case 19:
             return {
                 threePiece: three19
-            }
+            };
+        case 20:
+            return {
+                threePiece: three20
+            };
+        case 21:
+            return {
+                threePiece: three21
+            };
         default:
             return {};
     }

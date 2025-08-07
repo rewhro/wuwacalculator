@@ -179,7 +179,13 @@ export default function BuffsPane({
             </div>
 
             <ExpandableSection title="Echo Buffs">
-                <EchoBuffs activeStates={activeStates} toggleState={toggleState} />
+                <EchoBuffs
+                    activeStates={activeStates}
+                    toggleState={toggleState}
+                    characterId={charId}
+                    characterRuntimeStates={characterRuntimeStates}
+                    setCharacterRuntimeStates={setCharacterRuntimeStates}
+                />
             </ExpandableSection>
 
             <ExpandableSection title="Weapon Buffs">

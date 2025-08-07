@@ -34,7 +34,7 @@ async function downloadImage(url, dest) {
 async function run() {
     const foundIcons = [];
 
-    for (let id = 1; id <= 50; id++) {
+    for (let id = 1; id <= 60; id++) {
         const url = `${baseUrl}${id}_UI.webp`;
         const dest = path.join(ICONS_DIR, `${id}.webp`);
         const downloaded = await downloadImage(url, dest);

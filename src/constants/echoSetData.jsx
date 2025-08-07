@@ -182,6 +182,16 @@ const echoSets = [
         id: 19,
         name: 'Dream of the Lost',
         threePiece: 'Holding 0 Resonance Energy increases Crit. Rate by 20% and grants 35% Echo Skill DMG Bonus.'
+    },
+    {
+        id: 20,
+        name: 'Crown Of Valor',
+        threePiece: 'Upon gaining a Shield, increase the Resonator\'s ATK by 6% and Crit. DMG by 4% for 4s. This effect can be triggered once every 0.5s and stacks up to 5 times.'
+    },
+    {
+        id: 21,
+        name: 'Law Of Harmony',
+        threePiece: 'Casting Echo Skill grants 8% Echo Skill DMG Bonus to all Resonators in the team and 5% Heavy Attack DMG Bonus to the caster for 30s, stacking up to 4 times.'
     }
 ];
 
@@ -203,7 +213,9 @@ export const setIconMap = {
     16: '/assets/echo-icons/gustsOfWelkin.webp',
     17: '/assets/echo-icons/windwardPilgrimage.webp',
     18: '/assets/echo-icons/flamingClawprint.webp',
-    19: '/assets/echo-icons/dreamOfTheLost.webp'
+    19: '/assets/echo-icons/dreamOfTheLost.webp',
+    20: '/assets/echo-icons/crownOfValor.webp',
+    21: '/assets/echo-icons/lawOfHarmony.webp',
 };
 
 export const validSubstatRanges = {

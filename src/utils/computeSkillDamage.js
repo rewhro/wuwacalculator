@@ -99,7 +99,6 @@ export function computeSkillDamage({
             element,
             characterLevel
         });
-
         skillMeta = result.skillMeta ?? skillMeta;
         localMergedBuffs = result.mergedBuffs ?? localMergedBuffs;
     }
