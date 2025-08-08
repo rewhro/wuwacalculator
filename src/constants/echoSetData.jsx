@@ -190,7 +190,7 @@ const echoSets = [
     },
     {
         id: 21,
-        name: 'Law Of Harmony',
+        name: 'Law of Harmony',
         threePiece: 'Casting Echo Skill grants 8% Echo Skill DMG Bonus to all Resonators in the team and 5% Heavy Attack DMG Bonus to the caster for 30s, stacking up to 4 times.'
     }
 ];
