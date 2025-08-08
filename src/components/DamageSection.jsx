@@ -122,6 +122,7 @@ export default function DamageSection({
                     name: label,
                     skillType: 'echoSkill',
                     tags: result.skillMeta?.tags ?? [],
+                    element: result.skillMeta.element ?? echoElement,
                     normal,
                     crit,
                     avg,
@@ -133,7 +134,7 @@ export default function DamageSection({
                     name: label,
                     tab: 'echoAttacks',
                     skillType: 'echoSkill',
-                    element: echoElement,
+                    element: result.skillMeta.element ?? echoElement,
                     normal,
                     crit,
                     avg,
@@ -383,10 +384,9 @@ export default function DamageSection({
 
                                 {echoSkillResults.map((skill, i) => {
                                     const echoId = mainEcho.id ?? mainEcho.name?.toLowerCase();
-                                    const echoElement = echoElements[echoId] ?? elementToAttribute[activeCharacter?.attribute] ?? '';
+                                    const echoElement = skill.element ?? echoElements[echoId] ?? elementToAttribute[activeCharacter?.attribute] ?? '';
                                     const isSupportSkill = skill.tags?.includes('healing') || skill.tags?.includes('shielding');
                                     const supportColor = skill.tags?.includes('healing') ? 'limegreen' : '#838383';
-
 
                                     return (
                                         <React.Fragment key={i}>

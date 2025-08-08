@@ -294,7 +294,13 @@ export const mainEchoBuffs = {
         always: { aero: 20}
     },
     '6000121': {
-        always: { electro: 12, heavyAtk: 12 }
+        always: { electro: 12, heavyAtk: 12 },
+        skillMetaModifier: (skillMeta, { characterState }) => {
+            if (skillMeta.name.includes('The False Sovereign Skill 2')) {
+                skillMeta.element = 'havoc';
+            }
+            return skillMeta;
+        }
     },
     '6000160': {
         always: { aero: 12, resonanceLiberation: 25 }
