@@ -57,7 +57,7 @@ export function applyWeaponLogic({
                                      currentParamValues = [],
                                  }) {
 
-    const bonus = parseFloat(currentParamValues[0]) * characterState?.activeStates?.huntersStacks ?? 0;
+    const bonus = parseFloat(currentParamValues[0]) * (characterState?.activeStates?.huntersStacks ?? 0);
     mergedBuffs.heavyAtk = (mergedBuffs.heavyAtk ?? 0) + bonus;
     mergedBuffs.atkPercent = (mergedBuffs.atkPercent ?? 0) + bonus;
 
