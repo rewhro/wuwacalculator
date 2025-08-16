@@ -87,8 +87,10 @@ export function applySetEffect({ mergedBuffs, characterState, activeCharacter, c
     mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + 4 * crownOfValorStack;
 
     const lawOfHarmonyStack = effect.lawOfHarmony3p ?? 0;
-    mergedBuffs.heavyAtk = (mergedBuffs.heavyAtk ?? 0) + 5 * lawOfHarmonyStack;
-    mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 8 * lawOfHarmonyStack;
+    if (lawOfHarmonyStack > 0) {
+        mergedBuffs.heavyAtk = (mergedBuffs.heavyAtk ?? 0) + 30;
+    }
+    mergedBuffs.echoSkill = (mergedBuffs.echoSkill ?? 0) + 4 * lawOfHarmonyStack;
 
     return mergedBuffs;
 }
