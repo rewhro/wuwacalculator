@@ -158,7 +158,7 @@ export default function InfoPage() {
 
                         <div className="info-section">
                             <h3>...SO</h3>
-                            <p>Most assets and character data are sourced from <a href="https://ww.hakush.in/" target="_blank" rel="noopener noreferrer">Hakush</a> and the internet.</p>
+                            <p>Most assets and character data are sourced from <a href="https://ww.hakush.in/" target="_blank" rel="noopener noreferrer">hakush.in</a>, <a href="https://encore.moe/?lang=en/" target="_blank" rel="noopener noreferrer">encore.moe</a> and the internet.</p>
                             <p>The formulas for calculating damage were gotten from <a href="https://wutheringwaves.fandom.com/wiki/Damage" target="_blank" rel="noopener noreferrer">Wuthering Waves Wiki</a>.</p>
                         </div>
 

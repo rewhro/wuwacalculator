@@ -5099,11 +5099,7 @@
       5
     ],
     "IntensityCode": 2,
-    "MonsterInfo": 330000200,
-    "Phantom": {
-      "Name": "Phantom: Nightmare Mourning Aix",
-      "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_SG_33020_UI.T_IconMonsterGoods_SG_33020_UI"
-    }
+    "MonsterInfo": 330000200
   },
   {
     "id": "6000093",
@@ -5197,10 +5193,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Desc": "Casting Echo Skill grants {0} Heavy Attack DMG Bonus to the caster for {1}s.\nAdditionally, all Resonators in the team gain {2} Echo Skill DMG Bonus for {4}s, stacking up to {3} times. Echoes of the same name can only trigger this effect once. The record of Echo triggering this effect is cleared along with this effect. At {3} stacks, casting Echo Skill again resets the duration of this effect.",
             "Param": [
-              "8%",
-              "5%",
+              "30%",
+              "4",
+              "4%",
               "4",
               "30"
             ]
@@ -5514,10 +5511,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Desc": "Casting Echo Skill grants {0} Heavy Attack DMG Bonus to the caster for {1}s.\nAdditionally, all Resonators in the team gain {2} Echo Skill DMG Bonus for {4}s, stacking up to {3} times. Echoes of the same name can only trigger this effect once. The record of Echo triggering this effect is cleared along with this effect. At {3} stacks, casting Echo Skill again resets the duration of this effect.",
             "Param": [
-              "8%",
-              "5%",
+              "30%",
+              "4",
+              "4%",
               "4",
               "30"
             ]
@@ -7572,10 +7570,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Desc": "Casting Echo Skill grants {0} Heavy Attack DMG Bonus to the caster for {1}s.\nAdditionally, all Resonators in the team gain {2} Echo Skill DMG Bonus for {4}s, stacking up to {3} times. Echoes of the same name can only trigger this effect once. The record of Echo triggering this effect is cleared along with this effect. At {3} stacks, casting Echo Skill again resets the duration of this effect.",
             "Param": [
-              "8%",
-              "5%",
+              "30%",
+              "4",
+              "4%",
               "4",
               "30"
             ]
@@ -7880,85 +7879,63 @@
     "Place": "",
     "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34017_UI.T_IconMonsterHead_34017_UI",
     "Skill": {
-      "Desc": "Transform into the False Sovereign and dash forward in a spinning strike, dealing {0} Electro DMG 4 times.\nThe Resonator with this Echo equipped in the main slot gains {1} Electro DMG Bonus and {2} Heavy Attack DMG Bonus. Upon casting Intro Skill, summon Overflowing Tidal Blight to deal {3} Havoc DMG.\nStarts with {4} charges. Gains 1 charge every {5}s, up to {6} charges.\nCD: {7}s",
+      "Desc": "Transform into the False Sovereign and dash forward in a spinning strike, dealing {0} Electro DMG 4 times.\nThe Resonator with this Echo equipped in the main slot gains {1} Electro DMG Bonus and {2} Heavy Attack DMG Bonus. Upon casting Intro Skill, the False Sovereign is also summoned to deal {3} Electro DMG.\nStart with {4} charges. Gain 1 charge every {5}s, up to {6} charges.\nCD: {7}s",
       "SimpleDesc": "Transform into the False Sovereign to attack nearby enemies and deal Electro DMG.\nThe Resonator with this Echo equipped in the main slot gains Electro and Heavy Attack DMG Bonus. Upon casting Echo Skill, summon the False Sovereign to deal Electro DMG.",
       "Param": [
         [
-          "41.25%",
+          "30.75%",
           "12.00%",
           "12.00%",
           "225.00%",
           "2",
-          "15",
+          "8",
           "2",
-          "15"
+          "8"
         ],
         [
-          "49.50%",
+          "36.90%",
           "12.00%",
           "12.00%",
           "270.00%",
           "2",
-          "15",
+          "8",
           "2",
-          "15"
+          "8"
         ],
         [
-          "57.75%",
+          "43.05%",
           "12.00%",
           "12.00%",
           "315.00%",
           "2",
-          "15",
+          "8",
           "2",
-          "15"
+          "8"
         ],
         [
-          "66.00%",
+          "49.20%",
           "12.00%",
           "12.00%",
           "360.00%",
           "2",
-          "15",
+          "8",
           "2",
-          "15"
+          "8"
         ],
         [
-          "74.25%",
+          "55.35%",
           "12.00%",
           "12.00%",
           "405.00%",
           "2",
-          "15",
+          "8",
           "2",
-          "15"
+          "8"
         ]
       ],
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_34017_UI.T_MstSkil_34017_UI"
     },
     "Group": {
-      "18": {
-        "Id": 18,
-        "Name": "Flaming Clawprint",
-        "Icon": "/Game/Aki/UI/UIResources/Common/Image/IconElementAttri/T_IconElementAttriFireUltimateSkill.T_IconElementAttriFireUltimateSkill",
-        "Color": "FFFFFF00",
-        "Set": {
-          "2": {
-            "Desc": "Fusion DMG + {0}",
-            "Param": [
-              "10%"
-            ]
-          },
-          "5": {
-            "Desc": "Casting Resonance Liberation grants all Resonators in the team {0} Fusion DMG Bonus and the caster {1} Resonance Liberation DMG Bonus, lasting for {2}s.",
-            "Param": [
-              "15%",
-              "20%",
-              "35"
-            ]
-          }
-        }
-      },
       "20": {
         "Id": 20,
         "Name": "Crown of Valor",
@@ -8001,34 +7978,39 @@
       "SimpleDesc": "Summon a Tidestorm to deal Aero DMG to enemies.\nThe Resonator with this Echo equipped in the main slot gains Aero and Resonance Liberation DMG Bonus.",
       "Param": [
         [
-          "112.50%",
+          "7.60%",
+          "91.20%",
           "12.00%",
           "12.00%",
-          "25"
+          "20"
         ],
         [
-          "135.00%",
+          "9.12%",
+          "109.44%",
           "12.00%",
           "12.00%",
-          "25"
+          "20"
         ],
         [
-          "157.50%",
+          "10.64%",
+          "127.68%",
           "12.00%",
           "12.00%",
-          "25"
+          "20"
         ],
         [
-          "180.00%",
+          "12.16%",
+          "145.92%",
           "12.00%",
           "12.00%",
-          "25"
+          "20"
         ],
         [
-          "202.50%",
+          "13.68%",
+          "164.16%",
           "12.00%",
           "12.00%",
-          "25"
+          "20"
         ]
       ],
       "Icon": "/Game/Aki/UI/UIResources/Common/Image/MstSkill/T_MstSkil_34018_UI.T_MstSkil_34018_UI"
@@ -8176,10 +8158,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Desc": "Casting Echo Skill grants {0} Heavy Attack DMG Bonus to the caster for {1}s.\nAdditionally, all Resonators in the team gain {2} Echo Skill DMG Bonus for {4}s, stacking up to {3} times. Echoes of the same name can only trigger this effect once. The record of Echo triggering this effect is cleared along with this effect. At {3} stacks, casting Echo Skill again resets the duration of this effect.",
             "Param": [
-              "8%",
-              "5%",
+              "30%",
+              "4",
+              "4%",
               "4",
               "30"
             ]
@@ -8380,10 +8363,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Desc": "Casting Echo Skill grants {0} Heavy Attack DMG Bonus to the caster for {1}s.\nAdditionally, all Resonators in the team gain {2} Echo Skill DMG Bonus for {4}s, stacking up to {3} times. Echoes of the same name can only trigger this effect once. The record of Echo triggering this effect is cleared along with this effect. At {3} stacks, casting Echo Skill again resets the duration of this effect.",
             "Param": [
-              "8%",
-              "5%",
+              "30%",
+              "4",
+              "4%",
               "4",
               "30"
             ]
@@ -8449,10 +8433,11 @@
         "Color": "FFFFFF00",
         "Set": {
           "3": {
-            "Desc": "Casting Echo Skill grants {0} Echo Skill DMG Bonus to all Resonators in the team and {1} Heavy Attack DMG Bonus to the caster for {3}s, stacking up to {2} times.",
+            "Desc": "Casting Echo Skill grants {0} Heavy Attack DMG Bonus to the caster for {1}s.\nAdditionally, all Resonators in the team gain {2} Echo Skill DMG Bonus for {4}s, stacking up to {3} times. Echoes of the same name can only trigger this effect once. The record of Echo triggering this effect is cleared along with this effect. At {3} stacks, casting Echo Skill again resets the duration of this effect.",
             "Param": [
-              "8%",
-              "5%",
+              "30%",
+              "4",
+              "4%",
               "4",
               "30"
             ]
