@@ -57,17 +57,12 @@ export function applyAugustaLogic({
         mergedBuffs.__augustaS1 = true;
     }
 
-    /*const critRate = (mergedBuffs.critRate ?? 0) + 5;
+    const critRate = (mergedBuffs.critRate ?? 0) + 5;
     const excessCritRate = Math.max(0, critRate - 100);
     const bonusCritDmg = Math.min(100, excessCritRate * 2);
     if (isActiveSequence(2) && !mergedBuffs.__augustaS2) {
-        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + (20 * crown);
+        mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + (20 * crown);
         mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + bonusCritDmg;
-        mergedBuffs.__augustaS2 = true;
-    }*/
-
-    if (isActiveSequence(2) && !mergedBuffs.__augustaS2) {
-        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + (35 * crown);
         mergedBuffs.__augustaS2 = true;
     }
 
@@ -98,8 +93,10 @@ export function applyAugustaLogic({
         skillMeta.skillShieldBonus = (skillMeta.skillShieldBonus ?? 0) + 50;
     }
 
+    const excessCritRate2 = Math.max(0, critRate - 150);
+    const bonusCritDmg2 = Math.min(50, excessCritRate2 * 2);
     if (isActiveSequence(6) && !mergedBuffs.__augustaS6) {
-        mergedBuffs.electro = (mergedBuffs.electro ?? 0) + (5 * crown);
+        mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + bonusCritDmg2;
         mergedBuffs.__augustaS6 = true;
     }
 
@@ -144,30 +141,30 @@ export const augustaMultipliers = {
     ],
     normalAttack: [
         {
-            name: "Engraved in Radiant Light DMG",
+            name: "Engraved in Radiant Light: Thunder Rage DMG",
             scaling: { atk: 1 },
             Param : [
                 [
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2",
-                    "75%*2"
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2",
+                    "100%*2"
                 ]
             ]
         }

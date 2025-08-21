@@ -75,7 +75,7 @@ export function applyIunoLogic({
 
     if (name.includes('rainy season dwell in my eyes')) {
         skillMeta.visible = isActiveSequence(4);
-        skillMeta.multiplier = 4.8;
+        skillMeta.multiplier = 1.6;
     }
 
     if (isActiveSequence(5) && !mergedBuffs.__iunoS5) {

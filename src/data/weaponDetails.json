@@ -17810,13 +17810,13 @@
         "1": [
           {
             "Name": "ATK",
-            "Value": 47,
+            "Value": 54,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 540,
+            "Value": 270,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17824,13 +17824,13 @@
         "2": [
           {
             "Name": "ATK",
-            "Value": 50.9574,
+            "Value": 58.5468,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 540,
+            "Value": 270,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17838,13 +17838,13 @@
         "3": [
           {
             "Name": "ATK",
-            "Value": 54.9195,
+            "Value": 63.099,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 540,
+            "Value": 270,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17852,13 +17852,13 @@
         "4": [
           {
             "Name": "ATK",
-            "Value": 58.8816,
+            "Value": 67.6512,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 540,
+            "Value": 270,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17866,13 +17866,13 @@
         "5": [
           {
             "Name": "ATK",
-            "Value": 62.839,
+            "Value": 72.198,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 644.976,
+            "Value": 322.488,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17880,13 +17880,13 @@
         "6": [
           {
             "Name": "ATK",
-            "Value": 66.8011,
+            "Value": 76.7502,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 644.976,
+            "Value": 322.488,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17894,13 +17894,13 @@
         "7": [
           {
             "Name": "ATK",
-            "Value": 70.7632,
+            "Value": 81.3024,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 644.976,
+            "Value": 322.488,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17908,13 +17908,13 @@
         "8": [
           {
             "Name": "ATK",
-            "Value": 74.7206,
+            "Value": 85.8492,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 644.976,
+            "Value": 322.488,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17922,13 +17922,13 @@
         "9": [
           {
             "Name": "ATK",
-            "Value": 78.6827,
+            "Value": 90.4014,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 644.976,
+            "Value": 322.488,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17936,13 +17936,13 @@
         "10": [
           {
             "Name": "ATK",
-            "Value": 82.6448,
+            "Value": 94.9536,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 749.952,
+            "Value": 374.976,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17950,13 +17950,13 @@
         "11": [
           {
             "Name": "ATK",
-            "Value": 86.6022,
+            "Value": 99.5004,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 749.952,
+            "Value": 374.976,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17964,13 +17964,13 @@
         "12": [
           {
             "Name": "ATK",
-            "Value": 90.5643,
+            "Value": 104.0526,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 749.952,
+            "Value": 374.976,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17978,13 +17978,13 @@
         "13": [
           {
             "Name": "ATK",
-            "Value": 94.5264,
+            "Value": 108.6048,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 749.952,
+            "Value": 374.976,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -17992,13 +17992,13 @@
         "14": [
           {
             "Name": "ATK",
-            "Value": 98.4885,
+            "Value": 113.157,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 749.952,
+            "Value": 374.976,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18006,13 +18006,13 @@
         "15": [
           {
             "Name": "ATK",
-            "Value": 102.4459,
+            "Value": 117.7038,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 854.982,
+            "Value": 427.491,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18020,13 +18020,13 @@
         "16": [
           {
             "Name": "ATK",
-            "Value": 106.408,
+            "Value": 122.256,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 854.982,
+            "Value": 427.491,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18034,13 +18034,13 @@
         "17": [
           {
             "Name": "ATK",
-            "Value": 110.3701,
+            "Value": 126.8082,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 854.982,
+            "Value": 427.491,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18048,13 +18048,13 @@
         "18": [
           {
             "Name": "ATK",
-            "Value": 114.3275,
+            "Value": 131.355,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 854.982,
+            "Value": 427.491,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18062,13 +18062,13 @@
         "19": [
           {
             "Name": "ATK",
-            "Value": 118.2896,
+            "Value": 135.9072,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 854.982,
+            "Value": 427.491,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18076,13 +18076,13 @@
         "20": [
           {
             "Name": "ATK",
-            "Value": 122.2517,
+            "Value": 140.4594,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 959.958,
+            "Value": 479.979,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18092,13 +18092,13 @@
         "20": [
           {
             "Name": "ATK",
-            "Value": 153.5819,
+            "Value": 176.4558,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 959.958,
+            "Value": 479.979,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18106,13 +18106,13 @@
         "21": [
           {
             "Name": "ATK",
-            "Value": 157.544,
+            "Value": 181.008,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 959.958,
+            "Value": 479.979,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18120,13 +18120,13 @@
         "22": [
           {
             "Name": "ATK",
-            "Value": 161.5061,
+            "Value": 185.5602,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 959.958,
+            "Value": 479.979,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18134,13 +18134,13 @@
         "23": [
           {
             "Name": "ATK",
-            "Value": 165.4635,
+            "Value": 190.107,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 959.958,
+            "Value": 479.979,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18148,13 +18148,13 @@
         "24": [
           {
             "Name": "ATK",
-            "Value": 169.4256,
+            "Value": 194.6592,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 959.958,
+            "Value": 479.979,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18162,13 +18162,13 @@
         "25": [
           {
             "Name": "ATK",
-            "Value": 173.3877,
+            "Value": 199.2114,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1064.988,
+            "Value": 532.494,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18176,13 +18176,13 @@
         "26": [
           {
             "Name": "ATK",
-            "Value": 177.3498,
+            "Value": 203.7636,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1064.988,
+            "Value": 532.494,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18190,13 +18190,13 @@
         "27": [
           {
             "Name": "ATK",
-            "Value": 181.3072,
+            "Value": 208.3104,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1064.988,
+            "Value": 532.494,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18204,13 +18204,13 @@
         "28": [
           {
             "Name": "ATK",
-            "Value": 185.2693,
+            "Value": 212.8626,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1064.988,
+            "Value": 532.494,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18218,13 +18218,13 @@
         "29": [
           {
             "Name": "ATK",
-            "Value": 189.2314,
+            "Value": 217.4148,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1064.988,
+            "Value": 532.494,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18232,13 +18232,13 @@
         "30": [
           {
             "Name": "ATK",
-            "Value": 193.1888,
+            "Value": 221.9616,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1169.964,
+            "Value": 584.982,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18246,13 +18246,13 @@
         "31": [
           {
             "Name": "ATK",
-            "Value": 197.1509,
+            "Value": 226.5138,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1169.964,
+            "Value": 584.982,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18260,13 +18260,13 @@
         "32": [
           {
             "Name": "ATK",
-            "Value": 201.113,
+            "Value": 231.066,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1169.964,
+            "Value": 584.982,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18274,13 +18274,13 @@
         "33": [
           {
             "Name": "ATK",
-            "Value": 205.0704,
+            "Value": 235.6128,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1169.964,
+            "Value": 584.982,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18288,13 +18288,13 @@
         "34": [
           {
             "Name": "ATK",
-            "Value": 209.0325,
+            "Value": 240.165,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1169.964,
+            "Value": 584.982,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18302,13 +18302,13 @@
         "35": [
           {
             "Name": "ATK",
-            "Value": 212.9946,
+            "Value": 244.7172,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1274.994,
+            "Value": 637.497,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18316,13 +18316,13 @@
         "36": [
           {
             "Name": "ATK",
-            "Value": 216.9567,
+            "Value": 249.2694,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1274.994,
+            "Value": 637.497,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18330,13 +18330,13 @@
         "37": [
           {
             "Name": "ATK",
-            "Value": 220.9141,
+            "Value": 253.8162,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1274.994,
+            "Value": 637.497,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18344,13 +18344,13 @@
         "38": [
           {
             "Name": "ATK",
-            "Value": 224.8762,
+            "Value": 258.3684,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1274.994,
+            "Value": 637.497,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18358,13 +18358,13 @@
         "39": [
           {
             "Name": "ATK",
-            "Value": 228.8383,
+            "Value": 262.9206,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1274.994,
+            "Value": 637.497,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18372,13 +18372,13 @@
         "40": [
           {
             "Name": "ATK",
-            "Value": 232.7957,
+            "Value": 267.4674,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1379.97,
+            "Value": 689.985,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18388,13 +18388,13 @@
         "40": [
           {
             "Name": "ATK",
-            "Value": 264.1306,
+            "Value": 303.4692,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1379.97,
+            "Value": 689.985,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18402,13 +18402,13 @@
         "41": [
           {
             "Name": "ATK",
-            "Value": 268.0927,
+            "Value": 308.0214,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1379.97,
+            "Value": 689.985,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18416,13 +18416,13 @@
         "42": [
           {
             "Name": "ATK",
-            "Value": 272.0501,
+            "Value": 312.5682,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1379.97,
+            "Value": 689.985,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18430,13 +18430,13 @@
         "43": [
           {
             "Name": "ATK",
-            "Value": 276.0122,
+            "Value": 317.1204,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1379.97,
+            "Value": 689.985,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18444,13 +18444,13 @@
         "44": [
           {
             "Name": "ATK",
-            "Value": 279.9743,
+            "Value": 321.6726,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1379.97,
+            "Value": 689.985,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18458,13 +18458,13 @@
         "45": [
           {
             "Name": "ATK",
-            "Value": 283.9317,
+            "Value": 326.2194,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1485,
+            "Value": 742.5,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18472,13 +18472,13 @@
         "46": [
           {
             "Name": "ATK",
-            "Value": 287.8938,
+            "Value": 330.7716,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1485,
+            "Value": 742.5,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18486,13 +18486,13 @@
         "47": [
           {
             "Name": "ATK",
-            "Value": 291.8559,
+            "Value": 335.3238,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1485,
+            "Value": 742.5,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18500,13 +18500,13 @@
         "48": [
           {
             "Name": "ATK",
-            "Value": 295.818,
+            "Value": 339.876,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1485,
+            "Value": 742.5,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18514,13 +18514,13 @@
         "49": [
           {
             "Name": "ATK",
-            "Value": 299.7754,
+            "Value": 344.4228,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1485,
+            "Value": 742.5,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18528,13 +18528,13 @@
         "50": [
           {
             "Name": "ATK",
-            "Value": 303.7375,
+            "Value": 348.975,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1589.976,
+            "Value": 794.988,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18544,13 +18544,13 @@
         "50": [
           {
             "Name": "ATK",
-            "Value": 335.0724,
+            "Value": 384.9768,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1589.976,
+            "Value": 794.988,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18558,13 +18558,13 @@
         "51": [
           {
             "Name": "ATK",
-            "Value": 339.0298,
+            "Value": 389.5236,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1589.976,
+            "Value": 794.988,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18572,13 +18572,13 @@
         "52": [
           {
             "Name": "ATK",
-            "Value": 342.9919,
+            "Value": 394.0758,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1589.976,
+            "Value": 794.988,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18586,13 +18586,13 @@
         "53": [
           {
             "Name": "ATK",
-            "Value": 346.954,
+            "Value": 398.628,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1589.976,
+            "Value": 794.988,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18600,13 +18600,13 @@
         "54": [
           {
             "Name": "ATK",
-            "Value": 350.9114,
+            "Value": 403.1748,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1589.976,
+            "Value": 794.988,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18614,13 +18614,13 @@
         "55": [
           {
             "Name": "ATK",
-            "Value": 354.8735,
+            "Value": 407.727,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1694.952,
+            "Value": 847.476,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18628,13 +18628,13 @@
         "56": [
           {
             "Name": "ATK",
-            "Value": 358.8356,
+            "Value": 412.2792,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1694.952,
+            "Value": 847.476,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18642,13 +18642,13 @@
         "57": [
           {
             "Name": "ATK",
-            "Value": 362.7977,
+            "Value": 416.8314,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1694.952,
+            "Value": 847.476,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18656,13 +18656,13 @@
         "58": [
           {
             "Name": "ATK",
-            "Value": 366.7551,
+            "Value": 421.3782,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1694.952,
+            "Value": 847.476,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18670,13 +18670,13 @@
         "59": [
           {
             "Name": "ATK",
-            "Value": 370.7172,
+            "Value": 425.9304,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1694.952,
+            "Value": 847.476,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18684,13 +18684,13 @@
         "60": [
           {
             "Name": "ATK",
-            "Value": 374.6793,
+            "Value": 430.4826,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1799.982,
+            "Value": 899.991,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18700,13 +18700,13 @@
         "60": [
           {
             "Name": "ATK",
-            "Value": 406.0095,
+            "Value": 466.479,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1799.982,
+            "Value": 899.991,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18714,13 +18714,13 @@
         "61": [
           {
             "Name": "ATK",
-            "Value": 409.9716,
+            "Value": 471.0312,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1799.982,
+            "Value": 899.991,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18728,13 +18728,13 @@
         "62": [
           {
             "Name": "ATK",
-            "Value": 413.9337,
+            "Value": 475.5834,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1799.982,
+            "Value": 899.991,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18742,13 +18742,13 @@
         "63": [
           {
             "Name": "ATK",
-            "Value": 417.8911,
+            "Value": 480.1302,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1799.982,
+            "Value": 899.991,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18756,13 +18756,13 @@
         "64": [
           {
             "Name": "ATK",
-            "Value": 421.8532,
+            "Value": 484.6824,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1799.982,
+            "Value": 899.991,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18770,13 +18770,13 @@
         "65": [
           {
             "Name": "ATK",
-            "Value": 425.8153,
+            "Value": 489.2346,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1904.958,
+            "Value": 952.479,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18784,13 +18784,13 @@
         "66": [
           {
             "Name": "ATK",
-            "Value": 429.7727,
+            "Value": 493.7814,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1904.958,
+            "Value": 952.479,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18798,13 +18798,13 @@
         "67": [
           {
             "Name": "ATK",
-            "Value": 433.7348,
+            "Value": 498.3336,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1904.958,
+            "Value": 952.479,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18812,13 +18812,13 @@
         "68": [
           {
             "Name": "ATK",
-            "Value": 437.6969,
+            "Value": 502.8858,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1904.958,
+            "Value": 952.479,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18826,13 +18826,13 @@
         "69": [
           {
             "Name": "ATK",
-            "Value": 441.659,
+            "Value": 507.438,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 1904.958,
+            "Value": 952.479,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18840,13 +18840,13 @@
         "70": [
           {
             "Name": "ATK",
-            "Value": 445.6164,
+            "Value": 511.9848,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2009.988,
+            "Value": 1004.994,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18856,13 +18856,13 @@
         "70": [
           {
             "Name": "ATK",
-            "Value": 476.9513,
+            "Value": 547.9866,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2009.988,
+            "Value": 1004.994,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18870,13 +18870,13 @@
         "71": [
           {
             "Name": "ATK",
-            "Value": 480.9134,
+            "Value": 552.5388,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2009.988,
+            "Value": 1004.994,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18884,13 +18884,13 @@
         "72": [
           {
             "Name": "ATK",
-            "Value": 484.8708,
+            "Value": 557.0856,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2009.988,
+            "Value": 1004.994,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18898,13 +18898,13 @@
         "73": [
           {
             "Name": "ATK",
-            "Value": 488.8329,
+            "Value": 561.6378,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2009.988,
+            "Value": 1004.994,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18912,13 +18912,13 @@
         "74": [
           {
             "Name": "ATK",
-            "Value": 492.795,
+            "Value": 566.19,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2009.988,
+            "Value": 1004.994,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18926,13 +18926,13 @@
         "75": [
           {
             "Name": "ATK",
-            "Value": 496.7524,
+            "Value": 570.7368,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2114.964,
+            "Value": 1057.482,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18940,13 +18940,13 @@
         "76": [
           {
             "Name": "ATK",
-            "Value": 500.7145,
+            "Value": 575.289,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2114.964,
+            "Value": 1057.482,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18954,13 +18954,13 @@
         "77": [
           {
             "Name": "ATK",
-            "Value": 504.6766,
+            "Value": 579.8412,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2114.964,
+            "Value": 1057.482,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18968,13 +18968,13 @@
         "78": [
           {
             "Name": "ATK",
-            "Value": 508.634,
+            "Value": 584.388,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2114.964,
+            "Value": 1057.482,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18982,13 +18982,13 @@
         "79": [
           {
             "Name": "ATK",
-            "Value": 512.5961,
+            "Value": 588.9402,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2114.964,
+            "Value": 1057.482,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -18996,13 +18996,13 @@
         "80": [
           {
             "Name": "ATK",
-            "Value": 516.5582,
+            "Value": 593.4924,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2219.994,
+            "Value": 1109.997,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19012,13 +19012,13 @@
         "80": [
           {
             "Name": "ATK",
-            "Value": 547.8931,
+            "Value": 629.4942,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2219.994,
+            "Value": 1109.997,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19026,13 +19026,13 @@
         "81": [
           {
             "Name": "ATK",
-            "Value": 551.8505,
+            "Value": 634.041,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2219.994,
+            "Value": 1109.997,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19040,13 +19040,13 @@
         "82": [
           {
             "Name": "ATK",
-            "Value": 555.8126,
+            "Value": 638.5932,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2219.994,
+            "Value": 1109.997,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19054,13 +19054,13 @@
         "83": [
           {
             "Name": "ATK",
-            "Value": 559.7747,
+            "Value": 643.1454,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2219.994,
+            "Value": 1109.997,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19068,13 +19068,13 @@
         "84": [
           {
             "Name": "ATK",
-            "Value": 563.7321,
+            "Value": 647.6922,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2219.994,
+            "Value": 1109.997,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19082,13 +19082,13 @@
         "85": [
           {
             "Name": "ATK",
-            "Value": 567.6942,
+            "Value": 652.2444,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2324.97,
+            "Value": 1162.485,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19096,13 +19096,13 @@
         "86": [
           {
             "Name": "ATK",
-            "Value": 571.6563,
+            "Value": 656.7966,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2324.97,
+            "Value": 1162.485,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19110,13 +19110,13 @@
         "87": [
           {
             "Name": "ATK",
-            "Value": 575.6137,
+            "Value": 661.3434,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2324.97,
+            "Value": 1162.485,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19124,13 +19124,13 @@
         "88": [
           {
             "Name": "ATK",
-            "Value": 579.5758,
+            "Value": 665.8956,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2324.97,
+            "Value": 1162.485,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19138,13 +19138,13 @@
         "89": [
           {
             "Name": "ATK",
-            "Value": 583.5379,
+            "Value": 670.4478,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2324.97,
+            "Value": 1162.485,
             "IsRatio": false,
             "IsPercent": true
           }
@@ -19152,13 +19152,13 @@
         "90": [
           {
             "Name": "ATK",
-            "Value": 587.5,
+            "Value": 675,
             "IsRatio": false,
             "IsPercent": false
           },
           {
             "Name": "Crit. Rate",
-            "Value": 2430,
+            "Value": 1215,
             "IsRatio": false,
             "IsPercent": true
           }
