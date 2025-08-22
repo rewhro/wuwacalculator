@@ -58,7 +58,7 @@ export function applyAugustaLogic({
     }
 
     const critRate = (mergedBuffs.critRate ?? 0) + 5;
-    const excessCritRate = Math.max(0, critRate - 100);
+    const excessCritRate = Math.max(0, critRate - 100 + (20 * crown));
     const bonusCritDmg = Math.min(100, excessCritRate * 2);
     if (isActiveSequence(2) && !mergedBuffs.__augustaS2) {
         mergedBuffs.critRate = (mergedBuffs.critRate ?? 0) + (20 * crown);
@@ -93,7 +93,7 @@ export function applyAugustaLogic({
         skillMeta.skillShieldBonus = (skillMeta.skillShieldBonus ?? 0) + 50;
     }
 
-    const excessCritRate2 = Math.max(0, critRate - 150);
+    const excessCritRate2 = Math.max(0, critRate - 150 + (20 * crown));
     const bonusCritDmg2 = Math.min(50, excessCritRate2 * 2);
     if (isActiveSequence(6) && !mergedBuffs.__augustaS6) {
         mergedBuffs.critDmg = (mergedBuffs.critDmg ?? 0) + bonusCritDmg2;
